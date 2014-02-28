@@ -32,7 +32,7 @@ public class ForestTile extends GameTile{
      * 
      * @param board Plateau de jeu auquel appartient le tiles de type foret
      */
-    public ForestTile(GameBoard board) { 
-        super(board,2);
+    public ForestTile(GameBoard board, int x, int y) { 
+        super(board, x, y, 2);
     }    
 }

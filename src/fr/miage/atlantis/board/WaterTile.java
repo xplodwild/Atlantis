@@ -32,7 +32,7 @@ public class WaterTile extends GameTile{
      * 
      * @param board Plateau de jeu auquel appartient le tiles de type mer
      */
-    public WaterTile(GameBoard board){ 
-        super(board,0);
+    public WaterTile(GameBoard board, int x, int y) { 
+        super(board, x, y, 0);
     }
 }
