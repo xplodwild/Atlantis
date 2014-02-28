@@ -59,6 +59,20 @@ public class TileAction {
     public void use(GameTile tile, GameLogic logic) {
         throw new UnsupportedOperationException("Not implemented");
     }
-    
-    
+
+    public boolean ismIsImmediate() {
+        return mIsImmediate;
+    }
+
+    public boolean ismIsTriggerable() {
+        return mIsTriggerable;
+    }
+
+    public int getmAction() {
+        return mAction;
+    }
+
+    public int getmAnimal() {
+        return mAnimal;
+    }  
 }
