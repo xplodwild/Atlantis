@@ -38,6 +38,7 @@ public class TileAction {
     
     private boolean mIsImmediate;
     private boolean mIsTriggerable;
+    private boolean mIsVolcano;
     private int mAction;
     private int mAnimal;
     
@@ -59,6 +60,25 @@ public class TileAction {
     public void use(GameTile tile, GameLogic logic) {
         throw new UnsupportedOperationException("Not implemented");
     }
-    
-    
+
+    public boolean isImmediate() {
+        return mIsImmediate;
+    }
+
+    public boolean isTriggerable() {
+        return mIsTriggerable;
+    }
+
+    public boolean isVolcano() {
+        return mIsVolcano;
+    } 
+
+    public int getAction() {
+        return mAction;
+    }
+
+    public int getAnimal() {
+        return mAnimal;
+    }  
 }
+

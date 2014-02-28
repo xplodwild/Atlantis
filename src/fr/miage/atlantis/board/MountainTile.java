@@ -18,18 +18,22 @@
 
 package fr.miage.atlantis.board;
 
+
 /**
- *
+ * Tile de type montagne
+ * 
+ * @author AtlantisTeam
+ * @version 1.0
+ * @date 28/02/2014 * 
  */
-public class MountainTile {
-    
-    private boolean mIsVolcano;
-    
-    public MountainTile(boolean isVolcano) {
-        throw new UnsupportedOperationException("Not implemented");
-    }
-    
-    public boolean isVolcano() {
-        return mIsVolcano;
-    }
+public class MountainTile extends GameTile{
+
+    /**
+     * Constructeur de classe
+     * 
+     * @param board Plateau de jeu auquel appartient le tiles de type montagne
+     */
+    public MountainTile(GameBoard board){          
+        super(board,3);
+    }     
 }
