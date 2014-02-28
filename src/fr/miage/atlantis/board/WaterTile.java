@@ -19,20 +19,20 @@
 package fr.miage.atlantis.board;
 
 /**
- * Tile de type plage
+ * Tile de type mer
  * 
  * @author AtlantisTeam
  * @version 1.0
  * @date 28/02/2014 * 
  */
-public class BeachTile extends GameTile{
+public class WaterTile extends GameTile{
 
     /**
      * Constructeur de classe
      * 
-     * @param board Plateau de jeu auquel appartient le tiles de type plage
+     * @param board Plateau de jeu auquel appartient le tiles de type mer
      */
-    public BeachTile(GameBoard board){ 
-        super(board,1);
+    public WaterTile(GameBoard board){ 
+        super(board,0);
     }
 }
