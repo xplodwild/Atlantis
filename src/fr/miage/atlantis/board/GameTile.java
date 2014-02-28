@@ -25,6 +25,9 @@ import java.util.List;
 /**
  * Classe abstraite représentant les tiles que l'on place sur le plateau de jeu
  * 
+ * @author AtlantisTeam
+ * @version 1.0
+ * @date 28/02/2014 * 
  */
 public abstract class GameTile {
 
@@ -49,10 +52,46 @@ public abstract class GameTile {
      */
     private GameBoard mBoard;
     
+    
+    /**
+     * Constructeur de GameTile
+     * 
+     * @param board Plateau auquel appartient le tile
+     * @param height hauteur du tile
+     */
     GameTile(GameBoard board, int height) {
         this.mBoard=board;
         this.mHeight=height;
         this.mEntities=new ArrayList<GameEntity>();
+    }
+        
+          
+    /**
+     * Ajoute une entité sur le tile courant
+     * 
+     * @param gE Entité de jeu à ajouter sur le tile
+     */
+    public void addEntity(GameEntity gE){
+        this.mEntities.add(gE);
+    }
+    
+    
+    /**
+     * Enleve une entité sur le tile courant
+     * 
+     * @param gE Entité de jeu a supprimer du tile 
+     */
+    public void removeEntity(GameEntity gE){
+        this.mEntities.remove(gE);
+    }
+    
+    
+    //---------------------------------------------
+    //GETTERS
+    //---------------------------------------------
+    
+    public List<GameEntity> getEntities() {
+        return mEntities;
     }
     
     public int getX() {
@@ -69,17 +108,5 @@ public abstract class GameTile {
     
     public GameBoard getBoard() {
         return mBoard;
-    }
-    
-    public void addEntity(GameEntity gE){
-        this.mEntities.add(gE);
-    }
-    
-    public void removeEntity(GameEntity gE){
-        this.mEntities.remove(gE);
-    }
-    
-    public List<GameEntity> getEntities() {
-        return mEntities;
     }
 }
