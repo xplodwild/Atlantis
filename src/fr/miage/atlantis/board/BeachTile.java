@@ -32,7 +32,7 @@ public class BeachTile extends GameTile{
      * 
      * @param board Plateau de jeu auquel appartient le tiles de type plage
      */
-    public BeachTile(GameBoard board){ 
-        super(board,1);
+    public BeachTile(GameBoard board, int x, int y){ 
+        super(board, x, y, 1);
     }
 }
