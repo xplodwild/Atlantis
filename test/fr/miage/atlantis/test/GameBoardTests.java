@@ -19,6 +19,7 @@ package fr.miage.atlantis.test;
 
 import fr.miage.atlantis.board.BeachTile;
 import fr.miage.atlantis.board.GameBoard;
+import static junit.framework.Assert.assertTrue;
 import junit.framework.TestCase;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -53,15 +54,46 @@ public class GameBoardTests extends TestCase {
     @After
     public void tearDown() {
     }
-    // TODO add test methods here.
-    // The methods must be annotated with annotation @Test. For example:
-    //
-    // @Test
-    // public void hello() {}
+    
+    // ============
+    // TEST METHODS
+    // ============
     
     @Test
     public void testWaterEdge() {
         // On créé un board avec une seule tile pour le moment
+        BeachTile single = new BeachTile(mGameBoard, 5, 5);
+        assertTrue(mGameBoard.canPlaceTileAt(5, 5));
+        
+        // On place la tile
+        mGameBoard.placeTileAt(single);
+        assertTrue(single.isOnBoard());
+        
+        // La tile est forcément au bord de l'eau
+        assertTrue(mGameBoard.isTileAtWaterEdge(single));
+        
+        // On ne peut plus placer de tiles à cet endroit
+        assertFalse(mGameBoard.canPlaceTileAt(5, 5));
+        
+        // On a bien une tile au niveau Plage
+        assertTrue(mGameBoard.hasTileAtLevel(single.getHeight()));
+    }
+    
+    @Test
+    public void testSinkTile() {
+        // On créé un board avec une seule tile pour le moment
+        BeachTile single = new BeachTile(mGameBoard, 5, 5);
+        
+        // On place la tile
+        mGameBoard.placeTileAt(single);
+        assertTrue(single.isOnBoard());
+        
+        // On fait couler la tile
+        mGameBoard.sinkTile(single);
+        assertFalse(single.isOnBoard());
+        
+        // On peut replacer une tile à l'endroit cité
+        assertTrue(mGameBoard.canPlaceTileAt(5, 5));
     }
     
 }
