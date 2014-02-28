@@ -34,6 +34,5 @@ public class ForestTile extends GameTile{
      */
     public ForestTile(GameBoard board, int x, int y) { 
         super(board, x, y, 2);
-
     }    
 }
