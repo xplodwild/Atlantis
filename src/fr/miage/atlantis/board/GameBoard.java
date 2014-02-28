@@ -47,7 +47,7 @@ public class GameBoard {
         throw new UnsupportedOperationException("Not implemented");
     }
     
-    public boolean placeTileAt(GameTile t, int x, int y) {
+    public boolean placeTileAt(GameTile t) {
         throw new UnsupportedOperationException("Not implemented");
     }
     
