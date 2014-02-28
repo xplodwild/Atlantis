@@ -19,12 +19,20 @@
 package fr.miage.atlantis.board;
 
 /**
- *
+ * Tile de type foret
+ * 
+ * @author AtlantisTeam
+ * @version 1.0
+ * @date 28/02/2014 * 
  */
-public class ForestTile {
+public class ForestTile extends GameTile{
 
-    public ForestTile() {
-        throw new UnsupportedOperationException("Not implemented");
-    }
-    
+    /**
+     * Constructeur de classe
+     * 
+     * @param board Plateau de jeu auquel appartient le tiles de type foret
+     */
+    public ForestTile(GameBoard board) { 
+        super(board,2);
+    }    
 }

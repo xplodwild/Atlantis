@@ -19,21 +19,40 @@
 package fr.miage.atlantis.board;
 
 import fr.miage.atlantis.entities.GameEntity;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * Classe abstraite représentant les tiles que l'on place sur le plateau de jeu
+ * 
  */
 public abstract class GameTile {
 
+    /**
+     * mX : Coordonné X du tile sur le plateau de jeu
+     */
     private int mX;
+    /**
+     * my : Coordonné Y du tile sur le plateau de jeu
+     */
     private int mY;
+    /**
+     * mHeight : Coordonné Z du tile (hauteur)
+     */
     private int mHeight;
+    /**
+     * Entitées de jeu présente sur le tile courant (Animaux/Pions/Bateau...)
+     */
     private List<GameEntity> mEntities;
+    /**
+     * mBoard : Board a laquelle appartient le tile courant
+     */
     private GameBoard mBoard;
     
     GameTile(GameBoard board, int height) {
-        throw new UnsupportedOperationException("Not implemented");
+        this.mBoard=board;
+        this.mHeight=height;
+        this.mEntities=new ArrayList<GameEntity>();
     }
     
     public int getX() {
@@ -50,6 +69,14 @@ public abstract class GameTile {
     
     public GameBoard getBoard() {
         return mBoard;
+    }
+    
+    public void addEntity(GameEntity gE){
+        this.mEntities.add(gE);
+    }
+    
+    public void removeEntity(GameEntity gE){
+        this.mEntities.remove(gE);
     }
     
     public List<GameEntity> getEntities() {

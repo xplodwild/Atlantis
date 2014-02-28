@@ -38,6 +38,7 @@ public class TileAction {
     
     private boolean mIsImmediate;
     private boolean mIsTriggerable;
+    private boolean mIsVolcano;
     private int mAction;
     private int mAnimal;
     
@@ -60,19 +61,23 @@ public class TileAction {
         throw new UnsupportedOperationException("Not implemented");
     }
 
-    public boolean ismIsImmediate() {
+    public boolean isImmediate() {
         return mIsImmediate;
     }
 
-    public boolean ismIsTriggerable() {
+    public boolean isTriggerable() {
         return mIsTriggerable;
     }
 
-    public int getmAction() {
+    public boolean isVolcano() {
+        return mIsVolcano;
+    } 
+
+    public int getAction() {
         return mAction;
     }
 
-    public int getmAnimal() {
+    public int getAnimal() {
         return mAnimal;
     }  
 }
