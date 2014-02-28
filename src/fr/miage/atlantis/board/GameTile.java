@@ -1,3 +1,4 @@
+
 /*
  * Copyright (C) 2014 Loris Durand, Guillaume Lesniak, Cristian Sanna,
  *                    Lucie Wiemert
@@ -59,7 +60,9 @@ public abstract class GameTile {
      * @param board Plateau auquel appartient le tile
      * @param height hauteur du tile
      */
-    GameTile(GameBoard board, int height) {
+    GameTile(GameBoard board,int x,int y, int height) {
+        this.mX=x;
+        this.mY=y;
         this.mBoard=board;
         this.mHeight=height;
         this.mEntities=new ArrayList<GameEntity>();

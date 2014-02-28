@@ -33,7 +33,8 @@ public class MountainTile extends GameTile{
      * 
      * @param board Plateau de jeu auquel appartient le tiles de type montagne
      */
-    public MountainTile(GameBoard board){          
-        super(board,3);
+
+    public MountainTile(GameBoard board, int x, int y){          
+        super(board, x, y, 3);
     }     
 }
