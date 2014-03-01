@@ -55,8 +55,9 @@ public final class GameBoard {
        
        //Puis les 8 suivants de la meme façon
        for(int i=3;i<9;i++){
-           GameTile tmp=new BorderTile(this,"Border #"+i);
-           this.placeTileAtTheRightOf(nextTile,tmp);           
+           BorderTile tmp=new BorderTile(this,"Border #"+i);
+           this.placeTileAtTheRightOf(nextTile,tmp);    
+           nextTile=tmp;
        }
        
        //Première ligne terminée, Frontière haute du jeu mise en place.
@@ -225,24 +226,28 @@ public final class GameBoard {
      * @param base Tile existant
      * @param newTile Nouveau tile a greffer
      */
-    public static void placeTileAtTheBottomRightOf(GameTile base,GameTile newTile) {        
+    public void placeTileAtTheBottomRightOf(GameTile base,GameTile newTile) {        
         //On lie les deux tiles entre elles
         base.setRightBottomTile(newTile);
         newTile.setLeftUpperTile(newTile);
         
-        GameTile baseUpperRightTile=base.getRightUpperTile();
-        GameTile baseBottomRightTile=base.getRightBottomTile();
+        GameTile baseLeftBottomTile=base.getLeftBottomTile();
+        GameTile baseRightTile=base.getRightTile();
         
         //Puis on recupere les tile adjacent aux deux tile et on les lient a la nouvelle tile fraichement crée.
-        newTile.setLeftUpperTile(baseUpperRightTile);
-        newTile.setLeftBottomTile(baseBottomRightTile);
+        newTile.setLeftTile(baseLeftBottomTile);
+        newTile.setRightUpperTile(baseRightTile);
+        
+        //Update le HashMap 
+        this.tileSet.put(base.getName(), base);
+        this.tileSet.put(newTile.getName(), base);
         
         //Puis on update les Tiles ajacent pour prendre en compte le nouveau Til ajouté
-        if(baseBottomRightTile != null){
-            baseBottomRightTile.setRightUpperTile(newTile);
+        if(baseLeftBottomTile != null){
+            baseLeftBottomTile.setRightUpperTile(newTile);
         }
-        if(baseUpperRightTile != null){
-            baseUpperRightTile.setRightBottomTile(newTile);
+        if(baseRightTile != null){
+            baseRightTile.setRightBottomTile(newTile);
         }        
     }
     
