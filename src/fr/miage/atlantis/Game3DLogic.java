@@ -18,11 +18,21 @@
 
 package fr.miage.atlantis;
 
+import com.jme3.cinematic.MotionPath;
+import com.jme3.cinematic.MotionPathListener;
+import com.jme3.cinematic.events.MotionEvent;
+import com.jme3.math.FastMath;
+import com.jme3.math.Quaternion;
+import com.jme3.math.Spline;
+import com.jme3.math.Vector3f;
+import com.jme3.scene.Node;
 import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.board.TileAction;
 import fr.miage.atlantis.entities.GameEntity;
 import fr.miage.atlantis.graphics.Game3DRenderer;
 import fr.miage.atlantis.logic.GameLogic;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Main Game Engine loop class
@@ -30,10 +40,13 @@ import fr.miage.atlantis.logic.GameLogic;
 public class Game3DLogic extends GameLogic {
     
     private Game3DRenderer mRenderer;
+    private Map<GameEntity, Node> mEntityNodes;
+    private Map<GameTile, Node> mTileNodes;
     
     public Game3DLogic() {
         super();
         mRenderer = new Game3DRenderer();
+        mEntityNodes = new HashMap<GameEntity, Node>();
     }
     
     @Override
@@ -50,7 +63,39 @@ public class Game3DLogic extends GameLogic {
     }
 
     public void onUnitMove(GameEntity ent, GameTile dest) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        // On récupère la node 3D de cette entité
+        Node entNode = mEntityNodes.get(ent);
+        if (entNode == null) {
+            throw new IllegalStateException("Aucune node 3D trouvée pour l'unité à déplacer!");
+        }
+        
+        Node tileNode = mTileNodes.get(dest);
+        if (tileNode == null) {
+            throw new IllegalStateException("Aucune node 3D trouvée pour la tile de destination!");
+        }
+        
+        final MotionPath path = new MotionPath();
+        path.addWayPoint(entNode.getLocalTranslation());
+        path.addWayPoint(tileNode.getLocalTranslation());
+        path.setCurveTension(0.5f);
+        path.setCycle(false);
+        path.setPathSplineType(Spline.SplineType.Bezier);
+        
+        MotionEvent motionControl = new MotionEvent(entNode, path);
+        motionControl.setDirectionType(MotionEvent.Direction.PathAndRotation);
+        motionControl.setRotation(new Quaternion().fromAngleNormalAxis(-FastMath.HALF_PI, Vector3f.UNIT_Y));
+        motionControl.setInitialDuration(1f);
+        motionControl.setSpeed(2f);
+        
+        path.addListener(new MotionPathListener() {
+            public void onWayPointReach(MotionEvent control, int wayPointIndex) {
+                if (path.getNbWayPoints() == wayPointIndex + 1) {
+                    System.out.println(control.getSpatial().getName() + "Finished!!! ");
+                } else {
+                    System.out.println(control.getSpatial().getName() + " Reached way point " + wayPointIndex);
+                }
+            }
+        });
     }
 
     public void onDiceRoll(int face) {
