@@ -62,9 +62,9 @@ public final class GameBoard {
            BorderTile tmp=new BorderTile(this,"Border #"+i);
            this.placeTileAtTheRightOf(nextTile,tmp);    
            nextTile=tmp;
-       }
-       
+       }       
        //Première ligne terminée, Frontière haute du jeu mise en place.
+       
        
        //Debut de la ligne 2
        nextTile=new BorderTile(this,"Border #47");
@@ -86,12 +86,18 @@ public final class GameBoard {
        }
        
        nextTile=new BorderTile(this,"Border #9");
-       this.placeTileAtTheBottomLeftOf(bckp, nextTile);
-       this.placeTileAtTheBottomLeftOf(nextTile, new BorderTile(this,"Border #10",true));
+       this.placeTileAtTheRightOf(bckp, nextTile);
+       this.placeTileAtTheRightOf(nextTile, new BorderTile(this,"Border #10",true));
+       //Fin de la ligne 2
        
        
-       //Puis on passe à la ligne suivante
-       //... To be continued
+       //Debut de la ligne 3
+       GameTile n46=this.tileSet.get("Border #46");
+       
+       nextTile=new BorderTile(this,"Border #45",true);
+       this.placeTileAtTheBottomLeftOf(n46, nextTile);
+       
+       
                 
     }
     
