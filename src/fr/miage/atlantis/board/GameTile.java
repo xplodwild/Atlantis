@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2014 Loris Durand, Guillaume Lesniak, Cristian Sanna,
  *                    Lucie Wiemert
@@ -41,7 +40,7 @@ public abstract class GameTile {
      */
     private int mY;
     /**
-     * mHeight : Coordonné Z du tile (hauteur)
+     * mHeight : Coordonnée hauteur du tile
      */
     private int mHeight;
     /**
@@ -52,6 +51,10 @@ public abstract class GameTile {
      * mBoard : Board a laquelle appartient le tile courant
      */
     private GameBoard mBoard;
+    /**
+     * mIsOnBoard : Indique si la tile est sur le plateau ou retirée
+     */
+    private boolean mIsOnBoard;
     
     
     /**
@@ -60,12 +63,13 @@ public abstract class GameTile {
      * @param board Plateau auquel appartient le tile
      * @param height hauteur du tile
      */
-    GameTile(GameBoard board,int x,int y, int height) {
-        this.mX=x;
-        this.mY=y;
-        this.mBoard=board;
-        this.mHeight=height;
-        this.mEntities=new ArrayList<GameEntity>();
+    GameTile(GameBoard board, int x, int y, int height) {
+        mBoard = board;
+        mHeight = height;
+        mX = x;
+        mY = y;
+        mIsOnBoard = true;
+        mEntities = new ArrayList<GameEntity>();
     }
         
           
@@ -88,6 +92,12 @@ public abstract class GameTile {
         this.mEntities.remove(gE);
     }
     
+    /**
+     * Indique que cette tile a été supprimée du plateau
+     */
+    public void removeFromBoard() {
+        mIsOnBoard = false;
+    }
     
     //---------------------------------------------
     //GETTERS
@@ -111,5 +121,9 @@ public abstract class GameTile {
     
     public GameBoard getBoard() {
         return mBoard;
+    }
+    
+    public boolean isOnBoard() {
+        return mIsOnBoard;
     }
 }

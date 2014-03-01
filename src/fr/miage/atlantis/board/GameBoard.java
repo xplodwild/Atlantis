@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2014 Loris Durand, Guillaume Lesniak, Cristian Sanna,
  *                    Lucie Wiemert
@@ -22,55 +21,24 @@ package fr.miage.atlantis.board;
 import fr.miage.atlantis.utils.HexagonTable;
 
 /**
- * Classe représentant le plateau de jeu
- * 
- * @author AtlantisTeam
- * @version 1.0
- * @date 28/02/2014 
+ *
  */
 public class GameBoard {
 
-    /**
-     * mBoard Implementation du plateau
-     */
     private HexagonTable<GameTile> mBoard;
     
-    /**
-     * Constructeur de GameBoard
-     * 
-     */
     public GameBoard() {
-        this.mBoard=new HexagonTable<GameTile>();
+        throw new UnsupportedOperationException("Not implemented");
     }
     
-    /**
-     * Teste si le tile donné est entouré d'au moins une tile de type WaterTile (h=0)
-     * 
-     * @param tile Tile du plateau à tester
-     * @return 
-     */
     public boolean isTileAtWaterEdge(GameTile tile) {
-        boolean isAtWaterEdge=false;
-        
-        //Si un des tiles adjacent est de type WaterTile (avec une Height=0)
-        if( this.getUpperRightCornerTile(tile).getHeight()==0  || this.getUpperLeftCornerTile(tile).getHeight()==0 ||
-            this.getBottomLeftCornerTile(tile).getHeight()==0  || this.getBottomRightCornerTile(tile).getHeight()==0){
-            isAtWaterEdge=true;
-        }
-        
-        return isAtWaterEdge;
+        throw new UnsupportedOperationException("Not implemented");
     }
     
     public boolean hasTileAtLevel(int h) {
         throw new UnsupportedOperationException("Not implemented");
     }
     
-    /**
-     * Coule le tile donné et le supprime du plateau, passe tout les player present sur le tile à Swimmer
-     * 
-     * @param tile tile a couler
-     * @return 
-     */
     public boolean sinkTile(GameTile tile) {
         throw new UnsupportedOperationException("Not implemented");
     }
@@ -85,21 +53,5 @@ public class GameBoard {
     
     public GameTile getTileAt(int x, int y) {
         throw new UnsupportedOperationException("Not implemented");
-    }
-
-    private GameTile getUpperRightCornerTile(GameTile tile) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    private GameTile getUpperLeftCornerTile(GameTile tile) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    private GameTile getBottomLeftCornerTile(GameTile tile) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    private GameTile getBottomRightCornerTile(GameTile tile) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

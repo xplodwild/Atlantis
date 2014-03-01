@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2014 Loris Durand, Guillaume Lesniak, Cristian Sanna,
  *                    Lucie Wiemert
@@ -82,3 +81,4 @@ public class TileAction {
         return mAnimal;
     }  
 }
+
