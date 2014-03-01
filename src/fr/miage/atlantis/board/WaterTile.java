@@ -28,11 +28,44 @@ package fr.miage.atlantis.board;
 public class WaterTile extends GameTile{
 
     /**
-     * Constructeur de classe
+     * mIsBeginningWithSeaShark : Defini si le waterTile est un des 5 emplacement ou se placent les serpent de mer
+     */
+    private boolean mIsBeginningWithSeaShark;
+    
+    /**
+     * Constructeur de WaterTile
      * 
      * @param board Plateau de jeu auquel appartient le tiles de type mer
+     * @param name Nom du tile
      */
-    public WaterTile(GameBoard board, int x, int y) { 
-        super(board, x, y, 0);
+    public WaterTile(GameBoard board,String name){ 
+        super(board, name, 0);
+    }
+    
+    /**
+     * Constructeur de WaterTile #2
+     * 
+     * @param board Plateau auquel appartient le tile
+     * @param hg Tile en haut a gauche du tile courant
+     * @param hd Tile en haut a droite du tile courant
+     * @param g Tile a gauche du tile courant
+     * @param d Tile a droite du tile courant
+     * @param bd Tile en bas a droite du tile courant
+     * @param bg Tile en bas a gauche du tile courant
+     * @param name Nom du tile (placement selon le schema établi (de la forme A1 B1 B2 ...)
+     * @param height hauteur du tile
+     */    
+    public WaterTile(GameBoard board,GameTile hg,GameTile hd,GameTile g,GameTile d,GameTile bd,GameTile bg,String name, int height) {
+        super(board, hg, hd, g, d, bd, bg, name, 0);
+    }
+    
+    
+    
+    //-----------------------------------------------
+    //GETTERS                                       |
+    //-----------------------------------------------
+    
+    public boolean isBeginningWithSeaShark(){
+        return this.mIsBeginningWithSeaShark;
     }
 }

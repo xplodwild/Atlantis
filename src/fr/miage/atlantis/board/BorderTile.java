@@ -18,28 +18,27 @@
 
 package fr.miage.atlantis.board;
 
-
 /**
- * Tile de type montagne
+ * Tile de type plage
  * 
  * @author AtlantisTeam
  * @version 1.0
  * @date 28/02/2014 * 
  */
-public class MountainTile extends GameTile{
+public class BorderTile extends GameTile{
 
-   /**
-     * Constructeur de MountainTile
+    /**
+     * Constructeur de BorderTile
      * 
-     * @param board Plateau de jeu auquel appartient le tiles de type montagne
+     * @param board Plateau de jeu auquel appartient le tiles de type frontiere
      * @param name Nom du tile
      */
-    public MountainTile(GameBoard board,String name){ 
-        super(board, name, 3);
+    public BorderTile(GameBoard board){ 
+        super(board, "Limites du plateau", -99);
     }
     
     /**
-     * Constructeur de MountainTile #2
+     * Constructeur de BorderTile #2
      * 
      * @param board Plateau auquel appartient le tile
      * @param hg Tile en haut a gauche du tile courant
@@ -51,7 +50,7 @@ public class MountainTile extends GameTile{
      * @param name Nom du tile (placement selon le schema établi (de la forme A1 B1 B2 ...)
      * @param height hauteur du tile
      */    
-    public MountainTile(GameBoard board,GameTile hg,GameTile hd,GameTile g,GameTile d,GameTile bd,GameTile bg,String name, int height) {
-        super(board, hg, hd, g, d, bd, bg, name, 3);
-    } 
+    public BorderTile(GameBoard board,GameTile hg,GameTile hd,GameTile g,GameTile d,GameTile bd,GameTile bg,String name, int height) {
+        super(board, hg, hd, g, d, bd, bg, "Limites du plateau", -99);
+    }
 }
