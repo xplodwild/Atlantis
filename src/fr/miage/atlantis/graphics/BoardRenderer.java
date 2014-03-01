@@ -151,7 +151,7 @@ public class BoardRenderer extends Node {
                 x * TILE_SIZE + mTileOffset);
         
         // On l'attache à cette Node
-        output.setUserData(DATA_TILE, tile);
+        output.setUserData(DATA_TILE, tile.getName());
         attachChild(output);
     }
 }
