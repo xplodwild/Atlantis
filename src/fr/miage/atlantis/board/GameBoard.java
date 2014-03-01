@@ -75,17 +75,18 @@ public final class GameBoard {
        //Place le 1er Tile Water
        WaterTile nextTile2=new WaterTile(this,"Water #1");
        this.placeTileAtTheRightOf(nextTile, nextTile2);
-       
+       WaterTile bckp=null;
        
        //Puis les 8 suivants de la meme façon
        for(int i=2;i<8;i++){
+           bckp=nextTile2;
            WaterTile tmp=new WaterTile(this,"Water #"+i);
            this.placeTileAtTheRightOf(nextTile2,tmp);    
            nextTile2=tmp;
        }
        
        nextTile=new BorderTile(this,"Border #9");
-       this.placeTileAtTheBottomLeftOf(nextTile2, nextTile);
+       this.placeTileAtTheBottomLeftOf(bckp, nextTile);
        this.placeTileAtTheBottomLeftOf(nextTile, new BorderTile(this,"Border #10",true));
        
        
