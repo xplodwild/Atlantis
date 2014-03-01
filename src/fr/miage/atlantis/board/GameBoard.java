@@ -97,6 +97,50 @@ public final class GameBoard {
        nextTile=new BorderTile(this,"Border #45",true);
        this.placeTileAtTheBottomLeftOf(n46, nextTile);
        
+       //Place le 8e Tile Water
+       nextTile2=new WaterTile(this,"Water #8");
+       this.placeTileAtTheRightOf(nextTile, nextTile2);
+       
+       tmp=null;
+       //Puis les 8 suivants de la meme façon
+       for(int i=9;i<18;i++){           
+           tmp=new WaterTile(this,"Water #"+i);
+           this.placeTileAtTheRightOf(nextTile2,tmp);    
+           nextTile2=tmp;
+       }
+       
+       nextTile=new BorderTile(this,"Border #11",true);
+       this.placeTileAtTheRightOf(tmp, nextTile);      
+       //Fin de la ligne 3
+       
+       //Mise a jour de l'attribut du tile de landing
+       WaterTile temp=(WaterTile)this.tileSet.get("Water #17");
+       temp.setIsLandingTile(true);
+       this.tileSet.put("Water #17", temp);
+           
+       
+       
+       //Debut de la ligne 4
+       GameTile n45=this.tileSet.get("Border #45");
+       
+       nextTile=new BorderTile(this,"Border #44",true);
+       this.placeTileAtTheBottomLeftOf(n45, nextTile);
+       
+       //Place le 8e Tile Water
+       nextTile2=new WaterTile(this,"Water #18");
+       this.placeTileAtTheRightOf(nextTile, nextTile2);
+       
+       tmp=null;
+       //Puis les 8 suivants de la meme façon
+       for(int i=19;i<29;i++){           
+           tmp=new WaterTile(this,"Water #"+i);
+           this.placeTileAtTheRightOf(nextTile2,tmp);    
+           nextTile2=tmp;
+       }
+       
+       nextTile=new BorderTile(this,"Border #12",true);
+       this.placeTileAtTheRightOf(tmp, nextTile);      
+       //Fin de la ligne 4
        
                 
     }
@@ -236,7 +280,7 @@ public final class GameBoard {
         
         //Update le HashMap 
         this.tileSet.put(base.getName(), base);
-        this.tileSet.put(newTile.getName(), base);
+        this.tileSet.put(newTile.getName(), newTile);
         
         //Puis on update les Tiles ajacent pour prendre en compte le nouveau Til ajouté
         if(baseBottomRightTile != null){
@@ -270,7 +314,7 @@ public final class GameBoard {
         
         //Update le HashMap 
         this.tileSet.put(base.getName(), base);
-        this.tileSet.put(newTile.getName(), base);
+        this.tileSet.put(newTile.getName(), newTile);
         
         //Puis on update les Tiles ajacent pour prendre en compte le nouveau Til ajouté
         if(baseBottomLeftTile != null){
@@ -304,7 +348,7 @@ public final class GameBoard {
         
         //Update le HashMap 
         this.tileSet.put(base.getName(), base);
-        this.tileSet.put(newTile.getName(), base);
+        this.tileSet.put(newTile.getName(), newTile);
         
         //Puis on update les Tiles ajacent pour prendre en compte le nouveau Til ajouté
         if(baseLeftBottomTile != null){
@@ -319,7 +363,7 @@ public final class GameBoard {
     
     
     /**
-     * Permet de place un Tile en bas a droite d'un autre, tout en updatant les Tile adjacents.
+     * Permet de place un Tile en bas a gauche d'un autre, tout en updatant les Tile adjacents.
      * 
      * @param base Tile existant
      * @param newTile Nouveau tile a greffer
@@ -338,7 +382,7 @@ public final class GameBoard {
         
         //Update le HashMap 
         this.tileSet.put(base.getName(), base);
-        this.tileSet.put(newTile.getName(), base);
+        this.tileSet.put(newTile.getName(), newTile);
         
         //Puis on update les Tiles ajacent pour prendre en compte le nouveau Til ajouté
         if(baseRightBottomTile != null){

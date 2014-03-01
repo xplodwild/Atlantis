@@ -79,6 +79,7 @@ public class WaterTile extends GameTile {
         super(board, hg, hd, g, d, bd, bg, name, 0);
     }
 
+    
     //-----------------------------------------------
     //GETTERS                                       |
     //-----------------------------------------------
@@ -89,4 +90,19 @@ public class WaterTile extends GameTile {
     public boolean isLandingTile() {
         return this.mIsLandingTile;
     }
+
+    
+    //-----------------------------------------------
+    //SETTERS                                       |
+    //-----------------------------------------------
+    
+    public void setIsBeginningWithSeaShark(boolean mIsBeginningWithSeaShark) {
+        this.mIsBeginningWithSeaShark = mIsBeginningWithSeaShark;
+    }
+
+    public void setIsLandingTile(boolean mIsLandingTile) {
+        this.mIsLandingTile = mIsLandingTile;
+    }
+    
+    
 }
