@@ -28,7 +28,7 @@ public class GameBoard {
     private HexagonTable<GameTile> mBoard;
     
     public GameBoard() {
-        throw new UnsupportedOperationException("Not implemented");
+        
     }
     
     public boolean isTileAtWaterEdge(GameTile tile) {

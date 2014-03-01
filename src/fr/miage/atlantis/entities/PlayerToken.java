@@ -33,10 +33,13 @@ public class PlayerToken extends GameEntity {
     
     private Player mPlayer;
     private int mState;
+    private int mPoints;
     
-    public PlayerToken(GameTile tile, Player p) {
+    public PlayerToken(GameTile tile, Player p, int points) {
         super("PlayerToken", tile);
-        throw new UnsupportedOperationException("Not implemented");
+        mState = STATE_ON_LAND;
+        mPoints = points;
+        mPlayer = p;
     }
     
     public int getState() {
@@ -44,7 +47,7 @@ public class PlayerToken extends GameEntity {
     }
     
     public void setState(int state) {
-        throw new UnsupportedOperationException("Not implemented");
+        mState = state;
     }
     
 }
