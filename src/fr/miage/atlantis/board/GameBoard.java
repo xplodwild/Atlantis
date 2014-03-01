@@ -76,18 +76,17 @@ public final class GameBoard {
        //Place le 1er Tile Water
        WaterTile nextTile2=new WaterTile(this,"Water #1");
        this.placeTileAtTheRightOf(nextTile, nextTile2);
-       WaterTile bckp=null;
        
+       WaterTile tmp=null;
        //Puis les 8 suivants de la meme façon
-       for(int i=2;i<8;i++){
-           bckp=nextTile2;
-           WaterTile tmp=new WaterTile(this,"Water #"+i);
+       for(int i=2;i<8;i++){           
+           tmp=new WaterTile(this,"Water #"+i);
            this.placeTileAtTheRightOf(nextTile2,tmp);    
            nextTile2=tmp;
        }
        
        nextTile=new BorderTile(this,"Border #9");
-       this.placeTileAtTheRightOf(bckp, nextTile);
+       this.placeTileAtTheRightOf(tmp, nextTile);
        this.placeTileAtTheRightOf(nextTile, new BorderTile(this,"Border #10",true));
        //Fin de la ligne 2
        
@@ -335,7 +334,7 @@ public final class GameBoard {
         
         //Puis on recupere les tile adjacent aux deux tile et on les lient a la nouvelle tile fraichement crée.
         newTile.setRightTile(baseRightBottomTile);
-        newTile.setRightUpperTile(baseLeftTile);
+        newTile.setLeftUpperTile(baseLeftTile);
         
         //Update le HashMap 
         this.tileSet.put(base.getName(), base);
