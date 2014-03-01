@@ -39,6 +39,21 @@ public final class GameBoard {
      */
     private HashMap<String,GameTile> tileSet;
     
+    /**
+     * Tile de foret restante à placer
+     */
+    private int forestTilesRemaining;
+    
+    /**
+     * Tile de plage restante a placer
+     */
+    private int beachTilesRemaining;
+    
+    /**
+     * Tile de montagne restante a placer
+     */
+    private int mountainTilesRemaining;
+    
     
     /**
      * Constructeur de GameBoard
@@ -47,7 +62,11 @@ public final class GameBoard {
     public GameBoard() {
        /*On vas creer et adresser ici les tiles en commencant par la haut gauche du plateau */
        /*Le nommage sera A1 pour le tile Haut Gauche puis on incremente*/
-        tileSet = new HashMap<String, GameTile>();
+       tileSet = new HashMap<String, GameTile>();
+       
+       this.beachTilesRemaining=16;
+       this.forestTilesRemaining=16;
+       this.mountainTilesRemaining=8;
        
        //On defini les deux premiere Tile de frontiere du board
        BorderTile firstTile=new BorderTile(this,"Border #1");  
@@ -113,13 +132,6 @@ public final class GameBoard {
        this.placeTileAtTheRightOf(tmp, nextTile);      
        //Fin de la ligne 3
        
-       //Mise a jour de l'attribut du tile de landing
-       WaterTile temp=(WaterTile)this.tileSet.get("Water #17");
-       temp.setIsLandingTile(true);
-       this.tileSet.put("Water #17", temp);
-           
-       
-       
        //Debut de la ligne 4
        GameTile n45=this.tileSet.get("Border #45");
        
@@ -141,6 +153,118 @@ public final class GameBoard {
        nextTile=new BorderTile(this,"Border #12",true);
        this.placeTileAtTheRightOf(tmp, nextTile);      
        //Fin de la ligne 4
+       
+                   
+       //Mise a jour de l'attribut du tile de landing et SeaShark de la partie Haute du plateau.
+       WaterTile temp=(WaterTile)this.tileSet.get("Water #17");
+       temp.setIsLandingTile(true);
+       this.tileSet.put("Water #17", temp);
+       
+       
+       temp=(WaterTile)this.tileSet.get("Water #18");
+       temp.setIsLandingTile(true);
+       this.tileSet.put("Water #18", temp);
+       
+       temp=(WaterTile)this.tileSet.get("Water #8");
+       temp.setIsLandingTile(true);
+       temp.setIsBeginningWithSeaShark(true);
+       this.tileSet.put("Water #8", temp);
+       
+       temp=(WaterTile)this.tileSet.get("Water #28");
+       temp.setIsLandingTile(true);
+       temp.setIsBeginningWithSeaShark(true);
+       this.tileSet.put("Water #28", temp);
+       
+       
+       
+       
+       
+       //Debut de la ligne 5
+       GameTile n44=this.tileSet.get("Border #44");
+       
+       nextTile=new BorderTile(this,"Border #42");
+       this.placeTileAtTheBottomRightOf(n44, nextTile);
+       
+       //Place le 29e Tile Water
+       nextTile2=new WaterTile(this,"Water #29");
+       this.placeTileAtTheRightOf(nextTile, nextTile2);
+       
+       tmp=null;
+       //Puis les 2 suivants de la meme façon
+       for(int i=30;i<32;i++){           
+           tmp=new WaterTile(this,"Water #"+i);
+           this.placeTileAtTheRightOf(nextTile2,tmp);    
+           nextTile2=tmp;
+       }
+       
+       GameTile tmp2=null;
+       GameTile nextTile3=nextTile2;
+       for(int i=1;i<5;i++){           
+           tmp2=this.generateRandomTile("Random #"+i);
+           this.placeTileAtTheRightOf(nextTile3,tmp2);    
+           nextTile3=tmp2;
+       }
+       
+       //Place le 32e Tile Water
+       nextTile2=new WaterTile(this,"Water #32");
+       this.placeTileAtTheRightOf(nextTile3, nextTile2);
+       
+       tmp=null;
+       //Puis les 2 suivants de la meme façon
+       for(int i=33;i<35;i++){           
+           tmp=new WaterTile(this,"Water #"+i);
+           this.placeTileAtTheRightOf(nextTile2,tmp);    
+           nextTile2=tmp;
+       }
+             
+       nextTile=new BorderTile(this,"Border #13");
+       this.placeTileAtTheRightOf(tmp, nextTile);      
+       //Fin de la ligne 5
+       
+       
+       //Debut de la ligne 6
+       GameTile n42=this.tileSet.get("Border #42");
+       
+       nextTile=new BorderTile(this,"Border #41");
+       this.placeTileAtTheBottomLeftOf(n42, nextTile);
+       
+       //Place le 29e Tile Water
+       nextTile2=new WaterTile(this,"Water #35");
+       this.placeTileAtTheRightOf(nextTile, nextTile2);
+       
+       tmp=null;
+       //Puis les 2 suivants de la meme façon
+       for(int i=36;i<38;i++){           
+           tmp=new WaterTile(this,"Water #"+i);
+           this.placeTileAtTheRightOf(nextTile2,tmp);    
+           nextTile2=tmp;
+       }
+       
+       tmp2=null;
+       nextTile3=nextTile2;
+       for(int i=1;i<6;i++){           
+           tmp2=this.generateRandomTile("Random #"+i);
+           this.placeTileAtTheRightOf(nextTile3,tmp2);    
+           nextTile3=tmp2;
+       }
+       
+       //Place le 32e Tile Water
+       nextTile2=new WaterTile(this,"Water #38");
+       this.placeTileAtTheRightOf(nextTile3, nextTile2);
+       
+       tmp=null;
+       //Puis les 2 suivants de la meme façon
+       for(int i=39;i<41;i++){           
+           tmp=new WaterTile(this,"Water #"+i);
+           this.placeTileAtTheRightOf(nextTile2,tmp);    
+           nextTile2=tmp;
+       }
+             
+       nextTile=new BorderTile(this,"Border #14");
+       this.placeTileAtTheRightOf(tmp, nextTile);      
+       //Fin de la ligne 6
+       
+       
        
                 
     }
@@ -182,19 +306,21 @@ public final class GameBoard {
      * 
      * @return un tile generé aléatoirement parmis les 3 types.
      */
-    public GameTile generateRandomTile(int forestRemaining,int beachRemaining,int mountainRemaining){
+    public GameTile generateRandomTile(String name){
         GameTile retour=null;
         int min=0;
         int max=3;
         int x=-1;
         
-        if(forestRemaining==0){
+        if(this.forestTilesRemaining==0){
             min++;
         }
-        if(beachRemaining==0){
+        
+        if(this.beachTilesRemaining==0){
             min++;
         }
-        if(mountainRemaining==0){
+        
+        if(this.mountainTilesRemaining==0){
             min++;
         }
                 
@@ -203,13 +329,13 @@ public final class GameBoard {
         }   
         
         switch(x){
-            case 0:     retour=new ForestTile(this,"tempName");
+            case 0:     retour=new ForestTile(this,name);
             break;   
                 
-            case 1:     retour=new BeachTile(this,"tempName");
+            case 1:     retour=new BeachTile(this,name);
             break; 
                 
-            case 2:     retour=new MountainTile(this,"tempName");
+            case 2:     retour=new MountainTile(this,name);
             break; 
                 
             default:    retour=null;
