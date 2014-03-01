@@ -28,9 +28,9 @@ package fr.miage.atlantis.board;
 public class BorderTile extends GameTile{
 
     /**
-     * Constructeur de Beachtile
+     * Constructeur de BorderTile
      * 
-     * @param board Plateau de jeu auquel appartient le tiles de type plage
+     * @param board Plateau de jeu auquel appartient le tiles de type frontiere
      * @param name Nom du tile
      */
     public BorderTile(GameBoard board){ 
@@ -38,7 +38,7 @@ public class BorderTile extends GameTile{
     }
     
     /**
-     * Constructeur de Beachtile #2
+     * Constructeur de BorderTile #2
      * 
      * @param board Plateau auquel appartient le tile
      * @param hg Tile en haut a gauche du tile courant

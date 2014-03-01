@@ -40,7 +40,7 @@ public class GameBoard {
      */
     public GameBoard() {
        /*On vas creer et adresser ici les tiles en commencant par la haut gauche du plateau */
-        /*Le nommage sera A1 pour le tile Haut Gauche puis on incremente*/
+       /*Le nommage sera A1 pour le tile Haut Gauche puis on incremente*/
     }
     
     /**
