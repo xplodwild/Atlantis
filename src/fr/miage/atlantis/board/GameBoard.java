@@ -245,11 +245,47 @@ public final class GameBoard {
         //Puis on update les Tiles ajacent pour prendre en compte le nouveau Til ajouté
         if(baseLeftBottomTile != null){
             baseLeftBottomTile.setRightUpperTile(newTile);
+            this.tileSet.put(baseLeftBottomTile.getName(), baseLeftBottomTile);
         }
         if(baseRightTile != null){
             baseRightTile.setRightBottomTile(newTile);
+            this.tileSet.put(baseRightTile.getName(), baseRightTile);
         }        
     }
+    
+     /**
+     * Permet de place un Tile en bas a droite d'un autre, tout en updatant les Tile adjacents.
+     * 
+     * @param base Tile existant
+     * @param newTile Nouveau tile a greffer
+     */
+    public void placeTileAtTheBottomLeftOf(GameTile base,GameTile newTile) {        
+        //On lie les deux tiles entre elles
+        base.setLeftBottomTile(newTile);
+        newTile.setRightUpperTile(newTile);
+        
+        GameTile baseLeftTile=base.getLeftTile();
+        GameTile baseRightBottomTile=base.getRightBottomTile();
+        
+        //Puis on recupere les tile adjacent aux deux tile et on les lient a la nouvelle tile fraichement crée.
+        newTile.setRightTile(baseRightBottomTile);
+        newTile.setRightBottomTile(baseLeftTile);
+        
+        //Update le HashMap 
+        this.tileSet.put(base.getName(), base);
+        this.tileSet.put(newTile.getName(), base);
+        
+        //Puis on update les Tiles ajacent pour prendre en compte le nouveau Til ajouté
+        if(baseRightBottomTile != null){
+            baseRightBottomTile.setLeftTile(newTile);
+            this.tileSet.put(baseRightBottomTile.getName(), baseRightBottomTile);
+        }
+        if(baseLeftTile != null){
+            baseLeftTile.setRightBottomTile(newTile);
+            this.tileSet.put(baseLeftTile.getName(), baseLeftTile);
+        }        
+    }
+    
     
     //-----------------------------------------------
     //GETTERS                                       |
