@@ -175,11 +175,11 @@ public abstract class GameTile {
         return mIsOnBoard;
     }
 
-    public String getmName() {
+    public String getName() {
         return mName;
     }
 
-    public GameTile getmLeftTile() {
+    public GameTile getLeftTile() {
         return mLeftTile;
     }
 

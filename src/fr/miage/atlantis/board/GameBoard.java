@@ -18,6 +18,9 @@
 
 package fr.miage.atlantis.board;
 
+import java.util.HashSet;
+import java.util.Iterator;
+
 
 
 /**
@@ -29,7 +32,7 @@ package fr.miage.atlantis.board;
  */
 public class GameBoard {
 
-    
+    private HashSet<GameTile> tileSet;
     
     /**
      * Constructeur de GameBoard
@@ -58,18 +61,38 @@ public class GameBoard {
         return isAtWaterEdge;
     }
     
+    
+    /**
+     * Teste si existance d'un tile d'une hauteur donnée dans les tiles de la board
+     * 
+     * @param h hauteur du tile dont on teste l'existance
+     * @return 
+     */
     public boolean hasTileAtLevel(int h) {
-        throw new UnsupportedOperationException("Not implemented");
+        Boolean retour=false;
+        
+        Iterator<GameTile> it=this.tileSet.iterator();
+        while(it.hasNext()){
+            GameTile tmp=it.next();
+            if(tmp.getHeight() == h){
+                retour=true;
+                break;
+            }
+        }        
+        return retour;
     }
     
     /**
      * Coule le tile donné et le supprime du plateau, passe tout les player present sur le tile à Swimmer
      * 
      * @param tile tile a couler
-     * @return 
      */
-    public boolean sinkTile(GameTile tile) {
-        throw new UnsupportedOperationException("Not implemented");
+    public void sinkTile(GameTile tile) {
+        
+        //Reste a couler les entities presente et agir dessus.
+        
+        this.tileSet.remove(tile);
+        throw new UnsupportedOperationException("Not fully implemented yet");
     }
     
     public boolean canPlaceTile() {
@@ -83,24 +106,83 @@ public class GameBoard {
             //TODO : Do the job !!! Inserer le tile dans l'hexagonmachin via une fonction a coder dans hexagonmachin
         }
     }
+            
     
-    public GameTile getTileAt(int x, int y) {
-        throw new UnsupportedOperationException("Not implemented");
+    //-----------------------------------------------
+    //GETTERS                                       |
+    //-----------------------------------------------
+    
+    /**
+     * Retourne le tile de nom donnée appartenant a la board.
+     * 
+     * @param name Nom du tile a retourner
+     * @return Tile de la board de nom 'name' ou null si introuvable
+     */
+    public GameTile getTileByName(String name) {
+        GameTile retour=null;
+        
+        Iterator<GameTile> it=this.tileSet.iterator();
+        while(it.hasNext()){
+            GameTile tmp=it.next();
+            if(tmp.getName().equals(name)){
+                retour=tmp;
+                break;
+            }
+        }        
+        return retour;
     }
 
     private GameTile getUpperRightCornerTile(GameTile tile) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-}
+        return tile.getRightUpperTile();
+    }
 
     private GameTile getUpperLeftCornerTile(GameTile tile) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return tile.getLeftUpperTile();
     }
 
     private GameTile getBottomLeftCornerTile(GameTile tile) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       return tile.getLeftBottomTile();
     }
 
     private GameTile getBottomRightCornerTile(GameTile tile) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return tile.getRightBottomTile();
     }
+    
+    private GameTile getRightSideTile(GameTile tile) {
+        return tile.getRightTile();
+    }
+    
+    private GameTile getLeftSideTile(GameTile tile) {
+        return tile.getLeftTile();
+    }
+    
+    
+    //-----------------------------------------------
+    //SETTERS                                       |
+    //-----------------------------------------------
+    
+    
+    private void setUpperRightCornerTile(GameTile tile,GameTile toBePlaced) {
+        tile.setRightUpperTile(toBePlaced);
+    }
+
+    private void setUpperLeftCornerTile(GameTile tile,GameTile toBePlaced) {
+        tile.setLeftUpperTile(toBePlaced);
+    }
+
+    private void setBottomLeftCornerTile(GameTile tile,GameTile toBePlaced) {
+       tile.setLeftBottomTile(toBePlaced);
+    }
+
+    private void setBottomRightCornerTile(GameTile tile,GameTile toBePlaced) {
+        tile.setRightBottomTile(toBePlaced);
+    }
+    
+    private void setRightSideTile(GameTile tile,GameTile toBePlaced) {
+        tile.setRightTile(toBePlaced);
+    }
+    
+    private void setLeftSideTile(GameTile tile,GameTile toBePlaced) {
+        tile.setLeftTile(toBePlaced);
+    }    
 }
