@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package fr.miage.atlantis.graphics;
+package fr.miage.atlantis.graphics.models;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;

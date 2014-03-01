@@ -18,6 +18,8 @@
 
 package fr.miage.atlantis.graphics;
 
+import fr.miage.atlantis.graphics.models.SharkModel;
+import fr.miage.atlantis.graphics.models.TileModel;
 import com.jme3.app.SimpleApplication;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Node;

@@ -16,8 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package fr.miage.atlantis.graphics;
+package fr.miage.atlantis.graphics.models;
 
+import fr.miage.atlantis.graphics.models.StaticModel;
 import com.jme3.animation.AnimChannel;
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.LoopMode;
