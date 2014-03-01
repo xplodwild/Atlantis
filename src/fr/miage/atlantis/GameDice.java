@@ -32,11 +32,15 @@ public class GameDice {
     public float[] mProbability;
     
     public GameDice(float[] probability) {
-        throw new UnsupportedOperationException("Not implemented");    
+        if (probability == null || probability.length != FACE_COUNT) {
+            throw new IllegalArgumentException("The probability array must have FACE_COUNT values");
+        }
+        
+        mProbability = probability;
     }
     
     public static GameDice createDefault() {
-        throw new UnsupportedOperationException("Not implemented");
+        return new GameDice(new float[]{ 0.33333333f, 0.3333333f, 0.3333333f });
     }
     
     public int roll() {

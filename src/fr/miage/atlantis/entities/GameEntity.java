@@ -35,7 +35,8 @@ public class GameEntity {
     private GameTile mTile;
     
     public GameEntity(final String name, GameTile tile) {
-        throw new UnsupportedOperationException("Not implemented");
+        mName = name;
+        mTile = tile;
     }
     
     public void moveToTile(GameLogic logic, GameTile tile) {

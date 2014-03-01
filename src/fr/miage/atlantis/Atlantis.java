@@ -31,8 +31,12 @@ public class Atlantis {
         app.start();
     }
     
+    public Atlantis() {
+        mGameLogic = new Game3DLogic();
+    }
+    
     public void start() {
-        throw new UnsupportedOperationException("Not implemented");
+        mGameLogic.boot();
     }
 
 }

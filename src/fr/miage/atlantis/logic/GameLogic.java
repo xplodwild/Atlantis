@@ -33,11 +33,20 @@ public abstract class GameLogic implements GameTurnListener {
     private Player[] mPlayers;
     
     public GameLogic() {
-        throw new UnsupportedOperationException("Not implemented");
+        mBoard = new GameBoard();
+        mDice = GameDice.createDefault();
+        mLog = new GameLog();
     }
     
-    public void prepareGame(int nbPlayers) {
-        throw new UnsupportedOperationException("Not implemented");
+    public void boot() {
+        // Afficher un menu pour lancer la partie
+    }
+    
+    public void prepareGame(String[] players) {
+        mPlayers = new Player[players.length];
+        for (int i = 0; i < mPlayers.length; i++) {
+            mPlayers[i] = new Player(players[i]);
+        }
     }
     
     public void startGame() {

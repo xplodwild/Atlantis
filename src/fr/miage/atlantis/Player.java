@@ -20,6 +20,7 @@ package fr.miage.atlantis;
 
 import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.entities.PlayerToken;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,8 +32,22 @@ public class Player {
     private List<PlayerToken> mTokens;
     private List<GameTile> mActionTiles;
     
-    public Player() {
-        throw new UnsupportedOperationException("Not implemented");
+    public Player(final String name) {
+        mName = name;
+        mTokens = new ArrayList<PlayerToken>();
+        mActionTiles = new ArrayList<GameTile>();
+        
+        // On génère les 10 tokens par joueur
+        mTokens.add(new PlayerToken(null, this, 6));
+        mTokens.add(new PlayerToken(null, this, 5));
+        mTokens.add(new PlayerToken(null, this, 4));
+        mTokens.add(new PlayerToken(null, this, 3));
+        mTokens.add(new PlayerToken(null, this, 3));
+        mTokens.add(new PlayerToken(null, this, 2));
+        mTokens.add(new PlayerToken(null, this, 2));
+        mTokens.add(new PlayerToken(null, this, 1));
+        mTokens.add(new PlayerToken(null, this, 1));
+        mTokens.add(new PlayerToken(null, this, 1));
     }
     
     public String getName() {

@@ -18,6 +18,7 @@
 
 package fr.miage.atlantis.logic;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,11 +29,11 @@ public class GameLog {
     private List<GameTurn> mTurns;
     
     public GameLog() {
-        throw new UnsupportedOperationException("Not implemented");
+        mTurns = new ArrayList<GameTurn>();
     }
     
     public GameTurn getTurn(int i) {
-        throw new UnsupportedOperationException("Not implemented");
+        return mTurns.get(i);
     }
     
     public GameTurn getNextTurn() {
