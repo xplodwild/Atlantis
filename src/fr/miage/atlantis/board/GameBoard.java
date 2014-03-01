@@ -65,6 +65,8 @@ public class GameBoard {
         
     }
     
+    
+    
     /**
      * Teste si le tile donné est entouré d'au moins une tile de type WaterTile (h=0)
      * 
@@ -83,6 +85,12 @@ public class GameBoard {
         }    
         return isAtWaterEdge;
     }
+    
+    
+    public GameTile getFirstTile(){
+        return this.tileSet.get("Bord1");
+    }
+    
     
     /**
      * Génère un tile de type aléatoire
@@ -138,7 +146,7 @@ public class GameBoard {
         
         //Reste a couler les entities presente et agir dessus.
         
-        this.tileSet.remove(tile);
+        this.tileSet.remove(tile.getName());
         throw new UnsupportedOperationException("Not fully implemented yet");
     }
     

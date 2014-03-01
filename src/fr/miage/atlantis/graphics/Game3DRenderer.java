@@ -42,6 +42,8 @@ public class Game3DRenderer extends SimpleApplication {
         mSceneNode = new Node("Scene");
         mEnvironment = new Environment(rootNode, assetManager, viewPort);
         
+        
+        
         TileModel testTile = new TileModel(1, assetManager);
         //rootNode.attachChild(testTile);
         TileModel testTile2 = new TileModel(2, assetManager);
@@ -51,10 +53,10 @@ public class Game3DRenderer extends SimpleApplication {
         testTile3.setLocalTranslation(20, 0, 20);
         //rootNode.attachChild(testTile3);
         
-        WhaleModel whale = new WhaleModel(assetManager);
+        /*WhaleModel whale = new WhaleModel(assetManager);
         whale.printAnimations();
         rootNode.attachChild(whale);
-        whale.playAnimation(WhaleModel.ANIMATION_ATTACK_BOAT);
+        whale.playAnimation(WhaleModel.ANIMATION_ATTACK_BOAT);*/
         
         /*SharkModel shark = new SharkModel(assetManager);
         shark.printAnimations();
@@ -65,6 +67,10 @@ public class Game3DRenderer extends SimpleApplication {
         shark.printAnimations();
         rootNode.attachChild(shark);
         shark.playAnimation(SeaSerpentModel.ANIMATION_IDLE);*/
+    }
+    
+    public TileModel addTileToRender(GameTile tile) {
+        
     }
 
     @Override
