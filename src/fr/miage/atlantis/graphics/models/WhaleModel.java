@@ -23,16 +23,19 @@ import com.jme3.asset.AssetManager;
 /**
  *
  */
-public class SharkModel extends AnimatedModel {
-    
+public class WhaleModel extends AnimatedModel {
+
+    public final static String ANIMATION_IDLE = "Idle";
+    public final static String ANIMATION_RISE_IDLE = "Rise_Idle";
+    public final static String ANIMATION_SWIM = "Swim";
     public final static String ANIMATION_RISE = "Rise";
     public final static String ANIMATION_DIVE = "Dive";
-    public final static String ANIMATION_SUCKED_DOWN_WHIRPOOL = "sucked_down_whirpool";
-    public final static String ANIMATION_SWIM_CYCLE = "swim_cycle";
-    public final static String ANIMATION_ATTACK_SWIMMER = "attack_swimmer";
+    public final static String ANIMATION_ATTACK_BOAT = "Attack_Boat";
+    public final static String ANIMATION_SUCKED_DOWN = "Sucked_Down";
     
-    public SharkModel(AssetManager am) {
-        super(am, "Models/sharkA.mesh.xml", "Textures/shark.png", null);
+    public WhaleModel(AssetManager am) {
+        super(am, "Models/whaleA.mesh.xml", "Textures/whale.png", null);
     }
+
     
 }

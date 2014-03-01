@@ -23,7 +23,8 @@ import fr.miage.atlantis.graphics.models.TileModel;
 import com.jme3.app.SimpleApplication;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Node;
-import fr.miage.atlantis.entities.Shark;
+import fr.miage.atlantis.graphics.models.SeaSerpentModel;
+import fr.miage.atlantis.graphics.models.WhaleModel;
 
 /**
  *
@@ -50,10 +51,20 @@ public class Game3DRenderer extends SimpleApplication {
         testTile3.setLocalTranslation(20, 0, 20);
         //rootNode.attachChild(testTile3);
         
-        SharkModel shark = new SharkModel(assetManager);
+        WhaleModel whale = new WhaleModel(assetManager);
+        whale.printAnimations();
+        rootNode.attachChild(whale);
+        whale.playAnimation(WhaleModel.ANIMATION_ATTACK_BOAT);
+        
+        /*SharkModel shark = new SharkModel(assetManager);
         shark.printAnimations();
         rootNode.attachChild(shark);
-        shark.playAnimation(SharkModel.ANIMATION_ATTACK_SWIMMER);
+        shark.playAnimation(SharkModel.ANIMATION_DIVE);*/
+        
+        /*SeaSerpentModel shark = new SeaSerpentModel(assetManager);
+        shark.printAnimations();
+        rootNode.attachChild(shark);
+        shark.playAnimation(SeaSerpentModel.ANIMATION_IDLE);*/
     }
 
     @Override
