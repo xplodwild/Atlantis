@@ -36,20 +36,36 @@ public class StaticModel extends Node {
 
     public StaticModel(AssetManager am, String meshName,
             String diffusePath, String normalPath) {
+        // On charge le mesh
         mModel = am.loadModel(meshName);
+        
+        // Application de l'échelle par défaut
         mModel.scale(DEFAULT_SCALE);
         
+        // Application de la texture
         if (diffusePath != null) {
             mMaterial = new Material(am, "Common/MatDefs/Light/Lighting.j3md");
             mMaterial.setTexture("DiffuseMap", am.loadTexture(diffusePath));
+
             if (normalPath != null) {
+                // Il faut calculer les tangentes pour que le lighting
+                // fonctionne avec une texture de normalmap
                 TangentBinormalGenerator.generate(mModel);
                 mMaterial.setTexture("NormalMap", am.loadTexture(normalPath));
             }
+
             mModel.setMaterial(mMaterial);
         }
         
         this.attachChild(mModel);
+    }
+    
+    public Spatial getModel() {
+        return mModel;
+    }
+    
+    public Material getMaterial() {
+        return mMaterial;
     }
     
     

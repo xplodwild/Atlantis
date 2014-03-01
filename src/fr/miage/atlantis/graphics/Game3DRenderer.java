@@ -21,6 +21,7 @@ package fr.miage.atlantis.graphics;
 import com.jme3.app.SimpleApplication;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Node;
+import fr.miage.atlantis.entities.Shark;
 
 /**
  *
@@ -39,14 +40,18 @@ public class Game3DRenderer extends SimpleApplication {
         mEnvironment = new Environment(rootNode, assetManager, viewPort);
         
         TileModel testTile = new TileModel(1, assetManager);
-        rootNode.attachChild(testTile);
+        //rootNode.attachChild(testTile);
         TileModel testTile2 = new TileModel(2, assetManager);
         testTile2.setLocalTranslation(10, 0, 10);
-        rootNode.attachChild(testTile2);
+        //rootNode.attachChild(testTile2);
         TileModel testTile3 = new TileModel(3, assetManager);
         testTile3.setLocalTranslation(20, 0, 20);
-        rootNode.attachChild(testTile3);
+        //rootNode.attachChild(testTile3);
         
+        SharkModel shark = new SharkModel(assetManager);
+        shark.printAnimations();
+        rootNode.attachChild(shark);
+        shark.playAnimation(SharkModel.ANIMATION_ATTACK_SWIMMER);
     }
 
     @Override
