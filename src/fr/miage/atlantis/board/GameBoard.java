@@ -69,6 +69,7 @@ public final class GameBoard {
        //Debut de la ligne 2
        nextTile=new BorderTile(this,"Border #47");
        this.placeTileAtTheBottomLeftOf(firstTile, nextTile);
+       this.placeTileAtTheLeftOf(nextTile, new BorderTile(this,"Border #46"));
        
        //Place le 1er Tile Water
        WaterTile nextTile2=new WaterTile(this,"Water #1");
