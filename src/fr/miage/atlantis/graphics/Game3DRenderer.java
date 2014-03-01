@@ -22,6 +22,7 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Node;
 import fr.miage.atlantis.Game3DLogic;
+import fr.miage.atlantis.graphics.models.PlayerModel;
 
 /**
  *
@@ -76,6 +77,11 @@ public class Game3DRenderer extends SimpleApplication {
         shark.printAnimations();
         rootNode.attachChild(shark);
         shark.playAnimation(SeaSerpentModel.ANIMATION_IDLE);*/
+        
+        /*PlayerModel player = new PlayerModel(assetManager, PlayerModel.COLOR_BLUE);
+        player.printAnimations();
+        rootNode.attachChild(player);
+        player.playAnimation(PlayerModel.ANIMATION_GET_ON_OFF_BOAT);*/
     }
     
     
