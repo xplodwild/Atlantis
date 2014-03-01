@@ -43,6 +43,7 @@ public class GameBoard {
     public GameBoard() {
        /*On vas creer et adresser ici les tiles en commencant par la haut gauche du plateau */
        /*Le nommage sera A1 pour le tile Haut Gauche puis on incremente*/
+        tileSet = new HashMap<String, GameTile>();
        
        //On defini les deux premiere Tile de frontiere du board
        BorderTile firstTile=new BorderTile(this);  
@@ -55,7 +56,7 @@ public class GameBoard {
        
        //Puis les 8 suivants de la meme façon
        for(int i=3;i<9;i++){
-           this.placeTileAtTheRightOf(nextTile, nextTile);
+           this.placeTileAtTheRightOf(nextTile, new BorderTile(this));
            this.tileSet.put("Bord"+i, nextTile);
        }
        

@@ -33,7 +33,7 @@ public class Game3DLogic extends GameLogic {
     
     public Game3DLogic() {
         super();
-        mRenderer = new Game3DRenderer();
+        mRenderer = new Game3DRenderer(this);
     }
     
     @Override

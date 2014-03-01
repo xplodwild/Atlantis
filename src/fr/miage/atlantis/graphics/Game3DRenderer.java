@@ -18,13 +18,13 @@
 
 package fr.miage.atlantis.graphics;
 
-import fr.miage.atlantis.graphics.models.SharkModel;
 import fr.miage.atlantis.graphics.models.TileModel;
 import com.jme3.app.SimpleApplication;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Node;
-import fr.miage.atlantis.graphics.models.SeaSerpentModel;
-import fr.miage.atlantis.graphics.models.WhaleModel;
+import fr.miage.atlantis.Game3DLogic;
+import fr.miage.atlantis.board.GameTile;
+import fr.miage.atlantis.graphics.models.EmptyTileModel;
 
 /**
  *
@@ -33,6 +33,11 @@ public class Game3DRenderer extends SimpleApplication {
     
     private Node mSceneNode;
     private Environment mEnvironment;
+    private Game3DLogic mParent;
+    
+    public Game3DRenderer(Game3DLogic parent) {
+        mParent = parent;
+    }
 
     @Override
     public void simpleInitApp() {
@@ -40,10 +45,36 @@ public class Game3DRenderer extends SimpleApplication {
         cam.setFrustumFar(1000.0f);
         
         mSceneNode = new Node("Scene");
+        rootNode.attachChild(mSceneNode);
         mEnvironment = new Environment(rootNode, assetManager, viewPort);
         
+        // Rendu du plateau
+        GameTile currentTile = mParent.getBoard().getFirstTile();
+        GameTile rowHeadTile = currentTile;
         
+        int x = 0, y = 0;
+        while (true) {
+            x = 0;
+            addTileToRender(currentTile, x, y);
+            
+            while (currentTile.getRightTile() != null) {
+                x++;
+                currentTile = currentTile.getRightTile();
+                addTileToRender(currentTile, x, y);
+            }
+            
+            if (rowHeadTile.getLeftBottomTile() != null) {
+                rowHeadTile = rowHeadTile.getLeftBottomTile();
+                currentTile = rowHeadTile;
+            } else if (rowHeadTile.getRightBottomTile() != null) {
+                rowHeadTile = rowHeadTile.getRightBottomTile();
+                currentTile = rowHeadTile;
+            } else {
+                break;
+            }
+        }
         
+        /*
         TileModel testTile = new TileModel(1, assetManager);
         //rootNode.attachChild(testTile);
         TileModel testTile2 = new TileModel(2, assetManager);
@@ -52,6 +83,7 @@ public class Game3DRenderer extends SimpleApplication {
         TileModel testTile3 = new TileModel(3, assetManager);
         testTile3.setLocalTranslation(20, 0, 20);
         //rootNode.attachChild(testTile3);
+        */
         
         /*WhaleModel whale = new WhaleModel(assetManager);
         whale.printAnimations();
@@ -69,8 +101,18 @@ public class Game3DRenderer extends SimpleApplication {
         shark.playAnimation(SeaSerpentModel.ANIMATION_IDLE);*/
     }
     
-    public TileModel addTileToRender(GameTile tile) {
+    public Node addTileToRender(GameTile tile, int x, int y) {
+        Node output;
+        if (tile.getHeight() > 0) {
+            output = new TileModel(tile.getHeight(), assetManager);
+        } else {
+            output = new EmptyTileModel(assetManager);
+        }
         
+        output.setLocalTranslation(y * 20, 0, x * 20);
+        mSceneNode.attachChild(output);
+        
+        return output;
     }
 
     @Override
