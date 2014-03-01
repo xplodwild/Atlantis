@@ -18,7 +18,7 @@
 
 package fr.miage.atlantis.board;
 
-import fr.miage.atlantis.utils.HexagonTable;
+
 
 /**
  * Classe représentant le plateau de jeu
@@ -29,17 +29,15 @@ import fr.miage.atlantis.utils.HexagonTable;
  */
 public class GameBoard {
 
-    /**
-     * mBoard Implementation du plateau
-     */
-    private HexagonTable<GameTile> mBoard;
+    
     
     /**
      * Constructeur de GameBoard
      * 
      */
     public GameBoard() {
-        this.mBoard=new HexagonTable<GameTile>();
+       /*On vas creer et adresser ici les tiles en commencant par la haut gauche du plateau */
+        /*Le nommage sera A1 pour le tile Haut Gauche puis on incremente*/
     }
     
     /**
@@ -74,14 +72,14 @@ public class GameBoard {
         throw new UnsupportedOperationException("Not implemented");
     }
     
-    public boolean canPlaceTileAt(int x, int y) {
+    public boolean canPlaceTile() {
         boolean canPlace=false;
         
         return canPlace;
     }
     
     public void placeTileAt(GameTile t) {        
-        if(this.canPlaceTileAt(t.getX(), t.getY())){
+        if(this.canPlaceTile()){
             //TODO : Do the job !!! Inserer le tile dans l'hexagonmachin via une fonction a coder dans hexagonmachin
         }
     }

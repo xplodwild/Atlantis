@@ -32,13 +32,35 @@ import java.util.List;
 public abstract class GameTile {
 
     /**
-     * mX : Coordonné X du tile sur le plateau de jeu
+     * mName : nom du tile
      */
-    private int mX;
+    private String mName;
+    
     /**
-     * my : Coordonné Y du tile sur le plateau de jeu
+     * mLeftTile : Tile adjacent coté gauche
      */
-    private int mY;
+    private GameTile mLeftTile;
+    /**
+     * mLeftTile : Tile adjacent coté droit
+     */
+    private GameTile mRightTile;
+    /**
+     * mLeftTile : Tile adjacent coté gauche direction haute
+     */
+    private GameTile mLeftUpperTile;
+    /**
+     * mLeftTile : Tile adjacent coté gauche direction basse
+     */
+    private GameTile mLeftBottomTile;
+    /**
+     * mLeftTile : Tile adjacent coté droit direction haute
+     */
+    private GameTile mRightUpperTile;
+    /**
+     * mLeftTile : Tile adjacent coté droit direction basse
+     */
+    private GameTile mRightBottomTile;
+    
     /**
      * mHeight : Coordonnée hauteur du tile
      */
@@ -61,15 +83,48 @@ public abstract class GameTile {
      * Constructeur de GameTile
      * 
      * @param board Plateau auquel appartient le tile
+     * @param name Nom du tile (placement selon le schema établi (de la forme A1 B1 B2 ...)
      * @param height hauteur du tile
      */
-    GameTile(GameBoard board, int x, int y, int height) {
-        mBoard = board;
-        mHeight = height;
-        mX = x;
-        mY = y;
-        mIsOnBoard = true;
-        mEntities = new ArrayList<GameEntity>();
+    GameTile(GameBoard board,String name, int height) {
+        this.mBoard = board;
+        this.mHeight = height;
+        this.mLeftBottomTile=null;
+        this.mLeftTile=null;
+        this.mLeftUpperTile=null;
+        this.mRightBottomTile=null;
+        this.mRightTile=null;
+        this.mRightUpperTile=null;
+        this.mName=name;
+        this.mIsOnBoard = true;
+        this.mEntities = new ArrayList<GameEntity>();
+    }
+    
+    /**
+     * Constructeur de GameTile 
+     * 
+     * @param board Plateau auquel appartient le tile
+     * @param hg Tile en haut a gauche du tile courant
+     * @param hd Tile en haut a droite du tile courant
+     * @param g Tile a gauche du tile courant
+     * @param d Tile a droite du tile courant
+     * @param bd Tile en bas a droite du tile courant
+     * @param bg Tile en bas a gauche du tile courant
+     * @param name Nom du tile (placement selon le schema établi (de la forme A1 B1 B2 ...)
+     * @param height hauteur du tile
+     */    
+    GameTile(GameBoard board,GameTile hg,GameTile hd,GameTile g,GameTile d,GameTile bd,GameTile bg,String name, int height) {
+        this.mBoard = board;
+        this.mHeight = height;
+        this.mLeftBottomTile=bg;
+        this.mLeftTile=g;
+        this.mLeftUpperTile=hg;
+        this.mRightBottomTile=bd;
+        this.mRightTile=d;
+        this.mRightUpperTile=hd;
+        this.mName=name;
+        this.mIsOnBoard = true;
+        this.mEntities = new ArrayList<GameEntity>();
     }
         
           
@@ -99,20 +154,13 @@ public abstract class GameTile {
         mIsOnBoard = false;
     }
     
-    //---------------------------------------------
-    //GETTERS
-    //---------------------------------------------
+    
+    //-----------------------------------------------
+    //GETTERS                                       |
+    //-----------------------------------------------
     
     public List<GameEntity> getEntities() {
         return mEntities;
-    }
-    
-    public int getX() {
-        return mX;
-    }
-    
-    public int getY() {
-        return mY;
     }
     
     public int getHeight() {
@@ -125,5 +173,70 @@ public abstract class GameTile {
     
     public boolean isOnBoard() {
         return mIsOnBoard;
+    }
+
+    public String getmName() {
+        return mName;
+    }
+
+    public GameTile getmLeftTile() {
+        return mLeftTile;
+    }
+
+    public GameTile getRightTile() {
+        return mRightTile;
+    }
+
+    public GameTile getLeftUpperTile() {
+        return mLeftUpperTile;
+    }
+
+    public GameTile getLeftBottomTile() {
+        return mLeftBottomTile;
+    }
+
+    public GameTile getRightUpperTile() {
+        return mRightUpperTile;
+    }
+
+    public GameTile getRightBottomTile() {
+        return mRightBottomTile;
+    }
+    
+    
+    //-----------------------------------------------
+    //SETTERS                                       |
+    //-----------------------------------------------
+
+    public void setName(String mName) {
+        this.mName = mName;
+    }
+
+    public void setLeftTile(GameTile mLeftTile) {
+        this.mLeftTile = mLeftTile;
+    }
+
+    public void setRightTile(GameTile mRightTile) {
+        this.mRightTile = mRightTile;
+    }
+
+    public void setLeftUpperTile(GameTile mLeftUpperTile) {
+        this.mLeftUpperTile = mLeftUpperTile;
+    }
+
+    public void setLeftBottomTile(GameTile mLeftBottomTile) {
+        this.mLeftBottomTile = mLeftBottomTile;
+    }
+
+    public void setRightUpperTile(GameTile mRightUpperTile) {
+        this.mRightUpperTile = mRightUpperTile;
+    }
+
+    public void setRightBottomTile(GameTile mRightBottomTile) {
+        this.mRightBottomTile = mRightBottomTile;
+    }
+
+    public void setIsOnBoard(boolean mIsOnBoard) {
+        this.mIsOnBoard = mIsOnBoard;
     }
 }
