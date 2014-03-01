@@ -18,8 +18,10 @@
 
 package fr.miage.atlantis.board;
 
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.Random;
 
 
 
@@ -32,7 +34,7 @@ import java.util.Iterator;
  */
 public class GameBoard {
 
-    private HashSet<GameTile> tileSet;
+    private HashMap<String,GameTile> tileSet;
     
     /**
      * Constructeur de GameBoard
@@ -41,6 +43,26 @@ public class GameBoard {
     public GameBoard() {
        /*On vas creer et adresser ici les tiles en commencant par la haut gauche du plateau */
        /*Le nommage sera A1 pour le tile Haut Gauche puis on incremente*/
+       
+       //On defini les deux premiere Tile de frontiere du board
+       BorderTile firstTile=new BorderTile(this);  
+       BorderTile nextTile=new BorderTile(this);    
+       //On les ajoute au tileSet
+       this.tileSet.put("Bord1", firstTile);
+       this.tileSet.put("Bord2", nextTile);
+       //On place le 1er a la droite du second
+       this.placeTileAtTheRightOf(firstTile, nextTile);
+       
+       //Puis les 8 suivants de la meme façon
+       for(int i=3;i<9;i++){
+           this.placeTileAtTheRightOf(nextTile, nextTile);
+           this.tileSet.put("Bord"+i, nextTile);
+       }
+       
+       //Puis on passe à la ligne suivante
+       //... To be continued
+        
+        
     }
     
     /**
@@ -54,11 +76,36 @@ public class GameBoard {
         
         //Si un des tiles adjacent est de type WaterTile (avec une Height=0)
         if( this.getUpperRightCornerTile(tile).getHeight()==0  || this.getUpperLeftCornerTile(tile).getHeight()==0 ||
-            this.getBottomLeftCornerTile(tile).getHeight()==0  || this.getBottomRightCornerTile(tile).getHeight()==0){
+            this.getBottomLeftCornerTile(tile).getHeight()==0  || this.getBottomRightCornerTile(tile).getHeight()==0 ||
+            this.getLeftSideTile(tile).getHeight()==0 || this.getRightSideTile(tile).getHeight()==0){
+            
             isAtWaterEdge=true;
+        }    
+        return isAtWaterEdge;
     }
     
-        return isAtWaterEdge;
+    /**
+     * Génère un tile de type aléatoire
+     * 
+     * @return 
+     */
+    public GameTile generateRandomTile(int forestRemaining,int beachRemaining,int mountainRemaining){
+        GameTile retour=null;
+        int x=new Random().nextInt(3);
+        
+        if(forestRemaining>0 && beachRemaining>0 && mountainRemaining>0){
+            switch(x){
+                case 0: retour=new ForestTile(this,"tempName");
+                break;   
+                case 1: retour=new BeachTile(this,"tempName");
+                break;   
+                case 2: retour=new MountainTile(this,"tempName");
+                break;      
+            }  
+        }
+        
+        
+        return retour;
     }
     
     
@@ -71,9 +118,9 @@ public class GameBoard {
     public boolean hasTileAtLevel(int h) {
         Boolean retour=false;
         
-        Iterator<GameTile> it=this.tileSet.iterator();
+        Iterator<Map.Entry<String, GameTile>> it=this.tileSet.entrySet().iterator();
         while(it.hasNext()){
-            GameTile tmp=it.next();
+            GameTile tmp=it.next().getValue();
             if(tmp.getHeight() == h){
                 retour=true;
                 break;
@@ -101,10 +148,25 @@ public class GameBoard {
         return canPlace;
     }
     
-    public void placeTileAt(GameTile t) {        
-        if(this.canPlaceTile()){
-            //TODO : Do the job !!! Inserer le tile dans l'hexagonmachin via une fonction a coder dans hexagonmachin
+    public void placeTileAtTheRightOf(GameTile base,GameTile newTile) {        
+        //On lie les deux tiles entre elles
+        base.setRightTile(newTile);
+        newTile.setLeftTile(newTile);
+        
+        GameTile baseUpperRightTile=base.getRightUpperTile();
+        GameTile baseBottomRightTile=base.getRightBottomTile();
+        
+        //Puis on recupere les tile adjacent aux deux tile et on les lient a la nouvelle tile fraichement crée.
+        newTile.setLeftUpperTile(baseUpperRightTile);
+        newTile.setLeftBottomTile(baseBottomRightTile);
+        
+        //Puis on update les Tiles ajacent pour prendre en compte le nouveau Til ajouté
+        if(baseBottomRightTile != null){
+            baseBottomRightTile.setRightUpperTile(newTile);
         }
+        if(baseUpperRightTile != null){
+            baseUpperRightTile.setRightBottomTile(newTile);
+        }        
     }
             
     
@@ -121,9 +183,9 @@ public class GameBoard {
     public GameTile getTileByName(String name) {
         GameTile retour=null;
         
-        Iterator<GameTile> it=this.tileSet.iterator();
+       Iterator<Map.Entry<String, GameTile>> it=this.tileSet.entrySet().iterator();
         while(it.hasNext()){
-            GameTile tmp=it.next();
+            GameTile tmp=it.next().getValue();
             if(tmp.getName().equals(name)){
                 retour=tmp;
                 break;
