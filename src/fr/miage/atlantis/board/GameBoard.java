@@ -74,7 +74,7 @@ public final class GameBoard {
        
        //Place le 1er Tile Water
        WaterTile nextTile2=new WaterTile(this,"Water #1");
-       this.placeTileAtTheBottomLeftOf(nextTile, nextTile2);
+       this.placeTileAtTheRightOf(nextTile, nextTile2);
        
        
        //Puis les 8 suivants de la meme façon
