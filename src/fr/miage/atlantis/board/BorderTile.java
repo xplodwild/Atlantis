@@ -33,8 +33,8 @@ public class BorderTile extends GameTile{
      * @param board Plateau de jeu auquel appartient le tiles de type frontiere
      * @param name Nom du tile
      */
-    public BorderTile(GameBoard board){ 
-        super(board, "Limites du plateau", -99);
+    public BorderTile(GameBoard board,String name){ 
+        super(board, name, -99);
     }
     
     /**
@@ -51,6 +51,6 @@ public class BorderTile extends GameTile{
      * @param height hauteur du tile
      */    
     public BorderTile(GameBoard board,GameTile hg,GameTile hd,GameTile g,GameTile d,GameTile bd,GameTile bg,String name, int height) {
-        super(board, hg, hd, g, d, bd, bg, "Limites du plateau", -99);
+        super(board, hg, hd, g, d, bd, bg, name, -99);
     }
 }
