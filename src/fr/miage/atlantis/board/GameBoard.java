@@ -69,7 +69,8 @@ public final class GameBoard {
        //Debut de la ligne 2
        nextTile=new BorderTile(this,"Border #47");
        this.placeTileAtTheBottomLeftOf(firstTile, nextTile);
-       this.placeTileAtTheLeftOf(nextTile, new BorderTile(this,"Border #46"));
+       
+       this.placeTileAtTheLeftOf(nextTile, new BorderTile(this,"Border #46",true));
        
        //Place le 1er Tile Water
        WaterTile nextTile2=new WaterTile(this,"Water #1");
@@ -85,7 +86,7 @@ public final class GameBoard {
        
        nextTile=new BorderTile(this,"Border #9");
        this.placeTileAtTheBottomLeftOf(nextTile2, nextTile);
-       this.placeTileAtTheBottomLeftOf(nextTile, new BorderTile(this,"Border #10"));
+       this.placeTileAtTheBottomLeftOf(nextTile, new BorderTile(this,"Border #10",true));
        
        
        //Puis on passe à la ligne suivante
@@ -217,7 +218,7 @@ public final class GameBoard {
     public void placeTileAtTheRightOf(GameTile base,GameTile newTile) {        
         //On lie les deux tiles entre elles
         base.setRightTile(newTile);
-        newTile.setLeftTile(newTile);
+        newTile.setLeftTile(base);
         
         GameTile baseUpperRightTile=base.getRightUpperTile();
         GameTile baseBottomRightTile=base.getRightBottomTile();
@@ -251,7 +252,7 @@ public final class GameBoard {
     public void placeTileAtTheLeftOf(GameTile base,GameTile newTile) {        
         //On lie les deux tiles entre elles
         base.setLeftTile(newTile);
-        newTile.setRightTile(newTile);
+        newTile.setRightTile(base);
         
         GameTile baseUpperLeftTile=base.getLeftUpperTile();
         GameTile baseBottomLeftTile=base.getLeftBottomTile();
@@ -285,7 +286,7 @@ public final class GameBoard {
     public void placeTileAtTheBottomRightOf(GameTile base,GameTile newTile) {        
         //On lie les deux tiles entre elles
         base.setRightBottomTile(newTile);
-        newTile.setLeftUpperTile(newTile);
+        newTile.setLeftUpperTile(base);
         
         GameTile baseLeftBottomTile=base.getLeftBottomTile();
         GameTile baseRightTile=base.getRightTile();
@@ -319,7 +320,7 @@ public final class GameBoard {
     public void placeTileAtTheBottomLeftOf(GameTile base,GameTile newTile) {        
         //On lie les deux tiles entre elles
         base.setLeftBottomTile(newTile);
-        newTile.setRightUpperTile(newTile);
+        newTile.setRightUpperTile(base);
         
         GameTile baseLeftTile=base.getLeftTile();
         GameTile baseRightBottomTile=base.getRightBottomTile();

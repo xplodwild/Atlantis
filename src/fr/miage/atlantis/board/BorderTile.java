@@ -28,6 +28,11 @@ package fr.miage.atlantis.board;
 public class BorderTile extends GameTile{
 
     /**
+     * Attribut discriminant si oui ou non le tile frontiere est 
+     */
+    private boolean mIsEscapeBorder;
+    
+    /**
      * Constructeur de BorderTile
      * 
      * @param board Plateau de jeu auquel appartient le tiles de type frontiere
@@ -35,22 +40,29 @@ public class BorderTile extends GameTile{
      */
     public BorderTile(GameBoard board,String name){ 
         super(board, name, -99);
+        this.mIsEscapeBorder=false;
     }
     
     /**
-     * Constructeur de BorderTile #2
+     * Constructeur de BorderTile
      * 
-     * @param board Plateau auquel appartient le tile
-     * @param hg Tile en haut a gauche du tile courant
-     * @param hd Tile en haut a droite du tile courant
-     * @param g Tile a gauche du tile courant
-     * @param d Tile a droite du tile courant
-     * @param bd Tile en bas a droite du tile courant
-     * @param bg Tile en bas a gauche du tile courant
-     * @param name Nom du tile (placement selon le schema établi (de la forme A1 B1 B2 ...)
-     * @param height hauteur du tile
-     */    
-    public BorderTile(GameBoard board,GameTile hg,GameTile hd,GameTile g,GameTile d,GameTile bd,GameTile bg,String name, int height) {
-        super(board, hg, hd, g, d, bd, bg, name, -99);
+     * @param board Plateau de jeu auquel appartient le tiles de type frontiere
+     * @param name Nom du tile
+     * @param isEscapeBorder true si la frontiere represente les echapatoires pour les pions dans les 4 coins du board
+     */
+    public BorderTile(GameBoard board,String name,boolean isEscapeBorder){ 
+        super(board, name, -99);
+        this.mIsEscapeBorder=isEscapeBorder;
     }
+    
+           
+    //-----------------------------------------------
+    //GETTERS                                       |
+    //-----------------------------------------------
+    
+    public boolean isEscapeBorder() {
+        return mIsEscapeBorder;
+    }
+    
+   
 }
