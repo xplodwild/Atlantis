@@ -18,26 +18,51 @@
 
 package fr.miage.atlantis;
 
-import com.jme3.app.SimpleApplication;
-import com.jme3.renderer.RenderManager;
+import fr.miage.atlantis.board.GameTile;
+import fr.miage.atlantis.board.TileAction;
+import fr.miage.atlantis.entities.GameEntity;
+import fr.miage.atlantis.graphics.Game3DRenderer;
+import fr.miage.atlantis.logic.GameLogic;
 
 /**
  * Main Game Engine loop class
  */
-public class Game3DLogic extends SimpleApplication {
-
+public class Game3DLogic extends GameLogic {
+    
+    private Game3DRenderer mRenderer;
+    
+    public Game3DLogic() {
+        super();
+        mRenderer = new Game3DRenderer();
+    }
+    
     @Override
-    public void simpleInitApp() {
-        
+    public void boot() {
+        mRenderer.start();
     }
 
-    @Override
-    public void simpleUpdate(float tpf) {
-        
+    public void onTurnStart(Player p) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @Override
-    public void simpleRender(RenderManager rm) {
-        
+    public void onPlayTileAction(TileAction t) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
+
+    public void onUnitMove(GameEntity ent, GameTile dest) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void onDiceRoll(int face) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void onSinkTile(GameTile tile) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void onEntityAction(GameEntity source, GameEntity target, int action) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+    
 }
