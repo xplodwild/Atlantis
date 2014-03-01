@@ -97,7 +97,7 @@ public class EmptyTileModel extends Node {
         }
     }
     
-    public EmptyTileModel(AssetManager assetManager) {
+    public EmptyTileModel(AssetManager assetManager, ColorRGBA color) {
         HexagonMesh h = new HexagonMesh(60.0f);
         h.setMode(Mesh.Mode.Lines);
         h.setLineWidth(30);
@@ -106,7 +106,7 @@ public class EmptyTileModel extends Node {
         modelGrid.setLocalScale(0.1f);
         
         Material matGrid = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        matGrid.setColor("Color", ColorRGBA.Blue);
+        matGrid.setColor("Color", color);
         modelGrid.setMaterial(matGrid);
         
         attachChild(modelGrid);

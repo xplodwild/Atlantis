@@ -20,6 +20,7 @@ package fr.miage.atlantis.graphics;
 
 import fr.miage.atlantis.graphics.models.TileModel;
 import com.jme3.app.SimpleApplication;
+import com.jme3.math.ColorRGBA;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Node;
 import fr.miage.atlantis.Game3DLogic;
@@ -55,18 +56,9 @@ public class Game3DRenderer extends SimpleApplication {
         
         int x = 0, y = 0;
         while (true) {
-            x = 0;
+            int initialX = x;
             addTileToRender(currentTile, x, y);
             System.out.println("Adding self tile " + x + "," + y + " (" + currentTile.getName() + ")");
-            
-            while (currentTile.getLeftTile() != null) {
-                x--;
-                currentTile = currentTile.getLeftTile();
-                addTileToRender(currentTile, x, y);
-                System.out.println("Adding left row tile " + x + "," + y + " (" + currentTile.getName() + ")");
-            }
-            
-            currentTile = rowHeadTile;
             
             while (currentTile.getRightTile() != null) {
                 x++;
@@ -75,19 +67,38 @@ public class Game3DRenderer extends SimpleApplication {
                 System.out.println("Adding right row tile " + x + "," + y + " (" + currentTile.getName() + ")");
             }
             
-            if (rowHeadTile.getLeftBottomTile() != null) {
-                rowHeadTile = rowHeadTile.getLeftBottomTile();
-                currentTile = rowHeadTile;
-                System.out.println("Going below left");
-                mTileOffset += 10;
-                y++;
-            } else if (rowHeadTile.getRightBottomTile() != null) {
-                rowHeadTile = rowHeadTile.getRightBottomTile();
-                currentTile = rowHeadTile;
-                System.out.println("Going below right");
-                mTileOffset -= 10;
-                y++;
-            } else {
+            currentTile = rowHeadTile;
+            x = initialX;
+            
+            while (currentTile.getLeftTile() != null) {
+                x--;
+                currentTile = currentTile.getLeftTile();
+                addTileToRender(currentTile, x, y);
+                System.out.println("Adding left row tile " + x + "," + y + " (" + currentTile.getName() + ")");
+            }
+            
+            boolean belowFound = false;
+            while (!belowFound && currentTile != null) {
+                if (currentTile.getLeftBottomTile() != null) {
+                    System.out.println("Going below left of " + currentTile.getName());
+                    rowHeadTile = currentTile.getLeftBottomTile();
+                    currentTile = rowHeadTile;
+                    mTileOffset += 10;
+                    y++;
+                    belowFound = true;
+                } else if (currentTile.getRightBottomTile() != null) {
+                    System.out.println("Going below right of " + currentTile.getName());
+                    rowHeadTile = currentTile.getRightBottomTile();
+                    currentTile = rowHeadTile;
+                    mTileOffset -= 10;
+                    y++;
+                    belowFound = true;
+                } else {
+                    currentTile = currentTile.getRightTile();
+                }
+            }
+            
+            if (!belowFound) {
                 break;
             }
         }
@@ -124,10 +135,11 @@ public class Game3DRenderer extends SimpleApplication {
         if (tile.getHeight() > 0) {
             output = new TileModel(tile.getHeight(), assetManager);
         } else {
-            output = new EmptyTileModel(assetManager);
+            ColorRGBA color = tile.getHeight() < 0 ? ColorRGBA.Red : ColorRGBA.Cyan;
+            output = new EmptyTileModel(assetManager, color);
         }
         
-        output.setLocalTranslation(y * 20, 1, x * 20 + mTileOffset);
+        output.setLocalTranslation(y * -20, 1, x * 20 + mTileOffset);
         mSceneNode.attachChild(output);
         
         return output;
