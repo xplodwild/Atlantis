@@ -63,9 +63,9 @@ public final class GameBoard {
            BorderTile tmp=new BorderTile(this,"Border #"+i);
            this.placeTileAtTheRightOf(nextTile,tmp);    
            nextTile=tmp;
-       }
-       
+       }       
        //Première ligne terminée, Frontière haute du jeu mise en place.
+       
        
        //Debut de la ligne 2
        nextTile=new BorderTile(this,"Border #47");
@@ -76,22 +76,29 @@ public final class GameBoard {
        //Place le 1er Tile Water
        WaterTile nextTile2=new WaterTile(this,"Water #1");
        this.placeTileAtTheRightOf(nextTile, nextTile2);
-       
+       WaterTile bckp=null;
        
        //Puis les 8 suivants de la meme façon
        for(int i=2;i<8;i++){
+           bckp=nextTile2;
            WaterTile tmp=new WaterTile(this,"Water #"+i);
            this.placeTileAtTheRightOf(nextTile2,tmp);    
            nextTile2=tmp;
        }
        
        nextTile=new BorderTile(this,"Border #9");
-       this.placeTileAtTheBottomLeftOf(nextTile2, nextTile);
-       this.placeTileAtTheBottomLeftOf(nextTile, new BorderTile(this,"Border #10",true));
+       this.placeTileAtTheRightOf(bckp, nextTile);
+       this.placeTileAtTheRightOf(nextTile, new BorderTile(this,"Border #10",true));
+       //Fin de la ligne 2
        
        
-       //Puis on passe à la ligne suivante
-       //... To be continued
+       //Debut de la ligne 3
+       GameTile n46=this.tileSet.get("Border #46");
+       
+       nextTile=new BorderTile(this,"Border #45",true);
+       this.placeTileAtTheBottomLeftOf(n46, nextTile);
+       
+       
                 
     }
     
