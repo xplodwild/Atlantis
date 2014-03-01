@@ -34,6 +34,7 @@ public class Game3DRenderer extends SimpleApplication {
     private Node mSceneNode;
     private Environment mEnvironment;
     private Game3DLogic mParent;
+    private int mTileOffset = 0;
     
     public Game3DRenderer(Game3DLogic parent) {
         mParent = parent;
@@ -56,19 +57,36 @@ public class Game3DRenderer extends SimpleApplication {
         while (true) {
             x = 0;
             addTileToRender(currentTile, x, y);
+            System.out.println("Adding self tile " + x + "," + y + " (" + currentTile.getName() + ")");
+            
+            while (currentTile.getLeftTile() != null) {
+                x--;
+                currentTile = currentTile.getLeftTile();
+                addTileToRender(currentTile, x, y);
+                System.out.println("Adding left row tile " + x + "," + y + " (" + currentTile.getName() + ")");
+            }
+            
+            currentTile = rowHeadTile;
             
             while (currentTile.getRightTile() != null) {
                 x++;
                 currentTile = currentTile.getRightTile();
                 addTileToRender(currentTile, x, y);
+                System.out.println("Adding right row tile " + x + "," + y + " (" + currentTile.getName() + ")");
             }
             
             if (rowHeadTile.getLeftBottomTile() != null) {
                 rowHeadTile = rowHeadTile.getLeftBottomTile();
                 currentTile = rowHeadTile;
+                System.out.println("Going below left");
+                mTileOffset += 10;
+                y++;
             } else if (rowHeadTile.getRightBottomTile() != null) {
                 rowHeadTile = rowHeadTile.getRightBottomTile();
                 currentTile = rowHeadTile;
+                System.out.println("Going below right");
+                mTileOffset -= 10;
+                y++;
             } else {
                 break;
             }
@@ -109,7 +127,7 @@ public class Game3DRenderer extends SimpleApplication {
             output = new EmptyTileModel(assetManager);
         }
         
-        output.setLocalTranslation(y * 20, 0, x * 20);
+        output.setLocalTranslation(y * 20, 1, x * 20 + mTileOffset);
         mSceneNode.attachChild(output);
         
         return output;

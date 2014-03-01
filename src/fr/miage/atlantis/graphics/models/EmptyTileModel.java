@@ -103,7 +103,7 @@ public class EmptyTileModel extends Node {
         h.setLineWidth(30);
         
         Geometry modelGrid = new Geometry("Grid", h);
-        modelGrid.setLocalScale(0.3f);
+        modelGrid.setLocalScale(0.1f);
         
         Material matGrid = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         matGrid.setColor("Color", ColorRGBA.Blue);
