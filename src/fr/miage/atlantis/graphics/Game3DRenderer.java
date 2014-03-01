@@ -25,6 +25,7 @@ import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Node;
 import fr.miage.atlantis.Game3DLogic;
 import fr.miage.atlantis.board.GameTile;
+import fr.miage.atlantis.board.WaterTile;
 import fr.miage.atlantis.graphics.models.EmptyTileModel;
 
 /**
@@ -137,7 +138,14 @@ public class Game3DRenderer extends SimpleApplication {
         if (tile.getHeight() > 0) {
             output = new TileModel(tile.getHeight(), assetManager);
         } else {
-            ColorRGBA color = tile.getHeight() < 0 ? ColorRGBA.Red : ColorRGBA.Cyan;
+            ColorRGBA color = ColorRGBA.White;
+            if (tile.getHeight() < 0) {
+                color = ColorRGBA.Red;
+            } else if (tile.getHeight() == 0) {
+                WaterTile wt = (WaterTile) tile;
+                color = wt.isLandingTile() ? ColorRGBA.Blue : ColorRGBA.Cyan;
+                color = wt.isBeginningWithSeaShark() ? ColorRGBA.Magenta : color;
+            }
             output = new EmptyTileModel(assetManager, color);
         }
         
