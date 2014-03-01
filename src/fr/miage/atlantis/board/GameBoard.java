@@ -24,7 +24,6 @@ import java.util.Map;
 import java.util.Random;
 
 
-
 /**
  * Classe représentant le plateau de jeu
  *
@@ -34,7 +33,12 @@ import java.util.Random;
  */
 public final class GameBoard {
 
+    
+    /**
+     * Stock les tiles du board
+     */
     private HashMap<String,GameTile> tileSet;
+    
     
     /**
      * Constructeur de GameBoard
@@ -62,13 +66,30 @@ public final class GameBoard {
        
        //Première ligne terminée, Frontière haute du jeu mise en place.
        
+       //Debut de la ligne 2
+       nextTile=new BorderTile(this,"Border #47");
+       this.placeTileAtTheBottomLeftOf(firstTile, nextTile);
        
+       //Place le 1er Tile Water
+       WaterTile nextTile2=new WaterTile(this,"Water #1");
+       this.placeTileAtTheBottomLeftOf(nextTile, nextTile2);
+       
+       
+       //Puis les 8 suivants de la meme façon
+       for(int i=2;i<8;i++){
+           WaterTile tmp=new WaterTile(this,"Water #"+i);
+           this.placeTileAtTheRightOf(nextTile2,tmp);    
+           nextTile2=tmp;
+       }
+       
+       nextTile=new BorderTile(this,"Border #9");
+       this.placeTileAtTheBottomLeftOf(nextTile2, nextTile);
+       this.placeTileAtTheBottomLeftOf(nextTile, new BorderTile(this,"Border #10"));
        
        
        //Puis on passe à la ligne suivante
        //... To be continued
-        
-        
+                
     }
     
     
@@ -106,7 +127,7 @@ public final class GameBoard {
     /**
      * Génère un tile de type aléatoire
      * 
-     * @return 
+     * @return un tile generé aléatoirement parmis les 3 types.
      */
     public GameTile generateRandomTile(int forestRemaining,int beachRemaining,int mountainRemaining){
         GameTile retour=null;
@@ -218,6 +239,40 @@ public final class GameBoard {
             this.tileSet.put(baseUpperRightTile.getName(), baseUpperRightTile);
         }  
     }
+    
+    
+    /**
+     * Permet de place un Tile a la gauche d'un autre, tout en updatant les Tile adjacents.
+     * 
+     * @param base Tile existant
+     * @param newTile Nouveau tile a greffer
+     */
+    public void placeTileAtTheLeftOf(GameTile base,GameTile newTile) {        
+        //On lie les deux tiles entre elles
+        base.setLeftTile(newTile);
+        newTile.setRightTile(newTile);
+        
+        GameTile baseUpperLeftTile=base.getLeftUpperTile();
+        GameTile baseBottomLeftTile=base.getLeftBottomTile();
+        
+        //Puis on recupere les tile adjacent aux deux tile et on les lient a la nouvelle tile fraichement crée.
+        newTile.setRightUpperTile(baseUpperLeftTile);
+        newTile.setRightBottomTile(baseBottomLeftTile);
+        
+        //Update le HashMap 
+        this.tileSet.put(base.getName(), base);
+        this.tileSet.put(newTile.getName(), base);
+        
+        //Puis on update les Tiles ajacent pour prendre en compte le nouveau Til ajouté
+        if(baseBottomLeftTile != null){
+            baseBottomLeftTile.setRightUpperTile(newTile);
+            this.tileSet.put(baseBottomLeftTile.getName(), baseBottomLeftTile);
+        }
+        if(baseUpperLeftTile != null){
+            baseUpperLeftTile.setRightBottomTile(newTile);
+            this.tileSet.put(baseUpperLeftTile.getName(), baseUpperLeftTile);
+        }  
+    }
        
     
     /**
@@ -253,7 +308,8 @@ public final class GameBoard {
         }        
     }
     
-     /**
+    
+    /**
      * Permet de place un Tile en bas a droite d'un autre, tout en updatant les Tile adjacents.
      * 
      * @param base Tile existant
