@@ -83,14 +83,16 @@ public class Game3DRenderer extends SimpleApplication {
                     System.out.println("Going below left of " + currentTile.getName());
                     rowHeadTile = currentTile.getLeftBottomTile();
                     currentTile = rowHeadTile;
-                    mTileOffset += 10;
+                    mTileOffset -= 10;
+                    
                     y++;
                     belowFound = true;
                 } else if (currentTile.getRightBottomTile() != null) {
                     System.out.println("Going below right of " + currentTile.getName());
                     rowHeadTile = currentTile.getRightBottomTile();
                     currentTile = rowHeadTile;
-                    mTileOffset -= 10;
+                    mTileOffset += 10;
+                    
                     y++;
                     belowFound = true;
                 } else {
