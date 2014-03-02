@@ -28,6 +28,10 @@ package fr.miage.atlantis.board;
  */
 public class MountainTile extends GameTile{
 
+    /**
+     * Action a effectuer une fois le tile coulé
+     */
+    private TileAction action;
     
    /**
      * Constructeur de MountainTile
@@ -36,7 +40,7 @@ public class MountainTile extends GameTile{
      * @param name Nom du tile
      */
     public MountainTile(GameBoard board,String name){ 
-        super(board, name, 3);
+        super(board, name, 3);       
     }
     
     
@@ -56,4 +60,17 @@ public class MountainTile extends GameTile{
     public MountainTile(GameBoard board,GameTile hg,GameTile hd,GameTile g,GameTile d,GameTile bd,GameTile bg,String name, int height) {
         super(board, hg, hd, g, d, bd, bg, name, 3);
     } 
+    
+    
+       
+
+    //--------------------------------------------------------------------------
+    //SETTERS                                                                 `|
+    //--------------------------------------------------------------------------
+    
+    
+    public void setAction(TileAction action) {
+        this.action = action;
+    }
+    //--------------------------------------------------------------------------   
 }

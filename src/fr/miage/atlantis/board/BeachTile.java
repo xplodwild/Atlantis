@@ -28,6 +28,11 @@ package fr.miage.atlantis.board;
 public class BeachTile extends GameTile{
 
     /**
+     * Action a effectuer une fois le tile coulé
+     */
+    private TileAction action;
+    
+    /**
      * Constructeur de Beachtile
      * 
      * @param board Plateau de jeu auquel appartient le tiles de type plage
@@ -53,4 +58,17 @@ public class BeachTile extends GameTile{
     public BeachTile(GameBoard board,GameTile hg,GameTile hd,GameTile g,GameTile d,GameTile bd,GameTile bg,String name, int height) {
         super(board, hg, hd, g, d, bd, bg, name, 1);
     }
+    
+    
+       
+
+    //--------------------------------------------------------------------------
+    //SETTERS                                                                 `|
+    //--------------------------------------------------------------------------
+    
+    
+    public void setAction(TileAction action) {
+        this.action = action;
+    }
+    //--------------------------------------------------------------------------   
 }
