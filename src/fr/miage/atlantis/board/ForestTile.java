@@ -28,11 +28,6 @@ package fr.miage.atlantis.board;
 public class ForestTile extends GameTile{
 
     /**
-     * Action a effectuer une fois le tile coulé
-     */
-    private TileAction action;
-    
-    /**
      * Constructeur de ForestTile
      * 
      * @param board Plateau de jeu auquel appartient le tiles de type foret
@@ -58,18 +53,5 @@ public class ForestTile extends GameTile{
      */    
     public ForestTile(GameBoard board,GameTile hg,GameTile hd,GameTile g,GameTile d,GameTile bd,GameTile bg,String name, int height) {
         super(board, hg, hd, g, d, bd, bg, name, 2);
-    }  
-    
-    
-       
-
-    //--------------------------------------------------------------------------
-    //SETTERS                                                                 `|
-    //--------------------------------------------------------------------------
-    
-    
-    public void setAction(TileAction action) {
-        this.action = action;
-    }
-    //--------------------------------------------------------------------------   
+    }      
 }

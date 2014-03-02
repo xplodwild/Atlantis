@@ -86,6 +86,11 @@ public abstract class GameTile {
      */
     private boolean mIsOnBoard;
     
+    /**
+     * Action a effectuer une fois le tile coulé
+     */
+    private TileAction action;
+    
     
     /**
      * Constructeur de GameTile
@@ -255,5 +260,9 @@ public abstract class GameTile {
     public void setIsOnBoard(boolean mIsOnBoard) {
         this.mIsOnBoard = mIsOnBoard;
     }
-    //--------------------------------------------------------------------------
+   
+    public void setAction(TileAction action) {
+        this.action = action;
+    }
+    //--------------------------------------------------------------------------   
 }
