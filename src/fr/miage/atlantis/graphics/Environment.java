@@ -61,7 +61,7 @@ public class Environment {
     }
 
     private void setupWater(Node parent, AssetManager am, ViewPort viewPort) {
-        WaterFilter water = new WaterFilter(parent, new Vector3f(-.5f, -.5f, .5f));
+        WaterFilter water = new WaterFilter(parent, mDirectionalLight.getDirection());
 
         FilterPostProcessor fpp = new FilterPostProcessor(am);
         fpp.addFilter(water);

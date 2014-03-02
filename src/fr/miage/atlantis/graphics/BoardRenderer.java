@@ -175,8 +175,9 @@ public class BoardRenderer extends Node {
                 color = ColorRGBA.Red;
             } else if (tile.getHeight() == 0) {
                 WaterTile wt = (WaterTile) tile;
-                color = wt.isLandingTile() ? ColorRGBA.Blue : ColorRGBA.Cyan;
-                color = wt.isBeginningWithSeaShark() ? ColorRGBA.Magenta : color;
+                color = wt.isLandingTile() ? ColorRGBA.White :
+                        new ColorRGBA(51.0f / 255.0f, 181.0f / 255.0f, 229.0f / 255.0f, 1.0f);
+                //color = wt.isBeginningWithSeaShark() ? ColorRGBA.Magenta : color;
             }
 
             output = new EmptyTileModel(mAssetManager, color);
