@@ -211,7 +211,7 @@ public final class GameBoard {
        GameTile tmp2;
        GameTile nextTile3=nextTile2;
        for(int i=1;i<5;i++){           
-           tmp2=this.generateRandomTile("Random #"+i);
+           tmp2=this.generateRandomTile();
            tmp2.setAction(TileAction.generateRandomTileAction());
            this.placeTileAtTheRightOf(nextTile3,tmp2);    
            nextTile3=tmp2;
@@ -253,7 +253,7 @@ public final class GameBoard {
               
        nextTile3=nextTile2;
        for(int i=5;i<10;i++){           
-           tmp2=this.generateRandomTile("Random #"+i);
+           tmp2=this.generateRandomTile();
            tmp2.setAction(TileAction.generateRandomTileAction());
            this.placeTileAtTheRightOf(nextTile3,tmp2);    
            nextTile3=tmp2;
@@ -290,7 +290,7 @@ public final class GameBoard {
        this.placeTileAtTheRightOf(nextTile2, nextTile3);
                    
        for(int i=10;i<18;i++){           
-           tmp2=this.generateRandomTile("Random #"+i);
+           tmp2=this.generateRandomTile();
            tmp2.setAction(TileAction.generateRandomTileAction());
            this.placeTileAtTheRightOf(nextTile3,tmp2);    
            nextTile3=tmp2;
@@ -323,7 +323,7 @@ public final class GameBoard {
        this.placeTileAtTheRightOf(nextTile2, nextTile3);
        tmp2=null;       
        for(int i=18;i<21;i++){           
-           tmp2=this.generateRandomTile("Random #"+i);
+           tmp2=this.generateRandomTile();
            tmp2.setAction(TileAction.generateRandomTileAction());
            this.placeTileAtTheRightOf(nextTile3,tmp2);    
            nextTile3=tmp2;
@@ -334,7 +334,7 @@ public final class GameBoard {
        
        nextTile3=nextTile2;       
        for(int i=21;i<24;i++){           
-           tmp2=this.generateRandomTile("Random #"+i);
+           tmp2=this.generateRandomTile();
            tmp2.setAction(TileAction.generateRandomTileAction());
            this.placeTileAtTheRightOf(nextTile3,tmp2);    
            nextTile3=tmp2;
@@ -367,7 +367,7 @@ public final class GameBoard {
        this.placeTileAtTheRightOf(nextTile2, nextTile3);
                     
        for(int i=24;i<32;i++){           
-           tmp2=this.generateRandomTile("Random #"+i);
+           tmp2=this.generateRandomTile();
            tmp2.setAction(TileAction.generateRandomTileAction());
            this.placeTileAtTheRightOf(nextTile3,tmp2);    
            nextTile3=tmp2;
@@ -404,7 +404,7 @@ public final class GameBoard {
               
        nextTile3=nextTile2;
        for(int i=32;i<37;i++){           
-           tmp2=this.generateRandomTile("Random #"+i);
+           tmp2=this.generateRandomTile();
            tmp2.setAction(TileAction.generateRandomTileAction());
            this.placeTileAtTheRightOf(nextTile3,tmp2);    
            nextTile3=tmp2;
@@ -447,7 +447,7 @@ public final class GameBoard {
        nextTile3=nextTile2;
       
        for(int i=37;i<41;i++){           
-           tmp2=this.generateRandomTile("Random #"+i);
+           tmp2=this.generateRandomTile();
            tmp2.setAction(TileAction.generateRandomTileAction());
            this.placeTileAtTheRightOf(nextTile3,tmp2);    
            nextTile3=tmp2;
@@ -668,11 +668,10 @@ public final class GameBoard {
      * 
      * @return un tile generé aléatoirement parmis les 3 types.
      */
-    public GameTile generateRandomTile(String name){
+    public GameTile generateRandomTile(){
         int random=new Random().nextInt(randomiser.size());        
         GameTile retour=this.randomiser.get(random);
         randomiser.remove(random);
-        retour.setName(name);
         
         return retour;
     }
