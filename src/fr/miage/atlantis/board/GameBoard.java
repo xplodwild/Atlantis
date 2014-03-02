@@ -18,6 +18,7 @@
 
 package fr.miage.atlantis.board;
 
+import fr.miage.atlantis.entities.GameEntity;
 import fr.miage.atlantis.entities.SeaSerpent;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,7 +40,7 @@ public final class GameBoard {
     /**
      * Stock les tiles du board
      */
-    private HashMap<String,GameTile> tileSet;
+    private HashMap<String,GameTile> mTileSet;
     
     /**
      * Tile de foret restante à placer
@@ -68,7 +69,7 @@ public final class GameBoard {
      */
     public GameBoard() {
         /*On vas creer et adresser ici les tiles en commencant par la haut gauche du plateau */       
-        tileSet = new HashMap<String, GameTile>();
+        mTileSet = new HashMap<String, GameTile>();
 
         this.beachTilesRemaining=16;
         this.forestTilesRemaining=16;
@@ -97,8 +98,8 @@ public final class GameBoard {
        BorderTile firstTile=new BorderTile(this,"Border #1");  
        BorderTile nextTile=new BorderTile(this,"Border #2");    
        //On les ajoute au tileSet
-       this.tileSet.put("Border #1", firstTile);
-       this.tileSet.put("Border #2", nextTile);
+       this.mTileSet.put("Border #1", firstTile);
+       this.mTileSet.put("Border #2", nextTile);
        //On place le 1er a la droite du second
        this.placeTileAtTheRightOf(firstTile, nextTile);
        
@@ -118,9 +119,9 @@ public final class GameBoard {
        //-----------------------------------------------------------------------
        
        
-       nextTile=new BorderTile(this,"Border #47");
+       nextTile=new BorderTile(this,"Border #46");
        this.placeTileAtTheBottomLeftOf(firstTile, nextTile);       
-       this.placeTileAtTheLeftOf(nextTile, new BorderTile(this,"Border #46",true));
+       this.placeTileAtTheLeftOf(nextTile, new BorderTile(this,"Border #45",true));
             
        WaterTile nextTile2=new WaterTile(this,"Water #1");
        this.placeTileAtTheRightOf(nextTile, nextTile2);
@@ -145,8 +146,8 @@ public final class GameBoard {
        //-----------------------------------------------------------------------
        
        
-       GameTile n46=this.tileSet.get("Border #46");       
-       nextTile=new BorderTile(this,"Border #45",true);
+       GameTile n46=this.mTileSet.get("Border #45");       
+       nextTile=new BorderTile(this,"Border #44",true);
        this.placeTileAtTheBottomLeftOf(n46, nextTile);
        
        nextTile2=new WaterTile(this,"Water #8");
@@ -168,8 +169,8 @@ public final class GameBoard {
        //-----------------------------------------------------------------------
        //Ligne 4                                                               |
        //-----------------------------------------------------------------------
-       GameTile n45=this.tileSet.get("Border #45");       
-       nextTile=new BorderTile(this,"Border #44",true);
+       GameTile n45=this.mTileSet.get("Border #44");       
+       nextTile=new BorderTile(this,"Border #43",true);
        this.placeTileAtTheBottomLeftOf(n45, nextTile);
               
        nextTile2=new WaterTile(this,"Water #18");
@@ -194,7 +195,7 @@ public final class GameBoard {
        //-----------------------------------------------------------------------
        
        
-       GameTile n44=this.tileSet.get("Border #44");       
+       GameTile n44=this.mTileSet.get("Border #43");       
        nextTile=new BorderTile(this,"Border #42");
        this.placeTileAtTheBottomRightOf(n44, nextTile);
              
@@ -237,7 +238,7 @@ public final class GameBoard {
        //-----------------------------------------------------------------------
        
        
-       GameTile n42=this.tileSet.get("Border #42");       
+       GameTile n42=this.mTileSet.get("Border #42");       
        nextTile=new BorderTile(this,"Border #41");
        this.placeTileAtTheBottomLeftOf(n42, nextTile);
        
@@ -251,7 +252,7 @@ public final class GameBoard {
        }
               
        nextTile3=nextTile2;
-       for(int i=6;i<11;i++){           
+       for(int i=5;i<10;i++){           
            tmp2=this.generateRandomTile("Random #"+i);
            tmp2.setAction(TileAction.generateRandomTileAction());
            this.placeTileAtTheRightOf(nextTile3,tmp2);    
@@ -279,7 +280,7 @@ public final class GameBoard {
        //-----------------------------------------------------------------------
        
        
-       GameTile n41=this.tileSet.get("Border #41");       
+       GameTile n41=this.mTileSet.get("Border #41");       
        nextTile=new BorderTile(this,"Border #40");
        this.placeTileAtTheBottomLeftOf(n41, nextTile);
               
@@ -312,7 +313,7 @@ public final class GameBoard {
        //-----------------------------------------------------------------------
        
        
-       GameTile n40=this.tileSet.get("Border #40");       
+       GameTile n40=this.mTileSet.get("Border #40");       
        nextTile=new BorderTile(this,"Border #39");
        this.placeTileAtTheBottomRightOf(n40, nextTile);
              
@@ -321,7 +322,7 @@ public final class GameBoard {
        nextTile3=new WaterTile(this,"Water #46");
        this.placeTileAtTheRightOf(nextTile2, nextTile3);
        tmp2=null;       
-       for(int i=19;i<22;i++){           
+       for(int i=18;i<21;i++){           
            tmp2=this.generateRandomTile("Random #"+i);
            tmp2.setAction(TileAction.generateRandomTileAction());
            this.placeTileAtTheRightOf(nextTile3,tmp2);    
@@ -332,7 +333,7 @@ public final class GameBoard {
        this.placeTileAtTheRightOf(tmp2, nextTile2);
        
        nextTile3=nextTile2;       
-       for(int i=23;i<26;i++){           
+       for(int i=21;i<24;i++){           
            tmp2=this.generateRandomTile("Random #"+i);
            tmp2.setAction(TileAction.generateRandomTileAction());
            this.placeTileAtTheRightOf(nextTile3,tmp2);    
@@ -356,7 +357,7 @@ public final class GameBoard {
        //-----------------------------------------------------------------------
        
        
-       GameTile n39=this.tileSet.get("Border #39");       
+       GameTile n39=this.mTileSet.get("Border #39");       
        nextTile=new BorderTile(this,"Border #38");
        this.placeTileAtTheBottomLeftOf(n39, nextTile);       
        
@@ -365,7 +366,7 @@ public final class GameBoard {
        nextTile3=new WaterTile(this,"Water #51");
        this.placeTileAtTheRightOf(nextTile2, nextTile3);
                     
-       for(int i=26;i<34;i++){           
+       for(int i=24;i<32;i++){           
            tmp2=this.generateRandomTile("Random #"+i);
            tmp2.setAction(TileAction.generateRandomTileAction());
            this.placeTileAtTheRightOf(nextTile3,tmp2);    
@@ -389,7 +390,7 @@ public final class GameBoard {
        //-----------------------------------------------------------------------
        
        
-       GameTile n38=this.tileSet.get("Border #38");       
+       GameTile n38=this.mTileSet.get("Border #38");       
        nextTile=new BorderTile(this,"Border #37");
        this.placeTileAtTheBottomRightOf(n38, nextTile);     
        nextTile2=new WaterTile(this,"Water #54");
@@ -402,7 +403,7 @@ public final class GameBoard {
        }
               
        nextTile3=nextTile2;
-       for(int i=26;i<31;i++){           
+       for(int i=32;i<37;i++){           
            tmp2=this.generateRandomTile("Random #"+i);
            tmp2.setAction(TileAction.generateRandomTileAction());
            this.placeTileAtTheRightOf(nextTile3,tmp2);    
@@ -431,7 +432,7 @@ public final class GameBoard {
        //-----------------------------------------------------------------------
        
        
-       GameTile n37=this.tileSet.get("Border #37");       
+       GameTile n37=this.mTileSet.get("Border #37");       
        nextTile=new BorderTile(this,"Border #36");
        this.placeTileAtTheBottomRightOf(n37, nextTile);
        nextTile2=new WaterTile(this,"Water #58");
@@ -445,7 +446,7 @@ public final class GameBoard {
              
        nextTile3=nextTile2;
       
-       for(int i=31;i<35;i++){           
+       for(int i=37;i<41;i++){           
            tmp2=this.generateRandomTile("Random #"+i);
            tmp2.setAction(TileAction.generateRandomTileAction());
            this.placeTileAtTheRightOf(nextTile3,tmp2);    
@@ -474,7 +475,7 @@ public final class GameBoard {
        //-----------------------------------------------------------------------
        
        
-       GameTile n36=this.tileSet.get("Border #36");       
+       GameTile n36=this.mTileSet.get("Border #36");       
        nextTile=new BorderTile(this,"Border #35",true);
        this.placeTileAtTheBottomLeftOf(n36, nextTile);
        
@@ -500,7 +501,7 @@ public final class GameBoard {
        //-----------------------------------------------------------------------
        
        
-       GameTile n35=this.tileSet.get("Border #35");       
+       GameTile n35=this.mTileSet.get("Border #35");       
        nextTile=new BorderTile(this,"Border #34",true);
        this.placeTileAtTheBottomRightOf(n35, nextTile);       
        nextTile2=new WaterTile(this,"Water #75");
@@ -525,7 +526,7 @@ public final class GameBoard {
        //-----------------------------------------------------------------------
        
        
-       GameTile n34=this.tileSet.get("Border #34");       
+       GameTile n34=this.mTileSet.get("Border #34");       
        nextTile=new BorderTile(this,"Border #33",true);
        this.placeTileAtTheBottomRightOf(n34, nextTile);
        nextTile3=new BorderTile(this,"Border #32",true);
@@ -554,7 +555,7 @@ public final class GameBoard {
        //-----------------------------------------------------------------------
       
        
-       GameTile n32=this.tileSet.get("Border #32");
+       GameTile n32=this.mTileSet.get("Border #32");
        nextTile=new BorderTile(this,"Border #31");
        this.placeTileAtTheBottomRightOf(n32, nextTile);
                     
@@ -573,34 +574,34 @@ public final class GameBoard {
        //-----------------------------------------------------------------------
        
        
-       WaterTile temp=(WaterTile)this.tileSet.get("Water #17");
+       WaterTile temp=(WaterTile)this.mTileSet.get("Water #17");
        temp.setIsLandingTile(true);
-       this.tileSet.put("Water #17", temp);   
-       temp=(WaterTile)this.tileSet.get("Water #18");
+       this.mTileSet.put("Water #17", temp);   
+       temp=(WaterTile)this.mTileSet.get("Water #18");
        temp.setIsLandingTile(true);
-       this.tileSet.put("Water #18", temp);       
-       temp=(WaterTile)this.tileSet.get("Water #8");
-       temp.setIsLandingTile(true);
-       temp.setIsBeginningWithSeaShark(true);
-       this.tileSet.put("Water #8", temp);       
-       temp=(WaterTile)this.tileSet.get("Water #28");
+       this.mTileSet.put("Water #18", temp);       
+       temp=(WaterTile)this.mTileSet.get("Water #8");
        temp.setIsLandingTile(true);
        temp.setIsBeginningWithSeaShark(true);
-       this.tileSet.put("Water #28", temp);
-       temp=(WaterTile)this.tileSet.get("Water #75");
-       temp.setIsLandingTile(true);
-       this.tileSet.put("Water #75", temp);
-       temp=(WaterTile)this.tileSet.get("Water #84");
+       this.mTileSet.put("Water #8", temp);       
+       temp=(WaterTile)this.mTileSet.get("Water #28");
        temp.setIsLandingTile(true);
        temp.setIsBeginningWithSeaShark(true);
-       this.tileSet.put("Water #84", temp);
-       temp=(WaterTile)this.tileSet.get("Water #74");
+       this.mTileSet.put("Water #28", temp);
+       temp=(WaterTile)this.mTileSet.get("Water #75");
+       temp.setIsLandingTile(true);
+       this.mTileSet.put("Water #75", temp);
+       temp=(WaterTile)this.mTileSet.get("Water #84");
+       temp.setIsLandingTile(true);
+       temp.setIsBeginningWithSeaShark(true);
+       this.mTileSet.put("Water #84", temp);
+       temp=(WaterTile)this.mTileSet.get("Water #74");
        temp.setIsLandingTile(true);       
-       this.tileSet.put("Water #74", temp);
-       temp=(WaterTile)this.tileSet.get("Water #64");
+       this.mTileSet.put("Water #74", temp);
+       temp=(WaterTile)this.mTileSet.get("Water #64");
        temp.setIsLandingTile(true);
        temp.setIsBeginningWithSeaShark(true);
-       this.tileSet.put("Water #64", temp);
+       this.mTileSet.put("Water #64", temp);
        //-----------------------------------------------------------------------
      
        
@@ -610,19 +611,19 @@ public final class GameBoard {
        //Ajout des 5 SeaShark sur les Cases prévues à cet effet                |
        //-----------------------------------------------------------------------
               
-       temp=(WaterTile)this.tileSet.get("Water #64");
+       temp=(WaterTile)this.mTileSet.get("Water #64");
        temp.addEntity(new SeaSerpent(temp));
        
-       temp=(WaterTile)this.tileSet.get("Water #84");
+       temp=(WaterTile)this.mTileSet.get("Water #84");
        temp.addEntity(new SeaSerpent(temp));
        
-       temp=(WaterTile)this.tileSet.get("Water #28");
+       temp=(WaterTile)this.mTileSet.get("Water #28");
        temp.addEntity(new SeaSerpent(temp));
        
-       temp=(WaterTile)this.tileSet.get("Water #8");
+       temp=(WaterTile)this.mTileSet.get("Water #8");
        temp.addEntity(new SeaSerpent(temp));
        
-       temp=(WaterTile)this.tileSet.get("Water #47");
+       temp=(WaterTile)this.mTileSet.get("Water #47");
        temp.addEntity(new SeaSerpent(temp));       
        //-----------------------------------------------------------------------      
     }
@@ -649,7 +650,7 @@ public final class GameBoard {
     }
     
     public Map<String, GameTile> getTileSet() {
-        return tileSet;
+        return mTileSet;
     }
     
     /**
@@ -658,7 +659,7 @@ public final class GameBoard {
      * @return Premier Tile de la board.
      */
     public GameTile getFirstTile(){
-        return this.tileSet.get("Border #1");
+        return this.mTileSet.get("Border #1");
     }
     
     
@@ -671,6 +672,7 @@ public final class GameBoard {
         int random=new Random().nextInt(randomiser.size());        
         GameTile retour=this.randomiser.get(random);
         randomiser.remove(random);
+        retour.setName(name);
         
         return retour;
     }
@@ -685,7 +687,7 @@ public final class GameBoard {
     public boolean hasTileAtLevel(int h) {
         Boolean retour=false;
         
-        Iterator<Map.Entry<String, GameTile>> it=this.tileSet.entrySet().iterator();
+        Iterator<Map.Entry<String, GameTile>> it=this.mTileSet.entrySet().iterator();
         while(it.hasNext()){
             GameTile tmp=it.next().getValue();
             if(tmp.getHeight() == h){
@@ -698,18 +700,44 @@ public final class GameBoard {
     
     
     /**
-     * @TODO : Finir la methode
-     * 
      * Coule le tile donné et le supprime du plateau, passe tout les player present sur le tile à Swimmer
      * 
      * @param tile tile a couler
+     * @return La WaterTile qui a remplacé la tile
      */
-    public void sinkTile(GameTile tile) {
+    public WaterTile sinkTile(GameTile tile) {
+        // On remplace la tile par une watertile
+        mTileSet.remove(tile.getName());
         
-        //Reste a couler les entities presente et agir dessus.
+        WaterTile newTile = new WaterTile(this, "Sunken " + tile.getName());
+
+        // On cherche une tile adjacente pour la replacer
+        if (tile.getLeftTile() != null) {
+            tile.getLeftTile().setRightTile(newTile);
+        }
+        if (tile.getRightTile() != null) {
+            tile.getRightTile().setLeftTile(newTile);
+        }
+        if (tile.getLeftBottomTile() != null) {
+            tile.getLeftBottomTile().setRightUpperTile(newTile);
+        }
+        if (tile.getRightBottomTile() != null) {
+            tile.getRightBottomTile().setLeftUpperTile(newTile);
+        }
+        if (tile.getLeftUpperTile() != null) {
+            tile.getLeftUpperTile().setRightBottomTile(newTile);
+        }
+        if (tile.getRightUpperTile()!= null) {
+            tile.getRightUpperTile().setLeftBottomTile(newTile);
+        }
         
-        this.tileSet.remove(tile.getName());
-        throw new UnsupportedOperationException("Not fully implemented yet");
+        // On jette les gens à la flotte
+        for (GameEntity ent : tile.getEntities()) {
+            newTile.addEntity(ent);
+        }
+        
+        mTileSet.put(newTile.getName(), newTile);
+        return newTile;
     }
     
     public boolean canPlaceTile() {
@@ -738,17 +766,17 @@ public final class GameBoard {
         newTile.setLeftBottomTile(baseBottomRightTile);
         
         //Update le HashMap 
-        this.tileSet.put(base.getName(), base);
-        this.tileSet.put(newTile.getName(), newTile);
+        this.mTileSet.put(base.getName(), base);
+        this.mTileSet.put(newTile.getName(), newTile);
         
         //Puis on update les Tiles ajacent pour prendre en compte le nouveau Til ajouté
         if(baseBottomRightTile != null){
             baseBottomRightTile.setRightUpperTile(newTile);
-            this.tileSet.put(baseBottomRightTile.getName(), baseBottomRightTile);
+            this.mTileSet.put(baseBottomRightTile.getName(), baseBottomRightTile);
         }
         if(baseUpperRightTile != null){
             baseUpperRightTile.setRightBottomTile(newTile);
-            this.tileSet.put(baseUpperRightTile.getName(), baseUpperRightTile);
+            this.mTileSet.put(baseUpperRightTile.getName(), baseUpperRightTile);
         }  
     }
     
@@ -772,17 +800,17 @@ public final class GameBoard {
         newTile.setRightBottomTile(baseBottomLeftTile);
         
         //Update le HashMap 
-        this.tileSet.put(base.getName(), base);
-        this.tileSet.put(newTile.getName(), newTile);
+        this.mTileSet.put(base.getName(), base);
+        this.mTileSet.put(newTile.getName(), newTile);
         
         //Puis on update les Tiles ajacent pour prendre en compte le nouveau Til ajouté
         if(baseBottomLeftTile != null){
             baseBottomLeftTile.setRightUpperTile(newTile);
-            this.tileSet.put(baseBottomLeftTile.getName(), baseBottomLeftTile);
+            this.mTileSet.put(baseBottomLeftTile.getName(), baseBottomLeftTile);
         }
         if(baseUpperLeftTile != null){
             baseUpperLeftTile.setRightBottomTile(newTile);
-            this.tileSet.put(baseUpperLeftTile.getName(), baseUpperLeftTile);
+            this.mTileSet.put(baseUpperLeftTile.getName(), baseUpperLeftTile);
         }  
     }
        
@@ -806,17 +834,17 @@ public final class GameBoard {
         newTile.setRightUpperTile(baseRightTile);
         
         //Update le HashMap 
-        this.tileSet.put(base.getName(), base);
-        this.tileSet.put(newTile.getName(), newTile);
+        this.mTileSet.put(base.getName(), base);
+        this.mTileSet.put(newTile.getName(), newTile);
         
         //Puis on update les Tiles ajacent pour prendre en compte le nouveau Til ajouté
         if(baseLeftBottomTile != null){
             baseLeftBottomTile.setRightTile(newTile);
-            this.tileSet.put(baseLeftBottomTile.getName(), baseLeftBottomTile);
+            this.mTileSet.put(baseLeftBottomTile.getName(), baseLeftBottomTile);
         }
         if(baseRightTile != null){
             baseRightTile.setLeftBottomTile(newTile);
-            this.tileSet.put(baseRightTile.getName(), baseRightTile);
+            this.mTileSet.put(baseRightTile.getName(), baseRightTile);
         }        
     }
     
@@ -840,17 +868,17 @@ public final class GameBoard {
         newTile.setLeftUpperTile(baseLeftTile);
         
         //Update le HashMap 
-        this.tileSet.put(base.getName(), base);
-        this.tileSet.put(newTile.getName(), newTile);
+        this.mTileSet.put(base.getName(), base);
+        this.mTileSet.put(newTile.getName(), newTile);
         
         //Puis on update les Tiles ajacent pour prendre en compte le nouveau Til ajouté
         if(baseRightBottomTile != null){
             baseRightBottomTile.setLeftTile(newTile);
-            this.tileSet.put(baseRightBottomTile.getName(), baseRightBottomTile);
+            this.mTileSet.put(baseRightBottomTile.getName(), baseRightBottomTile);
         }
         if(baseLeftTile != null){
             baseLeftTile.setRightBottomTile(newTile);
-            this.tileSet.put(baseLeftTile.getName(), baseLeftTile);
+            this.mTileSet.put(baseLeftTile.getName(), baseLeftTile);
         }        
     }
     
