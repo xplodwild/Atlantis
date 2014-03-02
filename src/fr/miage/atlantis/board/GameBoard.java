@@ -110,7 +110,9 @@ public final class GameBoard {
        //Fin de la ligne 2
        
        
+       //-----------------------------------------------------------------------
        //Debut de la ligne 3
+       //-----------------------------------------------------------------------
        GameTile n46=this.tileSet.get("Border #46");
        
        nextTile=new BorderTile(this,"Border #45",true);
@@ -132,7 +134,12 @@ public final class GameBoard {
        this.placeTileAtTheRightOf(tmp, nextTile);      
        //Fin de la ligne 3
        
+       
+       
+       
+       //-----------------------------------------------------------------------
        //Debut de la ligne 4
+       //-----------------------------------------------------------------------
        GameTile n45=this.tileSet.get("Border #45");
        
        nextTile=new BorderTile(this,"Border #44",true);
@@ -153,6 +160,10 @@ public final class GameBoard {
        nextTile=new BorderTile(this,"Border #12",true);
        this.placeTileAtTheRightOf(tmp, nextTile);      
        //Fin de la ligne 4
+       
+       
+       
+       
        
                    
        //Mise a jour de l'attribut du tile de landing et SeaShark de la partie Haute du plateau.
@@ -179,7 +190,10 @@ public final class GameBoard {
        
        
        
+       //-----------------------------------------------------------------------
        //Debut de la ligne 5
+       //-----------------------------------------------------------------------
+       
        GameTile n44=this.tileSet.get("Border #44");
        
        nextTile=new BorderTile(this,"Border #42");
@@ -222,7 +236,10 @@ public final class GameBoard {
        //Fin de la ligne 5
        
        
+       //-----------------------------------------------------------------------
        //Debut de la ligne 6
+       //-----------------------------------------------------------------------
+       
        GameTile n42=this.tileSet.get("Border #42");
        
        nextTile=new BorderTile(this,"Border #41");
@@ -342,8 +359,230 @@ public final class GameBoard {
        
        nextTile=new BorderTile(this,"Border #16");
        this.placeTileAtTheRightOf(nextTile2, nextTile);      
-       //Fin de la ligne 7
+       //Fin de la ligne 8
        
+       
+       //-----------------------------------------------------------------------
+       //Debut de la ligne 9
+       //-----------------------------------------------------------------------
+       
+       GameTile n39=this.tileSet.get("Border #39");
+       
+       nextTile=new BorderTile(this,"Border #38");
+       this.placeTileAtTheBottomLeftOf(n39, nextTile);
+       
+       //Place le 29e Tile Water
+       nextTile2=new WaterTile(this,"Water #50");
+       this.placeTileAtTheRightOf(nextTile, nextTile2);
+       nextTile3=new WaterTile(this,"Water #51");
+       this.placeTileAtTheRightOf(nextTile2, nextTile3);
+             
+       tmp2=null;
+       for(int i=26;i<34;i++){           
+           tmp2=this.generateRandomTile("Random #"+i);
+           this.placeTileAtTheRightOf(nextTile3,tmp2);    
+           nextTile3=tmp2;
+       }
+       
+       //Place le 52e Tile Water
+       nextTile2=new WaterTile(this,"Water #52");
+       this.placeTileAtTheRightOf(nextTile3, nextTile2);
+       nextTile3=new WaterTile(this,"Water #53");
+       this.placeTileAtTheRightOf(nextTile2, nextTile3);    
+       
+       nextTile=new BorderTile(this,"Border #17");
+       this.placeTileAtTheRightOf(nextTile3, nextTile);      
+       //Fin de la ligne 9
+       
+       
+       
+       
+       
+       //Debut de la ligne 10
+       GameTile n38=this.tileSet.get("Border #38");
+       
+       nextTile=new BorderTile(this,"Border #37");
+       this.placeTileAtTheBottomRightOf(n38, nextTile);
+       
+       //Place le 29e Tile Water
+       nextTile2=new WaterTile(this,"Water #54");
+       this.placeTileAtTheRightOf(nextTile, nextTile2);
+       
+       tmp=null;
+       //Puis les 2 suivants de la meme façon
+       for(int i=55;i<57;i++){           
+           tmp=new WaterTile(this,"Water #"+i);
+           this.placeTileAtTheRightOf(nextTile2,tmp);    
+           nextTile2=tmp;
+       }
+       
+       tmp2=null;
+       nextTile3=nextTile2;
+       for(int i=26;i<31;i++){           
+           tmp2=this.generateRandomTile("Random #"+i);
+           this.placeTileAtTheRightOf(nextTile3,tmp2);    
+           nextTile3=tmp2;
+       }
+       
+       //Place le 32e Tile Water
+       nextTile2=new WaterTile(this,"Water #55");
+       this.placeTileAtTheRightOf(nextTile3, nextTile2);
+       
+       tmp=null;
+       //Puis les 2 suivants de la meme façon
+       for(int i=56;i<58;i++){           
+           tmp=new WaterTile(this,"Water #"+i);
+           this.placeTileAtTheRightOf(nextTile2,tmp);    
+           nextTile2=tmp;
+       }
+             
+       nextTile=new BorderTile(this,"Border #18");
+       this.placeTileAtTheRightOf(tmp, nextTile);      
+       //Fin de la ligne 10
+       
+       
+       
+       //Debut de la ligne 11
+       GameTile n37=this.tileSet.get("Border #37");
+       
+       nextTile=new BorderTile(this,"Border #36");
+       this.placeTileAtTheBottomRightOf(n37, nextTile);
+       
+       //Place le 29e Tile Water
+       nextTile2=new WaterTile(this,"Water #58");
+       this.placeTileAtTheRightOf(nextTile, nextTile2);
+       
+       tmp=null;
+       //Puis les 2 suivants de la meme façon
+       for(int i=59;i<61;i++){           
+           tmp=new WaterTile(this,"Water #"+i);
+           this.placeTileAtTheRightOf(nextTile2,tmp);    
+           nextTile2=tmp;
+       }
+       
+       tmp2=null;
+       nextTile3=nextTile2;
+       for(int i=31;i<35;i++){           
+           tmp2=this.generateRandomTile("Random #"+i);
+           this.placeTileAtTheRightOf(nextTile3,tmp2);    
+           nextTile3=tmp2;
+       }
+       
+       //Place le 32e Tile Water
+       nextTile2=new WaterTile(this,"Water #61");
+       this.placeTileAtTheRightOf(nextTile3, nextTile2);
+       
+       tmp=null;
+       //Puis les 2 suivants de la meme façon
+       for(int i=62;i<64;i++){           
+           tmp=new WaterTile(this,"Water #"+i);
+           this.placeTileAtTheRightOf(nextTile2,tmp);    
+           nextTile2=tmp;
+       }
+             
+       nextTile=new BorderTile(this,"Border #19");
+       this.placeTileAtTheRightOf(tmp, nextTile);      
+       //Fin de la ligne 11
+       
+       
+       //-----------------------------------------------------------------------
+       //Debut de la ligne 12
+       //-----------------------------------------------------------------------
+       GameTile n36=this.tileSet.get("Border #36");
+       
+       nextTile=new BorderTile(this,"Border #35",true);
+       this.placeTileAtTheBottomLeftOf(n36, nextTile);
+       
+       //Place le 8e Tile Water
+       nextTile2=new WaterTile(this,"Water #64");
+       this.placeTileAtTheRightOf(nextTile, nextTile2);
+       
+       tmp=null;
+       //Puis les 8 suivants de la meme façon
+       for(int i=65;i<75;i++){           
+           tmp=new WaterTile(this,"Water #"+i);
+           this.placeTileAtTheRightOf(nextTile2,tmp);    
+           nextTile2=tmp;
+       }
+       
+       nextTile=new BorderTile(this,"Border #20",true);
+       this.placeTileAtTheRightOf(tmp, nextTile);      
+       //Fin de la ligne 12
+       
+       
+       //-----------------------------------------------------------------------
+       //Debut de la ligne 13
+       //-----------------------------------------------------------------------
+       GameTile n35=this.tileSet.get("Border #35");
+       
+       nextTile=new BorderTile(this,"Border #34",true);
+       this.placeTileAtTheBottomRightOf(n35, nextTile);
+       
+       //Place le 8e Tile Water
+       nextTile2=new WaterTile(this,"Water #75");
+       this.placeTileAtTheRightOf(nextTile, nextTile2);
+       
+       tmp=null;
+       //Puis les 8 suivants de la meme façon
+       for(int i=76;i<85;i++){           
+           tmp=new WaterTile(this,"Water #"+i);
+           this.placeTileAtTheRightOf(nextTile2,tmp);    
+           nextTile2=tmp;
+       }
+       
+       nextTile=new BorderTile(this,"Border #21",true);
+       this.placeTileAtTheRightOf(tmp, nextTile);      
+       //Fin de la ligne 13
+       
+       
+       //-----------------------------------------------------------------------
+       //Debut de la ligne 13
+       //-----------------------------------------------------------------------
+       GameTile n34=this.tileSet.get("Border #34");
+       
+       nextTile=new BorderTile(this,"Border #33",true);
+       this.placeTileAtTheBottomRightOf(n34, nextTile);
+       nextTile3=new BorderTile(this,"Border #32",true);
+       this.placeTileAtTheRightOf(nextTile, nextTile3);
+       
+       
+       //Place le 8e Tile Water
+       nextTile2=new WaterTile(this,"Water #85");
+       this.placeTileAtTheRightOf(nextTile3, nextTile2);
+       
+       tmp=null;
+       //Puis les 8 suivants de la meme façon
+       for(int i=86;i<92;i++){           
+           tmp=new WaterTile(this,"Water #"+i);
+           this.placeTileAtTheRightOf(nextTile2,tmp);    
+           nextTile2=tmp;
+       }
+       
+       nextTile=new BorderTile(this,"Border #23",true);
+       this.placeTileAtTheRightOf(tmp, nextTile);      
+       nextTile3=new BorderTile(this,"Border #22",true);
+       this.placeTileAtTheRightOf(nextTile, nextTile3);  
+       
+       //Fin de la ligne 13
+       
+       
+       //-----------------------------------------------------------------------
+       //Debut de la ligne 14
+       //-----------------------------------------------------------------------
+      
+       GameTile n32=this.tileSet.get("Border #32");
+       nextTile=new BorderTile(this,"Border #31");
+       this.placeTileAtTheBottomRightOf(n32, nextTile);
+              
+       //Puis les 8 suivants de la meme façon
+       for(int i=30;i>23;i--){
+           BorderTile tmps=new BorderTile(this,"Border #"+i);
+           this.placeTileAtTheRightOf(nextTile,tmps);    
+           nextTile=tmps;
+       }       
+       //Première ligne terminée, Frontière haute du jeu mise en place.
+       
+       //Fin de la ligne 14
        
                 
     }
@@ -557,11 +796,11 @@ public final class GameBoard {
         
         //Puis on update les Tiles ajacent pour prendre en compte le nouveau Til ajouté
         if(baseLeftBottomTile != null){
-            baseLeftBottomTile.setRightUpperTile(newTile);
+            baseLeftBottomTile.setRightTile(newTile);
             this.tileSet.put(baseLeftBottomTile.getName(), baseLeftBottomTile);
         }
         if(baseRightTile != null){
-            baseRightTile.setRightBottomTile(newTile);
+            baseRightTile.setLeftBottomTile(newTile);
             this.tileSet.put(baseRightTile.getName(), baseRightTile);
         }        
     }
