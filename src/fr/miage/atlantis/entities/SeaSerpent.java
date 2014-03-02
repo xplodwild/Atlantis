@@ -22,19 +22,37 @@ import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.logic.GameLogic;
 
 /**
- *
+ * Classe implementant l'animal Serpent de mer
+ * 
+ * @author AtlantisTeam
+ * @version 1.0
+ * @date 02/03/2014  
  */
 public class SeaSerpent extends Animal {
     
+    /**
+     * Nombre maximal de movements
+     */
     private final static int MAX_MOVES = 1;
 
+    
+    /**
+     * Constructeur de SeaSerpent
+     * 
+     * @param tile Tile sur lequel on place le SeaSerpent
+     */
     public SeaSerpent(GameTile tile) {
         super("Serpent de mer", tile, MAX_MOVES);       
     }
 
+    /**
+     * Resultat d'un croisement entres entitées
+     * 
+     * @param logic Logique de jeu à appliquer
+     * @param ent Entité qui croise le seaserpent
+     */
     @Override
     public void onEntityCross(GameLogic logic, GameEntity ent) {
         throw new UnsupportedOperationException("Not implemented");
-    }
-    
+    }    
 }
