@@ -24,10 +24,11 @@ package fr.miage.atlantis.board;
  * 
  * @author AtlantisTeam
  * @version 1.0
- * @date 28/02/2014 * 
+ * @date 28/02/2014  
  */
 public class MountainTile extends GameTile{
 
+    
    /**
      * Constructeur de MountainTile
      * 
@@ -37,6 +38,7 @@ public class MountainTile extends GameTile{
     public MountainTile(GameBoard board,String name){ 
         super(board, name, 3);
     }
+    
     
     /**
      * Constructeur de MountainTile #2

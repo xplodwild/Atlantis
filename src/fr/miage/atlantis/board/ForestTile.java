@@ -23,10 +23,11 @@ package fr.miage.atlantis.board;
  * 
  * @author AtlantisTeam
  * @version 1.0
- * @date 28/02/2014 * 
+ * @date 28/02/2014  
  */
 public class ForestTile extends GameTile{
 
+    
     /**
      * Constructeur de ForestTile
      * 
@@ -36,6 +37,7 @@ public class ForestTile extends GameTile{
     public ForestTile(GameBoard board,String name){ 
         super(board, name, 2);
     }
+    
     
     /**
      * Constructeur de ForestTile #2

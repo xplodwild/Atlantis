@@ -23,7 +23,7 @@ package fr.miage.atlantis.board;
  * 
  * @author AtlantisTeam
  * @version 1.0
- * @date 28/02/2014 * 
+ * @date 01/03/2014  
  */
 public class BeachTile extends GameTile{
 

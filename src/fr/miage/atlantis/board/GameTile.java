@@ -27,7 +27,7 @@ import java.util.List;
  * 
  * @author AtlantisTeam
  * @version 1.0
- * @date 28/02/2014 * 
+ * @date 28/02/2014 
  */
 public abstract class GameTile {
 
@@ -40,22 +40,27 @@ public abstract class GameTile {
      * mLeftTile : Tile adjacent coté gauche
      */
     private GameTile mLeftTile;
+    
     /**
      * mLeftTile : Tile adjacent coté droit
      */
     private GameTile mRightTile;
+    
     /**
      * mLeftTile : Tile adjacent coté gauche direction haute
      */
     private GameTile mLeftUpperTile;
+    
     /**
      * mLeftTile : Tile adjacent coté gauche direction basse
      */
     private GameTile mLeftBottomTile;
+    
     /**
      * mLeftTile : Tile adjacent coté droit direction haute
      */
     private GameTile mRightUpperTile;
+    
     /**
      * mLeftTile : Tile adjacent coté droit direction basse
      */
@@ -65,14 +70,17 @@ public abstract class GameTile {
      * mHeight : Coordonnée hauteur du tile
      */
     private int mHeight;
+    
     /**
      * Entitées de jeu présente sur le tile courant (Animaux/Pions/Bateau...)
      */
     private List<GameEntity> mEntities;
+    
     /**
      * mBoard : Board a laquelle appartient le tile courant
      */
     private GameBoard mBoard;
+    
     /**
      * mIsOnBoard : Indique si la tile est sur le plateau ou retirée
      */
@@ -147,6 +155,7 @@ public abstract class GameTile {
         this.mEntities.remove(gE);
     }
     
+    
     /**
      * Indique que cette tile a été supprimée du plateau
      */
@@ -155,9 +164,12 @@ public abstract class GameTile {
     }
     
     
-    //-----------------------------------------------
-    //GETTERS                                       |
-    //-----------------------------------------------
+    
+    
+    //--------------------------------------------------------------------------
+    //GETTERS                                                                  |
+    //--------------------------------------------------------------------------
+    
     
     public List<GameEntity> getEntities() {
         return mEntities;
@@ -202,12 +214,16 @@ public abstract class GameTile {
     public GameTile getRightBottomTile() {
         return mRightBottomTile;
     }
+    //--------------------------------------------------------------------------
     
     
-    //-----------------------------------------------
-    //SETTERS                                       |
-    //-----------------------------------------------
+    
+    
+    //--------------------------------------------------------------------------
+    //SETTERS                                                                  |
+    //--------------------------------------------------------------------------
 
+    
     public void setName(String mName) {
         this.mName = mName;
     }
@@ -239,4 +255,5 @@ public abstract class GameTile {
     public void setIsOnBoard(boolean mIsOnBoard) {
         this.mIsOnBoard = mIsOnBoard;
     }
+    //--------------------------------------------------------------------------
 }
