@@ -40,7 +40,7 @@ import fr.miage.atlantis.logic.GameLogic;
 public class Game3DLogic extends GameLogic {
     
     private Game3DRenderer mRenderer;
-    
+
     public Game3DLogic() {
         super();
         mRenderer = new Game3DRenderer(this);
