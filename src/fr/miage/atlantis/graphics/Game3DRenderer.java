@@ -51,15 +51,15 @@ public class Game3DRenderer extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
-        flyCam.setMoveSpeed(100.0f);
-        cam.setFrustumFar(1000.0f);
+        flyCam.setMoveSpeed(200.0f);
+        cam.setFrustumFar(4000.0f);
         
         // Configuration des ombres
         rootNode.setShadowMode(ShadowMode.Off);
         
         mSceneNode = new Node("Scene");
         rootNode.attachChild(mSceneNode);
-        mEnvironment = new Environment(rootNode, assetManager, viewPort);
+        mEnvironment = new Environment(rootNode, assetManager, viewPort, cam);
         
         // Rendu du plateau
         mBoardRenderer = new BoardRenderer(assetManager);
