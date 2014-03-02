@@ -29,6 +29,10 @@ public class TileModel extends StaticModel {
         super(am, getModelPathFromHeight(height),
                 getTexturePathFromHeight(height),
                 getNormalPathFromHeight(height));
+        
+        // Les modèles de tiles hexagonaux sont décalées de l'origine, et du 
+        // coup ne collent pas avec les tiles empty. On les recentre manuellement.
+        setLocalTranslation(12, 0, 10);
     }
     
     private static String getModelPathFromHeight(int height) {
