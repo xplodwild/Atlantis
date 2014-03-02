@@ -22,20 +22,36 @@ import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.logic.GameLogic;
 
 /**
- *
+ * Classe implementant l'animal requin
+ * 
+ * @author AtlantisTeam
+ * @version 1.0
+ * @date 02/03/2014  
  */
 public class Shark extends Animal {
 
+    /**
+     * Nombre maximal de movements
+     */
     private final static int MAX_MOVES = 2;
 
+    /**
+     * Constructeur de Requin
+     * 
+     * @param tile Tile sur lequel on place le SeaSerpent
+     */
     public Shark(GameTile tile) {
-        super("Shark", tile, MAX_MOVES);
-        throw new UnsupportedOperationException("Not implemented");
+        super("Shark", tile, MAX_MOVES);       
     }
     
+    /**
+     * Resultat d'un croisement entres entitées
+     * 
+     * @param logic Logique de jeu à appliquer
+     * @param ent Entité qui croise le requin
+     */
     @Override
     public void onEntityCross(GameLogic logic, GameEntity ent) {
         throw new UnsupportedOperationException("Not implemented");
-    }
-    
+    }    
 }
