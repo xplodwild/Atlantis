@@ -19,8 +19,13 @@
 package fr.miage.atlantis.graphics;
 
 import com.jme3.app.SimpleApplication;
+import com.jme3.math.Vector3f;
+import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
+import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Node;
+import com.jme3.shadow.BasicShadowRenderer;
+import com.jme3.shadow.ShadowUtil;
 import fr.miage.atlantis.Game3DLogic;
 import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.entities.GameEntity;
@@ -48,6 +53,9 @@ public class Game3DRenderer extends SimpleApplication {
     public void simpleInitApp() {
         flyCam.setMoveSpeed(100.0f);
         cam.setFrustumFar(1000.0f);
+        
+        // Configuration des ombres
+        rootNode.setShadowMode(ShadowMode.Off);
         
         mSceneNode = new Node("Scene");
         rootNode.attachChild(mSceneNode);

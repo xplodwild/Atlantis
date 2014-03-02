@@ -26,6 +26,9 @@ import com.jme3.math.Vector3f;
 import com.jme3.post.FilterPostProcessor;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
+import com.jme3.shadow.PssmShadowFilter;
+import com.jme3.shadow.PssmShadowRenderer;
+import com.jme3.shadow.PssmShadowRenderer.FilterMode;
 import com.jme3.texture.Texture2D;
 import com.jme3.util.SkyFactory;
 import com.jme3.water.WaterFilter;
@@ -36,14 +39,15 @@ import com.jme3.water.WaterFilter;
 public class Environment {
 
     public Environment(Node parent, AssetManager am, ViewPort viewPort) {
-        // Mise en place de l'eau
-        setupWater(parent, am, viewPort);
         
         // Mise en place du ciel
         setupSky(parent, am);
         
         // Mise en place du lighting
-        setupLight(parent);
+        setupLight(parent, am, viewPort);
+        // Mise en place de l'eau
+        setupWater(parent, am, viewPort);
+        
     }
     
     private void setupWater(Node parent, AssetManager am, ViewPort viewPort) {
@@ -71,7 +75,7 @@ public class Environment {
                 "Textures/Sky/Bright/BrightSky.dds", false));
     }
     
-    private void setupLight(Node parent) {
+    private void setupLight(Node parent, AssetManager assetManager, ViewPort viewPort) {
         // Lumière ambiante, semi-claire
         AmbientLight al = new AmbientLight();
         al.setColor(ColorRGBA.Gray);
@@ -79,8 +83,31 @@ public class Environment {
         
         // Lumière directionnelle (soleil)
         DirectionalLight l = new DirectionalLight();
-        l.setDirection(new Vector3f(-.5f, -.5f, .5f));
+        l.setDirection(new Vector3f(-.5f, -1f, .5f));
         l.setColor(ColorRGBA.White);
         parent.addLight(l);
+        
+        // Ombres
+        PssmShadowRenderer pssmRenderer = new PssmShadowRenderer(assetManager, 1024, 3);
+        pssmRenderer.setDirection(new Vector3f(-0.5973172f, -0.56583486f, 0.8846725f).normalizeLocal());
+        pssmRenderer.setLambda(0.55f);
+        pssmRenderer.setShadowIntensity(0.6f);
+        pssmRenderer.setCompareMode(PssmShadowRenderer.CompareMode.Hardware);
+        pssmRenderer.setFilterMode(FilterMode.PCF8);
+                
+        viewPort.addProcessor(pssmRenderer);
+
+        PssmShadowFilter pssmFilter = new PssmShadowFilter(assetManager, 1024, 3);
+        pssmFilter.setLambda(0.55f);
+        pssmFilter.setShadowIntensity(0.6f);
+        pssmFilter.setCompareMode(PssmShadowRenderer.CompareMode.Hardware);
+        pssmFilter.setFilterMode(FilterMode.PCF8);
+        pssmFilter.setEnabled(false);
+
+        FilterPostProcessor fpp = new FilterPostProcessor(assetManager);
+        fpp.setNumSamples(4);
+        fpp.addFilter(pssmFilter);
+
+        viewPort.addProcessor(fpp);
     }
 }

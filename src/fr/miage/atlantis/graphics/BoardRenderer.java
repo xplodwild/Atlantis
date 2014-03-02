@@ -41,8 +41,8 @@ public class BoardRenderer extends Node {
     public final static String DATA_TILE = "tile";
     
     private final static boolean DEBUG_ITERATION = true;
-    private final static float TILE_HEIGHT = 40.0f;
-    private final static float TILE_WIDTH = 44.0f;
+    private final static float TILE_WIDTH = 35.0f;
+    private final static float TILE_HEIGHT = 39.9f;
     private final static float GRID_HEIGHT = 1.0f;
 
     private float mTileOffset = 0.0f;
@@ -169,9 +169,9 @@ public class BoardRenderer extends Node {
 
         // On positionne la tile
         output.setLocalTranslation(output.getLocalTranslation().add( 
-                new Vector3f(y * -TILE_HEIGHT,
+                new Vector3f(y * -TILE_WIDTH,
                 GRID_HEIGHT,
-                x * TILE_WIDTH + mTileOffset)));
+                x * TILE_HEIGHT + mTileOffset)));
         
         // On l'attache à cette Node
         output.setUserData(DATA_TILE, tile.getName());
