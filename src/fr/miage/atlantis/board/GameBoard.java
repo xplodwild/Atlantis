@@ -671,6 +671,7 @@ public final class GameBoard {
         int random=new Random().nextInt(randomiser.size());        
         GameTile retour=this.randomiser.get(random);
         randomiser.remove(random);
+        retour.setName(name);
         
         return retour;
     }
