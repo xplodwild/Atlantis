@@ -22,33 +22,69 @@ import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.logic.GameLogic;
 
 /**
- *
+ * Classe mère qui gère les entitées de jeu 
+ * 
+ * @author AtlantisTeam
+ * @version 1.0
+ * @date 02/03/2014  
  */
 public class GameEntity {
     
+    /**
+     * Constantes de jeu
+     */
     public final static int ACTION_SHARK_EAT = 0;
     public final static int ACTION_WHALE_NUKE = 1;
     public final static int ACTION_SEASERPENT_CRUSH = 2;
     public final static int ACTION_PLAYER_ESCAPE = 3;
     
+    /**
+     * Nom de l'entité
+     */
     private String mName;
+    
+    /**
+     * Tile de l'entité
+     */
     private GameTile mTile;
     
+    
+    /**
+     * Constructeur de l'entité
+     * 
+     * @param name Nom de l'entité
+     * @param tile Tile ou se place l'entité
+     */
     public GameEntity(final String name, GameTile tile) {
         mName = name;
         mTile = tile;
     }
     
+    /**
+     * Deplace cette entité sur le Tile tile, avec la logique de jeu logic
+     * 
+     * @param logic Logique de jeu à adopter
+     * @param tile Tile ou l'on deplace l'entité
+     */
     public void moveToTile(GameLogic logic, GameTile tile) {
         throw new UnsupportedOperationException("Not implemented");
     }
     
+    /**
+     * Tue l'unité visée
+     * 
+     * @param logic logique de jeu tuant l'unité
+     */
     public void die(GameLogic logic) {
         throw new UnsupportedOperationException("Not implemented");
     }
     
+    /**
+     * Spawn une unité.
+     * 
+     * @param logic logique de jeu spawnant une unité.
+     */
     public void spawn(GameLogic logic) {
         throw new UnsupportedOperationException("Not implemented");
     }
-
 }
