@@ -18,33 +18,11 @@
 
 package fr.miage.atlantis.graphics.models;
 
-import com.jme3.asset.AssetManager;
+import com.jme3.math.Vector3f;
 
 /**
  *
  */
-public class SeaSerpentModel extends AnimatedModel {
-
-    /**
-     * Attack cell
-rise
-Sucked Down
-swim cycle
-Dive
-     */
-    public final static String ANIMATION_IDLE = "Idle";
-    public final static String ANIMATION_ATTACK_CELL = "Attack cell";
-    public final static String ANIMATION_RISE = "rise";
-    public final static String ANIMATION_SUCKED_DOWN = "Sucked Down";
-    public final static String ANIMATION_SWIM_CYCLE = "swim cycle";
-    public final static String ANIMATION_DIVE = "Dive";
-    
-    public SeaSerpentModel(AssetManager am) {
-        super(am, "Models/serpentA.mesh.xml", "Textures/seaserpent.png",
-                "Textures/seaserpent_normal.png");
-        
-        getModelNode().setLocalTranslation(-2, 0, 24);
-    }
-
-    
+public interface AbstractTileModel {
+    public Vector3f getTileTopCenter();
 }

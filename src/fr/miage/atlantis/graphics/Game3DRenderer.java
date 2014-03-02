@@ -22,7 +22,9 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Node;
 import fr.miage.atlantis.Game3DLogic;
+import fr.miage.atlantis.graphics.models.AbstractTileModel;
 import fr.miage.atlantis.graphics.models.PlayerModel;
+import fr.miage.atlantis.graphics.models.SeaSerpentModel;
 
 /**
  *
@@ -73,15 +75,21 @@ public class Game3DRenderer extends SimpleApplication {
         rootNode.attachChild(shark);
         shark.playAnimation(SharkModel.ANIMATION_DIVE);*/
         
-        /*SeaSerpentModel shark = new SeaSerpentModel(assetManager);
+        SeaSerpentModel shark = new SeaSerpentModel(assetManager);
         shark.printAnimations();
         rootNode.attachChild(shark);
-        shark.playAnimation(SeaSerpentModel.ANIMATION_IDLE);*/
+        shark.playAnimation(SeaSerpentModel.ANIMATION_IDLE);
         
-        /*PlayerModel player = new PlayerModel(assetManager, PlayerModel.COLOR_BLUE);
+        AbstractTileModel tile = (AbstractTileModel) mBoardRenderer.getTile(126);
+        shark.setLocalTranslation(tile.getTileTopCenter());
+        
+        PlayerModel player = new PlayerModel(assetManager, PlayerModel.COLOR_BLUE);
         player.printAnimations();
         rootNode.attachChild(player);
-        player.playAnimation(PlayerModel.ANIMATION_GET_ON_OFF_BOAT);*/
+        player.playAnimation(PlayerModel.ANIMATION_LAND_IDLE_1);
+        
+        tile = (AbstractTileModel) mBoardRenderer.getTile(127);
+        player.setLocalTranslation(tile.getTileTopCenter());
     }
     
     

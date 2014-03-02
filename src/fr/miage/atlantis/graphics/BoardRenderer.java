@@ -27,6 +27,8 @@ import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.board.WaterTile;
 import fr.miage.atlantis.graphics.models.EmptyTileModel;
 import fr.miage.atlantis.graphics.models.TileModel;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -36,15 +38,21 @@ public class BoardRenderer extends Node {
     public final static String DATA_TILE = "tile";
     
     private final static boolean DEBUG_ITERATION = true;
-    private final static float TILE_HEIGHT = 20.0f;
-    private final static float TILE_WIDTH = 22.0f;
+    private final static float TILE_HEIGHT = 40.0f;
+    private final static float TILE_WIDTH = 44.0f;
     private final static float GRID_HEIGHT = 1.0f;
 
     private float mTileOffset = 0.0f;
     private AssetManager mAssetManager;
+    private List<Node> mTiles;
     
     public BoardRenderer(AssetManager am) {
         mAssetManager = am;
+        mTiles = new ArrayList<Node>();
+    }
+    
+    public Node getTile(int i) {
+        return mTiles.get(i);
     }
     
     /**
@@ -157,5 +165,8 @@ public class BoardRenderer extends Node {
         // On l'attache à cette Node
         output.setUserData(DATA_TILE, tile.getName());
         attachChild(output);
+        
+        System.out.println("Tile " + mTiles.size() + ": " + tile.getName());
+        mTiles.add(output);
     }
 }

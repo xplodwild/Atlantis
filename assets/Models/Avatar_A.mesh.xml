@@ -28968,7 +28968,7 @@
             </boneassignments>
         </submesh>
     </submeshes>
-    <skeletonlink name="Avatar_Skeleton_B.skeleton" />
+    <skeletonlink name="Avatar_Skeleton_A.skeleton" />
     <submeshnames>
         <submeshname name="submesh0" index="0" />
     </submeshnames>

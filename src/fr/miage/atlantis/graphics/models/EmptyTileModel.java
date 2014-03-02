@@ -25,6 +25,7 @@ import com.jme3.export.JmeImporter;
 import com.jme3.export.OutputCapsule;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
@@ -35,7 +36,7 @@ import java.io.IOException;
 /**
  *
  */
-public class EmptyTileModel extends Node {
+public class EmptyTileModel extends Node implements AbstractTileModel {
 
     private static final class HexagonMesh extends Mesh {
 
@@ -103,12 +104,17 @@ public class EmptyTileModel extends Node {
         h.setLineWidth(30);
         
         Geometry modelGrid = new Geometry("Grid", h);
-        modelGrid.setLocalScale(0.1f);
+        modelGrid.setLocalScale(0.2f);
         
         Material matGrid = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         matGrid.setColor("Color", color);
         modelGrid.setMaterial(matGrid);
         
         attachChild(modelGrid);
+    }
+    
+    public Vector3f getTileTopCenter() {
+        updateWorldBound();
+        return getWorldBound().getCenter().add(0, 1, 0);
     }
 }

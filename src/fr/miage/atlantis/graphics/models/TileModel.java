@@ -19,21 +19,31 @@
 package fr.miage.atlantis.graphics.models;
 
 import com.jme3.asset.AssetManager;
+import com.jme3.math.Vector3f;
 
 /**
  *
  */
-public class TileModel extends StaticModel {
+public class TileModel extends StaticModel implements AbstractTileModel {
+    
+    private int mHeight;
     
     public TileModel(int height, AssetManager am) {
         super(am, getModelPathFromHeight(height),
                 getTexturePathFromHeight(height),
                 getNormalPathFromHeight(height));
         
+        mHeight = height;
+        
         // Les modèles de tiles hexagonaux sont décalées de l'origine, et du 
         // coup ne collent pas avec les tiles empty. On les recentre manuellement.
-        setLocalTranslation(12, 0, 9.94982f);
-        setLocalScale(1.0f, 1.0f, 1.005f);
+        setLocalTranslation(24.0f, 0.0f, 20.9999f);
+        setLocalScale(2.0f, 2.0f, 2.01f);
+    }
+    
+    public Vector3f getTileTopCenter() {
+        updateWorldBound();
+        return getModelNode().getWorldBound().getCenter().add(0.0f, 6.0f * (mHeight+1), 0.0f);
     }
     
     private static String getModelPathFromHeight(int height) {

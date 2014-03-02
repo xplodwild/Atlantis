@@ -33,9 +33,12 @@ public class StaticModel extends Node {
 
     private Spatial mModel;
     private Material mMaterial;
+    private Node mModelNode;
 
     public StaticModel(AssetManager am, String meshName,
             String diffusePath, String normalPath) {
+        mModelNode = new Node();
+        
         // On charge le mesh
         mModel = am.loadModel(meshName);
         
@@ -57,11 +60,16 @@ public class StaticModel extends Node {
             mModel.setMaterial(mMaterial);
         }
         
-        this.attachChild(mModel);
+        mModelNode.attachChild(mModel);
+        this.attachChild(mModelNode);
     }
     
     public Spatial getModel() {
         return mModel;
+    }
+    
+    public Node getModelNode() {
+        return mModelNode;
     }
     
     public Material getMaterial() {
