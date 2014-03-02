@@ -22,7 +22,11 @@ import fr.miage.atlantis.Player;
 import fr.miage.atlantis.board.GameTile;
 
 /**
- *
+ * Classe representant les pions du jeu
+ * 
+ * @author AtlantisTeam
+ * @version 1.0
+ * @date 02/03/2014  
  */
 public class PlayerToken extends GameEntity {
 
@@ -31,10 +35,29 @@ public class PlayerToken extends GameEntity {
     public final static int STATE_ON_BOAT  = 2;
     public final static int STATE_SAFE     = 3;
     
+    /**
+     * Joueur a qui appartient le pion
+     */
     private Player mPlayer;
+    
+    /**
+     * Etat du pion
+     */
     private int mState;
+    
+    /**
+     * Valeur du pion
+     */
     private int mPoints;
     
+    
+    /**
+     * Constructeur des pions
+     * 
+     * @param tile Tile sur lequel le pion est placé
+     * @param p Joueur a qui appartient le pion
+     * @param points Valeur du pion
+     */
     public PlayerToken(GameTile tile, Player p, int points) {
         super("PlayerToken", tile);
         mState = STATE_ON_LAND;
@@ -42,12 +65,27 @@ public class PlayerToken extends GameEntity {
         mPlayer = p;
     }
     
+    
+    
+    
+    //--------------------------------------------------------------------------
+    //GETTERS                                                                  |
+    //--------------------------------------------------------------------------
     public int getState() {
         return mState;
     }
+    //--------------------------------------------------------------------------
+    
+    
+    
+    
+    //--------------------------------------------------------------------------
+    //SETTERS                                                                  |
+    //--------------------------------------------------------------------------
+    
     
     public void setState(int state) {
         mState = state;
     }
-    
+    //--------------------------------------------------------------------------
 }
