@@ -584,7 +584,26 @@ public final class GameBoard {
        
        //Fin de la ligne 14
        
-                
+       
+       //Mise a jour de l'attribut du tile de landing et SeaShark de la partie Haute du plateau.
+       temp=(WaterTile)this.tileSet.get("Water #75");
+       temp.setIsLandingTile(true);
+       this.tileSet.put("Water #75", temp);
+       
+       
+       temp=(WaterTile)this.tileSet.get("Water #84");
+       temp.setIsLandingTile(true);
+       temp.setIsBeginningWithSeaShark(true);
+       this.tileSet.put("Water #84", temp);
+       
+       temp=(WaterTile)this.tileSet.get("Water #74");
+       temp.setIsLandingTile(true);       
+       this.tileSet.put("Water #74", temp);
+       
+       temp=(WaterTile)this.tileSet.get("Water #64");
+       temp.setIsLandingTile(true);
+       temp.setIsBeginningWithSeaShark(true);
+       this.tileSet.put("Water #64", temp); 
     }
     
     
