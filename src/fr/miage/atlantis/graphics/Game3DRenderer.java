@@ -19,21 +19,16 @@
 package fr.miage.atlantis.graphics;
 
 import com.jme3.app.SimpleApplication;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
-import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Node;
-import com.jme3.shadow.BasicShadowRenderer;
-import com.jme3.shadow.ShadowUtil;
 import fr.miage.atlantis.Game3DLogic;
 import fr.miage.atlantis.Player;
 import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.entities.GameEntity;
 import fr.miage.atlantis.entities.PlayerToken;
-import fr.miage.atlantis.graphics.models.AbstractTileModel;
-import fr.miage.atlantis.graphics.models.PlayerModel;
-import fr.miage.atlantis.graphics.models.SeaSerpentModel;
 import java.util.Map;
 
 /**
@@ -55,6 +50,8 @@ public class Game3DRenderer extends SimpleApplication {
     public void simpleInitApp() {
         flyCam.setMoveSpeed(200.0f);
         cam.setFrustumFar(4000.0f);
+        cam.setLocation(new Vector3f(-398.292f, 572.2102f, 176.78018f));
+        cam.setRotation(new Quaternion(0.43458012f, 0.5573096f, -0.4326719f, 0.5597688f));
         
         // Configuration des ombres
         rootNode.setShadowMode(ShadowMode.Off);
@@ -92,12 +89,13 @@ public class Game3DRenderer extends SimpleApplication {
         return mEntitiesRenderer;
     }
     
-    boolean DID_TEST = false;
+    int FRAME_COUNT = 0;
 
     @Override
     public void simpleUpdate(float tpf) {
-        if (!DID_TEST) {
-            DID_TEST = true;
+        FRAME_COUNT++;
+        
+        if (FRAME_COUNT == 10) {
             
             // TEST: Ajout d'un player token de test
             Map<String, GameTile> tiles = mParent.getBoard().getTileSet();
@@ -106,6 +104,9 @@ public class Game3DRenderer extends SimpleApplication {
             mEntitiesRenderer.addEntity(pt);
         
             mParent.onUnitMove(pt, tiles.get("Beach #4"));
+        } else if (FRAME_COUNT == 100) {
+            Map<String, GameTile> tiles = mParent.getBoard().getTileSet();
+            mParent.onSinkTile(tiles.get("Beach #4"));
         }
     }
 

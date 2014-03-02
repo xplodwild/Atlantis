@@ -28,12 +28,10 @@ import com.jme3.scene.Node;
 import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.board.TileAction;
 import fr.miage.atlantis.entities.GameEntity;
-import fr.miage.atlantis.entities.PlayerToken;
 import fr.miage.atlantis.graphics.AnimationBrain;
 import fr.miage.atlantis.graphics.Game3DRenderer;
 import fr.miage.atlantis.graphics.models.AbstractTileModel;
 import fr.miage.atlantis.graphics.models.AnimatedModel;
-import fr.miage.atlantis.graphics.models.PlayerModel;
 import fr.miage.atlantis.logic.GameLogic;
 
 /**
@@ -73,7 +71,7 @@ public class Game3DLogic extends GameLogic {
             throw new IllegalStateException("Aucune node 3D trouvée pour la tile de destination!");
         }
         
-        final MotionEvent motionEvent = generateTileMotionPath(entNode, tileNode);
+        final MotionEvent motionEvent = generateEntityOnTileMotion(entNode, tileNode);
         
         // Callback lorsque l'animation est terminée
         motionEvent.getPath().addListener(new MotionPathListener() {
@@ -108,15 +106,50 @@ public class Game3DLogic extends GameLogic {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public void onSinkTile(GameTile tile) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void onSinkTile(final GameTile tile) {
+        AbstractTileModel tileNode = mRenderer.getBoardRenderer().findTileModel(tile);
+        if (tileNode == null) {
+            throw new IllegalStateException("Aucune node 3D trouvée pour la tile de destination!");
+        }
+        
+        final MotionEvent motionEvent = generateTileSinkMotion((Node) tileNode);
+        // Callback lorsque l'animation est terminée
+        motionEvent.getPath().addListener(new MotionPathListener() {
+            public void onWayPointReach(MotionEvent control, int wayPointIndex) {
+                if (motionEvent.getPath().getNbWayPoints() == wayPointIndex + 1) {
+                    // On est à la fin de l'animation. On remplace la tile
+                    // coulée par une WaterTile
+                    getBoard().sinkTile(tile);
+
+                    if (getCurrentTurn() != null) {
+                        getCurrentTurn().onSinkTileFinished();
+                    }
+                }
+            }
+        });
+        
+        motionEvent.play();
     }
 
     public void onEntityAction(GameEntity source, GameEntity target, int action) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    private MotionEvent generateTileMotionPath(Node entNode, AbstractTileModel tileNode) {
+    private MotionEvent generateTileSinkMotion(Node tileNode) {
+         // On créé le chemin
+        final MotionPath path = new MotionPath();
+        path.addWayPoint(tileNode.getLocalTranslation());
+        path.addWayPoint(tileNode.getLocalTranslation().add(0, -20, 0));
+        path.setPathSplineType(Spline.SplineType.Linear);
+        
+        // On créé le contrôleur
+        final MotionEvent motionControl = new MotionEvent(tileNode, path);
+        motionControl.setInitialDuration(1f);
+        
+        return motionControl;
+    }
+    
+    private MotionEvent generateEntityOnTileMotion(Node entNode, AbstractTileModel tileNode) {
          // On créé le chemin
         final MotionPath path = new MotionPath();
         path.addWayPoint(entNode.getLocalTranslation());
@@ -127,7 +160,7 @@ public class Game3DLogic extends GameLogic {
         final MotionEvent motionControl = new MotionEvent(entNode, path);
         motionControl.setDirectionType(MotionEvent.Direction.PathAndRotation);
         motionControl.setRotation(new Quaternion().fromAngleNormalAxis(0, Vector3f.UNIT_Y));
-        motionControl.setInitialDuration(10f);
+        motionControl.setInitialDuration(2f);
         
         return motionControl;
     }
