@@ -84,7 +84,7 @@ public class TileModel extends StaticModel implements AbstractTileModel {
     
     private static String getNormalPathFromHeight(int height) {
         String path = null;
-        /*switch (height) {
+        switch (height) {
             case 1:
                 path = "Textures/sand_normal.jpg";
                 break;
@@ -96,7 +96,7 @@ public class TileModel extends StaticModel implements AbstractTileModel {
             case 3:
                 path = "Textures/rock_normal.jpg";
                 break;
-        }*/
+        }
         return path;
     }
 }
