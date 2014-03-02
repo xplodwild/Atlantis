@@ -74,6 +74,10 @@ public class PlayerToken extends GameEntity {
     public int getState() {
         return mState;
     }
+    
+    public Player getPlayer() {
+        return mPlayer;
+    }
     //--------------------------------------------------------------------------
     
     

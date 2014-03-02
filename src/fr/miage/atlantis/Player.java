@@ -31,11 +31,13 @@ public class Player {
     private String mName;
     private List<PlayerToken> mTokens;
     private List<GameTile> mActionTiles;
+    private int mNumber;
     
-    public Player(final String name) {
+    public Player(final String name, final int number) {
         mName = name;
         mTokens = new ArrayList<PlayerToken>();
         mActionTiles = new ArrayList<GameTile>();
+        mNumber = number;
         
         // On génère les 10 tokens par joueur
         mTokens.add(new PlayerToken(null, this, 6));
@@ -48,6 +50,10 @@ public class Player {
         mTokens.add(new PlayerToken(null, this, 1));
         mTokens.add(new PlayerToken(null, this, 1));
         mTokens.add(new PlayerToken(null, this, 1));
+    }
+    
+    public int getNumber() {
+        return mNumber;
     }
     
     public String getName() {

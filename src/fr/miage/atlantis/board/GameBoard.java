@@ -648,6 +648,9 @@ public final class GameBoard {
         return isAtWaterEdge;
     }
     
+    public Map<String, GameTile> getTileSet() {
+        return tileSet;
+    }
     
     /**
      * Accesseur pour le premier Tile du board
@@ -665,7 +668,6 @@ public final class GameBoard {
      * @return un tile generé aléatoirement parmis les 3 types.
      */
     public GameTile generateRandomTile(String name){
-                
         int random=new Random().nextInt(randomiser.size());        
         GameTile retour=this.randomiser.get(random);
         randomiser.remove(random);

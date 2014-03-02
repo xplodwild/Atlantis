@@ -87,4 +87,8 @@ public class GameEntity {
     public void spawn(GameLogic logic) {
         throw new UnsupportedOperationException("Not implemented");
     }
+    
+    public GameTile getTile() {
+        return mTile;
+    }
 }

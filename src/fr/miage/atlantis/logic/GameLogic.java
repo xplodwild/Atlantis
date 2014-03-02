@@ -45,7 +45,7 @@ public abstract class GameLogic implements GameTurnListener {
     public void prepareGame(String[] players) {
         mPlayers = new Player[players.length];
         for (int i = 0; i < mPlayers.length; i++) {
-            mPlayers[i] = new Player(players[i]);
+            mPlayers[i] = new Player(players[i], i+1);
         }
     }
     

@@ -22,9 +22,12 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Node;
 import fr.miage.atlantis.Game3DLogic;
+import fr.miage.atlantis.board.GameTile;
+import fr.miage.atlantis.entities.GameEntity;
 import fr.miage.atlantis.graphics.models.AbstractTileModel;
 import fr.miage.atlantis.graphics.models.PlayerModel;
 import fr.miage.atlantis.graphics.models.SeaSerpentModel;
+import java.util.Map;
 
 /**
  *
@@ -35,6 +38,7 @@ public class Game3DRenderer extends SimpleApplication {
     private Environment mEnvironment;
     private Game3DLogic mParent;
     private BoardRenderer mBoardRenderer;
+    private EntitiesRenderer mEntitiesRenderer;
     
     public Game3DRenderer(Game3DLogic parent) {
         mParent = parent;
@@ -53,6 +57,19 @@ public class Game3DRenderer extends SimpleApplication {
         mBoardRenderer = new BoardRenderer(assetManager);
         mBoardRenderer.renderBoard(mParent.getBoard());
         mSceneNode.attachChild(mBoardRenderer);
+        
+        mEntitiesRenderer = new EntitiesRenderer(assetManager, mBoardRenderer);
+
+        // Rendu des entités déjà placées sur le plateau
+        Map<String, GameTile> tiles = mParent.getBoard().getTileSet();
+        for (GameTile tile : tiles.values()) {
+            for (GameEntity ent : tile.getEntities()) {
+                mEntitiesRenderer.addEntity(ent);
+            }
+        }
+        
+        mSceneNode.attachChild(mEntitiesRenderer);
+        
         
         /*
         TileModel testTile = new TileModel(1, assetManager);

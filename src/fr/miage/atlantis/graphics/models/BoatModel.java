@@ -23,29 +23,15 @@ import com.jme3.asset.AssetManager;
 /**
  *
  */
-public class SeaSerpentModel extends AnimatedModel {
-
-    /**
-     * Attack cell
-rise
-Sucked Down
-swim cycle
-Dive
-     */
-    public final static String ANIMATION_IDLE = "Idle";
-    public final static String ANIMATION_ATTACK_CELL = "Attack cell";
-    public final static String ANIMATION_RISE = "rise";
-    public final static String ANIMATION_SUCKED_DOWN = "Sucked Down";
-    public final static String ANIMATION_SWIM_CYCLE = "swim cycle";
-    public final static String ANIMATION_DIVE = "Dive";
+public class BoatModel extends AnimatedModel {
     
-    public SeaSerpentModel(AssetManager am) {
-        super(am, "Models/serpentA.mesh.xml", "Textures/seaserpent.png",
-                "Textures/seaserpent_normal.png");
-        
-        getModelNode().setLocalTranslation(-2, 0, 24);
-        playAnimation(ANIMATION_IDLE);
+    public final static String ANIMATION_BOAT_IDLE = "boat_idle";
+    public final static String ANIMATION_BOAT_SINK = "boat_sink";
+    public final static String ANIMATION_BOAT_ROW = "boat_row";
+
+    public BoatModel(AssetManager am) {
+        super(am, "Models/boat.mesh.xml",
+                "Textures/boat.png", "Textures/boat_normal.png");
     }
 
-    
 }

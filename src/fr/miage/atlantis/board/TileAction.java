@@ -99,7 +99,7 @@ public class TileAction {
     private int mAction;
     private int mAnimal;
     
-    private static ArrayList<TileAction> randomiser;
+    private static ArrayList<TileAction> sRandomizer;
     
     
     
@@ -145,40 +145,42 @@ public class TileAction {
      * @return A random ActionTile
      */
     public static TileAction generateRandomTileAction(){
-        if(TileAction.randomiser == null){
+        if(TileAction.sRandomizer == null){
+            sRandomizer = new ArrayList<TileAction>();
+            
             for(int i=0;i<=TileAction.nb_Animal_Shark;i++){
-                randomiser.add(TileAction.Factory.createSpawnAnimal(TileAction.ANIMAL_SHARK));
+                sRandomizer.add(TileAction.Factory.createSpawnAnimal(TileAction.ANIMAL_SHARK));
                 for(int j=0;j<=TileAction.nb_Action_CancelAnimal;j++){
-                    randomiser.add(TileAction.Factory.createCancelAnimal(TileAction.ANIMAL_SHARK));
+                    sRandomizer.add(TileAction.Factory.createCancelAnimal(TileAction.ANIMAL_SHARK));
                 }
                 for(int k=0;k<=TileAction.nb_Action_MoveAnimal;k++){
-                    randomiser.add(TileAction.Factory.createMoveAnimal(TileAction.ANIMAL_SHARK));
+                    sRandomizer.add(TileAction.Factory.createMoveAnimal(TileAction.ANIMAL_SHARK));
                 }
             }
             
             for(int i=0;i<=TileAction.nb_Animal_Whale;i++){
-                randomiser.add(TileAction.Factory.createSpawnAnimal(TileAction.ANIMAL_WHALE));
+                sRandomizer.add(TileAction.Factory.createSpawnAnimal(TileAction.ANIMAL_WHALE));
                 
                 for(int j=0;j<=TileAction.nb_Action_CancelAnimal;j++){
-                    randomiser.add(TileAction.Factory.createCancelAnimal(TileAction.ANIMAL_WHALE));
+                    sRandomizer.add(TileAction.Factory.createCancelAnimal(TileAction.ANIMAL_WHALE));
                 }
                 for(int k=0;k<=TileAction.nb_Action_MoveAnimal;k++){
-                    randomiser.add(TileAction.Factory.createMoveAnimal(TileAction.ANIMAL_WHALE));
+                    sRandomizer.add(TileAction.Factory.createMoveAnimal(TileAction.ANIMAL_WHALE));
                 }
             }
             
             for(int i=0;i<=TileAction.nb_Action_BonusBoat;i++){
-                randomiser.add(TileAction.Factory.createBonusBoat());
+                sRandomizer.add(TileAction.Factory.createBonusBoat());
             }
             
             for(int i=0;i<=TileAction.nb_Action_BonusSwim;i++){
-                randomiser.add(TileAction.Factory.createBonusSwim());
+                sRandomizer.add(TileAction.Factory.createBonusSwim());
             }          
         }
         
-        int random=new Random().nextInt(TileAction.randomiser.size());        
-        TileAction retour=TileAction.randomiser.get(random);
-        TileAction.randomiser.remove(random);
+        int random=new Random().nextInt(TileAction.sRandomizer.size());        
+        TileAction retour=TileAction.sRandomizer.get(random);
+        TileAction.sRandomizer.remove(random);
         
         return retour;
     }

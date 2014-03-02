@@ -50,5 +50,24 @@ public class PlayerModel extends AnimatedModel {
         super(am, "Models/Avatar_A.mesh.xml",
                 "Textures/player_" + color + ".png", null);
     }
+    
+    public static String intToColor(int i) {
+        switch (i) {
+            case 1:
+                return COLOR_BLUE;
+                
+            case 2:
+                return COLOR_GREEN;
+                
+            case 3:
+                return COLOR_ORANGE;
+                
+            case 4:
+                return COLOR_RED;
+                
+            default:
+                throw new IllegalStateException("Unknown player number");
+        }
+    }
 
 }

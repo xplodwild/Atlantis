@@ -25,10 +25,13 @@ import com.jme3.scene.Node;
 import fr.miage.atlantis.board.GameBoard;
 import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.board.WaterTile;
+import fr.miage.atlantis.graphics.models.AbstractTileModel;
 import fr.miage.atlantis.graphics.models.EmptyTileModel;
 import fr.miage.atlantis.graphics.models.TileModel;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -45,14 +48,22 @@ public class BoardRenderer extends Node {
     private float mTileOffset = 0.0f;
     private AssetManager mAssetManager;
     private List<Node> mTiles;
+    private Map<Node, GameTile> mNodeToGameTiles;
+    private Map<GameTile, AbstractTileModel> mGameTileToModel;
     
     public BoardRenderer(AssetManager am) {
         mAssetManager = am;
         mTiles = new ArrayList<Node>();
+        mNodeToGameTiles = new HashMap<Node, GameTile>();
+        mGameTileToModel = new HashMap<GameTile, AbstractTileModel>();
     }
     
     public Node getTile(int i) {
         return mTiles.get(i);
+    }
+    
+    public AbstractTileModel findTileModel(GameTile tile) {
+        return mGameTileToModel.get(tile);
     }
     
     /**
@@ -164,6 +175,8 @@ public class BoardRenderer extends Node {
         
         // On l'attache à cette Node
         output.setUserData(DATA_TILE, tile.getName());
+        mNodeToGameTiles.put(output, tile);
+        mGameTileToModel.put(tile, (AbstractTileModel) output);
         attachChild(output);
         
         System.out.println("Tile " + mTiles.size() + ": " + tile.getName());
