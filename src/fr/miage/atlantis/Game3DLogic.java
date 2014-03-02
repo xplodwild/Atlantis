@@ -29,8 +29,10 @@ import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.board.TileAction;
 import fr.miage.atlantis.entities.GameEntity;
 import fr.miage.atlantis.entities.PlayerToken;
+import fr.miage.atlantis.graphics.AnimationBrain;
 import fr.miage.atlantis.graphics.Game3DRenderer;
 import fr.miage.atlantis.graphics.models.AbstractTileModel;
+import fr.miage.atlantis.graphics.models.AnimatedModel;
 import fr.miage.atlantis.graphics.models.PlayerModel;
 import fr.miage.atlantis.logic.GameLogic;
 
@@ -71,41 +73,35 @@ public class Game3DLogic extends GameLogic {
             throw new IllegalStateException("Aucune node 3D trouvée pour la tile de destination!");
         }
         
-        // On créé le chemin
-        final MotionPath path = new MotionPath();
-        path.addWayPoint(entNode.getLocalTranslation());
-        path.addWayPoint(tileNode.getTileTopCenter());
-        path.setPathSplineType(Spline.SplineType.Linear);
+        final MotionEvent motionEvent = generateTileMotionPath(entNode, tileNode);
         
-        // On créé le contrôleur
-        MotionEvent motionControl = new MotionEvent(entNode, path);
-        motionControl.setDirectionType(MotionEvent.Direction.PathAndRotation);
-        motionControl.setRotation(new Quaternion().fromAngleNormalAxis(0, Vector3f.UNIT_Y));
-        motionControl.setInitialDuration(10f);
-        
-        path.addListener(new MotionPathListener() {
+        // Callback lorsque l'animation est terminée
+        motionEvent.getPath().addListener(new MotionPathListener() {
             public void onWayPointReach(MotionEvent control, int wayPointIndex) {
-                if (path.getNbWayPoints() == wayPointIndex + 1) {
+                if (motionEvent.getPath().getNbWayPoints() == wayPointIndex + 1) {
                     // On est à la fin du chemin
-                    if (ent instanceof PlayerToken) {
-                        if (dest.getHeight() > 0) {
-                            PlayerModel pm = (PlayerModel) entNode;
-                            pm.playAnimation(PlayerModel.ANIMATION_LAND_IDLE_1);
-                        }
+                    String animation = AnimationBrain.getIdleAnimation(ent);
+                    
+                    if (animation != null) {
+                        ((AnimatedModel) entNode).playAnimation(animation);
+                    }
+                    
+                    // On notifie le jeu
+                    if (getCurrentTurn() != null) {
+                        getCurrentTurn().onUnitMoveFinished();
                     }
                 }
             }
         });
         
         // On détermine l'animation à jouer
-        if (ent instanceof PlayerToken) {
-            if (dest.getHeight() > 0) {
-                PlayerModel pm = (PlayerModel) entNode;
-                pm.playAnimation(PlayerModel.ANIMATION_WALK_CYCLE);
-            }
+        String animation = AnimationBrain.getMovementAnimation(ent, dest);
+        if (animation != null) {
+            ((AnimatedModel) entNode).playAnimation(animation);
         }
         
-        motionControl.play();
+        // On lance le mouvement
+        motionEvent.play();
     }
 
     public void onDiceRoll(int face) {
@@ -120,4 +116,19 @@ public class Game3DLogic extends GameLogic {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    private MotionEvent generateTileMotionPath(Node entNode, AbstractTileModel tileNode) {
+         // On créé le chemin
+        final MotionPath path = new MotionPath();
+        path.addWayPoint(entNode.getLocalTranslation());
+        path.addWayPoint(tileNode.getTileTopCenter());
+        path.setPathSplineType(Spline.SplineType.Linear);
+        
+        // On créé le contrôleur
+        final MotionEvent motionControl = new MotionEvent(entNode, path);
+        motionControl.setDirectionType(MotionEvent.Direction.PathAndRotation);
+        motionControl.setRotation(new Quaternion().fromAngleNormalAxis(0, Vector3f.UNIT_Y));
+        motionControl.setInitialDuration(10f);
+        
+        return motionControl;
+    }
 }
