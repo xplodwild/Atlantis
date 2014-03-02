@@ -49,6 +49,7 @@ public class PlayerModel extends AnimatedModel {
     public PlayerModel(AssetManager am, final String color) {
         super(am, "Models/Avatar_A.mesh.xml",
                 "Textures/player_" + color + ".png", null);
+        playAnimation(ANIMATION_LAND_IDLE_2);
     }
     
     public static String intToColor(int i) {

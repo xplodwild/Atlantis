@@ -24,10 +24,12 @@ import fr.miage.atlantis.entities.Boat;
 import fr.miage.atlantis.entities.GameEntity;
 import fr.miage.atlantis.entities.PlayerToken;
 import fr.miage.atlantis.entities.SeaSerpent;
+import fr.miage.atlantis.entities.Shark;
 import fr.miage.atlantis.graphics.models.AbstractTileModel;
 import fr.miage.atlantis.graphics.models.BoatModel;
 import fr.miage.atlantis.graphics.models.PlayerModel;
 import fr.miage.atlantis.graphics.models.SeaSerpentModel;
+import fr.miage.atlantis.graphics.models.SharkModel;
 
 /**
  *
@@ -50,6 +52,8 @@ public class EntitiesRenderer extends Node {
             output = addPlayer((PlayerToken) ent);
         } else if (ent instanceof SeaSerpent) {
             output = addSeaSerpent((SeaSerpent) ent);
+        } else if (ent instanceof Shark) {
+            output = addShark((Shark) ent);
         } else {
             throw new UnsupportedOperationException("Unknown entity type");
         }
@@ -72,6 +76,11 @@ public class EntitiesRenderer extends Node {
     
     private Node addSeaSerpent(SeaSerpent s) {
         SeaSerpentModel model = new SeaSerpentModel(mAssetManager);
+        return model;
+    }
+    
+    private Node addShark(Shark s) {
+        SharkModel model = new SharkModel(mAssetManager);
         return model;
     }
 

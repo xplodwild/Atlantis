@@ -32,6 +32,7 @@ public class BoatModel extends AnimatedModel {
     public BoatModel(AssetManager am) {
         super(am, "Models/boat.mesh.xml",
                 "Textures/boat.png", "Textures/boat_normal.png");
+        playAnimation(ANIMATION_BOAT_IDLE);
     }
 
 }

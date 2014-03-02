@@ -49,6 +49,13 @@ public class AnimatedModel extends StaticModel {
     public void playAnimation(String animation, boolean loop) {
         mChannel.setLoopMode(loop ? LoopMode.Loop : LoopMode.DontLoop);
         mChannel.setAnim(animation, BLEND_TIME);
+
+        if (loop) {
+            // Pour avoir moins l'air copier-coller, les animations loopées
+            // sont légèrement décalées. Ainsi, les modèles similaires avec
+            // la même animation ne seront pas tous identiques.
+            mChannel.setTime((float) Math.random() * mChannel.getAnimMaxTime());
+        }
     }
     
     public void printAnimations() {

@@ -35,6 +35,7 @@ public class WhaleModel extends AnimatedModel {
     
     public WhaleModel(AssetManager am) {
         super(am, "Models/whaleA.mesh.xml", "Textures/whale.png", null);
+        playAnimation(ANIMATION_IDLE);
     }
 
     
