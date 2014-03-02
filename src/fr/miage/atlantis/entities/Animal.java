@@ -22,20 +22,51 @@ import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.logic.GameLogic;
 
 /**
- *
+ * Classe Animal, reprensente les entités Animales que l'on place sur le Plateau de jeu
+ * 
+ * @author AtlantisTeam
+ * @version 1.0
+ * @date 02/03/2014 
  */
 public abstract class Animal extends GameEntity {
     
+    /**
+     * Nombre maximum de movements par tour de l'animal sur le plateau 
+     */
     private int mMaxMoves;
     
+    
+    /**
+     * Constructeur d'animaux
+     * 
+     * @param name Nom de l'animal
+     * @param tile Tile sur lequel est placé cet animal
+     * @param maxMoves Nombre maximal de movement possible de cet animal
+     */
     Animal(String name, GameTile tile, int maxMoves) {
         super(name, tile);
-        throw new UnsupportedOperationException("Not implemented");
+        this.mMaxMoves=maxMoves;
     }
+    
+    
+    
+    
+    //--------------------------------------------------------------------------
+    //GETTERS                                                                  |
+    //--------------------------------------------------------------------------
+    
     
     public int getMaxMoves() {
         return mMaxMoves;
     }
 
+    
+    
+    
+    //--------------------------------------------------------------------------
+    //METHODES ABSTRAITES                                                      |
+    //--------------------------------------------------------------------------
+    
+    
     public abstract void onEntityCross(GameLogic logic, GameEntity ent);
 }

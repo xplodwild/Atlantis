@@ -23,7 +23,7 @@ package fr.miage.atlantis.board;
  * 
  * @author AtlantisTeam
  * @version 1.0
- * @date 28/02/2014 * 
+ * @date 28/02/2014  
  */
 public class BorderTile extends GameTile{
 
@@ -31,6 +31,7 @@ public class BorderTile extends GameTile{
      * Attribut discriminant si oui ou non le tile frontiere est 
      */
     private boolean mIsEscapeBorder;
+    
     
     /**
      * Constructeur de BorderTile
@@ -42,6 +43,7 @@ public class BorderTile extends GameTile{
         super(board, name, -99);
         this.mIsEscapeBorder=false;
     }
+    
     
     /**
      * Constructeur de BorderTile
@@ -56,13 +58,15 @@ public class BorderTile extends GameTile{
     }
     
            
-    //-----------------------------------------------
-    //GETTERS                                       |
-    //-----------------------------------------------
+    
+    
+    //--------------------------------------------------------------------------
+    //GETTERS                                                                  |
+    //--------------------------------------------------------------------------
+    
     
     public boolean isEscapeBorder() {
         return mIsEscapeBorder;
     }
-    
-   
+    //--------------------------------------------------------------------------  
 }

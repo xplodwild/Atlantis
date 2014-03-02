@@ -29,8 +29,7 @@ public class SeaSerpent extends Animal {
     private final static int MAX_MOVES = 1;
 
     public SeaSerpent(GameTile tile) {
-        super("Kraken", tile, MAX_MOVES);
-        throw new UnsupportedOperationException("Not implemented");
+        super("Serpent de mer", tile, MAX_MOVES);       
     }
 
     @Override
