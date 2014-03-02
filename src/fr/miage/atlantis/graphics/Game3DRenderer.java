@@ -27,8 +27,10 @@ import com.jme3.scene.Node;
 import com.jme3.shadow.BasicShadowRenderer;
 import com.jme3.shadow.ShadowUtil;
 import fr.miage.atlantis.Game3DLogic;
+import fr.miage.atlantis.Player;
 import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.entities.GameEntity;
+import fr.miage.atlantis.entities.PlayerToken;
 import fr.miage.atlantis.graphics.models.AbstractTileModel;
 import fr.miage.atlantis.graphics.models.PlayerModel;
 import fr.miage.atlantis.graphics.models.SeaSerpentModel;
@@ -79,49 +81,32 @@ public class Game3DRenderer extends SimpleApplication {
         mSceneNode.attachChild(mEntitiesRenderer);
         
         
-        /*
-        TileModel testTile = new TileModel(1, assetManager);
-        //rootNode.attachChild(testTile);
-        TileModel testTile2 = new TileModel(2, assetManager);
-        testTile2.setLocalTranslation(10, 0, 10);
-        //rootNode.attachChild(testTile2);
-        TileModel testTile3 = new TileModel(3, assetManager);
-        testTile3.setLocalTranslation(20, 0, 20);
-        //rootNode.attachChild(testTile3);
-        */
         
-        /*WhaleModel whale = new WhaleModel(assetManager);
-        whale.printAnimations();
-        rootNode.attachChild(whale);
-        whale.playAnimation(WhaleModel.ANIMATION_ATTACK_BOAT);*/
-        
-        /*SharkModel shark = new SharkModel(assetManager);
-        shark.printAnimations();
-        rootNode.attachChild(shark);
-        shark.playAnimation(SharkModel.ANIMATION_DIVE);*/
-        
-        SeaSerpentModel shark = new SeaSerpentModel(assetManager);
-        shark.printAnimations();
-        rootNode.attachChild(shark);
-        shark.playAnimation(SeaSerpentModel.ANIMATION_IDLE);
-        
-        AbstractTileModel tile = (AbstractTileModel) mBoardRenderer.getTile(126);
-        shark.setLocalTranslation(tile.getTileTopCenter());
-        
-        PlayerModel player = new PlayerModel(assetManager, PlayerModel.COLOR_BLUE);
-        player.printAnimations();
-        rootNode.attachChild(player);
-        player.playAnimation(PlayerModel.ANIMATION_LAND_IDLE_1);
-        
-        tile = (AbstractTileModel) mBoardRenderer.getTile(127);
-        player.setLocalTranslation(tile.getTileTopCenter());
     }
     
+    public BoardRenderer getBoardRenderer() {
+        return mBoardRenderer;
+    }
     
+    public EntitiesRenderer getEntitiesRenderer() {
+        return mEntitiesRenderer;
+    }
+    
+    boolean DID_TEST = false;
 
     @Override
     public void simpleUpdate(float tpf) {
+        if (!DID_TEST) {
+            DID_TEST = true;
+            
+            // TEST: Ajout d'un player token de test
+            Map<String, GameTile> tiles = mParent.getBoard().getTileSet();
+            Player p = new Player("Joueur 1", 1);
+            PlayerToken pt = new PlayerToken(tiles.get("Beach #3"), p, 6);
+            mEntitiesRenderer.addEntity(pt);
         
+            mParent.onUnitMove(pt, tiles.get("Beach #4"));
+        }
     }
 
     @Override

@@ -77,15 +77,15 @@ public final class GameBoard {
         this.randomiser=new ArrayList();
         
         for(int i=0;i<this.forestTilesRemaining;i++){
-            randomiser.add(new ForestTile(this,""));
+            randomiser.add(new ForestTile(this,"Forest #"+i));
         }
 
         for(int i=0;i<this.mountainTilesRemaining;i++){
-            randomiser.add(new MountainTile(this,""));
+            randomiser.add(new MountainTile(this,"Mountain #"+i));
         }
 
         for(int i=0;i<this.beachTilesRemaining;i++){
-            randomiser.add(new BeachTile(this,""));
+            randomiser.add(new BeachTile(this,"Beach #"+i));
         }
 
        //-----------------------------------------------------------------------

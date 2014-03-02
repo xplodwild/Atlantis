@@ -30,6 +30,8 @@ import fr.miage.atlantis.graphics.models.BoatModel;
 import fr.miage.atlantis.graphics.models.PlayerModel;
 import fr.miage.atlantis.graphics.models.SeaSerpentModel;
 import fr.miage.atlantis.graphics.models.SharkModel;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -39,9 +41,12 @@ public class EntitiesRenderer extends Node {
     private AssetManager mAssetManager;
     private BoardRenderer mBoardRenderer;
     
+    private Map<GameEntity, Node> mEntityToNode;
+    
     public EntitiesRenderer(AssetManager am, BoardRenderer board) {
         mAssetManager = am;
         mBoardRenderer = board;
+        mEntityToNode = new HashMap<GameEntity, Node>();
     }
 
     public void addEntity(GameEntity ent) {
@@ -58,9 +63,18 @@ public class EntitiesRenderer extends Node {
             throw new UnsupportedOperationException("Unknown entity type");
         }
         
+        mEntityToNode.put(ent, output);
+        
         attachChild(output);
-        AbstractTileModel tile = mBoardRenderer.findTileModel(ent.getTile());
-        output.setLocalTranslation(tile.getTileTopCenter());
+        
+        if (ent.getTile() != null) {
+            AbstractTileModel tile = mBoardRenderer.findTileModel(ent.getTile());
+            output.setLocalTranslation(tile.getTileTopCenter());
+        }
+    }
+    
+    public Node getNodeFromEntity(GameEntity ent) {
+        return mEntityToNode.get(ent);
     }
     
     private Node addBoat(Boat b) {

@@ -21,7 +21,6 @@ package fr.miage.atlantis;
 import com.jme3.cinematic.MotionPath;
 import com.jme3.cinematic.MotionPathListener;
 import com.jme3.cinematic.events.MotionEvent;
-import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Spline;
 import com.jme3.math.Vector3f;
@@ -29,10 +28,11 @@ import com.jme3.scene.Node;
 import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.board.TileAction;
 import fr.miage.atlantis.entities.GameEntity;
+import fr.miage.atlantis.entities.PlayerToken;
 import fr.miage.atlantis.graphics.Game3DRenderer;
+import fr.miage.atlantis.graphics.models.AbstractTileModel;
+import fr.miage.atlantis.graphics.models.PlayerModel;
 import fr.miage.atlantis.logic.GameLogic;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Main Game Engine loop class
@@ -40,13 +40,10 @@ import java.util.Map;
 public class Game3DLogic extends GameLogic {
     
     private Game3DRenderer mRenderer;
-    private Map<GameEntity, Node> mEntityNodes;
-    private Map<GameTile, Node> mTileNodes;
     
     public Game3DLogic() {
         super();
         mRenderer = new Game3DRenderer(this);
-        mEntityNodes = new HashMap<GameEntity, Node>();
     }
     
     @Override
@@ -62,40 +59,53 @@ public class Game3DLogic extends GameLogic {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public void onUnitMove(GameEntity ent, GameTile dest) {
+    public void onUnitMove(final GameEntity ent, final GameTile dest) {
         // On récupère la node 3D de cette entité
-        Node entNode = mEntityNodes.get(ent);
+        final Node entNode = mRenderer.getEntitiesRenderer().getNodeFromEntity(ent);
         if (entNode == null) {
             throw new IllegalStateException("Aucune node 3D trouvée pour l'unité à déplacer!");
         }
         
-        Node tileNode = mTileNodes.get(dest);
+        AbstractTileModel tileNode = mRenderer.getBoardRenderer().findTileModel(dest);
         if (tileNode == null) {
             throw new IllegalStateException("Aucune node 3D trouvée pour la tile de destination!");
         }
         
+        // On créé le chemin
         final MotionPath path = new MotionPath();
         path.addWayPoint(entNode.getLocalTranslation());
-        path.addWayPoint(tileNode.getLocalTranslation());
-        path.setCurveTension(0.5f);
-        path.setCycle(false);
-        path.setPathSplineType(Spline.SplineType.Bezier);
+        path.addWayPoint(tileNode.getTileTopCenter());
+        path.setPathSplineType(Spline.SplineType.Linear);
         
+        // On créé le contrôleur
         MotionEvent motionControl = new MotionEvent(entNode, path);
         motionControl.setDirectionType(MotionEvent.Direction.PathAndRotation);
-        motionControl.setRotation(new Quaternion().fromAngleNormalAxis(-FastMath.HALF_PI, Vector3f.UNIT_Y));
-        motionControl.setInitialDuration(1f);
-        motionControl.setSpeed(2f);
+        motionControl.setRotation(new Quaternion().fromAngleNormalAxis(0, Vector3f.UNIT_Y));
+        motionControl.setInitialDuration(10f);
         
         path.addListener(new MotionPathListener() {
             public void onWayPointReach(MotionEvent control, int wayPointIndex) {
                 if (path.getNbWayPoints() == wayPointIndex + 1) {
-                    System.out.println(control.getSpatial().getName() + "Finished!!! ");
-                } else {
-                    System.out.println(control.getSpatial().getName() + " Reached way point " + wayPointIndex);
+                    // On est à la fin du chemin
+                    if (ent instanceof PlayerToken) {
+                        if (dest.getHeight() > 0) {
+                            PlayerModel pm = (PlayerModel) entNode;
+                            pm.playAnimation(PlayerModel.ANIMATION_LAND_IDLE_1);
+                        }
+                    }
                 }
             }
         });
+        
+        // On détermine l'animation à jouer
+        if (ent instanceof PlayerToken) {
+            if (dest.getHeight() > 0) {
+                PlayerModel pm = (PlayerModel) entNode;
+                pm.playAnimation(PlayerModel.ANIMATION_WALK_CYCLE);
+            }
+        }
+        
+        motionControl.play();
     }
 
     public void onDiceRoll(int face) {
@@ -109,5 +119,5 @@ public class Game3DLogic extends GameLogic {
     public void onEntityAction(GameEntity source, GameEntity target, int action) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-    
+
 }
