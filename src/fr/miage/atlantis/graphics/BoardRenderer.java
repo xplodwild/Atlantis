@@ -20,6 +20,7 @@ package fr.miage.atlantis.graphics;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import fr.miage.atlantis.board.GameBoard;
 import fr.miage.atlantis.board.GameTile;
@@ -35,7 +36,8 @@ public class BoardRenderer extends Node {
     public final static String DATA_TILE = "tile";
     
     private final static boolean DEBUG_ITERATION = true;
-    private final static float TILE_SIZE = 20.0f;
+    private final static float TILE_HEIGHT = 20.0f;
+    private final static float TILE_WIDTH = 22.0f;
     private final static float GRID_HEIGHT = 1.0f;
 
     private float mTileOffset = 0.0f;
@@ -93,7 +95,7 @@ public class BoardRenderer extends Node {
                     if (DEBUG_ITERATION) System.out.println("Going below left of " + currentTile.getName());
                     rowHeadTile = currentTile.getLeftBottomTile();
                     currentTile = rowHeadTile;
-                    mTileOffset -= TILE_SIZE / 2.0f;
+                    mTileOffset -= TILE_HEIGHT / 2.0f;
                     
                     y++;
                     belowFound = true;
@@ -101,12 +103,13 @@ public class BoardRenderer extends Node {
                     if (DEBUG_ITERATION) System.out.println("Going below right of " + currentTile.getName());
                     rowHeadTile = currentTile.getRightBottomTile();
                     currentTile = rowHeadTile;
-                    mTileOffset += TILE_SIZE / 2.0f;
+                    mTileOffset += TILE_HEIGHT / 2.0f;
                     
                     y++;
                     belowFound = true;
                 } else {
                     currentTile = currentTile.getRightTile();
+                    x++;
                 }
             }
             
@@ -146,9 +149,10 @@ public class BoardRenderer extends Node {
         }
 
         // On positionne la tile
-        output.setLocalTranslation(y * -TILE_SIZE,
+        output.setLocalTranslation(output.getLocalTranslation().add( 
+                new Vector3f(y * -TILE_HEIGHT,
                 GRID_HEIGHT,
-                x * TILE_SIZE + mTileOffset);
+                x * TILE_WIDTH + mTileOffset)));
         
         // On l'attache à cette Node
         output.setUserData(DATA_TILE, tile.getName());
