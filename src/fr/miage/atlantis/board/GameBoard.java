@@ -19,6 +19,7 @@
 package fr.miage.atlantis.board;
 
 import fr.miage.atlantis.entities.SeaSerpent;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -55,20 +56,38 @@ public final class GameBoard {
      */
     private int mountainTilesRemaining;
     
+    /**
+     * Randomiser de tiles
+     */
+    private ArrayList<GameTile> randomiser;
+    
     
     /**
      * Constructeur de GameBoard
      * 
      */
     public GameBoard() {
-       /*On vas creer et adresser ici les tiles en commencant par la haut gauche du plateau */       
-       tileSet = new HashMap<String, GameTile>();
-       
-       this.beachTilesRemaining=16;
-       this.forestTilesRemaining=16;
-       this.mountainTilesRemaining=8;
-       
-       
+        /*On vas creer et adresser ici les tiles en commencant par la haut gauche du plateau */       
+        tileSet = new HashMap<String, GameTile>();
+
+        this.beachTilesRemaining=16;
+        this.forestTilesRemaining=16;
+        this.mountainTilesRemaining=8;
+
+        this.randomiser=new ArrayList();
+        
+        for(int i=0;i<this.forestTilesRemaining;i++){
+            randomiser.add(new ForestTile(this,""));
+        }
+
+        for(int i=0;i<this.mountainTilesRemaining;i++){
+            randomiser.add(new MountainTile(this,""));
+        }
+
+        for(int i=0;i<this.beachTilesRemaining;i++){
+            randomiser.add(new BeachTile(this,""));
+        }
+
        //-----------------------------------------------------------------------
        //Ligne 1                                                               |
        //-----------------------------------------------------------------------
@@ -638,40 +657,10 @@ public final class GameBoard {
      * @return un tile generé aléatoirement parmis les 3 types.
      */
     public GameTile generateRandomTile(String name){
-        GameTile retour;
-        int min=0;
-        int max=3;
-        int x=-1;
-        
-        if(this.forestTilesRemaining==0){
-            min++;
-        }
-        
-        if(this.beachTilesRemaining==0){
-            min++;
-        }
-        
-        if(this.mountainTilesRemaining==0){
-            min++;
-        }
                 
-        while(x<min && min!=max){
-            x=new Random().nextInt(3);         
-        }   
-        
-        switch(x){
-            case 0:     retour=new ForestTile(this,name);
-            break;   
-                
-            case 1:     retour=new BeachTile(this,name);
-            break; 
-                
-            case 2:     retour=new MountainTile(this,name);
-            break; 
-                
-            default:    retour=null;
-            break;
-        } 
+        int random=new Random().nextInt(randomiser.size());        
+        GameTile retour=this.randomiser.get(random);
+        randomiser.remove(random);
         
         return retour;
     }
