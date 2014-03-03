@@ -42,7 +42,7 @@ public class Whale extends Animal {
      * @param tile Tile sur lequel on place le SeaSerpent
      */
     public Whale(GameTile tile) {
-        super("Whale", tile, MAX_MOVES);
+        super("Whale", MAX_MOVES);
         throw new UnsupportedOperationException("Not implemented");
     }
 

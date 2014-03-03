@@ -55,9 +55,8 @@ public class GameEntity {
      * @param name Nom de l'entité
      * @param tile Tile ou se place l'entité
      */
-    public GameEntity(final String name, GameTile tile) {
+    public GameEntity(final String name) {
         mName = name;
-        mTile = tile;
     }
 
     /**
@@ -76,11 +75,13 @@ public class GameEntity {
         tile.addEntity(this);
         mTile = tile;
 
-        // On trigger les événements des autres entités présentes sur la tile
         boolean somethingHappened = false;
-        for (GameEntity ent : tile.getEntities()) {
-            if (ent != this) {
-                somethingHappened |= ent.onEntityCross(logic, this);
+        if (logic != null) {
+            // On trigger les événements des autres entités présentes sur la tile
+            for (GameEntity ent : tile.getEntities()) {
+                if (ent != this) {
+                    somethingHappened |= ent.onEntityCross(logic, this);
+                }
             }
         }
 

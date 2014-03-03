@@ -60,8 +60,8 @@ public class PlayerToken extends GameEntity {
      * @param p Joueur a qui appartient le pion
      * @param points Valeur du pion
      */
-    public PlayerToken(GameTile tile, Player p, int points) {
-        super("PlayerToken", tile);
+    public PlayerToken(Player p, int points) {
+        super("PlayerToken");
         mState = STATE_ON_LAND;
         mPoints = points;
         mPlayer = p;

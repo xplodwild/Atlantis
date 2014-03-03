@@ -41,8 +41,8 @@ public class SeaSerpent extends Animal {
      *
      * @param tile Tile sur lequel on place le SeaSerpent
      */
-    public SeaSerpent(GameTile tile) {
-        super("Serpent de mer", tile, MAX_MOVES);
+    public SeaSerpent() {
+        super("Serpent de mer", MAX_MOVES);
     }
 
     /**

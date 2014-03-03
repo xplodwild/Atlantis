@@ -613,20 +613,32 @@ public final class GameBoard {
        //Ajout des 5 SeaShark sur les Cases prévues à cet effet                |
        //-----------------------------------------------------------------------
 
+       SeaSerpent ss = null;
+
        temp=(WaterTile)this.mTileSet.get("Water #64");
-       temp.addEntity(new SeaSerpent(temp));
+       ss = new SeaSerpent();
+       ss.moveToTile(null, temp);
+       temp.addEntity(ss);
 
        temp=(WaterTile)this.mTileSet.get("Water #84");
-       temp.addEntity(new SeaSerpent(temp));
+       ss = new SeaSerpent();
+       ss.moveToTile(null, temp);
+       temp.addEntity(ss);
 
        temp=(WaterTile)this.mTileSet.get("Water #28");
-       temp.addEntity(new SeaSerpent(temp));
+       ss = new SeaSerpent();
+       ss.moveToTile(null, temp);
+       temp.addEntity(ss);
 
        temp=(WaterTile)this.mTileSet.get("Water #8");
-       temp.addEntity(new SeaSerpent(temp));
+       ss = new SeaSerpent();
+       ss.moveToTile(null, temp);
+       temp.addEntity(ss);
 
        temp=(WaterTile)this.mTileSet.get("Water #47");
-       temp.addEntity(new SeaSerpent(temp));
+       ss = new SeaSerpent();
+       ss.moveToTile(null, temp);
+       temp.addEntity(ss);
        //-----------------------------------------------------------------------
     }
 
