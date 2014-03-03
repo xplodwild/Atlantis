@@ -54,19 +54,7 @@ public class GameLog {
     public void logTurn(GameTurn i){
         this.mTurns.add(i);
     }
-    
-    
-    
-    
-    /**
-     * @TODO : Définir quel nextTurn on retourne ?!?
-     * 
-     * @return 
-     */
-    public GameTurn getNextTurn() {
-        throw new UnsupportedOperationException("Not implemented");
-    }
-
+   
     
     
     

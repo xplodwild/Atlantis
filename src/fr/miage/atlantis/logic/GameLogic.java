@@ -104,6 +104,11 @@ public abstract class GameLogic implements GameTurnListener {
         
     }
     
+    
+    /**
+     * Stocke le tour présent, génère le suivant et le démarre via start()
+     * 
+     */
     public void nextTurn() {        
         this.mLog.logTurn(mCurrentTurn);
         Player p=this.mCurrentTurn.getPlayer();         
@@ -111,6 +116,7 @@ public abstract class GameLogic implements GameTurnListener {
         //Lance le nouveau tour 
         this.mCurrentTurn.startTurn();                                    //@TODO : Verifier si cela se fait bien ici    
     }
+    
     
     /**
      * Retourne le joueur suivant
@@ -133,10 +139,22 @@ public abstract class GameLogic implements GameTurnListener {
     }
     
     
+    /**
+     * Retourne true si le tour est bien terminé
+     * 
+     * @return True si le tour est fini, false sinon
+     */
     public boolean isFinished() {
         throw new UnsupportedOperationException("Not implemented");
     }
     
+    
+    /**
+     * Actions a effectuer lors du deplacement de ent sur dest.
+     * 
+     * @param ent Entity a deplacer
+     * @param dest Tile de destination
+     */
     @Override
     public void onUnitMove(final GameEntity ent, final GameTile dest) {
         ent.moveToTile(this, dest);
