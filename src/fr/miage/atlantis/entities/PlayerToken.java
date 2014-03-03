@@ -90,6 +90,10 @@ public class PlayerToken extends GameEntity {
         return mState;
     }
 
+    public int getPoints() {
+        return this.mPoints;
+    }
+
     public Player getPlayer() {
         return mPlayer;
     }

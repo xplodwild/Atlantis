@@ -30,6 +30,9 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.board.TileAction;
+import fr.miage.atlantis.entities.Boat;
+import fr.miage.atlantis.entities.GameEntity;
+import fr.miage.atlantis.entities.PlayerToken;
 import fr.miage.atlantis.board.WaterTile;
 import fr.miage.atlantis.entities.Boat;
 import fr.miage.atlantis.entities.GameEntity;
@@ -43,6 +46,10 @@ import fr.miage.atlantis.logic.GameLogic;
 
 /**
  * Main Game Engine loop class
+ * 
+ * @author AtlantisTeam
+ * @version 1.0
+ * @date 03/03/2014  
  */
 public class Game3DLogic extends GameLogic {
 
@@ -67,6 +74,8 @@ public class Game3DLogic extends GameLogic {
     }
 
     @Override
+
+ 
     public void onUnitMove(final GameEntity ent, final GameTile dest) {
         super.onUnitMove(ent, dest);
 
@@ -203,3 +212,4 @@ public class Game3DLogic extends GameLogic {
         }
     }
 }
+

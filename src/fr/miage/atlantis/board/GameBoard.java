@@ -334,7 +334,6 @@ public final class GameBoard {
 
        nextTile2=new WaterTile(this,"Water #47",false,true);
        this.placeTileAtTheRightOf(tmp2, nextTile2);
-
        nextTile3=nextTile2;
        for(int i=21;i<24;i++){
            tmp2=this.generateRandomTile();
@@ -620,13 +619,16 @@ public final class GameBoard {
        ss = new SeaSerpent();
        ss.moveToTile(null, temp);
 
+
        temp=(WaterTile)this.mTileSet.get("Water #84");
        ss = new SeaSerpent();
        ss.moveToTile(null, temp);
 
+
        temp=(WaterTile)this.mTileSet.get("Water #28");
        ss = new SeaSerpent();
        ss.moveToTile(null, temp);
+
 
        temp=(WaterTile)this.mTileSet.get("Water #8");
        ss = new SeaSerpent();
@@ -635,6 +637,7 @@ public final class GameBoard {
        temp=(WaterTile)this.mTileSet.get("Water #47");
        ss = new SeaSerpent();
        ss.moveToTile(null, temp);
+
        //-----------------------------------------------------------------------
     }
 

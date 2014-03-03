@@ -19,7 +19,11 @@
 package fr.miage.atlantis;
 
 /**
- *
+ * Classe représentant le dé du jeu
+ * 
+ * @author AtlantisTeam
+ * @version 1.0
+ * @date 03/03/2014  
  */
 public class GameDice {
     
@@ -31,6 +35,12 @@ public class GameDice {
     
     public float[] mProbability;
     
+    
+    /**
+     * Constructeur de dés
+     * 
+     * @param probability Tableau des probabilité de chaques faces de tomber
+     */
     public GameDice(float[] probability) {
         if (probability == null || probability.length != FACE_COUNT) {
             throw new IllegalArgumentException("The probability array must have FACE_COUNT values");
@@ -39,6 +49,11 @@ public class GameDice {
         mProbability = probability;
     }
     
+    /**
+     * Créé un dés standard, non pipé 
+     * 
+     * @return Nouveau dé standard , toutes les faces on la meme probabilité de tomber.
+     */
     public static GameDice createDefault() {
         return new GameDice(new float[]{ 0.33333333f, 0.3333333f, 0.3333333f });
     }
