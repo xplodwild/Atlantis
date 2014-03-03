@@ -29,18 +29,18 @@ import fr.miage.atlantis.logic.GameLogic;
 /**
  * Main Game Engine loop class
  */
-public class Game3DLogic extends GameLogic {
+public class GameConsoleLogic extends GameLogic {
     
     private Game3DRenderer mRenderer;
     
-    public Game3DLogic() {
+    public GameConsoleLogic() {
         super();
-        mRenderer = new Game3DRenderer(this);
+        
     }
     
     @Override
     public void boot() {
-        mRenderer.start();
+        System.out.println("Démarrage en mode console...");
     }
 
     public void onTurnStart(Player p) {
