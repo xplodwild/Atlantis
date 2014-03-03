@@ -187,7 +187,7 @@ public class Game3DLogic extends GameLogic {
 
         // On créé le contrôleur
         final MotionEvent motionControl = new MotionEvent(entNode, path);
-        motionControl.setDirectionType(MotionEvent.Direction.LookAt);
+        motionControl.setDirectionType(MotionEvent.Direction.PathAndRotation);
         motionControl.setRotation(new Quaternion().fromAngleNormalAxis(0, Vector3f.UNIT_Y));
         motionControl.setInitialDuration(2f);
 

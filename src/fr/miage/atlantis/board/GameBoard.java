@@ -619,27 +619,22 @@ public final class GameBoard {
        temp=(WaterTile)this.mTileSet.get("Water #64");
        ss = new SeaSerpent();
        ss.moveToTile(null, temp);
-       temp.addEntity(ss);
 
        temp=(WaterTile)this.mTileSet.get("Water #84");
        ss = new SeaSerpent();
        ss.moveToTile(null, temp);
-       temp.addEntity(ss);
 
        temp=(WaterTile)this.mTileSet.get("Water #28");
        ss = new SeaSerpent();
        ss.moveToTile(null, temp);
-       temp.addEntity(ss);
 
        temp=(WaterTile)this.mTileSet.get("Water #8");
        ss = new SeaSerpent();
        ss.moveToTile(null, temp);
-       temp.addEntity(ss);
 
        temp=(WaterTile)this.mTileSet.get("Water #47");
        ss = new SeaSerpent();
        ss.moveToTile(null, temp);
-       temp.addEntity(ss);
        //-----------------------------------------------------------------------
     }
 
