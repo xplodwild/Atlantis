@@ -67,8 +67,7 @@ public abstract class GameLogic implements GameTurnListener {
         mBoard = new GameBoard();
         mDice = GameDice.createDefault();
         mLog = new GameLog();
-    }
-    
+    }    
     
     
     /**
@@ -130,14 +129,15 @@ public abstract class GameLogic implements GameTurnListener {
     
     
     /**
-     * Retourne true si le tour est bien terminé
+     * Retourne true si le jeu est bien terminé
      * 
-     * @return True si le tour est fini, false sinon
+     * @return True si le jeu est fini, false sinon
      */
-    public boolean isFinished() {
+    public boolean isFinished() {   
         
+        //Fini si le tile Volcan est sorti , ou si tout les mToken sont sauvés.
         
-        return false;        
+        return false;
     }
     
     

@@ -42,6 +42,7 @@ public class GameTurn implements GameRenderListener {
     private Player mPlayer;
     private GameLogic mController;
     private boolean mDiceRolled;
+    private boolean mTurnIsOver;
     
     private int mRemainingMoves;
     
@@ -79,6 +80,8 @@ public class GameTurn implements GameRenderListener {
         //Le cas echeant bouge une entity
         
         //Le cas echeant execute les actions entity necessaires
+        
+        //Met l'attribut mTurnIsOver a true pour boucler le tour
         
         throw new UnsupportedOperationException("Not implemented");
     }
@@ -161,6 +164,10 @@ public class GameTurn implements GameRenderListener {
     
     public int getRemainingMoves() {
         return this.mRemainingMoves;
+    }
+    
+    public boolean getEndOfTurn(){
+        return this.mTurnIsOver;
     }
     
     public boolean hasRolledDice() {
