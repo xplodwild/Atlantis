@@ -38,7 +38,9 @@ public class AnimationBrain {
 
     public static String getIdleAnimation(GameEntity ent) {
         if (ent instanceof PlayerToken) {
-            if (ent.getTile().getHeight() == 0) {
+            PlayerToken pt = (PlayerToken) ent;
+            
+            if (pt.getState() == PlayerToken.STATE_SWIMMING) {
                 return PlayerModel.ANIMATION_SWIM_IDLE;
             } else {
                 int idle = new Random().nextInt(3);
@@ -69,10 +71,13 @@ public class AnimationBrain {
     
     public static String getMovementAnimation(GameEntity ent, GameTile dest) {
         if (ent instanceof PlayerToken) {
-            if (dest.getHeight() > 0) {
-                return PlayerModel.ANIMATION_WALK_CYCLE;
-            } else {
+            PlayerToken pt = (PlayerToken) ent;
+            
+            if (dest.getHeight() == 0
+                    && pt.getState() != PlayerToken.STATE_ON_BOAT) {
                 return PlayerModel.ANIMATION_SWIM_CYCLE;
+            } else {
+                return PlayerModel.ANIMATION_WALK_CYCLE;
             }
         }
         
