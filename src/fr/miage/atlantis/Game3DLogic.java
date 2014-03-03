@@ -24,24 +24,21 @@ import com.jme3.animation.AnimEventListener;
 import com.jme3.cinematic.MotionPath;
 import com.jme3.cinematic.MotionPathListener;
 import com.jme3.cinematic.events.MotionEvent;
-import com.jme3.math.Quaternion;
 import com.jme3.math.Spline;
-import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.board.TileAction;
-import fr.miage.atlantis.entities.Boat;
-import fr.miage.atlantis.entities.GameEntity;
-import fr.miage.atlantis.entities.PlayerToken;
 import fr.miage.atlantis.board.WaterTile;
 import fr.miage.atlantis.entities.Boat;
 import fr.miage.atlantis.entities.GameEntity;
 import fr.miage.atlantis.entities.PlayerToken;
+import fr.miage.atlantis.entities.Shark;
 import fr.miage.atlantis.graphics.AnimationBrain;
 import fr.miage.atlantis.graphics.Game3DRenderer;
 import fr.miage.atlantis.graphics.models.AbstractTileModel;
 import fr.miage.atlantis.graphics.models.AnimatedModel;
 import fr.miage.atlantis.graphics.models.PlayerModel;
+import fr.miage.atlantis.graphics.models.SharkModel;
 import fr.miage.atlantis.logic.GameLogic;
 
 /**
@@ -88,6 +85,7 @@ public class Game3DLogic extends GameLogic {
             throw new IllegalStateException("Aucune node 3D trouvée pour la tile " + dest.getName() + "!");
         }
 
+        final GameTile previousTile = ent.getTile();
         final MotionEvent motionEvent = generateEntityOnTileMotion(entNode, tileNode);
 
         // Callback lorsque l'animation est terminée
@@ -152,18 +150,18 @@ public class Game3DLogic extends GameLogic {
                         }
                     }
 
-                    // On lance l'action sous la tile, si c'est immédiat
-                    TileAction action = tile.getAction();
-                    if (action.isImmediate()) {
-                        onPlayTileAction(tile, action);
-                    } else {
-                        System.out.println("TODO: Tile is not immediate: " + action.toString());
-                        // TODO: Stocker la tile dans les tiles du joueur
-                    }
-
                     // Fin du tour, on notifie le tour si on l'a
                     if (getCurrentTurn() != null) {
                         getCurrentTurn().onSinkTileFinished();
+                    }
+
+                    // On lance l'action sous la tile, si c'est immédiat
+                    TileAction action = TileAction.Factory.createSpawnEntity(TileAction.ENTITY_SHARK); //tile.getAction();
+                    if (action.isImmediate()) {
+                        onPlayTileAction(newTile, action);
+                    } else {
+                        System.out.println("TODO: Tile is not immediate: " + action.toString());
+                        // TODO: Stocker la tile dans les tiles du joueur
                     }
                 }
             }
@@ -173,7 +171,37 @@ public class Game3DLogic extends GameLogic {
     }
 
     public void onEntityAction(GameEntity source, GameEntity target, int action) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        switch (action) {
+            case GameEntity.ACTION_SHARK_EAT:
+                // On lance les animations.
+                // Ces deux prochaines lignes sont PARFAITEMENT propres et certifiées sans bug.
+                final Shark shark = (Shark) ((source instanceof Shark) ? source : target);
+                final PlayerToken token = (PlayerToken) ((target instanceof PlayerToken) ? target : source);
+
+                final SharkModel sharkModel = (SharkModel) mRenderer.getEntitiesRenderer().getNodeFromEntity(shark);
+                PlayerModel playerModel = (PlayerModel) mRenderer.getEntitiesRenderer().getNodeFromEntity(token);
+
+                sharkModel.playAnimation(SharkModel.ANIMATION_ATTACK_SWIMMER, false, new AnimEventListener() {
+                    public void onAnimCycleDone(AnimControl control, AnimChannel channel, String animName) {
+                        sharkModel.playAnimation(SharkModel.ANIMATION_SWIM_CYCLE);
+                        control.removeListener(this);
+                    }
+
+                    public void onAnimChange(AnimControl control, AnimChannel channel, String animName) {
+                    }
+                });
+                playerModel.playAnimation(PlayerModel.ANIMATION_EATEN_BY_SHARK, false, new AnimEventListener() {
+                    public void onAnimCycleDone(AnimControl control, AnimChannel channel, String animName) {
+                        token.die(Game3DLogic.this);
+                        control.removeListener(this);
+                    }
+
+                    public void onAnimChange(AnimControl control, AnimChannel channel, String animName) {
+                    }
+                });
+
+                break;
+        }
     }
 
     public void onEntitySpawn(GameEntity spawned) {
@@ -199,13 +227,11 @@ public class Game3DLogic extends GameLogic {
         final MotionPath path = new MotionPath();
         path.addWayPoint(entNode.getLocalTranslation());
         path.addWayPoint(tileNode.getTileTopCenter());
-        path.addWayPoint(tileNode.getTileTopCenter().add(0, 0, 1f));
         path.setPathSplineType(Spline.SplineType.Linear);
 
         // On créé le contrôleur
         final MotionEvent motionControl = new MotionEvent(entNode, path);
         motionControl.setDirectionType(MotionEvent.Direction.PathAndRotation);
-        motionControl.setRotation(new Quaternion().fromAngleNormalAxis(0, Vector3f.UNIT_Y));
         motionControl.setInitialDuration(2f);
 
         return motionControl;
@@ -218,6 +244,11 @@ public class Game3DLogic extends GameLogic {
         if (animation != null) {
             model.playAnimation(animation);
         }
+    }
+
+    public void onUnitDie(GameEntity zombie) {
+        zombie.getTile().removeEntity(zombie);
+        mRenderer.getEntitiesRenderer().removeEntity(zombie);
     }
 }
 

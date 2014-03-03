@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2014 Loris Durand, Guillaume Lesniak, Cristian Sanna,
  *                    Lucie Wiemert
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *  
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -24,7 +24,7 @@ import com.jme3.asset.AssetManager;
  *
  */
 public class PlayerModel extends AnimatedModel {
-    
+
     public final static String ANIMATION_CLIMB_BOAT = "Climb_boat";
     public final static String ANIMATION_EATEN_BY_SHARK = "Eaten_by_shark";
     public final static String ANIMATION_SWIM_IDLE = "Swim_Idle";
@@ -38,9 +38,9 @@ public class PlayerModel extends AnimatedModel {
     public final static String ANIMATION_LAND_IDLE_1 = "Land_Idle1";
     public final static String ANIMATION_LAND_IDLE_2 = "Land_Idle2";
     public final static String ANIMATION_LAND_IDLE_3 = "Land_Idle3";
-    
-    
-    
+
+
+
     public final static String COLOR_BLUE = "blue";
     public final static String COLOR_GREEN = "green";
     public final static String COLOR_ORANGE = "orange";
@@ -50,22 +50,23 @@ public class PlayerModel extends AnimatedModel {
         super(am, "Models/Avatar_A.mesh.xml",
                 "Textures/player_" + color + ".png", null);
         playAnimation(ANIMATION_LAND_IDLE_2);
+        getModelNode().setLocalTranslation(0, 1.5f, 0);
     }
-    
+
     public static String intToColor(int i) {
         switch (i) {
             case 1:
                 return COLOR_BLUE;
-                
+
             case 2:
                 return COLOR_GREEN;
-                
+
             case 3:
                 return COLOR_ORANGE;
-                
+
             case 4:
                 return COLOR_RED;
-                
+
             default:
                 throw new IllegalStateException("Unknown player number");
         }

@@ -73,6 +73,12 @@ public class EntitiesRenderer extends Node {
         }
     }
 
+    public void removeEntity(GameEntity ent) {
+        Node node = mEntityToNode.get(ent);
+        detachChild(node);
+        mEntityToNode.remove(ent);
+    }
+
     public Node getNodeFromEntity(GameEntity ent) {
         return mEntityToNode.get(ent);
     }
