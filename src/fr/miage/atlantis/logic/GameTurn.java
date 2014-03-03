@@ -26,7 +26,11 @@ import fr.miage.atlantis.entities.GameEntity;
 import java.util.List;
 
 /**
- *
+ * Classe representant un tour de jeu
+ * 
+ * @author AtlantisTeam
+ * @version 1.0
+ * @date 03/03/2014  
  */
 public class GameTurn implements GameRenderListener {
 
@@ -38,46 +42,73 @@ public class GameTurn implements GameRenderListener {
     private Player mPlayer;
     private GameLogic mController;
     private boolean mDiceRolled;
+    
     private int mRemainingMoves;
     
+    
+    /**
+     * Constructeur de GameTurn
+     * 
+     * @param controller 
+     * @param p Joueur jouant le tour
+     */
     public GameTurn(GameLogic controller, Player p) {
+        this.mPlayer=p;
+        this.mController=controller;
+        this.mRemainingMoves=3;
+        this.mDiceRolled=false;
+        this.mSunkenTile=null;
+        
+    }
+    
+    /**
+     * Demarre le début du tour de jeu du joueur courant
+     */
+    public void startTurn() {
+        
+        //Peu jouer une carte TileAction dans son pool de tiles
+        
+        //3 Déplacement de pions
+        
+        //Coule un Tile
+        
+        //Effectue l'action du tile ou le stocke
+        
+        //Roll the dice
+        
+        //Le cas echeant bouge une entity
+        
+        //Le cas echeant execute les actions entity necessaires
+        
         throw new UnsupportedOperationException("Not implemented");
     }
     
     
     /**
-      * Demarre le début du tour de jeu du joueur courant
-      */
-    public void startTurn() {
-        
-         //Peu jouer une carte TileAction dans son pool de tiles
-         
-         //3 Déplacement de pions
-         
-         //Coule un Tile
-        
-         //Effectue l'action du tile ou le stocke
-         
-       //Roll the dice
-       
-         //Le cas echeant bouge une entity
-         
-         //Le cas echeant execute les actions entity necessaires
-       
-        throw new UnsupportedOperationException("Not implemented");
-    }
-    
+     * Deplace une Entity sur le tile donnée
+     * 
+     * @param ent Entity a deplacer
+     * @param dest Tile destination
+     */
     public void moveEntity(GameEntity ent, GameTile dest) {
         throw new UnsupportedOperationException("Not implemented");
     }
     
     
+    
     public int rollDice() {
+        this.mDiceRolled=true;
         throw new UnsupportedOperationException("Not implemented");
     }
     
+    
+    
     public boolean hasSunkLandTile() {
-        throw new UnsupportedOperationException("Not implemented");
+        boolean sunk=false;
+        if(this.mSunkenTile!=null){
+            sunk=true;
+        }
+        return sunk;
     }
     
     public void sinkLandTile(GameTile tile) {
@@ -117,17 +148,24 @@ public class GameTurn implements GameRenderListener {
     }
     
     
-     //--------------------------------------------------------------------------
-     //GETTERS                                                                  |
-     //--------------------------------------------------------------------------
-     
-     
-     public int getRemainingMoves() {
-         return this.mRemainingMoves;
-     }
-     
-     public boolean hasRolledDice() {
-         return this.mDiceRolled;
-     }
-     //--------------------------------------------------------------------------
+    
+    
+    //--------------------------------------------------------------------------
+    //GETTERS                                                                  |
+    //--------------------------------------------------------------------------
+    
+    
+    public Player getPlayer(){
+        return this.mPlayer;
+    }
+    
+    public int getRemainingMoves() {
+        return this.mRemainingMoves;
+    }
+    
+    public boolean hasRolledDice() {
+        return this.mDiceRolled;
+    }
+    //--------------------------------------------------------------------------
 }
+
