@@ -38,6 +38,7 @@ public interface GameTurnListener {
      * @param p Joueur qui debute son tour
      */
     public void onTurnStart(Player p);
+
     
     /**
      * Action a effectuer lors du jeu d'un playtile
@@ -80,6 +81,7 @@ public interface GameTurnListener {
      * @param action Action a realiser
      */
     public void onEntityAction(GameEntity source, GameEntity target, int action);
+
     
     /**
      * Action a réaliser lors du spawn d'entité

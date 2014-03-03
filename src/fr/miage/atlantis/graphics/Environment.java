@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2014 Loris Durand, Guillaume Lesniak, Cristian Sanna,
  *                    Lucie Wiemert
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *  
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -84,7 +84,7 @@ public class Environment {
     private void setupSky(Node parent, ViewPort viewPort, AssetManager am, Camera cam) {
         parent.attachChild(SkyFactory.createSky(am,
             "Textures/Sky/Bright/BrightSky.dds", false));
-        
+
         boolean starMotion = true;
         boolean bottomDome = true;
         mSkyControl = new SkyControl(am, cam, 0.1f, starMotion, bottomDome);
@@ -97,7 +97,7 @@ public class Environment {
         updater.setAmbientLight(mAmbient);
         updater.setMainLight(mDirectionalLight);
 
-        float hour = 15f;
+        float hour = 14f;
         mSkyControl.getSunAndStars().setHour(hour);
 
         float cloudiness = 0.5f;
@@ -119,7 +119,7 @@ public class Environment {
         mAmbient = new AmbientLight();
         mAmbient.setColor(ColorRGBA.Gray);
         parent.addLight(mAmbient);
-        
+
         // Lumière ambiante contrôlée par SkyControl
         mAmbient = new AmbientLight();
         parent.addLight(mAmbient);

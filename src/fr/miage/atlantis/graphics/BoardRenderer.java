@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2014 Loris Durand, Guillaume Lesniak, Cristian Sanna,
  *                    Lucie Wiemert
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *  
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -41,9 +41,12 @@ import java.util.Map;
  *
  */
 public class BoardRenderer extends Node {
-    
+
     public final static String DATA_TILE = "tile";
-    
+    public final static String DATA_TILE_X = "tile_x";
+    public final static String DATA_TILE_Y = "tile_y";
+    public final static String DATA_TILE_OFFSET = "tile_offset";
+
     private final static boolean DEBUG_ITERATION = true;
     private final static boolean DEBUG_BORDER = false;
     private final static float TILE_WIDTH = 35.0f;
@@ -55,16 +58,16 @@ public class BoardRenderer extends Node {
     private List<Node> mTiles;
     private Map<Node, GameTile> mNodeToGameTiles;
     private Map<GameTile, AbstractTileModel> mGameTileToModel;
-    
+
     public BoardRenderer(AssetManager am) {
         mAssetManager = am;
         mTiles = new ArrayList<Node>();
         mNodeToGameTiles = new HashMap<Node, GameTile>();
         mGameTileToModel = new HashMap<GameTile, AbstractTileModel>();
-        
+
         addIslands();
     }
-    
+
     public void addIslands() {
         StaticModel islands = new StaticModel(mAssetManager,
                 "Models/polymsh.mesh.xml", "Textures/sand.jpg", name);
@@ -72,15 +75,15 @@ public class BoardRenderer extends Node {
         islands.setLocalTranslation(TILE_WIDTH * -6.5f, 0, TILE_WIDTH * 4.8f);
         attachChild(islands);
     }
-    
+
     public Node getTile(int i) {
         return mTiles.get(i);
     }
-    
+
     public AbstractTileModel findTileModel(GameTile tile) {
         return mGameTileToModel.get(tile);
     }
-    
+
     /**
      * Parcours le board passé en paramètre et crée toutes les nodes 3D en
      * fonction de l'état actuel du board.
@@ -89,19 +92,19 @@ public class BoardRenderer extends Node {
     public void renderBoard(final GameBoard board) {
         GameTile currentTile = board.getFirstTile();
         GameTile rowHeadTile = currentTile;
-        
+
         if (currentTile == null) {
             throw new IllegalStateException("Impossible de rendre un board vide");
         }
-        
+
         int x = 0, y = 0;
         while (true) {
             int initialX = x;
-            
+
             // On ajoute la tile présente
             addTileToRender(currentTile, x, y);
             if (DEBUG_ITERATION) System.out.println("Adding self tile " + x + "," + y + " (" + currentTile.getName() + ")");
-            
+
             // On ajoute toutes les tiles à droite
             while (currentTile.getRightTile() != null) {
                 x++;
@@ -109,18 +112,18 @@ public class BoardRenderer extends Node {
                 addTileToRender(currentTile, x, y);
                 if (DEBUG_ITERATION) System.out.println("Adding right row tile " + x + "," + y + " (" + currentTile.getName() + ")");
             }
-            
+
             // On ajoute toutes les tiles à gauche
             currentTile = rowHeadTile;
             x = initialX;
-            
+
             while (currentTile.getLeftTile() != null) {
                 x--;
                 currentTile = currentTile.getLeftTile();
                 addTileToRender(currentTile, x, y);
                 if (DEBUG_ITERATION) System.out.println("Adding left row tile " + x + "," + y + " (" + currentTile.getName() + ")");
             }
-            
+
             // On cherche l'élément du dessous. On est déjà à gauche, donc
             // on continue à droite tant qu'on a rien en dessous.
             boolean belowFound = false;
@@ -130,7 +133,7 @@ public class BoardRenderer extends Node {
                     rowHeadTile = currentTile.getLeftBottomTile();
                     currentTile = rowHeadTile;
                     mTileOffset -= TILE_HEIGHT / 2.0f;
-                    
+
                     y++;
                     belowFound = true;
                 } else if (currentTile.getRightBottomTile() != null) {
@@ -138,7 +141,7 @@ public class BoardRenderer extends Node {
                     rowHeadTile = currentTile.getRightBottomTile();
                     currentTile = rowHeadTile;
                     mTileOffset += TILE_HEIGHT / 2.0f;
-                    
+
                     y++;
                     belowFound = true;
                 } else {
@@ -146,14 +149,14 @@ public class BoardRenderer extends Node {
                     x++;
                 }
             }
-            
+
             if (!belowFound) {
                 // Il n'y a plus rien en dessous, on s'arrête
                 break;
             }
         }
     }
-    
+
     /**
      * Ajoute une tile au rendu à l'endroit singulier spécifié. Les coordonnées
      * sont converties automatiquement en coordonnées de l'univers 3D
@@ -163,7 +166,7 @@ public class BoardRenderer extends Node {
      */
     public void addTileToRender(GameTile tile, int x, int y) {
         Node output;
-        
+
         // Si c'est une tile au dessus de l'eau, on utilise un mesh avec la
         // texture qui va bien. Sinon, on fait un contour seulement.
         if (tile.getHeight() > 0) {
@@ -184,24 +187,51 @@ public class BoardRenderer extends Node {
         }
 
         // On positionne la tile
-        output.setLocalTranslation(output.getLocalTranslation().add( 
+        output.setLocalTranslation(output.getLocalTranslation().add(
                 new Vector3f(y * -TILE_WIDTH,
                 GRID_HEIGHT,
                 x * TILE_HEIGHT + mTileOffset)));
-        
+
         // On l'attache à cette Node
         output.setUserData(DATA_TILE, tile.getName());
+        output.setUserData(DATA_TILE_X, x);
+        output.setUserData(DATA_TILE_Y, y);
+        output.setUserData(DATA_TILE_OFFSET, mTileOffset);
         mNodeToGameTiles.put(output, tile);
         mGameTileToModel.put(tile, (AbstractTileModel) output);
         attachChild(output);
-        
+
         if (tile.getHeight() < 0 && !DEBUG_BORDER) {
             // Si on ne debug pas les bordures, les tiles sont quand même ajoutées
             // au jeu, mais on ne les affiche pas en les rendant après le ciel
             output.setQueueBucket(RenderQueue.Bucket.Sky);
         }
-        
-        System.out.println("Tile " + mTiles.size() + ": " + tile.getName());
+
+        System.out.println("Tile " + mTiles.size() + ": " + tile.getName() + " (height=" + tile.getHeight() + ")");
         mTiles.add(output);
+    }
+
+    /**
+     * Remplace une tile existante au rendu. Cela est utile pour ne pas avoir à recalculer la position
+     * x et y de la tile
+     * @param src La tile supprimée
+     * @param dest La nouvelle tiel
+     */
+    public void replaceTile(GameTile src, GameTile dest) {
+        Node srcNode = (Node) mGameTileToModel.get(src);
+
+        if (srcNode == null) {
+            throw new IllegalStateException("Impossible de trouver la tile source!");
+        }
+
+        // On supprime l'ancienne tile
+        detachChild(srcNode);
+
+        // On ajoute la nouvelle au même endroit
+        int x = (Integer) srcNode.getUserData(DATA_TILE_X);
+        int y = (Integer) srcNode.getUserData(DATA_TILE_Y);
+        mTileOffset = (Float) srcNode.getUserData(DATA_TILE_OFFSET);
+
+        addTileToRender(dest, x, y);
     }
 }

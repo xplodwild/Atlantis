@@ -53,6 +53,7 @@ public class Player {
      */
     private int mNumber;
 
+
     
     /**
      * Constructeur de Joueur
@@ -94,11 +95,11 @@ public class Player {
     public String getName() {
         return mName;
     }
-    
+
     public List<PlayerToken> getTokens() {
         return mTokens;
-    }    
-    
+    }   
+
     public List<GameTile> mActionTiles() {
         return mActionTiles;
     }

@@ -81,15 +81,15 @@ public final class GameBoard {
         this.randomiser=new ArrayList();
 
         for(int i=0;i<this.forestTilesRemaining;i++){
-            randomiser.add(new ForestTile(this,""));
+            randomiser.add(new ForestTile(this,"Forest #"+i));
         }
 
         for(int i=0;i<this.mountainTilesRemaining;i++){
-            randomiser.add(new MountainTile(this,""));
+            randomiser.add(new MountainTile(this,"Mountain #"+i));
         }
 
         for(int i=0;i<this.beachTilesRemaining;i++){
-            randomiser.add(new BeachTile(this,""));
+            randomiser.add(new BeachTile(this,"Beach #"+i));
         }
 
        //-----------------------------------------------------------------------
@@ -618,27 +618,26 @@ public final class GameBoard {
        temp=(WaterTile)this.mTileSet.get("Water #64");
        ss = new SeaSerpent();
        ss.moveToTile(null, temp);
-       temp.addEntity(ss);
+
 
        temp=(WaterTile)this.mTileSet.get("Water #84");
        ss = new SeaSerpent();
        ss.moveToTile(null, temp);
-       temp.addEntity(ss);
+
 
        temp=(WaterTile)this.mTileSet.get("Water #28");
        ss = new SeaSerpent();
        ss.moveToTile(null, temp);
-       temp.addEntity(ss);
+
 
        temp=(WaterTile)this.mTileSet.get("Water #8");
        ss = new SeaSerpent();
        ss.moveToTile(null, temp);
-       temp.addEntity(ss);
 
        temp=(WaterTile)this.mTileSet.get("Water #47");
        ss = new SeaSerpent();
        ss.moveToTile(null, temp);
-       temp.addEntity(ss);
+
        //-----------------------------------------------------------------------
     }
 
