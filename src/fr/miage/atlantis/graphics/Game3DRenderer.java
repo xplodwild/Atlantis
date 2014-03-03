@@ -107,13 +107,6 @@ public class Game3DRenderer extends SimpleApplication {
         } else if (FRAME_COUNT == 100) {
             Map<String, GameTile> tiles = mParent.getBoard().getTileSet();
             mParent.onSinkTile(tiles.get("Beach #4"));
-        } else if (FRAME_COUNT == 300) {
-            System.out.println("DEBUG: Spawning a BOAT!");
-            Map<String, GameTile> tiles = mParent.getBoard().getTileSet();
-            Boat b = new Boat();
-            b.moveToTile(mParent, tiles.get("Sunken Beach #4"));
-            mParent.onPlayTileAction(tiles.get("Sunken Beach #4"),
-                    TileAction.Factory.createSpawnEntity(TileAction.ENTITY_BOAT));
         }
     }
 

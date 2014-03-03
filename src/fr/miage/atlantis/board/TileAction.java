@@ -204,6 +204,9 @@ public class TileAction {
             case ACTION_SPAWN_ENTITY:
                 performActionSpawnEntity(tile, logic);
                 break;
+
+            default:
+                throw new UnsupportedOperationException("Not implemented yet: Action " + mAction);
         }
     }
 
@@ -258,8 +261,12 @@ public class TileAction {
         return mAction;
     }
 
-    public int getAnimal() {
+    public int getEntity() {
         return mEntity;
     }
     //--------------------------------------------------------------------------
+
+    public String toString() {
+        return "TileAction(action=" + mAction + ", entity="+mEntity+", isImmediate=" + mIsImmediate + ", isTriggerable=" + mIsTriggerable + ")";
+    }
 }

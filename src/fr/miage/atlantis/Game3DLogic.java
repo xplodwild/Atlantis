@@ -46,10 +46,10 @@ import fr.miage.atlantis.logic.GameLogic;
 
 /**
  * Main Game Engine loop class
- * 
+ *
  * @author AtlantisTeam
  * @version 1.0
- * @date 03/03/2014  
+ * @date 03/03/2014
  */
 public class Game3DLogic extends GameLogic {
 
@@ -74,8 +74,6 @@ public class Game3DLogic extends GameLogic {
     }
 
     @Override
-
- 
     public void onUnitMove(final GameEntity ent, final GameTile dest) {
         super.onUnitMove(ent, dest);
 
@@ -154,6 +152,16 @@ public class Game3DLogic extends GameLogic {
                         }
                     }
 
+                    // On lance l'action sous la tile, si c'est immédiat
+                    TileAction action = tile.getAction();
+                    if (action.isImmediate()) {
+                        onPlayTileAction(tile, action);
+                    } else {
+                        System.out.println("TODO: Tile is not immediate: " + action.toString());
+                        // TODO: Stocker la tile dans les tiles du joueur
+                    }
+
+                    // Fin du tour, on notifie le tour si on l'a
                     if (getCurrentTurn() != null) {
                         getCurrentTurn().onSinkTileFinished();
                     }
