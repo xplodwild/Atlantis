@@ -750,6 +750,7 @@ public final class GameBoard {
         List<GameEntity> entities = new ArrayList<GameEntity>(tile.getEntities());
         for (GameEntity ent : entities) {
             ent.moveToTile(logic, newTile);
+            System.out.println("Entity is now in sunken tile " + newTile.getName());
         }
 
         mTileSet.put(newTile.getName(), newTile);

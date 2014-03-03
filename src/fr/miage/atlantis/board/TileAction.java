@@ -17,6 +17,10 @@
  */
 package fr.miage.atlantis.board;
 
+import fr.miage.atlantis.entities.Boat;
+import fr.miage.atlantis.entities.GameEntity;
+import fr.miage.atlantis.entities.Shark;
+import fr.miage.atlantis.entities.Whale;
 import fr.miage.atlantis.logic.GameLogic;
 import java.util.ArrayList;
 import java.util.Random;
@@ -204,7 +208,35 @@ public class TileAction {
     }
 
     private void performActionSpawnEntity(GameTile tile, GameLogic logic) {
+        // On spawne l'entité
+        GameEntity spawnedEntity = null;
 
+        switch (mEntity) {
+            case ENTITY_BOAT:
+                spawnedEntity = new Boat();
+                break;
+
+            case ENTITY_SHARK:
+                spawnedEntity = new Shark();
+                break;
+
+            case ENTITY_WHALE:
+                spawnedEntity = new Whale();
+                break;
+
+            default:
+                throw new IllegalArgumentException("Unknown spawn entity type: " + mEntity);
+        }
+
+        // On spawne une première fois l'entité pour que onEntitySpawn mette l'entité au bon
+        // endroit sur le rendu. Ensuite, on relance moveToTile avec la logic pour effectivement
+        // lancer les événements. Cela permet d'être sûr que la nouvelle entité est bien affichée
+        // avant que d'autres animations se lancent.
+        System.out.println("Spawned entity: Moving to tile");
+        spawnedEntity.moveToTile(null, tile);
+        logic.onEntitySpawn(spawnedEntity);
+        System.out.println("Spawned entity: Triggering events");
+        spawnedEntity.moveToTile(logic, tile);
     }
 
     //--------------------------------------------------------------------------

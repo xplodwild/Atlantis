@@ -80,7 +80,7 @@ public class GameEntity {
             // On trigger les événements des autres entités présentes sur la tile
             for (GameEntity ent : tile.getEntities()) {
                 if (ent != this) {
-                    somethingHappened |= ent.onEntityCross(logic, this);
+                    somethingHappened |= onEntityCross(logic, ent);
                 }
             }
         }
