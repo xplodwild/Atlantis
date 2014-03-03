@@ -19,6 +19,8 @@
 package fr.miage.atlantis.graphics;
 
 import com.jme3.app.SimpleApplication;
+import com.jme3.input.MouseInput;
+import com.jme3.input.controls.MouseAxisTrigger;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
@@ -41,6 +43,7 @@ public class Game3DRenderer extends SimpleApplication {
     private Game3DLogic mParent;
     private BoardRenderer mBoardRenderer;
     private EntitiesRenderer mEntitiesRenderer;
+    private InputActionListener mInputListener;
 
     public Game3DRenderer(Game3DLogic parent) {
         mParent = parent;
@@ -79,6 +82,9 @@ public class Game3DRenderer extends SimpleApplication {
         }
 
         mSceneNode.attachChild(mEntitiesRenderer);
+
+        // Configuration de l'input (picking souris, clavier)
+        mInputListener = new InputActionListener(inputManager, this);
     }
 
     public BoardRenderer getBoardRenderer() {

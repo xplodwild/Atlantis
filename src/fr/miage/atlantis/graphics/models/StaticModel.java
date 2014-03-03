@@ -65,7 +65,7 @@ public class StaticModel extends Node {
 
             if (cachedMat != null) {
                 System.out.println("USING CACHED MATERIAL");
-                mMaterial = cachedMat;
+                mMaterial = cachedMat.clone();
             } else {
                 System.out.println("GENERATING NEW MATERIAL");
                 mMaterial = new Material(am, "Common/MatDefs/Light/Lighting.j3md");
@@ -80,6 +80,7 @@ public class StaticModel extends Node {
 
                 mMaterial.setBoolean("UseMaterialColors", true);
                 mMaterial.setColor("Ambient", ColorRGBA.White);
+                mMaterial.setColor("Diffuse", ColorRGBA.DarkGray);
 
                 ModelCache.getInstance().putMaterial(cacheKey, mMaterial);
             }
