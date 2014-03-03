@@ -19,6 +19,8 @@
 package fr.miage.atlantis.graphics;
 
 import com.jme3.app.SimpleApplication;
+import com.jme3.input.MouseInput;
+import com.jme3.input.controls.MouseAxisTrigger;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
@@ -27,8 +29,6 @@ import com.jme3.scene.Node;
 import fr.miage.atlantis.Game3DLogic;
 import fr.miage.atlantis.Player;
 import fr.miage.atlantis.board.GameTile;
-import fr.miage.atlantis.board.TileAction;
-import fr.miage.atlantis.entities.Boat;
 import fr.miage.atlantis.entities.GameEntity;
 import fr.miage.atlantis.entities.PlayerToken;
 import java.util.Map;
@@ -43,6 +43,7 @@ public class Game3DRenderer extends SimpleApplication {
     private Game3DLogic mParent;
     private BoardRenderer mBoardRenderer;
     private EntitiesRenderer mEntitiesRenderer;
+    private InputActionListener mInputListener;
 
     public Game3DRenderer(Game3DLogic parent) {
         mParent = parent;
@@ -54,6 +55,9 @@ public class Game3DRenderer extends SimpleApplication {
         cam.setFrustumFar(4000.0f);
         cam.setLocation(new Vector3f(-398.292f, 572.2102f, 176.78018f));
         cam.setRotation(new Quaternion(0.43458012f, 0.5573096f, -0.4326719f, 0.5597688f));
+
+        inputManager.setCursorVisible(true);
+        flyCam.setDragToRotate(true);
 
         // Configuration des ombres
         rootNode.setShadowMode(ShadowMode.Off);
@@ -78,6 +82,9 @@ public class Game3DRenderer extends SimpleApplication {
         }
 
         mSceneNode.attachChild(mEntitiesRenderer);
+
+        // Configuration de l'input (picking souris, clavier)
+        mInputListener = new InputActionListener(inputManager, this);
     }
 
     public BoardRenderer getBoardRenderer() {
@@ -107,13 +114,6 @@ public class Game3DRenderer extends SimpleApplication {
         } else if (FRAME_COUNT == 100) {
             Map<String, GameTile> tiles = mParent.getBoard().getTileSet();
             mParent.onSinkTile(tiles.get("Beach #4"));
-        } else if (FRAME_COUNT == 300) {
-            System.out.println("DEBUG: Spawning a BOAT!");
-            Map<String, GameTile> tiles = mParent.getBoard().getTileSet();
-            Boat b = new Boat();
-            b.moveToTile(mParent, tiles.get("Sunken Beach #4"));
-            mParent.onPlayTileAction(tiles.get("Sunken Beach #4"),
-                    TileAction.Factory.createSpawnEntity(TileAction.ENTITY_BOAT));
         }
     }
 

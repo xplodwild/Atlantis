@@ -52,6 +52,12 @@ public class Shark extends Animal {
      */
     @Override
     public boolean onEntityCross(GameLogic logic, GameEntity ent) {
-        throw new UnsupportedOperationException("Not implemented");
+        if (ent instanceof PlayerToken) {
+            PlayerToken pt = (PlayerToken) ent;
+            // Les sharks mangent les petits humains
+            logic.onEntityAction(this, ent, GameEntity.ACTION_SHARK_EAT);
+        }
+
+        return false;
     }
 }

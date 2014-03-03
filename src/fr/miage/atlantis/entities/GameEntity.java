@@ -75,6 +75,8 @@ public class GameEntity {
         tile.addEntity(this);
         mTile = tile;
 
+        System.out.println("MOVE " + mName + " TO " + tile.getName());
+
         boolean somethingHappened = false;
         if (logic != null) {
             // On trigger les événements des autres entités présentes sur la tile
@@ -94,7 +96,9 @@ public class GameEntity {
      * @param logic logique de jeu tuant l'unité
      */
     public void die(GameLogic logic) {
-        throw new UnsupportedOperationException("Not implemented");
+        // TODO: Animations
+        // On supprime le perso du jeu
+        logic.onUnitDie(this);
     }
 
     /**

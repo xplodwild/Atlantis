@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2014 Loris Durand, Guillaume Lesniak, Cristian Sanna,
  *                    Lucie Wiemert
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *  
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -97,24 +97,24 @@ public class EmptyTileModel extends Node implements AbstractTileModel {
             capsule.write(rt, "rt", 0);
         }
     }
-    
+
     public EmptyTileModel(AssetManager assetManager, ColorRGBA color) {
         HexagonMesh h = new HexagonMesh(60.0f);
         h.setMode(Mesh.Mode.Lines);
         h.setLineWidth(30);
-        
+
         Geometry modelGrid = new Geometry("Grid", h);
         modelGrid.setLocalScale(0.19f);
-        
+
         Material matGrid = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         matGrid.setColor("Color", color);
         modelGrid.setMaterial(matGrid);
-        
+
         attachChild(modelGrid);
     }
-    
+
     public Vector3f getTileTopCenter() {
         updateWorldBound();
-        return getWorldBound().getCenter().add(0, 1, 0);
+        return getWorldBound().getCenter().add(0, 4.0f, 0);
     }
 }
