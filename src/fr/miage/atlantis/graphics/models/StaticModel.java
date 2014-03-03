@@ -20,6 +20,8 @@ package fr.miage.atlantis.graphics.models;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
+import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.util.TangentBinormalGenerator;
@@ -38,6 +40,7 @@ public class StaticModel extends Node {
     public StaticModel(AssetManager am, String meshName,
             String diffusePath, String normalPath) {
         mModelNode = new Node();
+        mModelNode.setShadowMode(ShadowMode.CastAndReceive);
         
         // On charge le mesh
         mModel = am.loadModel(meshName);
@@ -56,6 +59,9 @@ public class StaticModel extends Node {
                 TangentBinormalGenerator.generate(mModel);
                 mMaterial.setTexture("NormalMap", am.loadTexture(normalPath));
             }
+            
+            mMaterial.setBoolean("UseMaterialColors", true);
+            mMaterial.setColor("Ambient", ColorRGBA.White);
 
             mModel.setMaterial(mMaterial);
         }

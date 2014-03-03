@@ -20,13 +20,17 @@ package fr.miage.atlantis.graphics;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
+import com.jme3.renderer.queue.RenderQueue;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import fr.miage.atlantis.board.GameBoard;
 import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.board.WaterTile;
 import fr.miage.atlantis.graphics.models.AbstractTileModel;
 import fr.miage.atlantis.graphics.models.EmptyTileModel;
+import fr.miage.atlantis.graphics.models.StaticModel;
 import fr.miage.atlantis.graphics.models.TileModel;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,8 +45,9 @@ public class BoardRenderer extends Node {
     public final static String DATA_TILE = "tile";
     
     private final static boolean DEBUG_ITERATION = true;
-    private final static float TILE_HEIGHT = 40.0f;
-    private final static float TILE_WIDTH = 44.0f;
+    private final static boolean DEBUG_BORDER = false;
+    private final static float TILE_WIDTH = 35.0f;
+    private final static float TILE_HEIGHT = 39.9f;
     private final static float GRID_HEIGHT = 1.0f;
 
     private float mTileOffset = 0.0f;
@@ -56,6 +61,16 @@ public class BoardRenderer extends Node {
         mTiles = new ArrayList<Node>();
         mNodeToGameTiles = new HashMap<Node, GameTile>();
         mGameTileToModel = new HashMap<GameTile, AbstractTileModel>();
+        
+        addIslands();
+    }
+    
+    public void addIslands() {
+        StaticModel islands = new StaticModel(mAssetManager,
+                "Models/polymsh.mesh.xml", "Textures/sand.jpg", name);
+        islands.scale(1.0f, 1.5f, 0.85f);
+        islands.setLocalTranslation(TILE_WIDTH * -6.5f, 0, TILE_WIDTH * 4.8f);
+        attachChild(islands);
     }
     
     public Node getTile(int i) {
@@ -160,8 +175,9 @@ public class BoardRenderer extends Node {
                 color = ColorRGBA.Red;
             } else if (tile.getHeight() == 0) {
                 WaterTile wt = (WaterTile) tile;
-                color = wt.isLandingTile() ? ColorRGBA.Blue : ColorRGBA.Cyan;
-                color = wt.isBeginningWithSeaShark() ? ColorRGBA.Magenta : color;
+                color = wt.isLandingTile() ? ColorRGBA.White :
+                        new ColorRGBA(51.0f / 255.0f, 181.0f / 255.0f, 229.0f / 255.0f, 1.0f);
+                //color = wt.isBeginningWithSeaShark() ? ColorRGBA.Magenta : color;
             }
 
             output = new EmptyTileModel(mAssetManager, color);
@@ -169,15 +185,21 @@ public class BoardRenderer extends Node {
 
         // On positionne la tile
         output.setLocalTranslation(output.getLocalTranslation().add( 
-                new Vector3f(y * -TILE_HEIGHT,
+                new Vector3f(y * -TILE_WIDTH,
                 GRID_HEIGHT,
-                x * TILE_WIDTH + mTileOffset)));
+                x * TILE_HEIGHT + mTileOffset)));
         
         // On l'attache à cette Node
         output.setUserData(DATA_TILE, tile.getName());
         mNodeToGameTiles.put(output, tile);
         mGameTileToModel.put(tile, (AbstractTileModel) output);
         attachChild(output);
+        
+        if (tile.getHeight() < 0 && !DEBUG_BORDER) {
+            // Si on ne debug pas les bordures, les tiles sont quand même ajoutées
+            // au jeu, mais on ne les affiche pas en les rendant après le ciel
+            output.setQueueBucket(RenderQueue.Bucket.Sky);
+        }
         
         System.out.println("Tile " + mTiles.size() + ": " + tile.getName());
         mTiles.add(output);

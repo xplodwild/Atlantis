@@ -104,7 +104,7 @@ public class EmptyTileModel extends Node implements AbstractTileModel {
         h.setLineWidth(30);
         
         Geometry modelGrid = new Geometry("Grid", h);
-        modelGrid.setLocalScale(0.2f);
+        modelGrid.setLocalScale(0.19f);
         
         Material matGrid = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         matGrid.setColor("Color", color);
