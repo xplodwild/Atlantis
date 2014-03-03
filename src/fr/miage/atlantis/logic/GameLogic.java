@@ -20,6 +20,8 @@ package fr.miage.atlantis.logic;
 import fr.miage.atlantis.GameDice;
 import fr.miage.atlantis.Player;
 import fr.miage.atlantis.board.GameBoard;
+import fr.miage.atlantis.board.GameTile;
+import fr.miage.atlantis.entities.GameEntity;
 
 /**
  *
@@ -67,5 +69,10 @@ public abstract class GameLogic implements GameTurnListener {
     
     public boolean isFinished() {
         throw new UnsupportedOperationException("Not implemented");
+    }
+    
+    @Override
+    public void onUnitMove(final GameEntity ent, final GameTile dest) {
+        ent.moveToTile(this, dest);
     }
 }

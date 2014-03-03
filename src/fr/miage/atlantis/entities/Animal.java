@@ -68,5 +68,5 @@ public abstract class Animal extends GameEntity {
     //--------------------------------------------------------------------------
     
     
-    public abstract void onEntityCross(GameLogic logic, GameEntity ent);
+    
 }
