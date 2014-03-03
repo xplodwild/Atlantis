@@ -27,8 +27,6 @@ import com.jme3.scene.Node;
 import fr.miage.atlantis.Game3DLogic;
 import fr.miage.atlantis.Player;
 import fr.miage.atlantis.board.GameTile;
-import fr.miage.atlantis.board.TileAction;
-import fr.miage.atlantis.entities.Boat;
 import fr.miage.atlantis.entities.GameEntity;
 import fr.miage.atlantis.entities.PlayerToken;
 import java.util.Map;
@@ -54,6 +52,9 @@ public class Game3DRenderer extends SimpleApplication {
         cam.setFrustumFar(4000.0f);
         cam.setLocation(new Vector3f(-398.292f, 572.2102f, 176.78018f));
         cam.setRotation(new Quaternion(0.43458012f, 0.5573096f, -0.4326719f, 0.5597688f));
+
+        inputManager.setCursorVisible(true);
+        flyCam.setDragToRotate(true);
 
         // Configuration des ombres
         rootNode.setShadowMode(ShadowMode.Off);

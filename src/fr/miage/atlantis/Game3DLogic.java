@@ -24,7 +24,9 @@ import com.jme3.animation.AnimEventListener;
 import com.jme3.cinematic.MotionPath;
 import com.jme3.cinematic.MotionPathListener;
 import com.jme3.cinematic.events.MotionEvent;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Spline;
+import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.board.TileAction;
@@ -156,7 +158,7 @@ public class Game3DLogic extends GameLogic {
                     }
 
                     // On lance l'action sous la tile, si c'est immédiat
-                    TileAction action = TileAction.Factory.createSpawnEntity(TileAction.ENTITY_SHARK); //tile.getAction();
+                    TileAction action = tile.getAction();
                     if (action.isImmediate()) {
                         onPlayTileAction(newTile, action);
                     } else {
@@ -232,6 +234,7 @@ public class Game3DLogic extends GameLogic {
         // On créé le contrôleur
         final MotionEvent motionControl = new MotionEvent(entNode, path);
         motionControl.setDirectionType(MotionEvent.Direction.PathAndRotation);
+        motionControl.setRotation(new Quaternion().fromAngleNormalAxis(0, Vector3f.UNIT_Y));
         motionControl.setInitialDuration(2f);
 
         return motionControl;
