@@ -955,7 +955,7 @@ public final class GameBoard {
     }
 
     private void setRightSideTile(GameTile tile,GameTile toBePlaced) {
-        tile.setRightTile(toBePlaced);
+        tile.setRightTile(toBePlaced);    
     }
 
     private void setLeftSideTile(GameTile tile,GameTile toBePlaced) {
