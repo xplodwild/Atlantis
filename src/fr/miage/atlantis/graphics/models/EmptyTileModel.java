@@ -98,7 +98,7 @@ public class EmptyTileModel extends Node implements AbstractTileModel {
         }
     }
 
-    public EmptyTileModel(AssetManager assetManager, ColorRGBA color) {
+    public EmptyTileModel(final String tileName, AssetManager assetManager, ColorRGBA color) {
         HexagonMesh h = new HexagonMesh(60.0f);
         h.setMode(Mesh.Mode.Lines);
         h.setLineWidth(30);
@@ -109,6 +109,8 @@ public class EmptyTileModel extends Node implements AbstractTileModel {
         Material matGrid = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         matGrid.setColor("Color", color);
         modelGrid.setMaterial(matGrid);
+
+        modelGrid.setUserData(TileModel.DATA_TILE_NAME, tileName);
 
         attachChild(modelGrid);
     }

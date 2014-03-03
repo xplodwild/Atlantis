@@ -20,6 +20,7 @@ package fr.miage.atlantis.graphics.models;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Mesh;
 
 /**
  *
@@ -27,10 +28,11 @@ import com.jme3.math.Vector3f;
 public class TileModel extends StaticModel implements AbstractTileModel {
 
     public final static String DATA_IS_TILE = "is_tile";
+    public final static String DATA_TILE_NAME = "tile_name";
 
     private int mHeight;
 
-    public TileModel(int height, AssetManager am) {
+    public TileModel(final String tileName, int height, AssetManager am) {
         super(am, getModelPathFromHeight(height),
                 getTexturePathFromHeight(height),
                 getNormalPathFromHeight(height));
@@ -43,6 +45,7 @@ public class TileModel extends StaticModel implements AbstractTileModel {
         setLocalScale(2.0f, 2.0f, 2.01f);
 
         getModel().setUserData(DATA_IS_TILE, true);
+        getModel().setUserData(DATA_TILE_NAME, tileName);
     }
 
     public Vector3f getTileTopCenter() {
