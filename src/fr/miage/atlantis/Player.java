@@ -24,15 +24,41 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * Classe représentant un joueur
+ * 
+ * @author AtlantisTeam
+ * @version 1.0
+ * @date 03/03/2014  
  */
 public class Player {
 
+    /**
+     * Pseudo du joueur
+     */
     private String mName;
+    
+    /**
+     * Liste des pions du joueur
+     */
     private List<PlayerToken> mTokens;
+    
+    /**
+     * Liste des Tiles dans la main du joueur
+     */
     private List<GameTile> mActionTiles;
+    
+    /**
+     * Numéro du joueur
+     */
     private int mNumber;
 
+    
+    /**
+     * Constructeur de Joueur
+     * 
+     * @param name Pseudo
+     * @param number Numéro
+     */
     public Player(final String name, final int number) {
         mName = name;
         mTokens = new ArrayList<PlayerToken>();
@@ -52,6 +78,14 @@ public class Player {
         mTokens.add(new PlayerToken(this, 1));
     }
 
+    
+    
+    
+    //--------------------------------------------------------------------------    
+    //GETTERS                                                                  |
+    //--------------------------------------------------------------------------
+    
+    
     public int getNumber() {
         return mNumber;
     }
@@ -59,16 +93,19 @@ public class Player {
     public String getName() {
         return mName;
     }
-
+    
     public List<PlayerToken> getTokens() {
         return mTokens;
-    }
-
+    }    
+    
     public List<GameTile> mActionTiles() {
         return mActionTiles;
     }
 
     public int getScore() {
-        throw new UnsupportedOperationException("Not implemented");
+        //Parcours la liste des tokens et compte les points des tokens ou l'attribut "sauvé" est true;
+        
+        return 0;
     }
+    //--------------------------------------------------------------------------
 }
