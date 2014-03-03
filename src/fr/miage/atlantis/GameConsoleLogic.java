@@ -23,15 +23,19 @@ import fr.miage.atlantis.board.TileAction;
 import fr.miage.atlantis.entities.Boat;
 import fr.miage.atlantis.entities.GameEntity;
 import fr.miage.atlantis.entities.PlayerToken;
-import fr.miage.atlantis.graphics.Game3DRenderer;
 import fr.miage.atlantis.logic.GameLogic;
 
 /**
  * Main Game Engine loop class
+ * 
+ * @author AtlantisTeam
+ * @version 1.0
+ * @date 03/03/2014  
  */
+
 public class GameConsoleLogic extends GameLogic {
     
-    private Game3DRenderer mRenderer;
+   
     
     public GameConsoleLogic() {
         super();

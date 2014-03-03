@@ -70,15 +70,6 @@ public abstract class GameLogic implements GameTurnListener {
     }
     
     
-    /**
-     * @TODO : Implement l'affichage d'un menu pour lancer la partie
-     * 
-     * Methode permettant de lancer une partie 
-     */
-    public void boot() {
-        throw new UnsupportedOperationException("Not implemented");
-    }
-    
     
     /**
      * Initialise les joueurs du jeu
@@ -100,8 +91,7 @@ public abstract class GameLogic implements GameTurnListener {
     public void startGame() {
         Player p=this.mPlayers[0];
         this.mCurrentTurn=new GameTurn(this,p);
-        this.mCurrentTurn.startTurn();
-        
+        this.mCurrentTurn.startTurn();        
     }
     
     
@@ -145,7 +135,9 @@ public abstract class GameLogic implements GameTurnListener {
      * @return True si le tour est fini, false sinon
      */
     public boolean isFinished() {
-        throw new UnsupportedOperationException("Not implemented");
+        
+        
+        return false;        
     }
     
     
@@ -175,5 +167,19 @@ public abstract class GameLogic implements GameTurnListener {
     public GameTurn getCurrentTurn() {
         return mCurrentTurn;
     }    
+    //--------------------------------------------------------------------------
+    
+    
+    
+    
+    //--------------------------------------------------------------------------
+    //METHODES ABSTRAITES                                                      |
+    //--------------------------------------------------------------------------
+    
+    
+    /**    
+     * Methode permettant de lancer une partie 
+     */
+    public abstract void boot();
     //--------------------------------------------------------------------------
 }

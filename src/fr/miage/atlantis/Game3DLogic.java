@@ -28,6 +28,10 @@ import fr.miage.atlantis.logic.GameLogic;
 
 /**
  * Main Game Engine loop class
+ * 
+ * @author AtlantisTeam
+ * @version 1.0
+ * @date 03/03/2014  
  */
 public class Game3DLogic extends GameLogic {
     
