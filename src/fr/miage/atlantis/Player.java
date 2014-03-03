@@ -21,6 +21,7 @@ package fr.miage.atlantis;
 import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.entities.PlayerToken;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -103,9 +104,15 @@ public class Player {
     }
 
     public int getScore() {
-        //Parcours la liste des tokens et compte les points des tokens ou l'attribut "sauvé" est true;
-        
-        return 0;
+        Iterator it=this.mTokens.iterator();
+        int score=0;
+        while(it.hasNext()){
+            PlayerToken ptk=(PlayerToken)it.next();
+            if(ptk.getState() == PlayerToken.STATE_SAFE){
+                score+=ptk.getPoints();
+            }
+        }
+        return score;
     }
     //--------------------------------------------------------------------------
 }
