@@ -37,12 +37,33 @@ public class GameTurn implements GameRenderListener {
     private int mDiceAction;
     private Player mPlayer;
     private GameLogic mController;
+    private boolean mDiceRolled;
+    private int mRemainingMoves;
     
     public GameTurn(GameLogic controller, Player p) {
         throw new UnsupportedOperationException("Not implemented");
     }
     
+    
+    /**
+      * Demarre le début du tour de jeu du joueur courant
+      */
     public void startTurn() {
+        
+         //Peu jouer une carte TileAction dans son pool de tiles
+         
+         //3 Déplacement de pions
+         
+         //Coule un Tile
+        
+         //Effectue l'action du tile ou le stocke
+         
+       //Roll the dice
+       
+         //Le cas echeant bouge une entity
+         
+         //Le cas echeant execute les actions entity necessaires
+       
         throw new UnsupportedOperationException("Not implemented");
     }
     
@@ -50,13 +71,6 @@ public class GameTurn implements GameRenderListener {
         throw new UnsupportedOperationException("Not implemented");
     }
     
-    public int getRemainingMoves() {
-        throw new UnsupportedOperationException("Not implemented");
-    }
-    
-    public boolean hasRolledDice() {
-        throw new UnsupportedOperationException("Not implemented");
-    }
     
     public int rollDice() {
         throw new UnsupportedOperationException("Not implemented");
@@ -101,4 +115,19 @@ public class GameTurn implements GameRenderListener {
     public void onEntityActionFinished() {
         throw new UnsupportedOperationException("Not implemented");
     }
+    
+    
+     //--------------------------------------------------------------------------
+     //GETTERS                                                                  |
+     //--------------------------------------------------------------------------
+     
+     
+     public int getRemainingMoves() {
+         return this.mRemainingMoves;
+     }
+     
+     public boolean hasRolledDice() {
+         return this.mDiceRolled;
+     }
+     //--------------------------------------------------------------------------
 }
