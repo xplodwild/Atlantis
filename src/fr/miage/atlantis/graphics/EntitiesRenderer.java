@@ -25,11 +25,13 @@ import fr.miage.atlantis.entities.GameEntity;
 import fr.miage.atlantis.entities.PlayerToken;
 import fr.miage.atlantis.entities.SeaSerpent;
 import fr.miage.atlantis.entities.Shark;
+import fr.miage.atlantis.entities.Whale;
 import fr.miage.atlantis.graphics.models.AbstractTileModel;
 import fr.miage.atlantis.graphics.models.BoatModel;
 import fr.miage.atlantis.graphics.models.PlayerModel;
 import fr.miage.atlantis.graphics.models.SeaSerpentModel;
 import fr.miage.atlantis.graphics.models.SharkModel;
+import fr.miage.atlantis.graphics.models.WhaleModel;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -59,8 +61,10 @@ public class EntitiesRenderer extends Node {
             output = addSeaSerpent((SeaSerpent) ent);
         } else if (ent instanceof Shark) {
             output = addShark((Shark) ent);
+        } else if (ent instanceof Whale) {
+            output = addWhale((Whale) ent);
         } else {
-            throw new UnsupportedOperationException("Unknown entity type");
+            throw new UnsupportedOperationException("Unknown entity type: " + ent.toString());
         }
 
         mEntityToNode.put(ent, output);
@@ -101,6 +105,11 @@ public class EntitiesRenderer extends Node {
 
     private Node addShark(Shark s) {
         SharkModel model = new SharkModel(mAssetManager);
+        return model;
+    }
+
+    private Node addWhale(Whale w) {
+        WhaleModel model = new WhaleModel(mAssetManager);
         return model;
     }
 
