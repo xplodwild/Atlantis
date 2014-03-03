@@ -58,8 +58,7 @@ public class GameTurn implements GameRenderListener {
         this.mController=controller;
         this.mRemainingMoves=3;
         this.mDiceRolled=false;
-        this.mSunkenTile=null;
-        
+        this.mSunkenTile=null;        
     }
     
     /**
