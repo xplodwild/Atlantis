@@ -18,7 +18,6 @@
 
 package fr.miage.atlantis.entities;
 
-import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.logic.GameLogic;
 
 /**
@@ -41,9 +40,8 @@ public class Whale extends Animal {
      *
      * @param tile Tile sur lequel on place le SeaSerpent
      */
-    public Whale(GameTile tile) {
+    public Whale() {
         super("Whale", MAX_MOVES);
-        throw new UnsupportedOperationException("Not implemented");
     }
 
     /**

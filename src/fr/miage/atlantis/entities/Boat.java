@@ -15,10 +15,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package fr.miage.atlantis.entities;
 
 import fr.miage.atlantis.board.GameTile;
+import fr.miage.atlantis.logic.GameLogic;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,13 +34,11 @@ public class Boat extends GameEntity {
     /**
      * Constante maximum de joueurs par bateau
      */
-    private static final int MAX_PLAYER_PER_BOAT=3;
-
+    private static final int MAX_PLAYER_PER_BOAT = 3;
     /**
      * Liste des tokens present sur le bateau
      */
     private List<PlayerToken> mOnboard;
-
 
     /**
      * Constructeur du bateau
@@ -49,9 +47,8 @@ public class Boat extends GameEntity {
      */
     public Boat() {
         super("Boat");
-        this.mOnboard=new ArrayList();
+        this.mOnboard = new ArrayList();
     }
-
 
     /**
      * Ajoute un PlayerToken sur le bateau
@@ -59,11 +56,12 @@ public class Boat extends GameEntity {
      * @param token Token a ajouter
      */
     public void addPlayer(PlayerToken token) {
-        if(this.hasRoom()){
+        if (this.hasRoom()) {
             this.mOnboard.add(token);
+        } else {
+            throw new IllegalStateException("Trying to add a player to a full boat!");
         }
     }
-
 
     /**
      * Test si il y a toujours de la place dans le bateau
@@ -71,21 +69,41 @@ public class Boat extends GameEntity {
      * @return true si il y a de la place, false sinon
      */
     public boolean hasRoom() {
-        boolean retour=false;
-        if(Boat.MAX_PLAYER_PER_BOAT > this.mOnboard.size() ){
-            retour=true;
+        boolean retour = false;
+        if (Boat.MAX_PLAYER_PER_BOAT > this.mOnboard.size()) {
+            retour = true;
         }
         return retour;
     }
 
+    @Override
+    public boolean onEntityCross(GameLogic logic, GameEntity ent) {
+        if (ent instanceof PlayerToken) {
+            System.out.println("Player is crossing a boat!");
+            // Un joueur rencontre ce bateau, si il y a de la place, il monte!
+            if (hasRoom()) {
+                PlayerToken pt = (PlayerToken) ent;
+                pt.setState(PlayerToken.STATE_ON_BOAT);
+                addPlayer(pt);
+                System.out.println("Added player token onboard the boat");
+                logic.onBoardBoat(pt, this);
+                return true;
+            } else {
+                // Tant pis.
+                return false;
+            }
+        } else if (ent instanceof Whale) {
+            // Une baleine rencontre le bateau: Les joueurs tombent à l'eau, le bateau sort du jeu.
+            // On notifie via moveToTile pour lancer les éventuels événements liés à ce changement.
+            throw new UnsupportedOperationException("Not implemented");
+        }
 
-
+        return false;
+    }
 
     //--------------------------------------------------------------------------
     //GETTERS
     //--------------------------------------------------------------------------
-
-
     public List<PlayerToken> getOnboardTokens() {
         return this.mOnboard;
     }
