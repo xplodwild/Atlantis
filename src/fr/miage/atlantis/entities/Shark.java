@@ -44,6 +44,8 @@ public class Shark extends Animal {
         super("Shark", MAX_MOVES);
     }
 
+    
+
     /**
      * Resultat d'un croisement entres entitées
      *

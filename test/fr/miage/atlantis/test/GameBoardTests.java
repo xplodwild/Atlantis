@@ -18,6 +18,7 @@
 package fr.miage.atlantis.test;
 
 import fr.miage.atlantis.board.BeachTile;
+import fr.miage.atlantis.board.BorderTile;
 import fr.miage.atlantis.board.ForestTile;
 import fr.miage.atlantis.board.GameBoard;
 import fr.miage.atlantis.board.GameTile;
@@ -32,7 +33,9 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 /**
  *
@@ -67,40 +70,22 @@ public class GameBoardTests extends TestCase {
     // ============
     
     @Test
-    public void testWaterEdge() {
-        // On créé un board avec une seule tile pour le moment
-        BeachTile single = new BeachTile(mGameBoard, 5, 5);
-        assertTrue(mGameBoard.canPlaceTileAt(5, 5));
+    public void testInstanciation() {
+        // On créé un board
+        assertTrue(this.mGameBoard.getFirstTile() instanceof BorderTile);
         
-        // On place la tile
-        mGameBoard.placeTileAt(single);
-        assertTrue(single.isOnBoard());
+        //Teste si la frontièr 47 est présente
+        assertTrue(this.mGameBoard.getTileSet().get("Border #47").isOnBoard());
         
         // La tile est forcément au bord de l'eau
-        assertTrue(mGameBoard.isTileAtWaterEdge(single));
+        assertTrue(this.mGameBoard.getTileSet().get("Random #1").getLeftUpperTile() instanceof WaterTile);
+                      
         
-        // On ne peut plus placer de tiles à cet endroit
-        assertFalse(mGameBoard.canPlaceTileAt(5, 5));
-        
-        // On a bien une tile au niveau Plage
-        assertTrue(mGameBoard.hasTileAtLevel(single.getHeight()));
     }
     
     @Test
     public void testSinkTile() {
-        // On créé un board avec une seule tile pour le moment
-        BeachTile single = new BeachTile(mGameBoard, 5, 5);
-        
-        // On place la tile
-        mGameBoard.placeTileAt(single);
-        assertTrue(single.isOnBoard());
-        
-        // On fait couler la tile
-        mGameBoard.sinkTile(single);
-        assertFalse(single.isOnBoard());
-        
-        // On peut replacer une tile à l'endroit cité
-        assertTrue(mGameBoard.canPlaceTileAt(5, 5));
+       
     }
     
     @Test
@@ -108,23 +93,18 @@ public class GameBoardTests extends TestCase {
         GameTile tiles[] = new GameTile[5];
         
         // Test de position
-        tiles[0] = new BeachTile(mGameBoard, 1, 1);
-        tiles[1] = new ForestTile(mGameBoard, 1, 2);
-        tiles[2] = new MountainTile(mGameBoard, 1, 3);
-        tiles[3] = new WaterTile(mGameBoard, 1, 4);
-        tiles[4] = new WaterTile(mGameBoard, 1, 5);
-        
-        for (int i = 0; i < 4; i++) {
-            GameTile tile = tiles[i];
-            assertEquals(tile.getX(), 1);
-            assertEquals(tile.getY(), i+1);
-        }
+        tiles[0] = new BeachTile(mGameBoard,"Beach Test #1");
+        tiles[1] = new ForestTile(mGameBoard,"Forest Test #1");
+        tiles[2] = new MountainTile(mGameBoard,"Mountain Test #1");
+        tiles[3] = new WaterTile(mGameBoard, "Water Test #1");
+        tiles[4] = new WaterTile(mGameBoard,"Water Test #2");
+    
         
         // Test ajout d'entités sur une tile d'eau
-        Boat b = new Boat(tiles[3]);
-        Shark s = new Shark(tiles[3]);
-        Whale w = new Whale(tiles[3]);
-        SeaSerpent k = new SeaSerpent(tiles[3]);
+        Boat b = new Boat();
+        Shark s = new Shark();
+        Whale w = new Whale();
+        SeaSerpent k = new SeaSerpent();
         tiles[3].addEntity(b);
         
         assertEquals(tiles[3].getEntities().size(), 1);
@@ -171,6 +151,11 @@ public class GameBoardTests extends TestCase {
             assertTrue(true);
         }
         
+        @Rule
+        public ExpectedException exception = ExpectedException.none();
+
+        @Test  
+        exception.expect(IndexOutOfBoundsException.class);
         
     }
     
