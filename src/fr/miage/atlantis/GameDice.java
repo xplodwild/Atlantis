@@ -13,7 +13,7 @@
  * GNU General Public License for more details.
  * 
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
 package fr.miage.atlantis;
@@ -89,6 +89,7 @@ public class GameDice {
         float random=new Random().nextFloat();
         int retour=0;
         for(int i = 0 ; i < this.mProbability.length ; i++){
+            //Si le random est dans une plage on retourne le i correspondant a l'index de cette proba dans le tableau
             if(i>0){
                 if(random>this.mProbability[i-1] && random<this.mProbability[i+1]){
                     retour=i;
