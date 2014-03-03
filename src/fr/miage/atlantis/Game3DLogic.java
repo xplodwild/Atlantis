@@ -18,6 +18,9 @@
 
 package fr.miage.atlantis;
 
+import com.jme3.animation.AnimChannel;
+import com.jme3.animation.AnimControl;
+import com.jme3.animation.AnimEventListener;
 import com.jme3.cinematic.MotionPath;
 import com.jme3.cinematic.MotionPathListener;
 import com.jme3.cinematic.events.MotionEvent;
@@ -28,12 +31,14 @@ import com.jme3.scene.Node;
 import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.board.TileAction;
 import fr.miage.atlantis.board.WaterTile;
+import fr.miage.atlantis.entities.Boat;
 import fr.miage.atlantis.entities.GameEntity;
 import fr.miage.atlantis.entities.PlayerToken;
 import fr.miage.atlantis.graphics.AnimationBrain;
 import fr.miage.atlantis.graphics.Game3DRenderer;
 import fr.miage.atlantis.graphics.models.AbstractTileModel;
 import fr.miage.atlantis.graphics.models.AnimatedModel;
+import fr.miage.atlantis.graphics.models.PlayerModel;
 import fr.miage.atlantis.logic.GameLogic;
 
 /**
@@ -57,8 +62,8 @@ public class Game3DLogic extends GameLogic {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public void onPlayTileAction(TileAction t) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void onPlayTileAction(GameTile tile, TileAction action) {
+        action.use(tile, this);
     }
 
     @Override
@@ -136,11 +141,7 @@ public class Game3DLogic extends GameLogic {
                     // On fait en sorte que les nouveaux nageurs nagent
                     for (GameEntity ent : newTile.getEntities()) {
                         if (ent instanceof PlayerToken) {
-                            Node n = mRenderer.getEntitiesRenderer().getNodeFromEntity(ent);
-                            String animation = AnimationBrain.getIdleAnimation(ent);
-                            if (animation != null) {
-                                ((AnimatedModel) n).playAnimation(animation);
-                            }
+                            onUnitMove(ent, newTile);
                         }
                     }
 
@@ -156,6 +157,10 @@ public class Game3DLogic extends GameLogic {
 
     public void onEntityAction(GameEntity source, GameEntity target, int action) {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void onEntitySpawn(GameEntity spawned) {
+        mRenderer.getEntitiesRenderer().addEntity(spawned);
     }
 
     private MotionEvent generateTileSinkMotion(Node tileNode) {
@@ -177,14 +182,24 @@ public class Game3DLogic extends GameLogic {
         final MotionPath path = new MotionPath();
         path.addWayPoint(entNode.getLocalTranslation());
         path.addWayPoint(tileNode.getTileTopCenter());
+        path.addWayPoint(tileNode.getTileTopCenter().add(0, 0, 1f));
         path.setPathSplineType(Spline.SplineType.Linear);
 
         // On créé le contrôleur
         final MotionEvent motionControl = new MotionEvent(entNode, path);
-        motionControl.setDirectionType(MotionEvent.Direction.PathAndRotation);
+        motionControl.setDirectionType(MotionEvent.Direction.LookAt);
         motionControl.setRotation(new Quaternion().fromAngleNormalAxis(0, Vector3f.UNIT_Y));
         motionControl.setInitialDuration(2f);
 
         return motionControl;
+    }
+
+    @Override
+    public void onBoardBoat(final PlayerToken player, Boat b) {
+        final PlayerModel model = (PlayerModel) mRenderer.getEntitiesRenderer().getNodeFromEntity(player);
+        String animation = AnimationBrain.getIdleAnimation(player);
+        if (animation != null) {
+            model.playAnimation(animation);
+        }
     }
 }
