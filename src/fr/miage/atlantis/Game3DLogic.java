@@ -24,6 +24,9 @@ import com.jme3.animation.AnimEventListener;
 import com.jme3.cinematic.MotionPath;
 import com.jme3.cinematic.MotionPathListener;
 import com.jme3.cinematic.events.MotionEvent;
+import com.jme3.effect.ParticleEmitter;
+import com.jme3.material.Material;
+import com.jme3.material.RenderState;
 import com.jme3.math.Spline;
 import com.jme3.scene.Node;
 import fr.miage.atlantis.board.GameTile;
@@ -35,6 +38,7 @@ import fr.miage.atlantis.entities.PlayerToken;
 import fr.miage.atlantis.entities.Shark;
 import fr.miage.atlantis.graphics.AnimationBrain;
 import fr.miage.atlantis.graphics.Game3DRenderer;
+import fr.miage.atlantis.graphics.ParticlesFactory;
 import fr.miage.atlantis.graphics.models.AbstractTileModel;
 import fr.miage.atlantis.graphics.models.AnimatedModel;
 import fr.miage.atlantis.graphics.models.PlayerModel;
@@ -133,7 +137,15 @@ public class Game3DLogic extends GameLogic {
             throw new IllegalStateException("Aucune node 3D trouvée pour la tile de destination!");
         }
 
+        // Effet visuel de splash d'eau
+        Node splashEffect = ParticlesFactory.makeWaterSplash(mRenderer.getAssetManager());
+        splashEffect.setLocalTranslation(tileNode.getTileTopCenter());
+        mRenderer.getRootNode().attachChild(splashEffect);
+        ParticlesFactory.emitAllParticles(splashEffect);
+
+        // Génération du mouvement de la tile
         final MotionEvent motionEvent = generateTileSinkMotion((Node) tileNode);
+
         // Callback lorsque l'animation est terminée
         motionEvent.getPath().addListener(new MotionPathListener() {
             public void onWayPointReach(MotionEvent control, int wayPointIndex) {
@@ -217,7 +229,7 @@ public class Game3DLogic extends GameLogic {
 
         // On créé le contrôleur
         final MotionEvent motionControl = new MotionEvent(tileNode, path);
-        motionControl.setInitialDuration(1f);
+        motionControl.setInitialDuration(0.5f);
 
         return motionControl;
     }
