@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package fr.miage.atlantis.logic;
 
 import fr.miage.atlantis.Player;
@@ -43,9 +42,7 @@ public class GameTurn implements GameRenderListener {
     private GameLogic mController;
     private boolean mDiceRolled;
     private boolean mTurnIsOver;
-
     private int mRemainingMoves;
-
 
     /**
      * Constructeur de GameTurn
@@ -54,11 +51,11 @@ public class GameTurn implements GameRenderListener {
      * @param p Joueur jouant le tour
      */
     public GameTurn(GameLogic controller, Player p) {
-        this.mPlayer=p;
-        this.mController=controller;
-        this.mRemainingMoves=3;
-        this.mDiceRolled=false;
-        this.mSunkenTile=null;
+        mPlayer = p;
+        mController = controller;
+        mRemainingMoves = 3;
+        mDiceRolled = false;
+        mSunkenTile = null;
     }
 
     /**
@@ -85,7 +82,6 @@ public class GameTurn implements GameRenderListener {
         throw new UnsupportedOperationException("Not implemented");
     }
 
-
     /**
      * Deplace une Entity sur le tile donnée
      *
@@ -96,19 +92,15 @@ public class GameTurn implements GameRenderListener {
         throw new UnsupportedOperationException("Not implemented");
     }
 
-
-
     public int rollDice() {
-        this.mDiceRolled=true;
+        mDiceRolled = true;
         throw new UnsupportedOperationException("Not implemented");
     }
 
-
-
     public boolean hasSunkLandTile() {
-        boolean sunk=false;
-        if(this.mSunkenTile!=null){
-            sunk=true;
+        boolean sunk = false;
+        if (mSunkenTile != null) {
+            sunk = true;
         }
         return sunk;
     }
@@ -149,29 +141,23 @@ public class GameTurn implements GameRenderListener {
         throw new UnsupportedOperationException("Not implemented");
     }
 
-
-
-
     //--------------------------------------------------------------------------
     //GETTERS                                                                  |
     //--------------------------------------------------------------------------
-
-
-    public Player getPlayer(){
-        return this.mPlayer;
+    public Player getPlayer() {
+        return mPlayer;
     }
 
     public int getRemainingMoves() {
-        return this.mRemainingMoves;
+        return mRemainingMoves;
     }
 
-    public boolean getEndOfTurn(){
-        return this.mTurnIsOver;
+    public boolean getEndOfTurn() {
+        return mTurnIsOver;
     }
 
     public boolean hasRolledDice() {
-        return this.mDiceRolled;
+        return mDiceRolled;
     }
     //--------------------------------------------------------------------------
 }
-

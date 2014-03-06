@@ -36,28 +36,22 @@ public abstract class GameLogic implements GameTurnListener {
      * Plateau du jeu
      */
     private GameBoard mBoard;
-
     /**
      * Dés du jeu
      */
     private GameDice mDice;
-
     /**
      * Log des tours de jeu
      */
     private GameLog mLog;
-
     /**
      * Tour de jeu actuel
      */
     private GameTurn mCurrentTurn;
-
     /**
      * Tableau des joueurs
      */
     private Player[] mPlayers;
-
-
 
     /**
      * Constructeur de GameLogic
@@ -69,7 +63,6 @@ public abstract class GameLogic implements GameTurnListener {
         mLog = new GameLog();
     }
 
-
     /**
      * Initialise les joueurs du jeu
      *
@@ -78,34 +71,32 @@ public abstract class GameLogic implements GameTurnListener {
     public void prepareGame(String[] players) {
         mPlayers = new Player[players.length];
         for (int i = 0; i < mPlayers.length; i++) {
-            mPlayers[i] = new Player(players[i], i+1);
+            mPlayers[i] = new Player(players[i], i + 1);
         }
     }
-
 
     /**
      * Initialise le premier tour de jeu
      *
      */
     public void startGame() {
-        Player p=this.mPlayers[0];
-        this.mCurrentTurn=new GameTurn(this,p);
-        this.mCurrentTurn.startTurn();
+        Player p = mPlayers[0];
+        mCurrentTurn = new GameTurn(this, p);
+        mCurrentTurn.startTurn();
     }
-
 
     /**
      * Stocke le tour présent, génère le suivant et le démarre via start()
      *
      */
     public void nextTurn() {
-        this.mLog.logTurn(mCurrentTurn);
-        Player p=this.mCurrentTurn.getPlayer();
-        this.mCurrentTurn=new GameTurn(this,this.nextPlayer(p));
-        //Lance le nouveau tour
-        this.mCurrentTurn.startTurn();                                    //@TODO : Verifier si cela se fait bien ici
-    }
+        mLog.logTurn(mCurrentTurn);
+        Player p = mCurrentTurn.getPlayer();
+        mCurrentTurn = new GameTurn(this, this.nextPlayer(p));
 
+        // Lance le nouveau tour
+        mCurrentTurn.startTurn();
+    }
 
     /**
      * Retourne le joueur suivant
@@ -113,20 +104,19 @@ public abstract class GameLogic implements GameTurnListener {
      * @param p Joueur Courant
      * @return Joueur suivant
      */
-    public Player nextPlayer(Player p){
-        Player next=null;
-        for(int i = 0 ; i < this.mPlayers.length ; i++){
-            if(p.equals(this.mPlayers[i])){
-                if(i + 1 == this.mPlayers.length){
-                    next=this.mPlayers[0];
-                }else{
-                    next=this.mPlayers[i+1];
+    public Player nextPlayer(Player p) {
+        Player next = null;
+        for (int i = 0; i < mPlayers.length; i++) {
+            if (p.equals(mPlayers[i])) {
+                if (i + 1 == mPlayers.length) {
+                    next = mPlayers[0];
+                } else {
+                    next = mPlayers[i + 1];
                 }
             }
         }
         return next;
     }
-
 
     /**
      * Retourne true si le jeu est bien terminé
@@ -140,7 +130,6 @@ public abstract class GameLogic implements GameTurnListener {
         return false;
     }
 
-
     /**
      * Actions a effectuer lors du deplacement de ent sur dest.
      *
@@ -152,14 +141,9 @@ public abstract class GameLogic implements GameTurnListener {
         ent.moveToTile(this, dest);
     }
 
-
-
-
     //--------------------------------------------------------------------------
     //GETTERS                                                                  |
     //--------------------------------------------------------------------------
-
-
     public GameBoard getBoard() {
         return mBoard;
     }
@@ -169,14 +153,9 @@ public abstract class GameLogic implements GameTurnListener {
     }
     //--------------------------------------------------------------------------
 
-
-
-
     //--------------------------------------------------------------------------
     //METHODES ABSTRAITES                                                      |
     //--------------------------------------------------------------------------
-
-
     /**
      * Methode permettant de lancer une partie
      */
@@ -194,12 +173,14 @@ public abstract class GameLogic implements GameTurnListener {
 
     /**
      * Signale au moteur de logique qu'on a pické une entité
+     *
      * @param ent L'entité pickée
      */
     public abstract void onEntityPicked(GameEntity ent);
 
     /**
      * Signale au moteur de logique qu'on a pické une tile
+     *
      * @param tile La tile pickée
      */
     public abstract void onTilePicked(GameTile tile);
