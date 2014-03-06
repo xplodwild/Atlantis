@@ -32,7 +32,9 @@ import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
-import de.lessvoid.nifty.elements.MouseClickMethods;
+import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
+import fr.miage.atlantis.graphics.models.EmptyTileModel;
 import fr.miage.atlantis.graphics.models.TileModel;
 
 /**
@@ -56,7 +58,7 @@ public class InputActionListener {
 
     private AnalogListener mMouseHoverListener = new AnalogListener() {
 
-        private Geometry mPreviousGeometry = null;
+        private Spatial mPreviousGeometry = null;
         private Material mOriginalMaterial = null;
 
         public void onAnalog(String name, float value, float tpf) {
@@ -68,7 +70,7 @@ public class InputActionListener {
             // On cherche si on a un nouvel élément
             PickingResult result = performPicking();
 
-            if (result != null) {
+            if (result != null && result.geometry != null) {
                 // On a un résultat, on l'highlight
                 Material mat = result.geometry.getMaterial();
                 mOriginalMaterial = mat.clone();
@@ -142,7 +144,19 @@ public class InputActionListener {
             CollisionResult result = results.getClosestCollision();
 
             PickingResult output = new PickingResult();
-            output.geometry = result.getGeometry();
+
+            // On vérifie si le noeud pické est un shell ou non (exemples les tiles vides, voir
+            // EmptyTileModel)
+            if (result.getGeometry().getParent().getUserDataKeys().contains(EmptyTileModel.DATA_IS_TILE_SHELL)) {
+                EmptyTileModel etm = (EmptyTileModel) result.getGeometry().getParent().getUserData(EmptyTileModel.DATA_IS_TILE_SHELL);
+
+                // Hack: On retrouve le vrai mesh au lieu du shell.
+                // TODO: Exporter probelement de blender
+                Spatial spatial = ((Node) ((Node) etm.getModel()).getChild(1)).getChild(0);
+                output.geometry = ((Geometry) spatial);
+            } else {
+                output.geometry = result.getGeometry();
+            }
             output.source = source;
 
             return output;
