@@ -153,8 +153,8 @@ public class InputActionListener {
                 EmptyTileModel etm = (EmptyTileModel) result.getGeometry().getParent().getUserData(EmptyTileModel.DATA_IS_TILE_SHELL);
 
                 // Hack: On retrouve le vrai mesh au lieu du shell.
-                // TODO: Exporter proprement de blender, parce qu'on a une CameraNode et LightNode la
-                Spatial spatial = ((Node) ((Node) etm.getModel()).getChild(1)).getChild(0);
+                // TODO: Exporter proprement de blender
+                Spatial spatial = ((Node) ((Node) etm.getModel()).getChild(0)).getChild(0);
                 output.geometry = ((Geometry) spatial);
             } else {
                 output.geometry = result.getGeometry();

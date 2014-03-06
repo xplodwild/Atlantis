@@ -25,6 +25,7 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue;
+import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import fr.miage.atlantis.graphics.ModelCache;
 
@@ -61,15 +62,20 @@ public class EmptyTileModel extends StaticModel implements AbstractTileModel {
         } else {
             model = model.clone(false);
         }
+
         model.setUserData(DATA_IS_TILE_SHELL, this);
         model.setQueueBucket(RenderQueue.Bucket.Sky);
         model.setLocalTranslation(24.0f, 0.0f, 20.9999f);
         model.setLocalScale(10.0f, 5.0f, 10.01f);
-        model.setName("Collision Shell " + tileName);
+
+        // On attache le shell a la node, meme s'il est invisible
         attachChild(model);
-        getModel().setName("Model Spatial " + tileName);
-        getModelNode().setName("Model Node " + tileName);
-        setName("Root Node " + tileName);
+
+        // Set tile name data
+        Node meshNode = ((Node) ((Node) getModel()).getChild(0));
+        meshNode.setName(tileName);
+        meshNode.setUserData(TileModel.DATA_IS_TILE, true);
+        meshNode.setUserData(TileModel.DATA_TILE_NAME, tileName);
     }
 
     public Vector3f getTileTopCenter() {
