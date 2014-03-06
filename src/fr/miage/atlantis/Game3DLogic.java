@@ -37,6 +37,7 @@ import fr.miage.atlantis.entities.PlayerToken;
 import fr.miage.atlantis.entities.Shark;
 import fr.miage.atlantis.graphics.AnimationBrain;
 import fr.miage.atlantis.graphics.Game3DRenderer;
+import fr.miage.atlantis.graphics.InputActionListener;
 import fr.miage.atlantis.graphics.models.AbstractTileModel;
 import fr.miage.atlantis.graphics.models.AnimatedModel;
 import fr.miage.atlantis.graphics.models.PlayerModel;
@@ -255,6 +256,28 @@ public class Game3DLogic extends GameLogic {
     public void onUnitDie(GameEntity zombie) {
         zombie.getTile().removeEntity(zombie);
         mRenderer.getEntitiesRenderer().removeEntity(zombie);
+    }
+
+    @Override
+    public void requestEntityPick() {
+        // On a besoin de picker une entité
+        mRenderer.getInputListener().requestPicking(InputActionListener.REQUEST_ENTITY_PICK);
+    }
+
+    @Override
+    public void requestTilePick() {
+        // On a besoin de picker une tile
+        mRenderer.getInputListener().requestPicking(InputActionListener.REQUEST_TILE_PICK);
+    }
+
+    @Override
+    public void onEntityPicked(GameEntity ent) {
+        System.out.println("Entity picked!");
+    }
+
+    @Override
+    public void onTilePicked(GameTile tile) {
+        System.out.println("Tile " + tile.getName() + " picked!");
     }
 }
 

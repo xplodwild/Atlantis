@@ -98,6 +98,14 @@ public class Game3DRenderer extends SimpleApplication {
         return mEntitiesRenderer;
     }
 
+    public InputActionListener getInputListener() {
+        return mInputListener;
+    }
+
+    public Game3DLogic getLogic() {
+        return mParent;
+    }
+
     int FRAME_COUNT = 0;
 
     @Override
@@ -117,6 +125,9 @@ public class Game3DRenderer extends SimpleApplication {
         } else if (FRAME_COUNT == 100) {
             Map<String, GameTile> tiles = mParent.getBoard().getTileSet();
             mParent.onSinkTile(tiles.get("Beach #4"));
+        } else if (FRAME_COUNT == 150) {
+            System.out.println("==> TEST: ASKING FOR TILE PICKING!");
+            mParent.requestTilePick();
         }
     }
 

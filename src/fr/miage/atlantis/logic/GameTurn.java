@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2014 Loris Durand, Guillaume Lesniak, Cristian Sanna,
  *                    Lucie Wiemert
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *  
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -27,10 +27,10 @@ import java.util.List;
 
 /**
  * Classe representant un tour de jeu
- * 
+ *
  * @author AtlantisTeam
  * @version 1.0
- * @date 03/03/2014  
+ * @date 03/03/2014
  */
 public class GameTurn implements GameRenderListener {
 
@@ -43,14 +43,14 @@ public class GameTurn implements GameRenderListener {
     private GameLogic mController;
     private boolean mDiceRolled;
     private boolean mTurnIsOver;
-    
+
     private int mRemainingMoves;
-    
-    
+
+
     /**
      * Constructeur de GameTurn
-     * 
-     * @param controller 
+     *
+     * @param controller
      * @param p Joueur jouant le tour
      */
     public GameTurn(GameLogic controller, Player p) {
@@ -58,53 +58,53 @@ public class GameTurn implements GameRenderListener {
         this.mController=controller;
         this.mRemainingMoves=3;
         this.mDiceRolled=false;
-        this.mSunkenTile=null;        
+        this.mSunkenTile=null;
     }
-    
+
     /**
      * Demarre le début du tour de jeu du joueur courant
      */
     public void startTurn() {
-        
+
         //Peu jouer une carte TileAction dans son pool de tiles
-        
+
         //3 Déplacement de pions
-        
+
         //Coule un Tile
-        
+
         //Effectue l'action du tile ou le stocke
-        
+
         //Roll the dice
-        
+
         //Le cas echeant bouge une entity
-        
+
         //Le cas echeant execute les actions entity necessaires
-        
+
         //Met l'attribut mTurnIsOver a true pour boucler le tour
-        
+
         throw new UnsupportedOperationException("Not implemented");
     }
-    
-    
+
+
     /**
      * Deplace une Entity sur le tile donnée
-     * 
+     *
      * @param ent Entity a deplacer
      * @param dest Tile destination
      */
     public void moveEntity(GameEntity ent, GameTile dest) {
         throw new UnsupportedOperationException("Not implemented");
     }
-    
-    
-    
+
+
+
     public int rollDice() {
         this.mDiceRolled=true;
         throw new UnsupportedOperationException("Not implemented");
     }
-    
-    
-    
+
+
+
     public boolean hasSunkLandTile() {
         boolean sunk=false;
         if(this.mSunkenTile!=null){
@@ -112,15 +112,15 @@ public class GameTurn implements GameRenderListener {
         }
         return sunk;
     }
-    
+
     public void sinkLandTile(GameTile tile) {
         throw new UnsupportedOperationException("Not implemented");
     }
-    
+
     public void useRemoteTile(TileAction action) {
         throw new UnsupportedOperationException("Not implemented");
     }
-    
+
     public void useLocalTile(TileAction action) {
         throw new UnsupportedOperationException("Not implemented");
     }
@@ -148,27 +148,27 @@ public class GameTurn implements GameRenderListener {
     public void onEntityActionFinished() {
         throw new UnsupportedOperationException("Not implemented");
     }
-    
-    
-    
-    
+
+
+
+
     //--------------------------------------------------------------------------
     //GETTERS                                                                  |
     //--------------------------------------------------------------------------
-    
-    
+
+
     public Player getPlayer(){
         return this.mPlayer;
     }
-    
+
     public int getRemainingMoves() {
         return this.mRemainingMoves;
     }
-    
+
     public boolean getEndOfTurn(){
         return this.mTurnIsOver;
     }
-    
+
     public boolean hasRolledDice() {
         return this.mDiceRolled;
     }

@@ -34,6 +34,8 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import fr.miage.atlantis.board.GameTile;
+import fr.miage.atlantis.entities.GameEntity;
 import fr.miage.atlantis.graphics.models.EmptyTileModel;
 import fr.miage.atlantis.graphics.models.TileModel;
 
@@ -42,12 +44,18 @@ import fr.miage.atlantis.graphics.models.TileModel;
  */
 public class InputActionListener {
 
+    private final static int REQUEST_NONE = -1;
+    public final static int REQUEST_ENTITY_PICK = 0;
+    public final static int REQUEST_TILE_PICK = 1;
+    private final static int REQUEST_MAX = 2;
+
     private final static String INPUTMAP_MOUSE_HOVER = "mouse_hover";
     private final static String INPUTMAP_MOUSE_CLICK = "mouse_click";
 
     private InputManager mInputManager;
     private Game3DRenderer mRenderer;
     private PickingResult mPickingResult;
+    private int mPickingRequest;
 
     private class PickingResult {
         public final static int SOURCE_BOARD = 0;
@@ -68,15 +76,17 @@ public class InputActionListener {
                 mPreviousGeometry.setMaterial(mOriginalMaterial);
             }
 
-            // On cherche si on a un nouvel élément
-            PickingResult result = performPicking();
+            if (mPickingRequest != REQUEST_NONE) {
+                // On cherche si on a un nouvel élément
+                PickingResult result = performPicking();
 
-            if (result != null && result.geometry != null) {
-                // On a un résultat, on l'highlight
-                Material mat = result.geometry.getMaterial();
-                mOriginalMaterial = mat.clone();
-                if (highlightMaterial(mat)) {
-                    mPreviousGeometry = result.geometry;
+                if (result != null && result.geometry != null) {
+                    // On a un résultat, on l'highlight
+                    Material mat = result.geometry.getMaterial();
+                    mOriginalMaterial = mat.clone();
+                    if (highlightMaterial(mat)) {
+                        mPreviousGeometry = result.geometry;
+                    }
                 }
             }
         }
@@ -84,13 +94,26 @@ public class InputActionListener {
 
     private ActionListener mMouseClickListener = new ActionListener() {
         public void onAction(String name, boolean isPressed, float tpf) {
-            if (isPressed) {
+            // Si on clique et qu'on a effectivement une requête de picking
+            if (isPressed && mPickingRequest != REQUEST_NONE) {
+                // On effectue le picking
                 PickingResult result = performPicking();
 
                 if (result != null) {
-                    if (result.source == PickingResult.SOURCE_BOARD) {
-                        System.out.println(result.geometry.getParent().getUserData(TileModel.DATA_TILE_NAME));
+                    if (mPickingRequest == REQUEST_ENTITY_PICK) {
+                        // On retrouve l'entité et on la passe
+                        GameEntity ent = mRenderer.getEntitiesRenderer()
+                                .getEntityFromNode(result.geometry.getParent());
+                        mRenderer.getLogic().onEntityPicked(ent);
+                    } else if (mPickingRequest == REQUEST_TILE_PICK) {
+                        // On retrouve la tile et on la passe
+                        String tileName = result.geometry.getParent().getUserData(TileModel.DATA_TILE_NAME);
+                        GameTile tile = mRenderer.getLogic().getBoard().getTileSet().get(tileName);
+                        mRenderer.getLogic().onTilePicked(tile);
                     }
+
+                    // On a complété la requête
+                    mPickingRequest = REQUEST_NONE;
                 }
             }
         }
@@ -100,8 +123,9 @@ public class InputActionListener {
         mInputManager = inputManager;
         mRenderer = renderer;
         mPickingResult = new PickingResult();
+        mPickingRequest = REQUEST_NONE;
 
-        // Picking 3D souris : écoute sur X et Y
+        // Picking 3D souris : écoute sur X et Y positif et négatif
         inputManager.addMapping(INPUTMAP_MOUSE_HOVER,
                 new MouseAxisTrigger(MouseInput.AXIS_X, true),
                 new MouseAxisTrigger(MouseInput.AXIS_X, false),
@@ -115,6 +139,26 @@ public class InputActionListener {
         inputManager.addListener(mMouseClickListener, INPUTMAP_MOUSE_CLICK);
     }
 
+    /**
+     * Demande à ce listener d'effectuer un picking en particulier. Le résultat sera rapporté
+     * au GameLogic correspondant.
+     * @param request L'une des constantes REQUEST_** de cette classe
+     */
+    public void requestPicking(int request) {
+        if (request < 0 || request >= REQUEST_MAX) {
+            throw new IllegalArgumentException("Request must be one of InputActionListener.REQUEST_**");
+        }
+
+        // En théorie quand on request un picking, on est en état "NONE", c'est-à-dire qu'aucune
+        // autre requête n'est en cours. Si on passe d'une requête à une autre, on a peut être
+        // un événement d'attente manquant.
+        if (mPickingRequest != REQUEST_NONE) {
+            System.out.println("WARN: Previous picking request wasn't complete! An event might be missing!");
+        }
+
+        mPickingRequest = request;
+    }
+
     private PickingResult performPicking() {
         CollisionResults results = new CollisionResults();
 
@@ -126,14 +170,17 @@ public class InputActionListener {
                 new Vector2f(click2d.x, click2d.y), 1f).subtractLocal(click3d).normalizeLocal();
         Ray ray = new Ray(click3d, dir);
 
-        // On teste d'abord si on touche une entité (elles sont toujours par dessus les tiles)
-        mRenderer.getEntitiesRenderer().updateModelBound();
-        mRenderer.getEntitiesRenderer().collideWith(ray, results);
-        PickingResult output = processPickingOutput(results, PickingResult.SOURCE_ENTITY);
+        PickingResult output = null;
+        if (mPickingRequest == REQUEST_ENTITY_PICK) {
+            // On teste si on touche une entité
+            mRenderer.getEntitiesRenderer().updateModelBound();
+            mRenderer.getEntitiesRenderer().collideWith(ray, results);
 
-        if (output == null) {
-            // Rien sur les entités. On teste si on touche un élément du plateau (tiles).
+            output = processPickingOutput(results, PickingResult.SOURCE_ENTITY);
+        } else if (mPickingRequest == REQUEST_TILE_PICK) {
+            // On teste si on touche un élément du plateau (tiles).
             mRenderer.getBoardRenderer().collideWith(ray, results);
+
             output = processPickingOutput(results, PickingResult.SOURCE_BOARD);
         }
 

@@ -44,11 +44,13 @@ public class EntitiesRenderer extends Node {
     private BoardRenderer mBoardRenderer;
 
     private Map<GameEntity, Node> mEntityToNode;
+    private Map<Node, GameEntity> mNodeToEntity;
 
     public EntitiesRenderer(AssetManager am, BoardRenderer board) {
         mAssetManager = am;
         mBoardRenderer = board;
         mEntityToNode = new HashMap<GameEntity, Node>();
+        mNodeToEntity = new HashMap<Node, GameEntity>();
     }
 
     public void addEntity(GameEntity ent) {
@@ -68,6 +70,7 @@ public class EntitiesRenderer extends Node {
         }
 
         mEntityToNode.put(ent, output);
+        mNodeToEntity.put(output, ent);
 
         attachChild(output);
 
@@ -81,10 +84,15 @@ public class EntitiesRenderer extends Node {
         Node node = mEntityToNode.get(ent);
         detachChild(node);
         mEntityToNode.remove(ent);
+        mNodeToEntity.remove(node);
     }
 
     public Node getNodeFromEntity(GameEntity ent) {
         return mEntityToNode.get(ent);
+    }
+
+    public GameEntity getEntityFromNode(Node node) {
+        return mNodeToEntity.get(node);
     }
 
     private Node addBoat(Boat b) {
