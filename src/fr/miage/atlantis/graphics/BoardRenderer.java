@@ -170,7 +170,7 @@ public class BoardRenderer extends Node {
         // Si c'est une tile au dessus de l'eau, on utilise un mesh avec la
         // texture qui va bien. Sinon, on fait un contour seulement.
         if (tile.getHeight() > 0) {
-            output = new TileModel(tile.getHeight(), mAssetManager);
+            output = new TileModel(tile.getName(), tile.getHeight(), mAssetManager);
         } else {
             // On détermine la couleur en fonction du type de tile
             ColorRGBA color = ColorRGBA.White;
@@ -183,7 +183,7 @@ public class BoardRenderer extends Node {
                 //color = wt.isBeginningWithSeaShark() ? ColorRGBA.Magenta : color;
             }
 
-            output = new EmptyTileModel(mAssetManager, color);
+            output = new EmptyTileModel(tile.getName(), mAssetManager, color);
         }
 
         // On positionne la tile

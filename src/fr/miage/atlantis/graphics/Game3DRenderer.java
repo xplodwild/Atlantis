@@ -19,13 +19,12 @@
 package fr.miage.atlantis.graphics;
 
 import com.jme3.app.SimpleApplication;
-import com.jme3.input.MouseInput;
-import com.jme3.input.controls.MouseAxisTrigger;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Node;
+import com.jme3.scene.plugins.blender.BlenderModelLoader;
 import fr.miage.atlantis.Game3DLogic;
 import fr.miage.atlantis.Player;
 import fr.miage.atlantis.board.GameTile;
@@ -51,6 +50,10 @@ public class Game3DRenderer extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
+        // Pré-configuration
+        assetManager.registerLoader(BlenderModelLoader.class, "blend");
+
+        // Configuration camera
         flyCam.setMoveSpeed(200.0f);
         cam.setFrustumFar(4000.0f);
         cam.setLocation(new Vector3f(-398.292f, 572.2102f, 176.78018f));

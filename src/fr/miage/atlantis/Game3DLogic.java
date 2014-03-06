@@ -100,6 +100,9 @@ public class Game3DLogic extends GameLogic {
                     // faire la suite des opérations via onUnitMoveFinished.
                     ent.moveToTile(Game3DLogic.this, dest);
 
+                    // Remise à zéro de l'orientation
+                    entNode.setLocalRotation(Quaternion.IDENTITY);
+
                     // On est à la fin du chemin, mise à jour de l'animation de l'entité bougée
                     String animation = AnimationBrain.getIdleAnimation(ent);
 
