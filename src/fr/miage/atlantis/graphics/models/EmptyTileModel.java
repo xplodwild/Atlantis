@@ -36,6 +36,8 @@ public class EmptyTileModel extends StaticModel implements AbstractTileModel {
     // Détermine si la tile pickée est juste un cocon autour de la tile
     public final static String DATA_IS_TILE_SHELL = "is_tile_shell";
 
+    private final static String COLLISION_MESH_FILE_NAME = "Models/collision_tile.mesh.xml";
+
     public EmptyTileModel(final String tileName, AssetManager assetManager, ColorRGBA color) {
         super(assetManager, "Models/hexagon.blend", null, null);
 
@@ -52,11 +54,12 @@ public class EmptyTileModel extends StaticModel implements AbstractTileModel {
         // On utilise une tile pleine comme modèle de collision, car le picking de jME utilise un
         // cast au niveau polygone. Du coup, il ne prend pas le milieu des tiles vides, ce qui
         // est embêtant.
-        // TODO: Le cache empêche le model de fonctionner pour une raison étrange
-        Spatial model = null; //ModelCache.getInstance().getModel("Models/collision_tile.mesh.xml");
+        Spatial model = ModelCache.getInstance().getModel(COLLISION_MESH_FILE_NAME);
         if (model == null) {
-            model = assetManager.loadModel("Models/collision_tile.mesh.xml");
-            //ModelCache.getInstance().putModel("Models/collision_tile.mesh.xml", model);
+            model = assetManager.loadModel(COLLISION_MESH_FILE_NAME);
+            ModelCache.getInstance().putModel(COLLISION_MESH_FILE_NAME, model);
+        } else {
+            model = model.clone(false);
         }
         model.setUserData(DATA_IS_TILE_SHELL, this);
         model.setQueueBucket(RenderQueue.Bucket.Sky);
