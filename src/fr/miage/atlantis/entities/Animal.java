@@ -18,9 +18,6 @@
 
 package fr.miage.atlantis.entities;
 
-import fr.miage.atlantis.board.GameTile;
-import fr.miage.atlantis.logic.GameLogic;
-
 /**
  * Classe Animal, reprensente les entités Animales que l'on place sur le Plateau de jeu
  *
@@ -59,14 +56,4 @@ public abstract class Animal extends GameEntity {
     public int getMaxMoves() {
         return mMaxMoves;
     }
-
-
-
-
-    //--------------------------------------------------------------------------
-    //METHODES ABSTRAITES                                                      |
-    //--------------------------------------------------------------------------
-
-
-
 }

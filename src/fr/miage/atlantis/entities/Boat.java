@@ -17,7 +17,6 @@
  */
 package fr.miage.atlantis.entities;
 
-import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.logic.GameLogic;
 import java.util.ArrayList;
 import java.util.List;

@@ -67,6 +67,7 @@ public class PlayerToken extends GameEntity {
         mPlayer = p;
     }
 
+    
     @Override
     public boolean moveToTile(GameLogic logic, GameTile tile) {
         boolean result = super.moveToTile(logic, tile);
@@ -82,6 +83,7 @@ public class PlayerToken extends GameEntity {
     }
 
 
+    
 
     //--------------------------------------------------------------------------
     //GETTERS                                                                  |

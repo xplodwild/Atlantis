@@ -18,7 +18,6 @@
 
 package fr.miage.atlantis.entities;
 
-import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.logic.GameLogic;
 
 /**
@@ -45,6 +44,7 @@ public class SeaSerpent extends Animal {
         super("Serpent de mer", MAX_MOVES);
     }
 
+    
     /**
      * Resultat d'un croisement entres entitées
      *
@@ -53,6 +53,8 @@ public class SeaSerpent extends Animal {
      */
     @Override
     public boolean onEntityCross(GameLogic logic, GameEntity ent) {
+        //TODO : implement function
+        
         throw new UnsupportedOperationException("Not implemented");
     }
 }

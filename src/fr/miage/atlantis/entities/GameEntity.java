@@ -59,6 +59,7 @@ public class GameEntity {
         mName = name;
     }
 
+    
     /**
      * Deplace cette entité sur le Tile tile, avec la logique de jeu logic
      *
@@ -90,17 +91,18 @@ public class GameEntity {
         return somethingHappened;
     }
 
+    
     /**
      * Tue l'unité visée
      *
      * @param logic logique de jeu tuant l'unité
      */
-    public void die(GameLogic logic) {
-        // TODO: Animations
+    public void die(GameLogic logic) {        
         // On supprime le perso du jeu
         logic.onUnitDie(this);
     }
 
+    
     /**
      * Spawn une unité.
      *
@@ -110,12 +112,29 @@ public class GameEntity {
         throw new UnsupportedOperationException("Not implemented");
     }
 
-    public GameTile getTile() {
-        return mTile;
-    }
-
+    
+    /**
+     * Actions a effectuer lors d'un croisement de deux Entity this et ent
+     * 
+     * @param logic Logique de jeu a adopter
+     * @param ent entity qui croise this
+     * @return 
+     */
     public boolean onEntityCross(GameLogic logic, GameEntity ent) {
         // Par défaut, on ne fait rien
         return false;
     }
+    
+    
+    
+    
+    //--------------------------------------------------------------------------
+    //GETTERS                                                                  |
+    //--------------------------------------------------------------------------
+    
+    
+    public GameTile getTile() {
+        return mTile;
+    }
+    //--------------------------------------------------------------------------   
 }

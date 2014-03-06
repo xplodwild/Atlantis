@@ -18,7 +18,6 @@
 
 package fr.miage.atlantis.entities;
 
-import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.logic.GameLogic;
 
 /**
@@ -35,6 +34,7 @@ public class Shark extends Animal {
      */
     private final static int MAX_MOVES = 2;
 
+    
     /**
      * Constructeur de Requin
      *
@@ -44,6 +44,7 @@ public class Shark extends Animal {
         super("Shark", MAX_MOVES);
     }
 
+    
     /**
      * Resultat d'un croisement entres entitées
      *
@@ -57,6 +58,8 @@ public class Shark extends Animal {
             // Les sharks mangent les petits humains
             logic.onEntityAction(this, ent, GameEntity.ACTION_SHARK_EAT);
         }
+        
+        //TODO : Finir d'implementer pour les autres entité, fix le retour
 
         return false;
     }
