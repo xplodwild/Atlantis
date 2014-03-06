@@ -47,6 +47,7 @@ public class InputActionListener {
 
     private InputManager mInputManager;
     private Game3DRenderer mRenderer;
+    private PickingResult mPickingResult;
 
     private class PickingResult {
         public final static int SOURCE_BOARD = 0;
@@ -98,6 +99,7 @@ public class InputActionListener {
     public InputActionListener(InputManager inputManager, Game3DRenderer renderer) {
         mInputManager = inputManager;
         mRenderer = renderer;
+        mPickingResult = new PickingResult();
 
         // Picking 3D souris : écoute sur X et Y
         inputManager.addMapping(INPUTMAP_MOUSE_HOVER,
@@ -143,7 +145,7 @@ public class InputActionListener {
             // On a des résultats, on prend le plus proche
             CollisionResult result = results.getClosestCollision();
 
-            PickingResult output = new PickingResult();
+            PickingResult output = mPickingResult;
 
             // On vérifie si le noeud pické est un shell ou non (exemples les tiles vides, voir
             // EmptyTileModel)
@@ -151,7 +153,7 @@ public class InputActionListener {
                 EmptyTileModel etm = (EmptyTileModel) result.getGeometry().getParent().getUserData(EmptyTileModel.DATA_IS_TILE_SHELL);
 
                 // Hack: On retrouve le vrai mesh au lieu du shell.
-                // TODO: Exporter probelement de blender
+                // TODO: Exporter proprement de blender, parce qu'on a une CameraNode et LightNode la
                 Spatial spatial = ((Node) ((Node) etm.getModel()).getChild(1)).getChild(0);
                 output.geometry = ((Geometry) spatial);
             } else {
