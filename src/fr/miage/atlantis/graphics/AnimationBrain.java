@@ -80,7 +80,7 @@ public class AnimationBrain {
                 return PlayerModel.ANIMATION_WALK_CYCLE;
             }
         } else if (ent instanceof SeaSerpent) {
-            return SeaSerpentModel.ANIMATION_SWIM_CYCLE;
+            return SeaSerpentModel.ANIMATION_IDLE;
         } else if (ent instanceof Shark) {
             return SharkModel.ANIMATION_SWIM_CYCLE;
         } else if (ent instanceof Whale) {
