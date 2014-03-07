@@ -230,18 +230,20 @@ public final class GameBoard {
        GameTile nextTile3=nextTile2;
        for(int i=1;i<5;i++){
            tmp2=this.generateRandomTile();
+           String tmpname=tmp2.getName();
            tmp2.setAction(TileAction.generateRandomTileAction());
            this.placeTileAtTheRightOf(nextTile3,tmp2);
-           nextTile3=tmp2;
+           nextTile3=this.mTileSet.get(tmpname);
        }
 
        nextTile2=new WaterTile(this,"Water #32");
        this.placeTileAtTheRightOf(nextTile3, nextTile2);
+       nextTile2=(WaterTile) this.mTileSet.get("Water #32");
 
        for(int i=33;i<35;i++){
            tmp=new WaterTile(this,"Water #"+i);
            this.placeTileAtTheRightOf(nextTile2,tmp);
-           nextTile2=tmp;
+           nextTile2=(WaterTile) this.mTileSet.get("Water #"+i);
        }
 
        nextTile=new BorderTile(this,"Border #13");
@@ -259,31 +261,35 @@ public final class GameBoard {
        GameTile n42=this.mTileSet.get("Border #42");
        nextTile=new BorderTile(this,"Border #41");
        this.placeTileAtTheBottomLeftOf(n42, nextTile);
+       nextTile=(BorderTile)this.mTileSet.get("Border #41");
 
        nextTile2=new WaterTile(this,"Water #35");
        this.placeTileAtTheRightOf(nextTile, nextTile2);
+       nextTile2=(WaterTile)this.mTileSet.get("Water #35");
 
        for(int i=36;i<38;i++){
            tmp=new WaterTile(this,"Water #"+i);
            this.placeTileAtTheRightOf(nextTile2,tmp);
-           nextTile2=tmp;
+           nextTile2=(WaterTile)this.mTileSet.get("Water #"+i);
        }
 
        nextTile3=nextTile2;
        for(int i=5;i<10;i++){
            tmp2=this.generateRandomTile();
+           String tmpname=tmp2.getName();
            tmp2.setAction(TileAction.generateRandomTileAction());
            this.placeTileAtTheRightOf(nextTile3,tmp2);
-           nextTile3=tmp2;
+           nextTile3=this.mTileSet.get(tmpname);
        }
 
        nextTile2=new WaterTile(this,"Water #38");
        this.placeTileAtTheRightOf(nextTile3, nextTile2);
+       nextTile2=(WaterTile)this.mTileSet.get("Water #38");
 
        for(int i=39;i<41;i++){
            tmp=new WaterTile(this,"Water #"+i);
            this.placeTileAtTheRightOf(nextTile2,tmp);
-           nextTile2=tmp;
+           nextTile2=(WaterTile)this.mTileSet.get("Water #"+i);
        }
 
        nextTile=new BorderTile(this,"Border #14");
@@ -301,24 +307,32 @@ public final class GameBoard {
        GameTile n41=this.mTileSet.get("Border #41");
        nextTile=new BorderTile(this,"Border #40");
        this.placeTileAtTheBottomLeftOf(n41, nextTile);
+       nextTile=(BorderTile)this.mTileSet.get("Border #40");
 
        nextTile2=new WaterTile(this,"Water #41");
        this.placeTileAtTheRightOf(nextTile, nextTile2);
+       nextTile2=(WaterTile)this.mTileSet.get("Water #41");
+       
        nextTile3=new WaterTile(this,"Water #42");
        this.placeTileAtTheRightOf(nextTile2, nextTile3);
-
+       nextTile3=(WaterTile)this.mTileSet.get("Water #42");
+       
        for(int i=10;i<18;i++){
            tmp2=this.generateRandomTile();
+           String tmpname=tmp2.getName();
            tmp2.setAction(TileAction.generateRandomTileAction());
            this.placeTileAtTheRightOf(nextTile3,tmp2);
-           nextTile3=tmp2;
+           nextTile3=this.mTileSet.get(tmpname);
        }
 
        nextTile2=new WaterTile(this,"Water #43");
        this.placeTileAtTheRightOf(nextTile3, nextTile2);
+       nextTile2=(WaterTile)this.mTileSet.get("Water #43");
+       
        nextTile3=new WaterTile(this,"Water #44");
        this.placeTileAtTheRightOf(nextTile2, nextTile3);
-
+       nextTile3=(WaterTile)this.mTileSet.get("Water #44");
+       
        nextTile=new BorderTile(this,"Border #15");
        this.placeTileAtTheRightOf(nextTile3, nextTile);
        //-----------------------------------------------------------------------
@@ -334,33 +348,45 @@ public final class GameBoard {
        GameTile n40=this.mTileSet.get("Border #40");
        nextTile=new BorderTile(this,"Border #39");
        this.placeTileAtTheBottomRightOf(n40, nextTile);
+       nextTile=(BorderTile)this.mTileSet.get("Border #39");
 
        nextTile2=new WaterTile(this,"Water #45");
        this.placeTileAtTheRightOf(nextTile, nextTile2);
+       nextTile2=(WaterTile)this.mTileSet.get("Water #45");
+       
        nextTile3=new WaterTile(this,"Water #46");
        this.placeTileAtTheRightOf(nextTile2, nextTile3);
+       nextTile3=(WaterTile)this.mTileSet.get("Water #46");
+       
        tmp2=null;
        for(int i=18;i<21;i++){
            tmp2=this.generateRandomTile();
+           String tmpname=tmp2.getName();
            tmp2.setAction(TileAction.generateRandomTileAction());
            this.placeTileAtTheRightOf(nextTile3,tmp2);
-           nextTile3=tmp2;
+           nextTile3=this.mTileSet.get(tmpname);
        }
 
        nextTile2=new WaterTile(this,"Water #47",false,true);
        this.placeTileAtTheRightOf(tmp2, nextTile2);
+       nextTile2=(WaterTile)this.mTileSet.get("Water #47");
+       
        nextTile3=nextTile2;
        for(int i=21;i<24;i++){
            tmp2=this.generateRandomTile();
+           String tmpname=tmp2.getName();
            tmp2.setAction(TileAction.generateRandomTileAction());
            this.placeTileAtTheRightOf(nextTile3,tmp2);
-           nextTile3=tmp2;
+           nextTile3=this.mTileSet.get(tmpname);
        }
 
        nextTile3=new WaterTile(this,"Water #48");
        this.placeTileAtTheRightOf(tmp2, nextTile3);
+       nextTile3=(WaterTile)this.mTileSet.get("Water #48");
+       
        nextTile2=new WaterTile(this,"Water #49");
        this.placeTileAtTheRightOf(nextTile3, nextTile2);
+       nextTile2=(WaterTile)this.mTileSet.get("Water #49");
 
        nextTile=new BorderTile(this,"Border #16");
        this.placeTileAtTheRightOf(nextTile2, nextTile);
@@ -377,23 +403,31 @@ public final class GameBoard {
        GameTile n39=this.mTileSet.get("Border #39");
        nextTile=new BorderTile(this,"Border #38");
        this.placeTileAtTheBottomLeftOf(n39, nextTile);
+       nextTile=(BorderTile)this.mTileSet.get("Border #38");
 
        nextTile2=new WaterTile(this,"Water #50");
        this.placeTileAtTheRightOf(nextTile, nextTile2);
+       nextTile2=(WaterTile)this.mTileSet.get("Water #50");
+       
        nextTile3=new WaterTile(this,"Water #51");
        this.placeTileAtTheRightOf(nextTile2, nextTile3);
+       nextTile3=(WaterTile)this.mTileSet.get("Water #51");
 
        for(int i=24;i<32;i++){
            tmp2=this.generateRandomTile();
+           String tmpname=tmp2.getName();
            tmp2.setAction(TileAction.generateRandomTileAction());
            this.placeTileAtTheRightOf(nextTile3,tmp2);
-           nextTile3=tmp2;
+           nextTile3=this.mTileSet.get(tmpname);
        }
 
        nextTile2=new WaterTile(this,"Water #52");
        this.placeTileAtTheRightOf(nextTile3, nextTile2);
+       nextTile2=(WaterTile)this.mTileSet.get("Water #52");
+       
        nextTile3=new WaterTile(this,"Water #53");
        this.placeTileAtTheRightOf(nextTile2, nextTile3);
+       nextTile3=(WaterTile)this.mTileSet.get("Water #53");
 
        nextTile=new BorderTile(this,"Border #17");
        this.placeTileAtTheRightOf(nextTile3, nextTile);
@@ -410,31 +444,36 @@ public final class GameBoard {
        GameTile n38=this.mTileSet.get("Border #38");
        nextTile=new BorderTile(this,"Border #37");
        this.placeTileAtTheBottomRightOf(n38, nextTile);
+       nextTile=(BorderTile)this.mTileSet.get("Border #37");
+       
        nextTile2=new WaterTile(this,"Water #54");
        this.placeTileAtTheRightOf(nextTile, nextTile2);
+       nextTile2=(WaterTile)this.mTileSet.get("Water #54");
 
        for(int i=55;i<57;i++){
            tmp=new WaterTile(this,"Water #"+i);
            this.placeTileAtTheRightOf(nextTile2,tmp);
-           nextTile2=tmp;
+           nextTile2=(WaterTile)this.mTileSet.get("Water #"+i);
        }
 
        nextTile3=nextTile2;
        for(int i=32;i<37;i++){
            tmp2=this.generateRandomTile();
+           String tmpname=tmp2.getName();
            tmp2.setAction(TileAction.generateRandomTileAction());
            this.placeTileAtTheRightOf(nextTile3,tmp2);
-           nextTile3=tmp2;
+           nextTile3=this.mTileSet.get(tmpname);
        }
 
        nextTile2=new WaterTile(this,"Water #55");
        this.placeTileAtTheRightOf(nextTile3, nextTile2);
+       nextTile2=(WaterTile)this.mTileSet.get("Water #55");
 
        tmp=null;
        for(int i=56;i<58;i++){
            tmp=new WaterTile(this,"Water #"+i);
            this.placeTileAtTheRightOf(nextTile2,tmp);
-           nextTile2=tmp;
+           nextTile2=(WaterTile)this.mTileSet.get("Water #"+i);
        }
 
        nextTile=new BorderTile(this,"Border #18");
@@ -452,32 +491,37 @@ public final class GameBoard {
        GameTile n37=this.mTileSet.get("Border #37");
        nextTile=new BorderTile(this,"Border #36");
        this.placeTileAtTheBottomRightOf(n37, nextTile);
+       nextTile=(BorderTile)this.mTileSet.get("Border #36");
+       
        nextTile2=new WaterTile(this,"Water #58");
        this.placeTileAtTheRightOf(nextTile, nextTile2);
+       nextTile2=(WaterTile)this.mTileSet.get("Water #58");
 
        for(int i=59;i<61;i++){
            tmp=new WaterTile(this,"Water #"+i);
            this.placeTileAtTheRightOf(nextTile2,tmp);
-           nextTile2=tmp;
+           nextTile2=(WaterTile)this.mTileSet.get("Water #"+i);;
        }
 
        nextTile3=nextTile2;
 
        for(int i=37;i<41;i++){
            tmp2=this.generateRandomTile();
+           String tmpname=tmp2.getName();
            tmp2.setAction(TileAction.generateRandomTileAction());
            this.placeTileAtTheRightOf(nextTile3,tmp2);
-           nextTile3=tmp2;
+           nextTile3=this.mTileSet.get(tmpname);
        }
 
        nextTile2=new WaterTile(this,"Water #61");
        this.placeTileAtTheRightOf(nextTile3, nextTile2);
+       nextTile2=(WaterTile)this.mTileSet.get("Water #61");
 
        tmp=null;
        for(int i=62;i<64;i++){
            tmp=new WaterTile(this,"Water #"+i);
            this.placeTileAtTheRightOf(nextTile2,tmp);
-           nextTile2=tmp;
+           nextTile2=(WaterTile)this.mTileSet.get("Water #"+i);
        }
 
        nextTile=new BorderTile(this,"Border #19");
@@ -495,15 +539,17 @@ public final class GameBoard {
        GameTile n36=this.mTileSet.get("Border #36");
        nextTile=new BorderTile(this,"Border #35",true);
        this.placeTileAtTheBottomLeftOf(n36, nextTile);
+       nextTile=(BorderTile)this.mTileSet.get("Border #35");
 
        nextTile2=new WaterTile(this,"Water #64");
        this.placeTileAtTheRightOf(nextTile, nextTile2);
+       nextTile2=(WaterTile)this.mTileSet.get("Water #64");
 
        tmp=null;
        for(int i=65;i<75;i++){
            tmp=new WaterTile(this,"Water #"+i);
            this.placeTileAtTheRightOf(nextTile2,tmp);
-           nextTile2=tmp;
+           nextTile2=(WaterTile)this.mTileSet.get("Water #"+i);
        }
 
        nextTile=new BorderTile(this,"Border #20",true);
@@ -519,16 +565,19 @@ public final class GameBoard {
 
 
        GameTile n35=this.mTileSet.get("Border #35");
-       nextTile=new BorderTile(this,"Border #34",true);
+       nextTile=new BorderTile(this,"Border #34",true);       
        this.placeTileAtTheBottomRightOf(n35, nextTile);
+       nextTile=(BorderTile)this.mTileSet.get("Border #34");
+       
        nextTile2=new WaterTile(this,"Water #75");
        this.placeTileAtTheRightOf(nextTile, nextTile2);
-
+       nextTile2=(WaterTile) this.mTileSet.get("Water #75");
+       
        tmp=null;
        for(int i=76;i<85;i++){
            tmp=new WaterTile(this,"Water #"+i);
            this.placeTileAtTheRightOf(nextTile2,tmp);
-           nextTile2=tmp;
+           nextTile2=(WaterTile) this.mTileSet.get("Water #"+i);;
        }
 
        nextTile=new BorderTile(this,"Border #21",true);
@@ -546,22 +595,29 @@ public final class GameBoard {
        GameTile n34=this.mTileSet.get("Border #34");
        nextTile=new BorderTile(this,"Border #33",true);
        this.placeTileAtTheBottomRightOf(n34, nextTile);
+       nextTile=(BorderTile) this.mTileSet.get("Border #33");
+       
        nextTile3=new BorderTile(this,"Border #32",true);
        this.placeTileAtTheRightOf(nextTile, nextTile3);
+       nextTile3=(BorderTile) this.mTileSet.get("Border #32");
+       
        nextTile2=new WaterTile(this,"Water #85");
        this.placeTileAtTheRightOf(nextTile3, nextTile2);
+       nextTile2=(WaterTile) this.mTileSet.get("Water #85");
 
        tmp=null;
        for(int i=86;i<92;i++){
            tmp=new WaterTile(this,"Water #"+i);
            this.placeTileAtTheRightOf(nextTile2,tmp);
-           nextTile2=tmp;
+           nextTile2=(WaterTile) this.mTileSet.get("Water #"+i);
        }
 
        nextTile=new BorderTile(this,"Border #23",true);
        this.placeTileAtTheRightOf(tmp, nextTile);
+       nextTile=(BorderTile) this.mTileSet.get("Border #23");       
+       
        nextTile3=new BorderTile(this,"Border #22",true);
-       this.placeTileAtTheRightOf(nextTile, nextTile3);
+       this.placeTileAtTheRightOf(nextTile, nextTile3);       
        //-----------------------------------------------------------------------
 
 
@@ -575,11 +631,12 @@ public final class GameBoard {
        GameTile n32=this.mTileSet.get("Border #32");
        nextTile=new BorderTile(this,"Border #31");
        this.placeTileAtTheBottomRightOf(n32, nextTile);
+       nextTile=(BorderTile) this.mTileSet.get("Border #31");
 
        for(int i=30;i>23;i--){
            BorderTile tmps=new BorderTile(this,"Border #"+i);
            this.placeTileAtTheRightOf(nextTile,tmps);
-           nextTile=tmps;
+           nextTile=(BorderTile) this.mTileSet.get("Border #"+i);
        }
        //-----------------------------------------------------------------------
 
