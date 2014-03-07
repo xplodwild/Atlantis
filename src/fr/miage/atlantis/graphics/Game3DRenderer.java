@@ -30,6 +30,7 @@ import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Node;
 import com.jme3.scene.plugins.blender.BlenderModelLoader;
 import fr.miage.atlantis.Game3DLogic;
+import fr.miage.atlantis.GameDice;
 import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.entities.GameEntity;
 import fr.miage.atlantis.graphics.models.DiceModel;
@@ -143,11 +144,11 @@ public class Game3DRenderer extends SimpleApplication {
                 if (wayPointIndex == 10) {
                     mDiceModel.setLocalRotation(Quaternion.IDENTITY);
 
-                    if (finalFace == DiceModel.FACE_SHARK) {
+                    if (finalFace == GameDice.FACE_SHARK) {
                         mDiceModel.rotate(0, 90, 0);
-                    } else if (finalFace == DiceModel.FACE_WHALE) {
+                    } else if (finalFace == GameDice.FACE_WHALE) {
                         mDiceModel.rotate(185, 0, 200);
-                    } else if (finalFace == DiceModel.FACE_SEASERPENT) {
+                    } else if (finalFace == GameDice.FACE_SEASERPENT) {
                         mDiceModel.rotate(90, 5, 0);
                     }
 

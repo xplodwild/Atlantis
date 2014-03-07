@@ -195,6 +195,10 @@ public abstract class GameLogic implements GameTurnListener {
     public Player[] getPlayers() {
         return mPlayers;
     }
+
+    public GameDice getDice() {
+        return mDice;
+    }
     //--------------------------------------------------------------------------
 
     //--------------------------------------------------------------------------

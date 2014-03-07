@@ -25,11 +25,6 @@ import com.jme3.math.ColorRGBA;
  *
  */
 public class DiceModel extends StaticModel {
-
-    public final static int FACE_SHARK = 1;
-    public final static int FACE_WHALE = 2;
-    public final static int FACE_SEASERPENT = 3;
-
     public DiceModel(AssetManager am) {
         super(am, "Models/cube.mesh.xml", "Textures/dice.png", null);
         getMaterial().setFloat("Shininess", 1.0f);

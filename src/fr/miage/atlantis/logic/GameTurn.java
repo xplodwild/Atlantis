@@ -17,12 +17,15 @@
  */
 package fr.miage.atlantis.logic;
 
+import fr.miage.atlantis.GameDice;
 import fr.miage.atlantis.Player;
 import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.board.TileAction;
 import fr.miage.atlantis.entities.EntityMove;
 import fr.miage.atlantis.entities.GameEntity;
-import fr.miage.atlantis.graphics.models.DiceModel;
+import fr.miage.atlantis.entities.SeaSerpent;
+import fr.miage.atlantis.entities.Shark;
+import fr.miage.atlantis.entities.Whale;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -97,6 +100,11 @@ public class GameTurn implements GameRenderListener {
 
     }
 
+    private void finishTurn() {
+        log("GameTurn: finishTurn");
+        mTurnIsOver = true;
+    }
+
     /**
      * Deplace une Entity sur le tile donnée
      *
@@ -128,8 +136,21 @@ public class GameTurn implements GameRenderListener {
         log("GameTurn: rollDice");
 
         mDiceRolled = true;
-        mDiceAction = DiceModel.FACE_SEASERPENT;
-        mRemainingDiceMoves = 1;
+        mDiceAction = mController.getDice().roll();
+        switch (mDiceAction) {
+            case GameDice.FACE_SEASERPENT:
+                mRemainingDiceMoves = SeaSerpent.MAX_MOVES;
+                break;
+
+            case GameDice.FACE_SHARK:
+                mRemainingDiceMoves = Shark.MAX_MOVES;
+                break;
+
+            case GameDice.FACE_WHALE:
+                mRemainingDiceMoves = Whale.MAX_MOVES;
+                break;
+        }
+
         mController.onDiceRoll(mDiceAction);
 
         return mDiceAction;
@@ -191,11 +212,38 @@ public class GameTurn implements GameRenderListener {
         } else if (mRemainingDiceMoves > 0) {
             // On a encore des mouvements de l'unité du dé possible
             requestDiceEntityPicking();
+        } else {
+            // On a plus de mouvements d'unités, on a coulé la tile, et on a bougé les unités
+            // avec le dé, on a donc fini le tour.
+            finishTurn();
         }
     }
 
     public void onDiceRollFinished() {
-        requestDiceEntityPicking();
+        // On vérifie si le board a effectivement une entité du type demandé. Sinon, on passe
+        // directement à la suite.
+        Class entityType = null;
+        switch (mDiceAction) {
+            case GameDice.FACE_SEASERPENT:
+                entityType = SeaSerpent.class;
+                break;
+
+            case GameDice.FACE_SHARK:
+                entityType = Shark.class;
+                break;
+
+            case GameDice.FACE_WHALE:
+                entityType = Whale.class;
+                break;
+        }
+
+        if (mController.getBoard().hasEntityOfType(entityType)) {
+            requestDiceEntityPicking();
+        } else {
+            // Pas d'entité du type du dé a bouger. Le dé étant la dernière étape d'un tour,
+            // on a terminé.
+            finishTurn();
+        }
     }
 
     public void onSinkTileFinished() {
@@ -222,17 +270,26 @@ public class GameTurn implements GameRenderListener {
      * Demande à la logique de jeu de picker l'entité qui a été obtenue via le dé
      */
     private void requestDiceEntityPicking() {
+        GameLogic.EntityPickRequest request = new GameLogic.EntityPickRequest();
+
         switch (mDiceAction) {
-            case DiceModel.FACE_SEASERPENT: {
-                GameLogic.EntityPickRequest request = new GameLogic.EntityPickRequest();
+            case GameDice.FACE_SEASERPENT:
                 request.pickingRestriction = GameLogic.EntityPickRequest.FLAG_PICK_SEASERPENT;
-                mController.requestEntityPick(request);
-            }
-            break;
+                break;
+
+            case GameDice.FACE_SHARK:
+                request.pickingRestriction = GameLogic.EntityPickRequest.FLAG_PICK_SHARK;
+                break;
+
+            case GameDice.FACE_WHALE:
+                request.pickingRestriction = GameLogic.EntityPickRequest.FLAG_PICK_WHALE;
+                break;
 
             default:
                 throw new UnsupportedOperationException("Processing of face " + mDiceAction + " isn't supported yet");
         }
+
+        mController.requestEntityPick(request);
     }
 
     //--------------------------------------------------------------------------

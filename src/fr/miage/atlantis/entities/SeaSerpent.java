@@ -32,7 +32,7 @@ public class SeaSerpent extends Animal {
     /**
      * Nombre maximal de movements
      */
-    private final static int MAX_MOVES = 1;
+    public final static int MAX_MOVES = 1;
 
 
     /**
