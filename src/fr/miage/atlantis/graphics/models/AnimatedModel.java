@@ -29,7 +29,7 @@ import com.jme3.asset.AssetManager;
  */
 public class AnimatedModel extends StaticModel {
 
-    private final static float BLEND_TIME = 0.5f;
+    private final static float BLEND_TIME = 0.3f;
 
     private AnimControl mControl;
     private AnimChannel mChannel;
