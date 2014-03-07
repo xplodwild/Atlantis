@@ -24,6 +24,7 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.texture.Texture;
 import com.jme3.util.TangentBinormalGenerator;
 import fr.miage.atlantis.graphics.ModelCache;
 
@@ -69,7 +70,9 @@ public class StaticModel extends Node {
             } else {
                 System.out.println("GENERATING NEW MATERIAL");
                 mMaterial = new Material(am, "Common/MatDefs/Light/Lighting.j3md");
-                mMaterial.setTexture("DiffuseMap", am.loadTexture(diffusePath));
+                Texture diffuseTex = am.loadTexture(diffusePath);
+                diffuseTex.setMinFilter(Texture.MinFilter.Trilinear);
+                mMaterial.setTexture("DiffuseMap", diffuseTex);
 
                 if (normalPath != null) {
                     // Il faut calculer les tangentes pour que le lighting

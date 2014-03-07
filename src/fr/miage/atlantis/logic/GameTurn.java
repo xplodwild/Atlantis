@@ -22,6 +22,7 @@ import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.board.TileAction;
 import fr.miage.atlantis.entities.EntityMove;
 import fr.miage.atlantis.entities.GameEntity;
+import fr.miage.atlantis.graphics.models.DiceModel;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,6 +47,7 @@ public class GameTurn implements GameRenderListener {
     private boolean mDiceRolled;
     private boolean mTurnIsOver;
     private int mRemainingMoves;
+    private int mRemainingDiceMoves;
 
     /**
      * Constructeur de GameTurn
@@ -114,9 +116,27 @@ public class GameTurn implements GameRenderListener {
         mController.onUnitMove(ent, dest);
     }
 
+    public void moveDiceEntity(GameEntity ent, GameTile dest) {
+        log("GameTurn: moveDiceEntity");
+
+        // TODO: Faut-il logger ces mouvements aussi?
+        mRemainingDiceMoves--;
+        mController.onUnitMove(ent, dest);
+    }
+
     public int rollDice() {
+        log("GameTurn: rollDice");
+
         mDiceRolled = true;
-        throw new UnsupportedOperationException("Not implemented");
+        mDiceAction = DiceModel.FACE_SEASERPENT;
+        mRemainingDiceMoves = 1;
+        mController.onDiceRoll(mDiceAction);
+
+        return mDiceAction;
+    }
+
+    public int getRemainingDiceMoves() {
+        return mRemainingDiceMoves;
     }
 
     public boolean hasSunkLandTile() {
@@ -168,15 +188,19 @@ public class GameTurn implements GameRenderListener {
             request.waterEdgeOnly = true;
 
             mController.requestTilePick(request);
+        } else if (mRemainingDiceMoves > 0) {
+            // On a encore des mouvements de l'unité du dé possible
+            requestDiceEntityPicking();
         }
     }
 
     public void onDiceRollFinished() {
-        throw new UnsupportedOperationException("Not implemented");
+        requestDiceEntityPicking();
     }
 
     public void onSinkTileFinished() {
-        throw new UnsupportedOperationException("Not implemented");
+        // Tile coulée et action lancée, on lance le dé
+        rollDice();
     }
 
     public void onEntityActionFinished() {
@@ -192,6 +216,23 @@ public class GameTurn implements GameRenderListener {
         request.pickingRestriction = GameLogic.EntityPickRequest.FLAG_PICK_PLAYER_ENTITIES;
         request.player = mPlayer;
         mController.requestEntityPick(request);
+    }
+
+    /**
+     * Demande à la logique de jeu de picker l'entité qui a été obtenue via le dé
+     */
+    private void requestDiceEntityPicking() {
+        switch (mDiceAction) {
+            case DiceModel.FACE_SEASERPENT: {
+                GameLogic.EntityPickRequest request = new GameLogic.EntityPickRequest();
+                request.pickingRestriction = GameLogic.EntityPickRequest.FLAG_PICK_SEASERPENT;
+                mController.requestEntityPick(request);
+            }
+            break;
+
+            default:
+                throw new UnsupportedOperationException("Processing of face " + mDiceAction + " isn't supported yet");
+        }
     }
 
     //--------------------------------------------------------------------------

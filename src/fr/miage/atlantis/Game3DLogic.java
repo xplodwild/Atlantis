@@ -40,6 +40,7 @@ import fr.miage.atlantis.graphics.Game3DRenderer;
 import fr.miage.atlantis.graphics.ParticlesFactory;
 import fr.miage.atlantis.graphics.models.AbstractTileModel;
 import fr.miage.atlantis.graphics.models.AnimatedModel;
+import fr.miage.atlantis.graphics.models.DiceModel;
 import fr.miage.atlantis.graphics.models.PlayerModel;
 import fr.miage.atlantis.graphics.models.SeaSerpentModel;
 import fr.miage.atlantis.graphics.models.SharkModel;
@@ -47,6 +48,7 @@ import fr.miage.atlantis.logic.GameLogic;
 import fr.miage.atlantis.logic.GameTurn;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Main Game Engine loop class
@@ -155,7 +157,9 @@ public class Game3DLogic extends GameLogic {
     }
 
     public void onDiceRoll(int face) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        // On a besoin de lancer le dé
+        System.out.println("Game3DLogic: onDiceRoll");
+        mRenderer.rollDiceAnimation(face);
     }
 
     public void onSinkTile(final GameTile tile) {
@@ -190,11 +194,6 @@ public class Game3DLogic extends GameLogic {
                         }
                     }
 
-                    // Fin du tour, on notifie le tour si on l'a
-                    if (getCurrentTurn() != null) {
-                        getCurrentTurn().onSinkTileFinished();
-                    }
-
                     // On lance l'action sous la tile, si c'est immédiat
                     TileAction action = tile.getAction();
                     if (action.isImmediate()) {
@@ -202,6 +201,11 @@ public class Game3DLogic extends GameLogic {
                     } else {
                         System.out.println("TODO: Tile is not immediate: " + action.toString());
                         // TODO: Stocker la tile dans les tiles du joueur
+                    }
+
+                    // Fin du tour, on notifie le tour si on l'a
+                    if (getCurrentTurn() != null) {
+                        getCurrentTurn().onSinkTileFinished();
                     }
                 }
             }
@@ -340,18 +344,33 @@ public class Game3DLogic extends GameLogic {
     public void onEntityPicked(GameEntity ent) {
         System.out.println("Entity picked: " + ent);
 
-        // On assume ici que lorsqu'on picke une entité, on veut picker une tile après.
-        mPickedEntity = ent;
-        TilePickRequest tilePick = new TilePickRequest();
-        tilePick.pickNearTile = ent.getTile();
-        tilePick.waterEdgeOnly = false;
+        GameTurn currentTurn = mRenderer.getLogic().getCurrentTurn();
 
-        // On reste sur l'eau si on est dans l'eau
-        if (ent.getTile().getHeight() == 0) {
+        if (currentTurn.getRemainingMoves() > 0) {
+            // On assume ici que lorsqu'on picke une entité, on veut picker une tile après.
+            mPickedEntity = ent;
+            TilePickRequest tilePick = new TilePickRequest();
+            tilePick.pickNearTile = ent.getTile();
+            tilePick.waterEdgeOnly = false;
+
+            // On reste sur l'eau si on est dans l'eau
+            if (ent.getTile().getHeight() == 0) {
+                tilePick.requiredHeight = 0;
+            }
+
+            requestTilePick(tilePick);
+        } else if (currentTurn.hasRolledDice() && currentTurn.getRemainingDiceMoves() > 0) {
+            // Le dé a été lancé, et on a des mouvements de dé restant. La seule chose possible, c'est
+            // un déplacement d'entité suite au dé qui vient tout juste d'être lancé.
+            mPickedEntity = ent;
+            TilePickRequest tilePick = new TilePickRequest();
+            tilePick.pickNearTile = ent.getTile();
+            tilePick.waterEdgeOnly = false;
+            // Toutes les entités du dé ne sont que dans l'eau
             tilePick.requiredHeight = 0;
-        }
 
-        requestTilePick(tilePick);
+            requestTilePick(tilePick);
+        }
     }
 
     @Override
@@ -365,6 +384,9 @@ public class Game3DLogic extends GameLogic {
         } else if (!currentTurn.hasSunkLandTile()) {
             // Il faut couler une tile
             currentTurn.sinkLandTile(tile);
+        } else if (currentTurn.hasRolledDice() && currentTurn.getRemainingDiceMoves() > 0) {
+            // On bouge une entité suite au lancé de dé
+            currentTurn.moveDiceEntity(mPickedEntity, tile);
         }
     }
 }
