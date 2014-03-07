@@ -782,9 +782,13 @@ public final class GameBoard {
         GameTile baseBottomRightTile=base.getRightBottomTile();
 
         //Puis on recupere les tile adjacent aux deux tile et on les lient a la nouvelle tile fraichement crée.
-        newTile.setLeftUpperTile(baseUpperRightTile);
-        newTile.setLeftBottomTile(baseBottomRightTile);
-
+        if(baseUpperRightTile != null){
+            newTile.setLeftUpperTile(baseUpperRightTile);
+        }
+        if(baseBottomRightTile != null){
+            newTile.setLeftBottomTile(baseBottomRightTile);
+        }
+        
         //Update le HashMap
         this.mTileSet.put(base.getName(), base);
         this.mTileSet.put(newTile.getName(), newTile);
@@ -816,9 +820,13 @@ public final class GameBoard {
         GameTile baseBottomLeftTile=base.getLeftBottomTile();
 
         //Puis on recupere les tile adjacent aux deux tile et on les lient a la nouvelle tile fraichement crée.
-        newTile.setRightUpperTile(baseUpperLeftTile);
-        newTile.setRightBottomTile(baseBottomLeftTile);
-
+        if(baseUpperLeftTile != null){
+            newTile.setRightUpperTile(baseUpperLeftTile);
+        }
+        if(baseBottomLeftTile != null){
+            newTile.setRightBottomTile(baseBottomLeftTile);
+        }
+        
         //Update le HashMap
         this.mTileSet.put(base.getName(), base);
         this.mTileSet.put(newTile.getName(), newTile);
@@ -850,9 +858,13 @@ public final class GameBoard {
         GameTile baseRightTile=base.getRightTile();
 
         //Puis on recupere les tile adjacent aux deux tile et on les lient a la nouvelle tile fraichement crée.
-        newTile.setLeftTile(baseLeftBottomTile);
-        newTile.setRightUpperTile(baseRightTile);
-
+        if(baseLeftBottomTile != null){
+            newTile.setLeftTile(baseLeftBottomTile);
+        }
+        if(baseRightTile != null){
+            newTile.setRightUpperTile(baseRightTile);
+        }
+        
         //Update le HashMap
         this.mTileSet.put(base.getName(), base);
         this.mTileSet.put(newTile.getName(), newTile);
@@ -884,8 +896,13 @@ public final class GameBoard {
         GameTile baseRightBottomTile=base.getRightBottomTile();
 
         //Puis on recupere les tile adjacent aux deux tile et on les lient a la nouvelle tile fraichement crée.
-        newTile.setRightTile(baseRightBottomTile);
-        newTile.setLeftUpperTile(baseLeftTile);
+        if(baseRightBottomTile != null){
+            newTile.setRightTile(baseRightBottomTile);
+        }
+        if(baseLeftTile != null){
+            newTile.setLeftUpperTile(baseLeftTile);
+        }
+        
 
         //Update le HashMap
         this.mTileSet.put(base.getName(), base);
