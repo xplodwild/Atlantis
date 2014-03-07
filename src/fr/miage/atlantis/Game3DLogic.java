@@ -45,6 +45,7 @@ import fr.miage.atlantis.graphics.models.SeaSerpentModel;
 import fr.miage.atlantis.graphics.models.SharkModel;
 import fr.miage.atlantis.logic.GameLogic;
 import fr.miage.atlantis.logic.GameTurn;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -182,7 +183,8 @@ public class Game3DLogic extends GameLogic {
                     mRenderer.getBoardRenderer().replaceTile(tile, newTile);
 
                     // On fait en sorte que les nouveaux nageurs nagent
-                    for (GameEntity ent : newTile.getEntities()) {
+                    List<GameEntity> newTileEntities = new ArrayList<GameEntity>(newTile.getEntities());
+                    for (GameEntity ent : newTileEntities) {
                         if (ent instanceof PlayerToken) {
                             onUnitMove(ent, newTile);
                         }
@@ -342,12 +344,11 @@ public class Game3DLogic extends GameLogic {
         mPickedEntity = ent;
         TilePickRequest tilePick = new TilePickRequest();
         tilePick.pickNearTile = ent.getTile();
+        tilePick.waterEdgeOnly = false;
 
         // On reste sur l'eau si on est dans l'eau
         if (ent.getTile().getHeight() == 0) {
-            tilePick.waterOnly = true;
-        } else {
-            tilePick.waterOnly = false;
+            tilePick.requiredHeight = 0;
         }
 
         requestTilePick(tilePick);
@@ -361,6 +362,9 @@ public class Game3DLogic extends GameLogic {
         if (currentTurn.getRemainingMoves() > 0) {
             // On assume que ce picking de tile était pour le déplacement d'unités.
             currentTurn.moveEntity(mPickedEntity, tile);
+        } else if (!currentTurn.hasSunkLandTile()) {
+            // Il faut couler une tile
+            currentTurn.sinkLandTile(tile);
         }
     }
 }

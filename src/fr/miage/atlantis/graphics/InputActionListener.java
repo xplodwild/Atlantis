@@ -104,7 +104,7 @@ public class InputActionListener {
                         // On retrouve la tile et on la passe.
                         GameTile tile = getTileFromNode(result.geometry);
 
-                        if (checkPickingConstraints(mTileRequest, tile)) {
+                        if (tile != null && checkPickingConstraints(mTileRequest, tile)) {
                             Material mat = result.geometry.getMaterial();
                             mOriginalMaterial = mat.clone();
                             if (highlightMaterial(mat)) {
@@ -312,26 +312,41 @@ public class InputActionListener {
     }
 
     private boolean checkPickingConstraints(GameLogic.TilePickRequest request, GameTile tile) {
-        if (request.waterOnly && tile.getHeight() > 0) {
+        if (request.requiredHeight >= 0 && tile.getHeight() != request.requiredHeight) {
             return false;
         }
 
-        /*
-        System.out.println("Left Bottom: " + tile.getLeftBottomTile());
-        System.out.println("Left: " + tile.getLeftTile());
-        System.out.println("Left Upper: " + tile.getLeftUpperTile());
-        System.out.println("Right Bottom: " + tile.getRightBottomTile());
-        System.out.println("Right: " + tile.getRightTile());
-        System.out.println("Right Upper: " + tile.getRightUpperTile());
-        */
+        if (request.waterEdgeOnly) {
+            boolean isAtEdge = false;
 
-        if (tile.getLeftBottomTile() != request.pickNearTile &&
-                tile.getLeftTile() != request.pickNearTile &&
-                tile.getLeftUpperTile() != request.pickNearTile &&
-                tile.getRightBottomTile() != request.pickNearTile &&
-                tile.getRightTile() != request.pickNearTile &&
-                tile.getRightUpperTile() != request.pickNearTile) {
-            return false;
+            if (tile.getLeftBottomTile() != null && tile.getLeftBottomTile().getHeight() == 0) {
+                isAtEdge = true;
+            } else if (tile.getLeftUpperTile() != null && tile.getLeftUpperTile().getHeight() == 0) {
+                isAtEdge = true;
+            } else if (tile.getLeftTile() != null && tile.getLeftTile().getHeight() == 0) {
+                isAtEdge = true;
+            } else if (tile.getRightTile() != null && tile.getRightTile().getHeight() == 0) {
+                isAtEdge = true;
+            } else if (tile.getRightUpperTile() != null && tile.getRightUpperTile().getHeight() == 0) {
+                isAtEdge = true;
+            } else if (tile.getRightBottomTile() != null && tile.getRightBottomTile().getHeight() == 0) {
+                isAtEdge = true;
+            }
+
+            if (!isAtEdge) {
+                return false;
+            }
+        }
+
+        if (request.pickNearTile != null) {
+            if (tile.getLeftBottomTile() != request.pickNearTile &&
+                    tile.getLeftTile() != request.pickNearTile &&
+                    tile.getLeftUpperTile() != request.pickNearTile &&
+                    tile.getRightBottomTile() != request.pickNearTile &&
+                    tile.getRightTile() != request.pickNearTile &&
+                    tile.getRightUpperTile() != request.pickNearTile) {
+                return false;
+            }
         }
 
         return true;

@@ -125,6 +125,7 @@ public class GameTurn implements GameRenderListener {
 
     public void sinkLandTile(GameTile tile) {
         mSunkenTile = tile;
+        mController.onSinkTile(tile);
     }
 
     public void useRemoteTile(TileAction action) {
@@ -152,6 +153,21 @@ public class GameTurn implements GameRenderListener {
         if (mRemainingMoves > 0) {
             // On a encore des mouvements de ses unités possibles, alors on le fait.
             requestPlayerEntityPicking();
+        } else if (mSunkenTile == null) {
+            // Il faut sinker une tile!
+            GameLogic.TilePickRequest request = new GameLogic.TilePickRequest();
+            request.pickNearTile = null;
+            int level = 1;
+            while (!mController.getBoard().hasTileAtLevel(level)) {
+                level++;
+                if (level > 3) {
+                    throw new IllegalStateException("No sinkable tile available!");
+                }
+            }
+            request.requiredHeight = level;
+            request.waterEdgeOnly = true;
+
+            mController.requestTilePick(request);
         }
     }
 

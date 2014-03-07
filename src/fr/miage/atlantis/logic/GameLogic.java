@@ -81,9 +81,15 @@ public abstract class GameLogic implements GameTurnListener {
         public GameTile pickNearTile;
 
         /**
-         * Si waterOnly vaut true, seulement les tiles au niveau de l'eau seront sélectionnables
+         * Si waterEdgeOnly vaut true, seulement les tiles au bord de l'eau seront sélectionnables
          */
-        public boolean waterOnly;
+        public boolean waterEdgeOnly;
+
+        /**
+         * Si requiredHeight est supérieur ou égal à zéro, seules les tiles au niveau spécifiées
+         * pourront être pickées
+         */
+        public int requiredHeight = -1;
     }
 
     /**
