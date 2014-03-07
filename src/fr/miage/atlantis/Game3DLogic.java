@@ -122,21 +122,23 @@ public class Game3DLogic extends GameLogic {
         motionEvent.getPath().addListener(new MotionPathListener() {
             public void onWayPointReach(MotionEvent control, int wayPointIndex) {
                 if (motionEvent.getPath().getNbWayPoints() == wayPointIndex + 1) {
+                    System.out.println("Game3DLogic: Waypoint reached, processing events");
                     // On bouge effectivement le joueur de tile. Note: On fait cette action à la
                     // fin de l'animation pour pouvoir proprement enchainer les actions (exemple:
                     // on marche sur un requin ou un bateau). Ainsi, le GameTurn attend avant de
                     // faire la suite des opérations via onUnitMoveFinished.
-                    ent.moveToTile(Game3DLogic.this, dest);
+                    if (!ent.moveToTile(Game3DLogic.this, dest)) {
+                        // On est à la fin du chemin, mise à jour de l'animation de l'entité bougée
+                        // car aucune action n'a eu lieu lors du déplacement
+                        String animation = AnimationBrain.getIdleAnimation(ent);
+
+                        if (animation != null) {
+                            ((AnimatedModel) entNode).playAnimation(animation);
+                        }
+                    }
 
                     // Remise à zéro de l'orientation
                     entNode.setLocalRotation(Quaternion.IDENTITY);
-
-                    // On est à la fin du chemin, mise à jour de l'animation de l'entité bougée
-                    String animation = AnimationBrain.getIdleAnimation(ent);
-
-                    if (animation != null) {
-                        ((AnimatedModel) entNode).playAnimation(animation);
-                    }
 
                     // On notifie le jeu, toutes les actions nécessaires sont faites.
                     if (getCurrentTurn() != null) {
@@ -279,6 +281,7 @@ public class Game3DLogic extends GameLogic {
     }
 
     public void onEntitySpawn(GameEntity spawned) {
+        System.out.println("Game3DLogic: onEntitySpawn " + spawned);
         mRenderer.getEntitiesRenderer().addEntity(spawned);
     }
 

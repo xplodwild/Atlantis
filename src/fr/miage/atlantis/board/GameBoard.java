@@ -1015,6 +1015,26 @@ public final class GameBoard {
         return false;
     }
 
+    /**
+     * Retourne si oui ou non il y a une tile au bord de l'eau au niveau spécifié.
+     * Exemple, si on a une tile Beach entourée de Mountain, cela renverra false même si
+     * une tile au niveau beach existe.
+     * @param level Le niveau
+     * @return true si il y a une tile au bord de l'eau, false sinon
+     */
+    public boolean hasTileAtWaterEdge(int level) {
+        Iterator<Map.Entry<String, GameTile>> it = this.mTileSet.entrySet().iterator();
+        while (it.hasNext()) {
+            GameTile tmp = it.next().getValue();
+            if (tmp.getHeight() == level) {
+                if (isTileAtWaterEdge(tmp)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
 
 
 

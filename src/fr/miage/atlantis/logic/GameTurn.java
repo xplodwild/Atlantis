@@ -103,6 +103,7 @@ public class GameTurn implements GameRenderListener {
     private void finishTurn() {
         log("GameTurn: finishTurn");
         mTurnIsOver = true;
+        mController.nextTurn();
     }
 
     /**
@@ -191,10 +192,13 @@ public class GameTurn implements GameRenderListener {
     }
 
     public void onUnitMoveFinished() {
+        log("GameTurn: onUnitMoveFinished()");
         if (mRemainingMoves > 0) {
             // On a encore des mouvements de ses unités possibles, alors on le fait.
+            log("==> Remaining moves: " + mRemainingMoves);
             requestPlayerEntityPicking();
         } else if (mSunkenTile == null) {
+            log("==> Tile sinking required!");
             // Il faut sinker une tile!
             GameLogic.TilePickRequest request = new GameLogic.TilePickRequest();
             request.pickNearTile = null;
@@ -206,11 +210,12 @@ public class GameTurn implements GameRenderListener {
                 }
             }
             request.requiredHeight = level;
-            request.waterEdgeOnly = true;
+            request.waterEdgeOnly = mController.getBoard().hasTileAtWaterEdge(level);
 
             mController.requestTilePick(request);
         } else if (mRemainingDiceMoves > 0) {
             // On a encore des mouvements de l'unité du dé possible
+            log("==> Remaining dice moves: " + mRemainingDiceMoves);
             requestDiceEntityPicking();
         } else {
             // On a plus de mouvements d'unités, on a coulé la tile, et on a bougé les unités
@@ -242,6 +247,7 @@ public class GameTurn implements GameRenderListener {
         } else {
             // Pas d'entité du type du dé a bouger. Le dé étant la dernière étape d'un tour,
             // on a terminé.
+            log("GameTurn: No entity of type " + entityType.toString() + " on the board. Finish turn.");
             finishTurn();
         }
     }
