@@ -282,8 +282,6 @@ public class InputActionListener {
                 // On vérifie que le pion appartient au joueur
                 if (pt.getPlayer() == request.player) {
                     return true;
-                } else {
-                    System.out.println("pt.getPlayer() != request.player");
                 }
             }
         }

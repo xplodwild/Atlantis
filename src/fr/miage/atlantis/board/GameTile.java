@@ -168,19 +168,19 @@ public abstract class GameTile {
         mIsOnBoard = false;
     }
 
-    
+
     @Override
     public String toString(){
         String retour="_____________________________\n";
         retour+="Nom de tile : "+this.mName+"\n";
         retour+="Hauteur : "+this.mHeight+"\n\n";
-        
+
         if(this.mLeftBottomTile != null){
             retour+="Tile bas-gauche : "+this.mLeftBottomTile.getName()+"\n";
         }else{
             retour+="Tile bas-gauche : Vide\n";
         }
-        
+
         if(this.mLeftTile != null){
             retour+="Tile gauche : "+this.mLeftTile.getName()+"\n";
         }else{
@@ -207,10 +207,10 @@ public abstract class GameTile {
             retour+="Tile haut-droit : Vide\n";
         }
         retour+="_____________________________\n\n";
-        
+
         return retour;
     }
-    
+
     //--------------------------------------------------------------------------
     //GETTERS                                                                  |
     //--------------------------------------------------------------------------
