@@ -36,8 +36,13 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.entities.GameEntity;
+import fr.miage.atlantis.entities.PlayerToken;
+import fr.miage.atlantis.entities.SeaSerpent;
+import fr.miage.atlantis.entities.Shark;
+import fr.miage.atlantis.entities.Whale;
 import fr.miage.atlantis.graphics.models.EmptyTileModel;
 import fr.miage.atlantis.graphics.models.TileModel;
+import fr.miage.atlantis.logic.GameLogic;
 
 /**
  *
@@ -56,6 +61,8 @@ public class InputActionListener {
     private Game3DRenderer mRenderer;
     private PickingResult mPickingResult;
     private int mPickingRequest;
+    private GameLogic.EntityPickRequest mEntityRequest;
+    private GameLogic.TilePickRequest mTileRequest;
 
     private class PickingResult {
         public final static int SOURCE_BOARD = 0;
@@ -81,11 +88,29 @@ public class InputActionListener {
                 PickingResult result = performPicking();
 
                 if (result != null && result.geometry != null) {
-                    // On a un résultat, on l'highlight
-                    Material mat = result.geometry.getMaterial();
-                    mOriginalMaterial = mat.clone();
-                    if (highlightMaterial(mat)) {
-                        mPreviousGeometry = result.geometry;
+                    // On a un résultat et qu'il correspond aux contraintes, on l'highlight
+                    if (mPickingRequest == REQUEST_ENTITY_PICK) {
+                        // On retrouve l'entité et on la passe.
+                        GameEntity ent = getEntityFromNode(result.geometry);
+
+                        if (checkPickingConstraints(mEntityRequest, ent)) {
+                            Material mat = result.geometry.getMaterial();
+                            mOriginalMaterial = mat.clone();
+                            if (highlightMaterial(mat)) {
+                                mPreviousGeometry = result.geometry;
+                            }
+                        }
+                    } else if (mPickingRequest == REQUEST_TILE_PICK) {
+                        // On retrouve la tile et on la passe.
+                        GameTile tile = getTileFromNode(result.geometry);
+
+                        if (checkPickingConstraints(mTileRequest, tile)) {
+                            Material mat = result.geometry.getMaterial();
+                            mOriginalMaterial = mat.clone();
+                            if (highlightMaterial(mat)) {
+                                mPreviousGeometry = result.geometry;
+                            }
+                        }
                     }
                 }
             }
@@ -109,14 +134,24 @@ public class InputActionListener {
                     if (request == REQUEST_ENTITY_PICK) {
                         // On retrouve l'entité et on la passe.
                         // Hierarchie: submesh0.getParent(mesh).getParent(modelNode).getParent(node)
-                        GameEntity ent = mRenderer.getEntitiesRenderer().getEntityFromNode(
-                                result.geometry.getParent().getParent().getParent());
-                        mRenderer.getLogic().onEntityPicked(ent);
+                        GameEntity ent = getEntityFromNode(result.geometry);
+
+                        if (checkPickingConstraints(mEntityRequest, ent)) {
+                            mRenderer.getLogic().onEntityPicked(ent);
+                        } else {
+                            // On relance la requête
+                            mPickingRequest = request;
+                        }
                     } else if (request == REQUEST_TILE_PICK) {
                         // On retrouve la tile et on la passe
-                        String tileName = result.geometry.getParent().getUserData(TileModel.DATA_TILE_NAME);
-                        GameTile tile = mRenderer.getLogic().getBoard().getTileSet().get(tileName);
-                        mRenderer.getLogic().onTilePicked(tile);
+                        GameTile tile = getTileFromNode(result.geometry);
+
+                        if (checkPickingConstraints(mTileRequest, tile)) {
+                            mRenderer.getLogic().onTilePicked(tile);
+                        } else {
+                            // On relance la requête
+                            mPickingRequest = request;
+                        }
                     }
 
                 }
@@ -144,12 +179,22 @@ public class InputActionListener {
         inputManager.addListener(mMouseClickListener, INPUTMAP_MOUSE_CLICK);
     }
 
+    public void requestEntityPicking(GameLogic.EntityPickRequest request) {
+        requestPicking(REQUEST_ENTITY_PICK);
+        mEntityRequest = request;
+    }
+
+    public void requestTilePicking(GameLogic.TilePickRequest request) {
+        requestPicking(REQUEST_TILE_PICK);
+        mTileRequest = request;
+    }
+
     /**
      * Demande à ce listener d'effectuer un picking en particulier. Le résultat sera rapporté
      * au GameLogic correspondant.
      * @param request L'une des constantes REQUEST_** de cette classe
      */
-    public void requestPicking(int request) {
+    private void requestPicking(int request) {
         if (request < 0 || request >= REQUEST_MAX) {
             throw new IllegalArgumentException("Request must be one of InputActionListener.REQUEST_**");
         }
@@ -217,6 +262,100 @@ public class InputActionListener {
         }
 
         return null;
+    }
+
+    /**
+     * Vérifie que l'entité pickée correspond aux contraintes de la requête de picking
+     * @param request La requête
+     * @param ent L'entité pickée
+     * @return true si l'entité respecte au moins une condition, false sinon
+     */
+    private boolean checkPickingConstraints(GameLogic.EntityPickRequest request, GameEntity ent) {
+        if ((request.pickingRestriction & GameLogic.EntityPickRequest.FLAG_PICK_PLAYER_ENTITIES) != 0) {
+            // On veut picker un pion du joueur. On vérifie que l'entité est bien cela.
+            // @TODO: Bateau!
+
+            // On vérifie que c'est bien un pion
+            if ((ent instanceof PlayerToken)) {
+                PlayerToken pt = (PlayerToken) ent;
+
+                // On vérifie que le pion appartient au joueur
+                if (pt.getPlayer() == request.player) {
+                    return true;
+                } else {
+                    System.out.println("pt.getPlayer() != request.player");
+                }
+            }
+        }
+
+        if ((request.pickingRestriction & GameLogic.EntityPickRequest.FLAG_PICK_SEASERPENT) != 0) {
+            // On veut picker un kraken.
+            if (ent instanceof SeaSerpent) {
+                // RELEASE THE KRAKEN
+                return true;
+            }
+        }
+
+        if ((request.pickingRestriction & GameLogic.EntityPickRequest.FLAG_PICK_SHARK) != 0) {
+            // On veut picker un shark
+            if (ent instanceof Shark) {
+                return true;
+            }
+        }
+
+        if ((request.pickingRestriction & GameLogic.EntityPickRequest.FLAG_PICK_WHALE) != 0) {
+            // On veut picker une baleine
+            if (ent instanceof Whale) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean checkPickingConstraints(GameLogic.TilePickRequest request, GameTile tile) {
+        if (request.waterOnly && tile.getHeight() > 0) {
+            return false;
+        }
+
+        System.out.println("Left Bottom: " + tile.getLeftBottomTile());
+        System.out.println("Left: " + tile.getLeftTile());
+        System.out.println("Left Upper: " + tile.getLeftUpperTile());
+        System.out.println("Right Bottom: " + tile.getRightBottomTile());
+        System.out.println("Right: " + tile.getRightTile());
+        System.out.println("Right Upper: " + tile.getRightUpperTile());
+
+        if (tile.getLeftBottomTile() != request.pickNearTile &&
+                tile.getLeftTile() != request.pickNearTile &&
+                tile.getLeftUpperTile() != request.pickNearTile &&
+                tile.getRightBottomTile() != request.pickNearTile &&
+                tile.getRightTile() != request.pickNearTile &&
+                tile.getRightUpperTile() != request.pickNearTile) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Retrouve l'entité a partir d'une géometrie d'entité pickée
+     * @param geometry
+     * @return
+     */
+    private GameEntity getEntityFromNode(Geometry geometry) {
+        // Hierarchie: submesh0.getParent(mesh).getParent(modelNode).getParent(node)
+        return mRenderer.getEntitiesRenderer().getEntityFromNode(
+                geometry.getParent().getParent().getParent());
+    }
+
+    /**
+     * Retrouve une GameTile à partir d'une géométrie de tile pickée
+     * @param geometry
+     * @return
+     */
+    private GameTile getTileFromNode(Geometry geometry) {
+        String tileName = geometry.getParent().getUserData(TileModel.DATA_TILE_NAME);
+        return mRenderer.getLogic().getBoard().getTileSet().get(tileName);
     }
 
     private boolean highlightMaterial(Material mat) {

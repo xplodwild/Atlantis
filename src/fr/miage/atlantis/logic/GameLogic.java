@@ -53,6 +53,39 @@ public abstract class GameLogic implements GameTurnListener {
      */
     private Player[] mPlayers;
 
+
+    public static class EntityPickRequest {
+        public static final int FLAG_PICK_PLAYER_ENTITIES   = (1 << 0);
+        public static final int FLAG_PICK_SHARK             = (1 << 1);
+        public static final int FLAG_PICK_WHALE             = (1 << 2);
+        public static final int FLAG_PICK_SEASERPENT        = (1 << 3);
+
+        /**
+         * Restriction des entités pouvant être pickées
+         * La valeur doit être une ou plusieurs de FLAG_PICK_**
+         */
+        public int pickingRestriction;
+
+        /**
+         * En cas de restriction d'entités appartenant au joueur,
+         * la restriction s'appliquera au joueur passé ici
+         */
+        public Player player;
+    }
+
+    public static class TilePickRequest {
+        /**
+         * Si cette variable n'est pas nulle, le picking de tile ne fonctionnera que sur les tiles
+         * adjacentes à celle-ci
+         */
+        public GameTile pickNearTile;
+
+        /**
+         * Si waterOnly vaut true, seulement les tiles au niveau de l'eau seront sélectionnables
+         */
+        public boolean waterOnly;
+    }
+
     /**
      * Constructeur de GameLogic
      *
@@ -169,12 +202,12 @@ public abstract class GameLogic implements GameTurnListener {
     /**
      * Indique à la logique du jeu qu'on a besoin de sélectionner une entité
      */
-    public abstract void requestEntityPick();
+    public abstract void requestEntityPick(EntityPickRequest request);
 
     /**
      * Indique à la logique du jeu qu'on a besoin de sélectionner une tile
      */
-    public abstract void requestTilePick();
+    public abstract void requestTilePick(TilePickRequest request);
 
     /**
      * Signale au moteur de logique qu'on a pické une entité

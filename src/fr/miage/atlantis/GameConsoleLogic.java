@@ -89,12 +89,12 @@ public class GameConsoleLogic extends GameLogic {
     }
 
     @Override
-    public void requestEntityPick() {
+    public void requestEntityPick(EntityPickRequest request) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void requestTilePick() {
+    public void requestTilePick(TilePickRequest request) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

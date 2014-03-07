@@ -140,8 +140,8 @@ public class GameTurn implements GameRenderListener {
         // Le tour commence : on peut utiliser une tile de notre stock local
         // TODO
 
-        // Sinon, on bouge nos entités
-        mController.requestEntityPick();
+        // Sinon, on bouge nos entités. On laisse le joueur choisir que ses entités à lui.
+        requestPlayerEntityPicking();
     }
 
     public void onPlayedTileAction() {
@@ -150,7 +150,8 @@ public class GameTurn implements GameRenderListener {
 
     public void onUnitMoveFinished() {
         if (mRemainingMoves > 0) {
-            mController.requestEntityPick();
+            // On a encore des mouvements de ses unités possibles, alors on le fait.
+            requestPlayerEntityPicking();
         }
     }
 
@@ -164,6 +165,17 @@ public class GameTurn implements GameRenderListener {
 
     public void onEntityActionFinished() {
         throw new UnsupportedOperationException("Not implemented");
+    }
+
+    /**
+     * Demande à la logique de jeu de picker des entités appartenant au joueur (PlayerToken, ou
+     * bateau ayant un pion du joueur en cours dessus).
+     */
+    private void requestPlayerEntityPicking() {
+        GameLogic.EntityPickRequest request = new GameLogic.EntityPickRequest();
+        request.pickingRestriction = GameLogic.EntityPickRequest.FLAG_PICK_PLAYER_ENTITIES;
+        request.player = mPlayer;
+        mController.requestEntityPick(request);
     }
 
     //--------------------------------------------------------------------------
