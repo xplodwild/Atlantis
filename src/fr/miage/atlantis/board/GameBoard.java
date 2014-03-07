@@ -28,6 +28,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 
 /**
@@ -639,6 +640,10 @@ public final class GameBoard {
        ss.moveToTile(null, temp);
 
        //-----------------------------------------------------------------------
+       
+       //Affiche chaques tiles et son detail
+       
+       this.printAllTiles();
     }
 
 
@@ -894,6 +899,15 @@ public final class GameBoard {
         if(baseLeftTile != null){
             baseLeftTile.setRightBottomTile(newTile);
             this.mTileSet.put(baseLeftTile.getName(), baseLeftTile);
+        }
+    }
+    
+    
+    public void printAllTiles(){
+        Set<String> s=this.mTileSet.keySet();
+        
+        for(String key : s){
+            System.out.println(this.mTileSet.get(key));
         }
     }
 
