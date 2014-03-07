@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import jme3tools.optimize.GeometryBatchFactory;
 
 /**
  *
@@ -167,7 +168,9 @@ public class BoardRenderer extends Node {
 
         // Si c'est une tile au dessus de l'eau, on utilise un mesh avec la
         // texture qui va bien. Sinon, on fait un contour seulement.
-        if (tile.getHeight() > 0) {
+        if (tile.getHeight() < 0) {
+            return;
+        } else if (tile.getHeight() > 0) {
             output = new TileModel(tile.getName(), tile.getHeight(), mAssetManager);
         } else {
             // On détermine la couleur en fonction du type de tile
@@ -198,12 +201,6 @@ public class BoardRenderer extends Node {
         mNodeToGameTiles.put(output, tile);
         mGameTileToModel.put(tile, (AbstractTileModel) output);
         attachChild(output);
-
-        if (tile.getHeight() < 0 && !DEBUG_BORDER) {
-            // Si on ne debug pas les bordures, les tiles sont quand même ajoutées
-            // au jeu, mais on ne les affiche pas en les rendant après le ciel
-            output.setQueueBucket(RenderQueue.Bucket.Sky);
-        }
 
         System.out.println("Tile " + mTiles.size() + ": " + tile.getName() + " (height=" + tile.getHeight() + ")");
         mTiles.add(output);
