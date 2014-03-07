@@ -854,10 +854,10 @@ public final class GameBoard {
 
         //Puis on recupere les tile adjacent aux deux tile et on les lient a la nouvelle tile fraichement crée.
         if(baseUpperRightTile != null){
-            newTile.setLeftUpperTile(baseUpperRightTile);
+            newTile.setLeftUpperTile(baseUpperRightTile);            
         }
         if(baseBottomRightTile != null){
-            newTile.setLeftBottomTile(baseBottomRightTile);
+            this.placeTileAtTheBottomLeftOf(newTile, baseBottomRightTile);           
         }
         
         //Update le HashMap
@@ -869,9 +869,8 @@ public final class GameBoard {
             baseBottomRightTile.setRightUpperTile(newTile);
             this.mTileSet.put(baseBottomRightTile.getName(), baseBottomRightTile);
         }
-        if(baseUpperRightTile != null){
-            baseUpperRightTile.setRightBottomTile(newTile);
-            this.mTileSet.put(baseUpperRightTile.getName(), baseUpperRightTile);
+        if(baseUpperRightTile != null){            
+            this.placeTileAtTheBottomRightOf(baseUpperRightTile, newTile);            
         }
     }
 
