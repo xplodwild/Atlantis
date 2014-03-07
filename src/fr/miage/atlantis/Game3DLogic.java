@@ -38,6 +38,7 @@ import fr.miage.atlantis.entities.Shark;
 import fr.miage.atlantis.graphics.AnimationBrain;
 import fr.miage.atlantis.graphics.Game3DRenderer;
 import fr.miage.atlantis.graphics.InputActionListener;
+import fr.miage.atlantis.graphics.ParticlesFactory;
 import fr.miage.atlantis.graphics.models.AbstractTileModel;
 import fr.miage.atlantis.graphics.models.AnimatedModel;
 import fr.miage.atlantis.graphics.models.PlayerModel;
@@ -162,7 +163,15 @@ public class Game3DLogic extends GameLogic {
             throw new IllegalStateException("Aucune node 3D trouvée pour la tile de destination!");
         }
 
+        // Effet visuel de splash d'eau
+        Node splashEffect = ParticlesFactory.makeWaterSplash(mRenderer.getAssetManager());
+        splashEffect.setLocalTranslation(tileNode.getTileTopCenter());
+        mRenderer.getRootNode().attachChild(splashEffect);
+        ParticlesFactory.emitAllParticles(splashEffect);
+
+        // Génération du mouvement de la tile
         final MotionEvent motionEvent = generateTileSinkMotion((Node) tileNode);
+
         // Callback lorsque l'animation est terminée
         motionEvent.getPath().addListener(new MotionPathListener() {
             public void onWayPointReach(MotionEvent control, int wayPointIndex) {
@@ -246,7 +255,7 @@ public class Game3DLogic extends GameLogic {
 
         // On créé le contrôleur
         final MotionEvent motionControl = new MotionEvent(tileNode, path);
-        motionControl.setInitialDuration(1f);
+        motionControl.setInitialDuration(0.5f);
 
         return motionControl;
     }
