@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package fr.miage.atlantis;
 
 import com.jme3.animation.AnimChannel;
@@ -34,14 +33,15 @@ import fr.miage.atlantis.board.WaterTile;
 import fr.miage.atlantis.entities.Boat;
 import fr.miage.atlantis.entities.GameEntity;
 import fr.miage.atlantis.entities.PlayerToken;
+import fr.miage.atlantis.entities.SeaSerpent;
 import fr.miage.atlantis.entities.Shark;
 import fr.miage.atlantis.graphics.AnimationBrain;
 import fr.miage.atlantis.graphics.Game3DRenderer;
-import fr.miage.atlantis.graphics.InputActionListener;
 import fr.miage.atlantis.graphics.ParticlesFactory;
 import fr.miage.atlantis.graphics.models.AbstractTileModel;
 import fr.miage.atlantis.graphics.models.AnimatedModel;
 import fr.miage.atlantis.graphics.models.PlayerModel;
+import fr.miage.atlantis.graphics.models.SeaSerpentModel;
 import fr.miage.atlantis.graphics.models.SharkModel;
 import fr.miage.atlantis.logic.GameLogic;
 import fr.miage.atlantis.logic.GameTurn;
@@ -210,7 +210,7 @@ public class Game3DLogic extends GameLogic {
 
     public void onEntityAction(GameEntity source, GameEntity target, int action) {
         switch (action) {
-            case GameEntity.ACTION_SHARK_EAT:
+            case GameEntity.ACTION_SHARK_EAT: {
                 // On lance les animations.
                 // Ces deux prochaines lignes sont PARFAITEMENT propres et certifiées sans bug.
                 final Shark shark = (Shark) ((source instanceof Shark) ? source : target);
@@ -237,8 +237,38 @@ public class Game3DLogic extends GameLogic {
                     public void onAnimChange(AnimControl control, AnimChannel channel, String animName) {
                     }
                 });
+            }
+            break;
 
-                break;
+            case GameEntity.ACTION_SEASERPENT_CRUSH: {
+                final SeaSerpent ss = (SeaSerpent) source;
+                final PlayerToken token = (PlayerToken) target;
+
+                final SeaSerpentModel ssModel = (SeaSerpentModel) mRenderer.getEntitiesRenderer().getNodeFromEntity(ss);
+                final PlayerModel playerModel = (PlayerModel) mRenderer.getEntitiesRenderer().getNodeFromEntity(token);
+                ssModel.lookAt(playerModel.getLocalTranslation(), Vector3f.UNIT_Y);
+                ssModel.rotate(0, -90, 0);
+
+                ssModel.playAnimation(SeaSerpentModel.ANIMATION_ATTACK_CELL, false, new AnimEventListener() {
+                    public void onAnimCycleDone(AnimControl control, AnimChannel channel, String animName) {
+                        ssModel.playAnimation(SeaSerpentModel.ANIMATION_IDLE);
+                        control.removeListener(this);
+                    }
+
+                    public void onAnimChange(AnimControl control, AnimChannel channel, String animName) {
+                    }
+                });
+                playerModel.playAnimation(PlayerModel.ANIMATION_EATEN_BY_SHARK, false, new AnimEventListener() {
+                    public void onAnimCycleDone(AnimControl control, AnimChannel channel, String animName) {
+                        token.die(Game3DLogic.this);
+                        control.removeListener(this);
+                    }
+
+                    public void onAnimChange(AnimControl control, AnimChannel channel, String animName) {
+                    }
+                });
+            }
+            break;
         }
     }
 
@@ -247,7 +277,7 @@ public class Game3DLogic extends GameLogic {
     }
 
     private MotionEvent generateTileSinkMotion(Node tileNode) {
-         // On créé le chemin
+        // On créé le chemin
         final MotionPath path = new MotionPath();
         path.addWayPoint(tileNode.getLocalTranslation());
         path.addWayPoint(tileNode.getLocalTranslation().add(0, -20, 0));
@@ -261,7 +291,7 @@ public class Game3DLogic extends GameLogic {
     }
 
     private MotionEvent generateEntityOnTileMotion(Node entNode, AbstractTileModel tileNode) {
-         // On créé le chemin
+        // On créé le chemin
         final MotionPath path = new MotionPath();
         path.addWayPoint(entNode.getLocalTranslation());
         path.addWayPoint(tileNode.getRandomizedTileTopCenter());
@@ -334,4 +364,3 @@ public class Game3DLogic extends GameLogic {
         }
     }
 }
-

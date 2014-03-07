@@ -316,12 +316,14 @@ public class InputActionListener {
             return false;
         }
 
+        /*
         System.out.println("Left Bottom: " + tile.getLeftBottomTile());
         System.out.println("Left: " + tile.getLeftTile());
         System.out.println("Left Upper: " + tile.getLeftUpperTile());
         System.out.println("Right Bottom: " + tile.getRightBottomTile());
         System.out.println("Right: " + tile.getRightTile());
         System.out.println("Right Upper: " + tile.getRightUpperTile());
+        */
 
         if (tile.getLeftBottomTile() != request.pickNearTile &&
                 tile.getLeftTile() != request.pickNearTile &&

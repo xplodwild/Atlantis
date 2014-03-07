@@ -59,7 +59,7 @@ public class GameEntity {
         mName = name;
     }
 
-    
+
     /**
      * Deplace cette entité sur le Tile tile, avec la logique de jeu logic
      *
@@ -83,7 +83,8 @@ public class GameEntity {
             // On trigger les événements des autres entités présentes sur la tile
             for (GameEntity ent : tile.getEntities()) {
                 if (ent != this) {
-                    somethingHappened |= onEntityCross(logic, ent);
+                    somethingHappened |= this.onEntityCross(logic, ent);
+                    somethingHappened |= ent.onEntityCross(logic, this);
                 }
             }
         }
@@ -91,18 +92,18 @@ public class GameEntity {
         return somethingHappened;
     }
 
-    
+
     /**
      * Tue l'unité visée
      *
      * @param logic logique de jeu tuant l'unité
      */
-    public void die(GameLogic logic) {        
+    public void die(GameLogic logic) {
         // On supprime le perso du jeu
         logic.onUnitDie(this);
     }
 
-    
+
     /**
      * Spawn une unité.
      *
@@ -112,29 +113,29 @@ public class GameEntity {
         throw new UnsupportedOperationException("Not implemented");
     }
 
-    
+
     /**
      * Actions a effectuer lors d'un croisement de deux Entity this et ent
-     * 
+     *
      * @param logic Logique de jeu a adopter
      * @param ent entity qui croise this
-     * @return 
+     * @return
      */
     public boolean onEntityCross(GameLogic logic, GameEntity ent) {
         // Par défaut, on ne fait rien
         return false;
     }
-    
-    
-    
-    
+
+
+
+
     //--------------------------------------------------------------------------
     //GETTERS                                                                  |
     //--------------------------------------------------------------------------
-    
-    
+
+
     public GameTile getTile() {
         return mTile;
     }
-    //--------------------------------------------------------------------------   
+    //--------------------------------------------------------------------------
 }
