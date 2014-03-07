@@ -43,6 +43,8 @@ import fr.miage.atlantis.graphics.models.AnimatedModel;
 import fr.miage.atlantis.graphics.models.PlayerModel;
 import fr.miage.atlantis.graphics.models.SharkModel;
 import fr.miage.atlantis.logic.GameLogic;
+import fr.miage.atlantis.logic.GameTurn;
+import java.util.List;
 
 /**
  * Main Game Engine loop class
@@ -54,6 +56,7 @@ import fr.miage.atlantis.logic.GameLogic;
 public class Game3DLogic extends GameLogic {
 
     private Game3DRenderer mRenderer;
+    private GameEntity mPickedEntity;
 
     public Game3DLogic() {
         super();
@@ -63,10 +66,30 @@ public class Game3DLogic extends GameLogic {
     @Override
     public void boot() {
         mRenderer.start();
+        prepareGame(new String[]{"Romain", "Olivier"});
+    }
+
+    @Override
+    public void startGame() {
+        // TEST: On place des tokens
+        Player[] plays = getPlayers();
+        for (int i = 0; i < plays.length; i++) {
+            Player p = plays[i];
+            List<PlayerToken> tokens = p.getTokens();
+
+            for (PlayerToken token : tokens) {
+                token.moveToTile(this, getBoard().getTileSet().get("Beach #3"));
+                mRenderer.getEntitiesRenderer().addEntity(token);
+            }
+        }
+
+        super.startGame();
     }
 
     public void onTurnStart(Player p) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        // TODO: Animations
+        System.out.println("Game3DLogic: onTurnStart");
+        getCurrentTurn().onTurnStarted();
     }
 
     public void onPlayTileAction(GameTile tile, TileAction action) {
@@ -261,23 +284,35 @@ public class Game3DLogic extends GameLogic {
     @Override
     public void requestEntityPick() {
         // On a besoin de picker une entité
+        System.out.println("Game3DLogic: requestEntityPick");
         mRenderer.getInputListener().requestPicking(InputActionListener.REQUEST_ENTITY_PICK);
     }
 
     @Override
     public void requestTilePick() {
         // On a besoin de picker une tile
+        System.out.println("Game3DLogic: requestTilePick");
         mRenderer.getInputListener().requestPicking(InputActionListener.REQUEST_TILE_PICK);
     }
 
     @Override
     public void onEntityPicked(GameEntity ent) {
-        System.out.println("Entity picked!");
+        System.out.println("Entity picked: " + ent);
+
+        // On assume ici que lorsqu'on picke une entité, on veut picker une tile après.
+        mPickedEntity = ent;
+        requestTilePick();
     }
 
     @Override
     public void onTilePicked(GameTile tile) {
         System.out.println("Tile " + tile.getName() + " picked!");
+
+        GameTurn currentTurn = mRenderer.getLogic().getCurrentTurn();
+        if (currentTurn.getRemainingMoves() > 0) {
+            // On assume que ce picking de tile était pour le déplacement d'unités.
+            currentTurn.moveEntity(mPickedEntity, tile);
+        }
     }
 }
 

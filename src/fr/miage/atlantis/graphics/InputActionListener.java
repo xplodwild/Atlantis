@@ -99,21 +99,26 @@ public class InputActionListener {
                 // On effectue le picking
                 PickingResult result = performPicking();
 
+
                 if (result != null) {
-                    if (mPickingRequest == REQUEST_ENTITY_PICK) {
-                        // On retrouve l'entité et on la passe
-                        GameEntity ent = mRenderer.getEntitiesRenderer()
-                                .getEntityFromNode(result.geometry.getParent());
+                    // On a complété la requête. On laisse la place pour des requêtes de picking
+                    // qui peuvent avoir lieu dans la logique ci dessous
+                    int request = mPickingRequest;
+                    mPickingRequest = REQUEST_NONE;
+
+                    if (request == REQUEST_ENTITY_PICK) {
+                        // On retrouve l'entité et on la passe.
+                        // Hierarchie: submesh0.getParent(mesh).getParent(modelNode).getParent(node)
+                        GameEntity ent = mRenderer.getEntitiesRenderer().getEntityFromNode(
+                                result.geometry.getParent().getParent().getParent());
                         mRenderer.getLogic().onEntityPicked(ent);
-                    } else if (mPickingRequest == REQUEST_TILE_PICK) {
+                    } else if (request == REQUEST_TILE_PICK) {
                         // On retrouve la tile et on la passe
                         String tileName = result.geometry.getParent().getUserData(TileModel.DATA_TILE_NAME);
                         GameTile tile = mRenderer.getLogic().getBoard().getTileSet().get(tileName);
                         mRenderer.getLogic().onTilePicked(tile);
                     }
 
-                    // On a complété la requête
-                    mPickingRequest = REQUEST_NONE;
                 }
             }
         }

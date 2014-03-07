@@ -113,21 +113,7 @@ public class Game3DRenderer extends SimpleApplication {
         FRAME_COUNT++;
 
         if (FRAME_COUNT == 10) {
-
-            // TEST: Ajout d'un player token de test
-            Map<String, GameTile> tiles = mParent.getBoard().getTileSet();
-            Player p = new Player("Joueur 1", 1);
-            PlayerToken pt = new PlayerToken(p, 6);
-            pt.moveToTile(mParent, tiles.get("Beach #3"));
-            mEntitiesRenderer.addEntity(pt);
-
-            mParent.onUnitMove(pt, tiles.get("Beach #4"));
-        } else if (FRAME_COUNT == 100) {
-            Map<String, GameTile> tiles = mParent.getBoard().getTileSet();
-            mParent.onSinkTile(tiles.get("Beach #4"));
-        } else if (FRAME_COUNT == 150) {
-            System.out.println("==> TEST: ASKING FOR TILE PICKING!");
-            mParent.requestTilePick();
+            mParent.startGame();
         }
     }
 

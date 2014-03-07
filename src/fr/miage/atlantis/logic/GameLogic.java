@@ -69,6 +69,7 @@ public abstract class GameLogic implements GameTurnListener {
      * @param players Tableau des pseudo des joueurs
      */
     public void prepareGame(String[] players) {
+        // On créé les joueurs
         mPlayers = new Player[players.length];
         for (int i = 0; i < mPlayers.length; i++) {
             mPlayers[i] = new Player(players[i], i + 1);
@@ -150,6 +151,10 @@ public abstract class GameLogic implements GameTurnListener {
 
     public GameTurn getCurrentTurn() {
         return mCurrentTurn;
+    }
+
+    public Player[] getPlayers() {
+        return mPlayers;
     }
     //--------------------------------------------------------------------------
 

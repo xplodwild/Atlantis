@@ -22,6 +22,7 @@ import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.board.TileAction;
 import fr.miage.atlantis.entities.EntityMove;
 import fr.miage.atlantis.entities.GameEntity;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,6 +33,8 @@ import java.util.List;
  * @date 03/03/2014
  */
 public class GameTurn implements GameRenderListener {
+
+    private final static boolean DBG_TRACE = true;
 
     private TileAction mTileAction;
     private List<TileAction> mRemoteTiles;
@@ -56,12 +59,23 @@ public class GameTurn implements GameRenderListener {
         mRemainingMoves = 3;
         mDiceRolled = false;
         mSunkenTile = null;
+        mMoves = new ArrayList<EntityMove>();
+    }
+
+    private void log(String str) {
+        if (DBG_TRACE) System.out.println(str);
     }
 
     /**
      * Demarre le début du tour de jeu du joueur courant
      */
     public void startTurn() {
+        log("GameTurn: startTurn()");
+        mController.onTurnStart(mPlayer);
+
+
+
+        //////
 
         //Peu jouer une carte TileAction dans son pool de tiles
 
@@ -79,7 +93,6 @@ public class GameTurn implements GameRenderListener {
 
         //Met l'attribut mTurnIsOver a true pour boucler le tour
 
-        throw new UnsupportedOperationException("Not implemented");
     }
 
     /**
@@ -89,7 +102,16 @@ public class GameTurn implements GameRenderListener {
      * @param dest Tile destination
      */
     public void moveEntity(GameEntity ent, GameTile dest) {
-        throw new UnsupportedOperationException("Not implemented");
+        log("GameTurn: moveEntity");
+
+        // On log le mouvement
+        // xplod: Pourquoi stocker le numero du tour ici? Surtout qu'on l'a pas
+        EntityMove move = new EntityMove(ent.getTile(), dest, ent, -1);
+        mMoves.add(move);
+        mRemainingMoves--;
+
+        // On le transmet au controlleur en attendant la suite
+        mController.onUnitMove(ent, dest);
     }
 
     public int rollDice() {
@@ -98,15 +120,11 @@ public class GameTurn implements GameRenderListener {
     }
 
     public boolean hasSunkLandTile() {
-        boolean sunk = false;
-        if (mSunkenTile != null) {
-            sunk = true;
-        }
-        return sunk;
+        return (mSunkenTile != null);
     }
 
     public void sinkLandTile(GameTile tile) {
-        throw new UnsupportedOperationException("Not implemented");
+        mSunkenTile = tile;
     }
 
     public void useRemoteTile(TileAction action) {
@@ -118,7 +136,12 @@ public class GameTurn implements GameRenderListener {
     }
 
     public void onTurnStarted() {
-        throw new UnsupportedOperationException("Not implemented");
+        log("GameTurn: onTurnStarted()");
+        // Le tour commence : on peut utiliser une tile de notre stock local
+        // TODO
+
+        // Sinon, on bouge nos entités
+        mController.requestEntityPick();
     }
 
     public void onPlayedTileAction() {
@@ -126,7 +149,9 @@ public class GameTurn implements GameRenderListener {
     }
 
     public void onUnitMoveFinished() {
-        throw new UnsupportedOperationException("Not implemented");
+        if (mRemainingMoves > 0) {
+            mController.requestEntityPick();
+        }
     }
 
     public void onDiceRollFinished() {
