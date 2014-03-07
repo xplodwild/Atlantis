@@ -22,12 +22,12 @@ import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState;
 import com.jme3.math.ColorRGBA;
-import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import fr.miage.atlantis.graphics.ModelCache;
+import java.util.Random;
 
 /**
  *
@@ -81,5 +81,10 @@ public class EmptyTileModel extends StaticModel implements AbstractTileModel {
     public Vector3f getTileTopCenter() {
         updateWorldBound();
         return getWorldBound().getCenter().add(0, 4.0f, 0);
+    }
+
+    public Vector3f getRandomizedTileTopCenter() {
+        Random r = new Random();
+        return getTileTopCenter(); //.add(-30.0f + r.nextFloat() * 30.0f, 0f, -30.0f + r.nextFloat() * 30.0f);
     }
 }

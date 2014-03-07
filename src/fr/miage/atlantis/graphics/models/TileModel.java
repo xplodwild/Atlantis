@@ -20,6 +20,7 @@ package fr.miage.atlantis.graphics.models;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.math.Vector3f;
+import java.util.Random;
 
 /**
  *
@@ -50,6 +51,11 @@ public class TileModel extends StaticModel implements AbstractTileModel {
     public Vector3f getTileTopCenter() {
         updateWorldBound();
         return getModelNode().getWorldBound().getCenter().add(0.0f, 6.0f * (mHeight+1), 0.0f);
+    }
+
+    public Vector3f getRandomizedTileTopCenter() {
+        Random r = new Random();
+        return getTileTopCenter().add(-10.0f + r.nextFloat() * 20.0f, 0f,  -10.0f + r.nextFloat() * 20.0f);
     }
 
     private static String getModelPathFromHeight(int height) {

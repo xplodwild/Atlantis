@@ -264,7 +264,7 @@ public class Game3DLogic extends GameLogic {
          // On créé le chemin
         final MotionPath path = new MotionPath();
         path.addWayPoint(entNode.getLocalTranslation());
-        path.addWayPoint(tileNode.getTileTopCenter());
+        path.addWayPoint(tileNode.getRandomizedTileTopCenter());
         path.setPathSplineType(Spline.SplineType.Linear);
 
         // On créé le contrôleur
@@ -291,17 +291,17 @@ public class Game3DLogic extends GameLogic {
     }
 
     @Override
-    public void requestEntityPick() {
+    public void requestEntityPick(EntityPickRequest request) {
         // On a besoin de picker une entité
         System.out.println("Game3DLogic: requestEntityPick");
-        mRenderer.getInputListener().requestPicking(InputActionListener.REQUEST_ENTITY_PICK);
+        mRenderer.getInputListener().requestEntityPicking(request);
     }
 
     @Override
-    public void requestTilePick() {
+    public void requestTilePick(TilePickRequest request) {
         // On a besoin de picker une tile
         System.out.println("Game3DLogic: requestTilePick");
-        mRenderer.getInputListener().requestPicking(InputActionListener.REQUEST_TILE_PICK);
+        mRenderer.getInputListener().requestTilePicking(request);
     }
 
     @Override
@@ -310,7 +310,17 @@ public class Game3DLogic extends GameLogic {
 
         // On assume ici que lorsqu'on picke une entité, on veut picker une tile après.
         mPickedEntity = ent;
-        requestTilePick();
+        TilePickRequest tilePick = new TilePickRequest();
+        tilePick.pickNearTile = ent.getTile();
+
+        // On reste sur l'eau si on est dans l'eau
+        if (ent.getTile().getHeight() == 0) {
+            tilePick.waterOnly = true;
+        } else {
+            tilePick.waterOnly = false;
+        }
+
+        requestTilePick(tilePick);
     }
 
     @Override

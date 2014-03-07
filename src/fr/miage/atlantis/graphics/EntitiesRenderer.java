@@ -76,7 +76,7 @@ public class EntitiesRenderer extends Node {
 
         if (ent.getTile() != null) {
             AbstractTileModel tile = mBoardRenderer.findTileModel(ent.getTile());
-            output.setLocalTranslation(tile.getTileTopCenter());
+            output.setLocalTranslation(tile.getRandomizedTileTopCenter());
         }
     }
 
