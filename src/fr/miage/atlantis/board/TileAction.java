@@ -41,6 +41,7 @@ public class TileAction {
     public final static int ENTITY_SHARK = 0;
     public final static int ENTITY_WHALE = 1;
     public final static int ENTITY_BOAT = 2;
+    public final static int ENTITY_SEASERPENT = 3;
     /**
      * Action de déplacer un animal au début de son tour
      */
@@ -62,9 +63,13 @@ public class TileAction {
      */
     public final static int ACTION_BONUS_BOAT = 4;
     /**
+     * Action du tourbillon
+     */
+    public final static int ACTION_WHIRL = 5;
+    /**
      * Action de la tile volcan
      */
-    public final static int ACTION_VOLCANO = 5;
+    public final static int ACTION_VOLCANO = 6;
     /**
      * Nombre de tile action de type Spawn Animal Shark
      */
@@ -74,25 +79,41 @@ public class TileAction {
      */
     public final static int TILE_COUNT_ANIMAL_WHALE = 5;
     /**
-     * Nombre de tile action de type Move Animal
+     * Nombre de tile action de type Move Animal Shark
      */
-    private final static int TILE_COUNT_MOVE_ANIMAL = 16;
+    private final static int TILE_COUNT_MOVE_SHARK = 2;
     /**
-     * Nombre de tile action de type CancelAnimal
+     * Nombre de tile action de type Move Animal Whale
      */
-    private final static int TILE_COUNT_CANCEL_ANIMAL = 11;
+    private final static int TILE_COUNT_MOVE_WHALE = 2;
     /**
-     * Nombre de tile action de type SpawnBoat
+     * Nombre de tile action de type Move Animal Seaserpent
      */
-    private final static int TILE_COUNT_SPAWN_BOAT = 2;                                   //@TODO : Trouver le nombre exact de ce type de tile
+    private final static int TILE_COUNT_MOVE_SEASERPENT = 2;
+    /**
+     * Nombre de tile action de type Cancel Animal Shark
+     */
+    private final static int TILE_COUNT_CANCEL_SHARK = 3;
+    /**
+     * Nombre de tile action de type Cancel Animal Whale
+     */
+    private final static int TILE_COUNT_CANCEL_WHALE = 3;
+    /**
+     * Nombre de tile action de type Spawn Boat
+     */
+    private final static int TILE_COUNT_SPAWN_BOAT = 3;
     /**
      * Nombre de tile action de type BonusSwim
      */
-    private final static int TILE_COUNT_BONUS_SWIM = 3;                                   //@TODO : Trouver le nombre exact de ce type de tile
+    private final static int TILE_COUNT_BONUS_SWIM = 4;
     /**
      * Nombre de tile action de type BonusBoat
      */
-    private final static int TILE_COUNT_BONUS_BOAT = 3;                                   //@TODO : Trouver le nombre exact de ce type de tile
+    private final static int TILE_COUNT_BONUS_BOAT = 4;
+    /**
+     * Nombre de tile action de type tourbillon
+     */
+    private final static int TILE_COUNT_WHIRL = 6;
     /**
      * Defini si l'action est une action a realiser immediatement ou non
      */
@@ -140,6 +161,10 @@ public class TileAction {
             return new TileAction(ACTION_BONUS_SWIM, NONE, false, false, false);
         }
 
+        public static TileAction createWhirl() {
+            return new TileAction(ACTION_WHIRL, NONE, true, false, false);
+        }
+
         public static TileAction createVolcano() {
             return new TileAction(ACTION_VOLCANO, NONE, false, false, true);
         }
@@ -154,33 +179,44 @@ public class TileAction {
         if (TileAction.sRandomizer == null) {
             sRandomizer = new ArrayList<TileAction>();
 
-            for (int i = 0; i <= TileAction.TILE_COUNT_ANIMAL_SHARK; i++) {
+            for (int i = 0; i < TileAction.TILE_COUNT_ANIMAL_SHARK; i++) {
                 sRandomizer.add(TileAction.Factory.createSpawnEntity(TileAction.ENTITY_SHARK));
-                for (int j = 0; j <= TileAction.TILE_COUNT_CANCEL_ANIMAL; j++) {
-                    sRandomizer.add(TileAction.Factory.createCancelAnimal(TileAction.ENTITY_SHARK));
-                }
-                for (int k = 0; k <= TileAction.TILE_COUNT_MOVE_ANIMAL; k++) {
-                    sRandomizer.add(TileAction.Factory.createMoveAnimal(TileAction.ENTITY_SHARK));
-                }
+            }
+            for (int j = 0; j < TileAction.TILE_COUNT_CANCEL_SHARK; j++) {
+                sRandomizer.add(TileAction.Factory.createCancelAnimal(TileAction.ENTITY_SHARK));
+            }
+            for (int k = 0; k < TileAction.TILE_COUNT_MOVE_SHARK; k++) {
+                sRandomizer.add(TileAction.Factory.createMoveAnimal(TileAction.ENTITY_SHARK));
             }
 
-            for (int i = 0; i <= TileAction.TILE_COUNT_ANIMAL_WHALE; i++) {
+            for (int i = 0; i < TileAction.TILE_COUNT_ANIMAL_WHALE; i++) {
                 sRandomizer.add(TileAction.Factory.createSpawnEntity(TileAction.ENTITY_WHALE));
-
-                for (int j = 0; j <= TileAction.TILE_COUNT_CANCEL_ANIMAL; j++) {
-                    sRandomizer.add(TileAction.Factory.createCancelAnimal(TileAction.ENTITY_WHALE));
-                }
-                for (int k = 0; k <= TileAction.TILE_COUNT_MOVE_ANIMAL; k++) {
-                    sRandomizer.add(TileAction.Factory.createMoveAnimal(TileAction.ENTITY_WHALE));
-                }
+            }
+            for (int j = 0; j < TileAction.TILE_COUNT_CANCEL_WHALE; j++) {
+                sRandomizer.add(TileAction.Factory.createCancelAnimal(TileAction.ENTITY_WHALE));
+            }
+            for (int k = 0; k < TileAction.TILE_COUNT_MOVE_WHALE; k++) {
+                sRandomizer.add(TileAction.Factory.createMoveAnimal(TileAction.ENTITY_WHALE));
             }
 
-            for (int i = 0; i <= TileAction.TILE_COUNT_SPAWN_BOAT; i++) {
+            for (int k = 0; k < TileAction.TILE_COUNT_MOVE_SEASERPENT; k++) {
+                sRandomizer.add(TileAction.Factory.createMoveAnimal(TileAction.ENTITY_SEASERPENT));
+            }
+
+            for (int i = 0; i < TileAction.TILE_COUNT_SPAWN_BOAT; i++) {
                 sRandomizer.add(TileAction.Factory.createBonusBoat());
             }
 
-            for (int i = 0; i <= TileAction.TILE_COUNT_BONUS_SWIM; i++) {
+            for (int i = 0; i < TileAction.TILE_COUNT_BONUS_SWIM; i++) {
                 sRandomizer.add(TileAction.Factory.createBonusSwim());
+            }
+
+            for (int i = 0; i < TileAction.TILE_COUNT_BONUS_BOAT; i++) {
+                sRandomizer.add(TileAction.Factory.createBonusBoat());
+            }
+
+            for (int i = 0; i < TileAction.TILE_COUNT_WHIRL; i++) {
+                sRandomizer.add(TileAction.Factory.createWhirl());
             }
         }
 

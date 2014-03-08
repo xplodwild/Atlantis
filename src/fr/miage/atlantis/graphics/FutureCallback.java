@@ -16,14 +16,33 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package fr.miage.atlantis.graphics.models;
-
-import com.jme3.math.Vector3f;
+package fr.miage.atlantis.graphics;
 
 /**
- *
+ * Fonction étant appelée au bout d'un certain temps ou nombre de frames rendues
  */
-public interface AbstractTileModel {
-    public Vector3f getTileTopCenter();
-    public Vector3f getRandomizedTileTopCenter();
+public abstract class FutureCallback {
+    private float mTimeRemaining;
+
+    public FutureCallback(float timeSec) {
+        mTimeRemaining = timeSec;
+    }
+
+    /**
+     * Fonction appelée par l'engine - décrémente le temps restant avant l'appel de l'événement
+     * @param timeSinceLastFrame
+     * @return
+     */
+    boolean decreaseTime(float timeSinceLastFrame) {
+        mTimeRemaining -= timeSinceLastFrame;
+
+        if (mTimeRemaining <= 0.0f) {
+            onFutureHappened();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public abstract void onFutureHappened();
 }

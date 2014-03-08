@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package fr.miage.atlantis;
 
 import com.jme3.animation.AnimChannel;
@@ -24,10 +23,9 @@ import com.jme3.animation.AnimEventListener;
 import com.jme3.cinematic.MotionPath;
 import com.jme3.cinematic.MotionPathListener;
 import com.jme3.cinematic.events.MotionEvent;
-import com.jme3.effect.ParticleEmitter;
-import com.jme3.material.Material;
-import com.jme3.material.RenderState;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Spline;
+import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.board.TileAction;
@@ -35,15 +33,22 @@ import fr.miage.atlantis.board.WaterTile;
 import fr.miage.atlantis.entities.Boat;
 import fr.miage.atlantis.entities.GameEntity;
 import fr.miage.atlantis.entities.PlayerToken;
+import fr.miage.atlantis.entities.SeaSerpent;
 import fr.miage.atlantis.entities.Shark;
 import fr.miage.atlantis.graphics.AnimationBrain;
 import fr.miage.atlantis.graphics.Game3DRenderer;
 import fr.miage.atlantis.graphics.ParticlesFactory;
 import fr.miage.atlantis.graphics.models.AbstractTileModel;
 import fr.miage.atlantis.graphics.models.AnimatedModel;
+import fr.miage.atlantis.graphics.models.DiceModel;
 import fr.miage.atlantis.graphics.models.PlayerModel;
+import fr.miage.atlantis.graphics.models.SeaSerpentModel;
 import fr.miage.atlantis.graphics.models.SharkModel;
 import fr.miage.atlantis.logic.GameLogic;
+import fr.miage.atlantis.logic.GameTurn;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 /**
  * Main Game Engine loop class
@@ -55,6 +60,7 @@ import fr.miage.atlantis.logic.GameLogic;
 public class Game3DLogic extends GameLogic {
 
     private Game3DRenderer mRenderer;
+    private GameEntity mPickedEntity;
 
     public Game3DLogic() {
         super();
@@ -64,10 +70,30 @@ public class Game3DLogic extends GameLogic {
     @Override
     public void boot() {
         mRenderer.start();
+        prepareGame(new String[]{"Romain", "Olivier"});
+    }
+
+    @Override
+    public void startGame() {
+        // TEST: On place des tokens
+        Player[] plays = getPlayers();
+        for (int i = 0; i < plays.length; i++) {
+            Player p = plays[i];
+            List<PlayerToken> tokens = p.getTokens();
+
+            for (PlayerToken token : tokens) {
+                token.moveToTile(this, getBoard().getTileSet().get("Beach #3"));
+                mRenderer.getEntitiesRenderer().addEntity(token);
+            }
+        }
+
+        super.startGame();
     }
 
     public void onTurnStart(Player p) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        // TODO: Animations
+        System.out.println("Game3DLogic: onTurnStart");
+        getCurrentTurn().onTurnStarted();
     }
 
     public void onPlayTileAction(GameTile tile, TileAction action) {
@@ -96,18 +122,23 @@ public class Game3DLogic extends GameLogic {
         motionEvent.getPath().addListener(new MotionPathListener() {
             public void onWayPointReach(MotionEvent control, int wayPointIndex) {
                 if (motionEvent.getPath().getNbWayPoints() == wayPointIndex + 1) {
+                    System.out.println("Game3DLogic: Waypoint reached, processing events");
                     // On bouge effectivement le joueur de tile. Note: On fait cette action à la
                     // fin de l'animation pour pouvoir proprement enchainer les actions (exemple:
                     // on marche sur un requin ou un bateau). Ainsi, le GameTurn attend avant de
                     // faire la suite des opérations via onUnitMoveFinished.
-                    ent.moveToTile(Game3DLogic.this, dest);
+                    if (!ent.moveToTile(Game3DLogic.this, dest)) {
+                        // On est à la fin du chemin, mise à jour de l'animation de l'entité bougée
+                        // car aucune action n'a eu lieu lors du déplacement
+                        String animation = AnimationBrain.getIdleAnimation(ent);
 
-                    // On est à la fin du chemin, mise à jour de l'animation de l'entité bougée
-                    String animation = AnimationBrain.getIdleAnimation(ent);
-
-                    if (animation != null) {
-                        ((AnimatedModel) entNode).playAnimation(animation);
+                        if (animation != null) {
+                            ((AnimatedModel) entNode).playAnimation(animation);
+                        }
                     }
+
+                    // Remise à zéro de l'orientation
+                    entNode.setLocalRotation(Quaternion.IDENTITY);
 
                     // On notifie le jeu, toutes les actions nécessaires sont faites.
                     if (getCurrentTurn() != null) {
@@ -128,7 +159,9 @@ public class Game3DLogic extends GameLogic {
     }
 
     public void onDiceRoll(int face) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        // On a besoin de lancer le dé
+        System.out.println("Game3DLogic: onDiceRoll");
+        mRenderer.rollDiceAnimation(face);
     }
 
     public void onSinkTile(final GameTile tile) {
@@ -156,24 +189,25 @@ public class Game3DLogic extends GameLogic {
                     mRenderer.getBoardRenderer().replaceTile(tile, newTile);
 
                     // On fait en sorte que les nouveaux nageurs nagent
-                    for (GameEntity ent : newTile.getEntities()) {
+                    List<GameEntity> newTileEntities = new ArrayList<GameEntity>(newTile.getEntities());
+                    for (GameEntity ent : newTileEntities) {
                         if (ent instanceof PlayerToken) {
                             onUnitMove(ent, newTile);
                         }
                     }
 
-                    // Fin du tour, on notifie le tour si on l'a
-                    if (getCurrentTurn() != null) {
-                        getCurrentTurn().onSinkTileFinished();
-                    }
-
                     // On lance l'action sous la tile, si c'est immédiat
-                    TileAction action = TileAction.Factory.createSpawnEntity(TileAction.ENTITY_SHARK); //tile.getAction();
+                    TileAction action = tile.getAction();
                     if (action.isImmediate()) {
                         onPlayTileAction(newTile, action);
                     } else {
                         System.out.println("TODO: Tile is not immediate: " + action.toString());
                         // TODO: Stocker la tile dans les tiles du joueur
+                    }
+
+                    // Fin du tour, on notifie le tour si on l'a
+                    if (getCurrentTurn() != null) {
+                        getCurrentTurn().onSinkTileFinished();
                     }
                 }
             }
@@ -184,7 +218,7 @@ public class Game3DLogic extends GameLogic {
 
     public void onEntityAction(GameEntity source, GameEntity target, int action) {
         switch (action) {
-            case GameEntity.ACTION_SHARK_EAT:
+            case GameEntity.ACTION_SHARK_EAT: {
                 // On lance les animations.
                 // Ces deux prochaines lignes sont PARFAITEMENT propres et certifiées sans bug.
                 final Shark shark = (Shark) ((source instanceof Shark) ? source : target);
@@ -211,17 +245,48 @@ public class Game3DLogic extends GameLogic {
                     public void onAnimChange(AnimControl control, AnimChannel channel, String animName) {
                     }
                 });
+            }
+            break;
 
-                break;
+            case GameEntity.ACTION_SEASERPENT_CRUSH: {
+                final SeaSerpent ss = (SeaSerpent) source;
+                final PlayerToken token = (PlayerToken) target;
+
+                final SeaSerpentModel ssModel = (SeaSerpentModel) mRenderer.getEntitiesRenderer().getNodeFromEntity(ss);
+                final PlayerModel playerModel = (PlayerModel) mRenderer.getEntitiesRenderer().getNodeFromEntity(token);
+                ssModel.lookAt(playerModel.getLocalTranslation(), Vector3f.UNIT_Y);
+                ssModel.rotate(0, -90, 0);
+
+                ssModel.playAnimation(SeaSerpentModel.ANIMATION_ATTACK_CELL, false, new AnimEventListener() {
+                    public void onAnimCycleDone(AnimControl control, AnimChannel channel, String animName) {
+                        ssModel.playAnimation(SeaSerpentModel.ANIMATION_IDLE);
+                        control.removeListener(this);
+                    }
+
+                    public void onAnimChange(AnimControl control, AnimChannel channel, String animName) {
+                    }
+                });
+                playerModel.playAnimation(PlayerModel.ANIMATION_EATEN_BY_SHARK, false, new AnimEventListener() {
+                    public void onAnimCycleDone(AnimControl control, AnimChannel channel, String animName) {
+                        token.die(Game3DLogic.this);
+                        control.removeListener(this);
+                    }
+
+                    public void onAnimChange(AnimControl control, AnimChannel channel, String animName) {
+                    }
+                });
+            }
+            break;
         }
     }
 
     public void onEntitySpawn(GameEntity spawned) {
+        System.out.println("Game3DLogic: onEntitySpawn " + spawned);
         mRenderer.getEntitiesRenderer().addEntity(spawned);
     }
 
     private MotionEvent generateTileSinkMotion(Node tileNode) {
-         // On créé le chemin
+        // On créé le chemin
         final MotionPath path = new MotionPath();
         path.addWayPoint(tileNode.getLocalTranslation());
         path.addWayPoint(tileNode.getLocalTranslation().add(0, -20, 0));
@@ -235,15 +300,16 @@ public class Game3DLogic extends GameLogic {
     }
 
     private MotionEvent generateEntityOnTileMotion(Node entNode, AbstractTileModel tileNode) {
-         // On créé le chemin
+        // On créé le chemin
         final MotionPath path = new MotionPath();
         path.addWayPoint(entNode.getLocalTranslation());
-        path.addWayPoint(tileNode.getTileTopCenter());
+        path.addWayPoint(tileNode.getRandomizedTileTopCenter());
         path.setPathSplineType(Spline.SplineType.Linear);
 
         // On créé le contrôleur
         final MotionEvent motionControl = new MotionEvent(entNode, path);
         motionControl.setDirectionType(MotionEvent.Direction.PathAndRotation);
+        motionControl.setRotation(new Quaternion().fromAngleNormalAxis(0, Vector3f.UNIT_Y));
         motionControl.setInitialDuration(2f);
 
         return motionControl;
@@ -262,5 +328,68 @@ public class Game3DLogic extends GameLogic {
         zombie.getTile().removeEntity(zombie);
         mRenderer.getEntitiesRenderer().removeEntity(zombie);
     }
-}
 
+    @Override
+    public void requestEntityPick(EntityPickRequest request) {
+        // On a besoin de picker une entité
+        System.out.println("Game3DLogic: requestEntityPick");
+        mRenderer.getInputListener().requestEntityPicking(request);
+    }
+
+    @Override
+    public void requestTilePick(TilePickRequest request) {
+        // On a besoin de picker une tile
+        System.out.println("Game3DLogic: requestTilePick");
+        mRenderer.getInputListener().requestTilePicking(request);
+    }
+
+    @Override
+    public void onEntityPicked(GameEntity ent) {
+        System.out.println("Entity picked: " + ent);
+
+        GameTurn currentTurn = mRenderer.getLogic().getCurrentTurn();
+
+        if (currentTurn.getRemainingMoves() > 0) {
+            // On assume ici que lorsqu'on picke une entité, on veut picker une tile après.
+            mPickedEntity = ent;
+            TilePickRequest tilePick = new TilePickRequest();
+            tilePick.pickNearTile = ent.getTile();
+            tilePick.waterEdgeOnly = false;
+
+            // On reste sur l'eau si on est dans l'eau
+            if (ent.getTile().getHeight() == 0) {
+                tilePick.requiredHeight = 0;
+            }
+
+            requestTilePick(tilePick);
+        } else if (currentTurn.hasRolledDice() && currentTurn.getRemainingDiceMoves() > 0) {
+            // Le dé a été lancé, et on a des mouvements de dé restant. La seule chose possible, c'est
+            // un déplacement d'entité suite au dé qui vient tout juste d'être lancé.
+            mPickedEntity = ent;
+            TilePickRequest tilePick = new TilePickRequest();
+            tilePick.pickNearTile = ent.getTile();
+            tilePick.waterEdgeOnly = false;
+            // Toutes les entités du dé ne sont que dans l'eau
+            tilePick.requiredHeight = 0;
+
+            requestTilePick(tilePick);
+        }
+    }
+
+    @Override
+    public void onTilePicked(GameTile tile) {
+        System.out.println("Tile " + tile.getName() + " picked!");
+
+        GameTurn currentTurn = mRenderer.getLogic().getCurrentTurn();
+        if (currentTurn.getRemainingMoves() > 0) {
+            // On assume que ce picking de tile était pour le déplacement d'unités.
+            currentTurn.moveEntity(mPickedEntity, tile);
+        } else if (!currentTurn.hasSunkLandTile()) {
+            // Il faut couler une tile
+            currentTurn.sinkLandTile(tile);
+        } else if (currentTurn.hasRolledDice() && currentTurn.getRemainingDiceMoves() > 0) {
+            // On bouge une entité suite au lancé de dé
+            currentTurn.moveDiceEntity(mPickedEntity, tile);
+        }
+    }
+}

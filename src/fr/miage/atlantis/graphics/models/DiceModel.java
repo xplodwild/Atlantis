@@ -18,12 +18,17 @@
 
 package fr.miage.atlantis.graphics.models;
 
-import com.jme3.math.Vector3f;
+import com.jme3.asset.AssetManager;
+import com.jme3.math.ColorRGBA;
 
 /**
  *
  */
-public interface AbstractTileModel {
-    public Vector3f getTileTopCenter();
-    public Vector3f getRandomizedTileTopCenter();
+public class DiceModel extends StaticModel {
+    public DiceModel(AssetManager am) {
+        super(am, "Models/cube.mesh.xml", "Textures/dice.png", null);
+        getMaterial().setFloat("Shininess", 1.0f);
+        getMaterial().setColor("Specular", ColorRGBA.White);
+    }
+
 }

@@ -19,102 +19,72 @@
 package fr.miage.atlantis.graphics.models;
 
 import com.jme3.asset.AssetManager;
-import com.jme3.export.InputCapsule;
-import com.jme3.export.JmeExporter;
-import com.jme3.export.JmeImporter;
-import com.jme3.export.OutputCapsule;
 import com.jme3.material.Material;
+import com.jme3.material.RenderState;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
-import com.jme3.scene.Geometry;
-import com.jme3.scene.Mesh;
+import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Node;
-import com.jme3.scene.VertexBuffer;
-import com.jme3.util.BufferUtils;
-import java.io.IOException;
+import com.jme3.scene.Spatial;
+import fr.miage.atlantis.graphics.ModelCache;
+import java.util.Random;
 
 /**
  *
  */
-public class EmptyTileModel extends Node implements AbstractTileModel {
+public class EmptyTileModel extends StaticModel implements AbstractTileModel {
 
-    private static final class HexagonMesh extends Mesh {
+    // Détermine si la tile pickée est juste un cocon autour de la tile
+    public final static String DATA_IS_TILE_SHELL = "is_tile_shell";
 
-        float a;
-        float rt = (float) Math.sqrt(3);
+    private final static String COLLISION_MESH_FILE_NAME = "Models/collision_tile.mesh.xml";
 
-        /**
-         *
-         * @param a_value : Note see 30-60-90 triangle
-         */
-        public HexagonMesh(float a_value) {
-            super();
-            a = a_value;
-            updateGeometry();
-        }
-
-        public void updateGeometry() {
-            float[] vert = {
-                0, 0, a * rt, //1
-                a, 0, 0, //2
-                3 * a, 0, 0, //3
-                4 * a, 0, a * rt, //4
-                3 * a, 0, 2 * a * rt, //5
-                a, 0, 2 * a * rt}; //6
-
-            float[] norm = {
-                0, 1, 0,
-                0, 1, 0,
-                0, 1, 0,
-                0, 1, 0};
-
-            int[] index = {
-                0, 1, 5,
-                4, 3, 2,
-                2, 1, 0,
-                5, 4, 3
-            };
-            setBuffer(VertexBuffer.Type.Position, 3, BufferUtils.createFloatBuffer(vert));
-            setBuffer(VertexBuffer.Type.Normal, 3, BufferUtils.createFloatBuffer(norm));
-            setBuffer(VertexBuffer.Type.Index, 3, BufferUtils.createIntBuffer(index));
-
-            updateBound();
-            updateCounts();
-
-        }
-
-        public void read(JmeImporter e) throws IOException {
-            super.read(e);
-            InputCapsule capsule = e.getCapsule(this);
-            a = capsule.readFloat("a", 0);
-            rt = capsule.readFloat("rt", 0);
-        }
-
-        public void write(JmeExporter e) throws IOException {
-            super.write(e);
-            OutputCapsule capsule = e.getCapsule(this);
-            capsule.write(a, "a", 0);
-            capsule.write(rt, "rt", 0);
-        }
-    }
-
-    public EmptyTileModel(AssetManager assetManager, ColorRGBA color) {
-        HexagonMesh h = new HexagonMesh(60.0f);
-        h.setMode(Mesh.Mode.Lines);
-        h.setLineWidth(30);
-
-        Geometry modelGrid = new Geometry("Grid", h);
-        modelGrid.setLocalScale(0.19f);
+    public EmptyTileModel(final String tileName, AssetManager assetManager, ColorRGBA color) {
+        super(assetManager, "Models/hexagon.blend", null, null);
 
         Material matGrid = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         matGrid.setColor("Color", color);
-        modelGrid.setMaterial(matGrid);
+        getModel().setMaterial(matGrid);
 
-        attachChild(modelGrid);
+        // Les normals sont cheloues dans le model d'hexagone, donc on désactive le culling
+        matGrid.getAdditionalRenderState().setFaceCullMode(RenderState.FaceCullMode.Off);
+
+        getModel().setUserData(TileModel.DATA_TILE_NAME, tileName);
+        getModel().setLocalScale(22.0f);
+
+        // On utilise une tile pleine comme modèle de collision, car le picking de jME utilise un
+        // cast au niveau polygone. Du coup, il ne prend pas le milieu des tiles vides, ce qui
+        // est embêtant.
+        Spatial model = ModelCache.getInstance().getModel(COLLISION_MESH_FILE_NAME);
+        if (model == null) {
+            model = assetManager.loadModel(COLLISION_MESH_FILE_NAME);
+            ModelCache.getInstance().putModel(COLLISION_MESH_FILE_NAME, model);
+        } else {
+            model = model.clone(false);
+        }
+
+        model.setUserData(DATA_IS_TILE_SHELL, this);
+        model.setQueueBucket(RenderQueue.Bucket.Sky);
+        model.setLocalTranslation(24.0f, 0.0f, 20.9999f);
+        model.setLocalScale(10.0f, 5.0f, 10.01f);
+
+        // On attache le shell a la node, meme s'il est invisible
+        attachChild(model);
+
+        // Set tile name data
+        Node meshNode = ((Node) ((Node) getModel()).getChild(0));
+        meshNode.setName(tileName);
+        meshNode.setUserData(TileModel.DATA_IS_TILE, true);
+        meshNode.setUserData(TileModel.DATA_TILE_NAME, tileName);
     }
 
     public Vector3f getTileTopCenter() {
         updateWorldBound();
         return getWorldBound().getCenter().add(0, 4.0f, 0);
+    }
+
+    public Vector3f getRandomizedTileTopCenter() {
+        Random r = new Random();
+        return getTileTopCenter(); //.add(-30.0f + r.nextFloat() * 30.0f, 0f, -30.0f + r.nextFloat() * 30.0f);
     }
 }

@@ -25,11 +25,13 @@ import fr.miage.atlantis.entities.GameEntity;
 import fr.miage.atlantis.entities.PlayerToken;
 import fr.miage.atlantis.entities.SeaSerpent;
 import fr.miage.atlantis.entities.Shark;
+import fr.miage.atlantis.entities.Whale;
 import fr.miage.atlantis.graphics.models.AbstractTileModel;
 import fr.miage.atlantis.graphics.models.BoatModel;
 import fr.miage.atlantis.graphics.models.PlayerModel;
 import fr.miage.atlantis.graphics.models.SeaSerpentModel;
 import fr.miage.atlantis.graphics.models.SharkModel;
+import fr.miage.atlantis.graphics.models.WhaleModel;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,11 +44,13 @@ public class EntitiesRenderer extends Node {
     private BoardRenderer mBoardRenderer;
 
     private Map<GameEntity, Node> mEntityToNode;
+    private Map<Node, GameEntity> mNodeToEntity;
 
     public EntitiesRenderer(AssetManager am, BoardRenderer board) {
         mAssetManager = am;
         mBoardRenderer = board;
         mEntityToNode = new HashMap<GameEntity, Node>();
+        mNodeToEntity = new HashMap<Node, GameEntity>();
     }
 
     public void addEntity(GameEntity ent) {
@@ -59,17 +63,20 @@ public class EntitiesRenderer extends Node {
             output = addSeaSerpent((SeaSerpent) ent);
         } else if (ent instanceof Shark) {
             output = addShark((Shark) ent);
+        } else if (ent instanceof Whale) {
+            output = addWhale((Whale) ent);
         } else {
-            throw new UnsupportedOperationException("Unknown entity type");
+            throw new UnsupportedOperationException("Unknown entity type: " + ent.toString());
         }
 
         mEntityToNode.put(ent, output);
+        mNodeToEntity.put(output, ent);
 
         attachChild(output);
 
         if (ent.getTile() != null) {
             AbstractTileModel tile = mBoardRenderer.findTileModel(ent.getTile());
-            output.setLocalTranslation(tile.getTileTopCenter());
+            output.setLocalTranslation(tile.getRandomizedTileTopCenter());
         }
     }
 
@@ -77,10 +84,15 @@ public class EntitiesRenderer extends Node {
         Node node = mEntityToNode.get(ent);
         detachChild(node);
         mEntityToNode.remove(ent);
+        mNodeToEntity.remove(node);
     }
 
     public Node getNodeFromEntity(GameEntity ent) {
         return mEntityToNode.get(ent);
+    }
+
+    public GameEntity getEntityFromNode(Node node) {
+        return mNodeToEntity.get(node);
     }
 
     private Node addBoat(Boat b) {
@@ -101,6 +113,11 @@ public class EntitiesRenderer extends Node {
 
     private Node addShark(Shark s) {
         SharkModel model = new SharkModel(mAssetManager);
+        return model;
+    }
+
+    private Node addWhale(Whale w) {
+        WhaleModel model = new WhaleModel(mAssetManager);
         return model;
     }
 

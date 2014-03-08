@@ -31,8 +31,7 @@ import com.jme3.shadow.EdgeFilteringMode;
 import com.jme3.texture.Texture2D;
 import com.jme3.util.SkyFactory;
 import com.jme3.water.WaterFilter;
-import jme3utilities.sky.SkyControl;
-import jme3utilities.sky.Updater;
+
 
 /**
  *
@@ -41,12 +40,11 @@ public class Environment {
 
     private AmbientLight mAmbient;
     private DirectionalLight mDirectionalLight;
-    private SkyControl mSkyControl;
 
     public Environment(Node parent, AssetManager am, ViewPort viewPort, Camera cam) {
 
         // Mise en place du lighting
-        setupLight(parent);
+        setupLight(parent, am, viewPort);
 
         // Mise en place du ciel
         setupSky(parent, viewPort, am, cam);
@@ -54,10 +52,6 @@ public class Environment {
         // Mise en place de l'eau
         setupWater(parent, am, viewPort);
 
-    }
-
-    public void setTime(float time) {
-        mSkyControl.getSunAndStars().setHour(time);
     }
 
     private void setupWater(Node parent, AssetManager am, ViewPort viewPort) {
@@ -71,8 +65,8 @@ public class Environment {
         water.setFoamExistence(new Vector3f(1f, 4, 0.5f));
         water.setFoamTexture((Texture2D) am.loadTexture("Common/MatDefs/Water/Textures/foam2.jpg"));
         water.setNormalScale(2.0f);
-        water.setReflectionMapSize(256);
-        water.setUseHQShoreline(true);
+        water.setReflectionMapSize(128);
+        water.setUseHQShoreline(false);
 
         //water.setRefractionConstant(0.25f);
         water.setRefractionStrength(0.2f);
@@ -84,25 +78,19 @@ public class Environment {
     private void setupSky(Node parent, ViewPort viewPort, AssetManager am, Camera cam) {
         parent.attachChild(SkyFactory.createSky(am,
             "Textures/Sky/Bright/BrightSky.dds", false));
+    }
 
-        boolean starMotion = true;
-        boolean bottomDome = true;
-        mSkyControl = new SkyControl(am, cam, 0.1f, starMotion, bottomDome);
+    private void setupLight(Node parent, AssetManager am, ViewPort viewPort) {
+        // Lumière ambiante
+        mAmbient = new AmbientLight();
+        mAmbient.setColor(ColorRGBA.White);
+        parent.addLight(mAmbient);
 
-        // add SkyControl to the root node
-        parent.addControl(mSkyControl);
-
-        Updater updater = mSkyControl.getUpdater();
-        updater.addViewPort(viewPort);
-        updater.setAmbientLight(mAmbient);
-        updater.setMainLight(mDirectionalLight);
-
-        float hour = 14f;
-        mSkyControl.getSunAndStars().setHour(hour);
-
-        float cloudiness = 0.5f;
-        mSkyControl.setCloudiness(cloudiness);
-        mSkyControl.setEnabled(true);
+        // Lumière directionnelle (soleil)
+        mDirectionalLight = new DirectionalLight();
+        mDirectionalLight.setDirection(new Vector3f(-0.4f, -0.3f, -0.2f).normalizeLocal());
+        mDirectionalLight.setColor(ColorRGBA.LightGray);
+        parent.addLight(mDirectionalLight);
 
         // Ombres
         DirectionalLightShadowRenderer dlsr =
@@ -110,23 +98,7 @@ public class Environment {
                 1024, 3);
         dlsr.setEdgeFilteringMode(EdgeFilteringMode.PCF4);
         dlsr.setLight(mDirectionalLight);
-        updater.addShadowRenderer(dlsr);
         viewPort.addProcessor(dlsr);
-    }
-
-    private void setupLight(Node parent) {
-        // Lumière ambiante, semi-claire, compense la sombritude du SkyControl
-        mAmbient = new AmbientLight();
-        mAmbient.setColor(ColorRGBA.Gray);
-        parent.addLight(mAmbient);
-
-        // Lumière ambiante contrôlée par SkyControl
-        mAmbient = new AmbientLight();
-        parent.addLight(mAmbient);
-
-        // Lumière directionnelle (soleil), contrôlé par SkyControl
-        mDirectionalLight = new DirectionalLight();
-        parent.addLight(mDirectionalLight);
 
     }
 }
