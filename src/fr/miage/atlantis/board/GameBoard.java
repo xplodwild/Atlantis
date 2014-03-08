@@ -22,7 +22,6 @@ import fr.miage.atlantis.entities.GameEntity;
 import fr.miage.atlantis.entities.SeaSerpent;
 import fr.miage.atlantis.logic.GameLogic;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -82,15 +81,21 @@ public final class GameBoard {
         this.randomiser=new ArrayList();
 
         for(int i=0;i<this.forestTilesRemaining;i++){
-            randomiser.add(new ForestTile(this,"Forest #"+i));
+            ForestTile tmp=new ForestTile(this,"Forest #"+i);
+            tmp.setAction(TileAction.generateRandomTileActionForest()); 
+            randomiser.add(tmp);
         }
 
         for(int i=0;i<this.mountainTilesRemaining;i++){
-            randomiser.add(new MountainTile(this,"Mountain #"+i));
+            MountainTile tmp=new MountainTile(this,"Mountain #"+i);
+            tmp.setAction(TileAction.generateRandomTileActionMountain());            
+            randomiser.add(tmp);
         }
 
         for(int i=0;i<this.beachTilesRemaining;i++){
-            randomiser.add(new BeachTile(this,"Beach #"+i));
+            BeachTile tmp=new BeachTile(this,"Beach #"+i);
+            tmp.setAction(TileAction.generateRandomTileActionBeach());
+            randomiser.add(tmp);
         }
 
        //-----------------------------------------------------------------------
@@ -230,8 +235,7 @@ public final class GameBoard {
        GameTile nextTile3=nextTile2;
        for(int i=1;i<5;i++){
            tmp2=this.generateRandomTile();
-           String tmpname=tmp2.getName();
-           tmp2.setAction(TileAction.generateRandomTileAction());
+           String tmpname=tmp2.getName();           
            this.placeTileAtTheRightOf(nextTile3,tmp2);
            nextTile3=this.mTileSet.get(tmpname);
        }
@@ -276,8 +280,7 @@ public final class GameBoard {
        nextTile3=nextTile2;
        for(int i=5;i<10;i++){
            tmp2=this.generateRandomTile();
-           String tmpname=tmp2.getName();
-           tmp2.setAction(TileAction.generateRandomTileAction());
+           String tmpname=tmp2.getName();           
            this.placeTileAtTheRightOf(nextTile3,tmp2);
            nextTile3=this.mTileSet.get(tmpname);
        }
@@ -320,7 +323,6 @@ public final class GameBoard {
        for(int i=10;i<18;i++){
            tmp2=this.generateRandomTile();
            String tmpname=tmp2.getName();
-           tmp2.setAction(TileAction.generateRandomTileAction());
            this.placeTileAtTheRightOf(nextTile3,tmp2);
            nextTile3=this.mTileSet.get(tmpname);
        }
@@ -362,7 +364,6 @@ public final class GameBoard {
        for(int i=18;i<21;i++){
            tmp2=this.generateRandomTile();
            String tmpname=tmp2.getName();
-           tmp2.setAction(TileAction.generateRandomTileAction());
            this.placeTileAtTheRightOf(nextTile3,tmp2);
            nextTile3=this.mTileSet.get(tmpname);
        }
@@ -375,7 +376,6 @@ public final class GameBoard {
        for(int i=21;i<24;i++){
            tmp2=this.generateRandomTile();
            String tmpname=tmp2.getName();
-           tmp2.setAction(TileAction.generateRandomTileAction());
            this.placeTileAtTheRightOf(nextTile3,tmp2);
            nextTile3=this.mTileSet.get(tmpname);
        }
@@ -416,7 +416,6 @@ public final class GameBoard {
        for(int i=24;i<32;i++){
            tmp2=this.generateRandomTile();
            String tmpname=tmp2.getName();
-           tmp2.setAction(TileAction.generateRandomTileAction());
            this.placeTileAtTheRightOf(nextTile3,tmp2);
            nextTile3=this.mTileSet.get(tmpname);
        }
@@ -460,7 +459,6 @@ public final class GameBoard {
        for(int i=32;i<37;i++){
            tmp2=this.generateRandomTile();
            String tmpname=tmp2.getName();
-           tmp2.setAction(TileAction.generateRandomTileAction());
            this.placeTileAtTheRightOf(nextTile3,tmp2);
            nextTile3=this.mTileSet.get(tmpname);
        }
@@ -508,7 +506,6 @@ public final class GameBoard {
        for(int i=37;i<41;i++){
            tmp2=this.generateRandomTile();
            String tmpname=tmp2.getName();
-           tmp2.setAction(TileAction.generateRandomTileAction());
            this.placeTileAtTheRightOf(nextTile3,tmp2);
            nextTile3=this.mTileSet.get(tmpname);
        }
@@ -682,10 +679,10 @@ public final class GameBoard {
 
 
        //-----------------------------------------------------------------------
-       //Ajout des 5 SeaShark sur les Cases prévues à cet effet                |
+       //Ajout des 5 SeaSerpent sur les Cases prévues à cet effet                |
        //-----------------------------------------------------------------------
 
-       SeaSerpent ss = null;
+       SeaSerpent ss;
 
        temp=(WaterTile)this.mTileSet.get("Water #64");
        ss = new SeaSerpent();
