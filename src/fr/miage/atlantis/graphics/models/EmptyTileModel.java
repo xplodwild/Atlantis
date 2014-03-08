@@ -85,6 +85,6 @@ public class EmptyTileModel extends StaticModel implements AbstractTileModel {
 
     public Vector3f getRandomizedTileTopCenter() {
         Random r = new Random();
-        return getTileTopCenter(); //.add(-30.0f + r.nextFloat() * 30.0f, 0f, -30.0f + r.nextFloat() * 30.0f);
+        return getTileTopCenter().add(-10.0f + r.nextFloat() * 20.0f, 0f,  -10.0f + r.nextFloat() * 20.0f);
     }
 }
