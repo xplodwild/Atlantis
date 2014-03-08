@@ -19,6 +19,7 @@
 package fr.miage.atlantis.graphics.models;
 
 import com.jme3.asset.AssetManager;
+import com.jme3.math.Quaternion;
 
 /**
  *
@@ -33,6 +34,7 @@ public class SharkModel extends AnimatedModel {
 
     public SharkModel(AssetManager am) {
         super(am, "Models/sharkA.mesh.xml", "Textures/shark.png", null);
+        getModelNode().setLocalRotation(new Quaternion(new float[]{0, 90, 0}));
         playAnimation(ANIMATION_SWIM_CYCLE);
     }
 
