@@ -102,8 +102,6 @@ public class Game3DLogic extends GameLogic {
 
     @Override
     public void onUnitMove(final GameEntity ent, final GameTile dest) {
-        super.onUnitMove(ent, dest);
-
         // On récupère la node 3D de cette entité
         final Node entNode = mRenderer.getEntitiesRenderer().getNodeFromEntity(ent);
         if (entNode == null) {
