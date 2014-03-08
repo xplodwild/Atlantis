@@ -797,26 +797,41 @@ public final class GameBoard {
         // On remplace la tile par une watertile
         mTileSet.remove(tile.getName());
 
-        WaterTile newTile = new WaterTile(this, "Sunken " + tile.getName());
+        WaterTile newTile = new WaterTile(this,tile.getLeftUpperTile(),tile.getRightUpperTile()
+                ,tile.getLeftTile(),tile.getRightTile(),tile.getRightBottomTile()
+                ,tile.getLeftBottomTile(),"Sunken " + tile.getName(),0);
 
-        // On cherche une tile adjacente pour la replacer
+        // On Modifie les occurences du tile à couler dans les tile adjacents
         if (tile.getLeftTile() != null) {
-            tile.getLeftTile().setRightTile(newTile);
+            GameTile tmp=tile.getLeftTile();
+            tmp.setRightTile(newTile);
+            //On update le tile dans la hashmap
+            mTileSet.put(tmp.getName(), tmp);
         }
-        if (tile.getRightTile() != null) {
-            tile.getRightTile().setLeftTile(newTile);
+        if (tile.getRightTile() != null) {            
+            GameTile tmp=tile.getRightTile();
+            tmp.setLeftTile(newTile);
+            mTileSet.put(tmp.getName(), tmp);
         }
         if (tile.getLeftBottomTile() != null) {
-            tile.getLeftBottomTile().setRightUpperTile(newTile);
+            GameTile tmp=tile.getLeftBottomTile();
+            tmp.setRightUpperTile(newTile);
+            mTileSet.put(tmp.getName(), tmp);
         }
         if (tile.getRightBottomTile() != null) {
-            tile.getRightBottomTile().setLeftUpperTile(newTile);
+            GameTile tmp=tile.getRightBottomTile();
+            tmp.setLeftUpperTile(newTile);
+            mTileSet.put(tmp.getName(), tmp);
         }
         if (tile.getLeftUpperTile() != null) {
-            tile.getLeftUpperTile().setRightBottomTile(newTile);
+            GameTile tmp=tile.getLeftUpperTile();
+            tmp.setRightBottomTile(newTile);
+            mTileSet.put(tmp.getName(), tmp);
         }
         if (tile.getRightUpperTile()!= null) {
-            tile.getRightUpperTile().setLeftBottomTile(newTile);
+            GameTile tmp=tile.getRightUpperTile();
+            tmp.setLeftBottomTile(newTile);
+            mTileSet.put(tmp.getName(), tmp);
         }
 
         // On jette les gens à la flotte. On fait une copie de la liste puisqu'elle va être
@@ -827,6 +842,7 @@ public final class GameBoard {
             System.out.println("Entity is now in sunken tile " + newTile.getName());
         }
 
+        //On update cette tile dans la hashmap
         mTileSet.put(newTile.getName(), newTile);
         return newTile;
     }
