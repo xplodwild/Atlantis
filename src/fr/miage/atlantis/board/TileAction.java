@@ -256,6 +256,10 @@ public class TileAction {
                 sRandomizerBeach.add(TileAction.Factory.createMoveAnimal(TileAction.ENTITY_SEASERPENT));
             }
 
+            for (int i = 0; i < TileAction.TILE_COUNT_SPAWN_BOAT_UNDERBEACHTILE; i++) {
+                sRandomizerMountain.add(TileAction.Factory.createBonusBoat());
+            }
+            
             for (int i = 0; i < TileAction.TILE_COUNT_BONUS_SWIM_UNDERBEACHTILE; i++) {
                 sRandomizerBeach.add(TileAction.Factory.createBonusSwim());
             }
