@@ -123,25 +123,26 @@ public class Game3DRenderer extends SimpleApplication {
 
     public void rollDiceAnimation(final int finalFace) {
         mSceneNode.attachChild(mDiceModel);
-        mDiceModel.setLocalTranslation(cam.getLocation().add(cam.getDirection().mult(100.0f)));
+        mDiceModel.setLocalTranslation(cam.getLocation().add(cam.getDirection().mult(150.0f)));
         mDiceModel.lookAt(cam.getLocation(), Vector3f.ZERO);
 
         // On créé le chemin
         final Random rand = new Random();
         final MotionPath path = new MotionPath();
         path.addWayPoint(mDiceModel.getLocalTranslation());
-        for (int i = 0; i < 10; i++) {
+
+        for (int i = 0; i < 2*3; i++) {
             path.addWayPoint(mDiceModel.getLocalTranslation()
                     .add(-5.0f + rand.nextFloat() * 10.0f,
                     -5.0f + rand.nextFloat() * 10.0f,
                     -5.0f + rand.nextFloat() * 10.0f));
         }
 
-        path.setPathSplineType(Spline.SplineType.CatmullRom);
+        path.setPathSplineType(Spline.SplineType.Bezier);
 
         path.addListener(new MotionPathListener() {
             public void onWayPointReach(MotionEvent motionControl, int wayPointIndex) {
-                if (wayPointIndex == 10) {
+                if (wayPointIndex + 1 == path.getNbWayPoints()) {
                     mDiceModel.setLocalRotation(Quaternion.IDENTITY);
 
                     if (finalFace == GameDice.FACE_SHARK) {
@@ -160,7 +161,7 @@ public class Game3DRenderer extends SimpleApplication {
                             mParent.getCurrentTurn().onDiceRollFinished();
                         }
                     };
-                    addFutureTimeCallback(fc, 2.0f);
+                    addFutureTimeCallback(fc, 3.0f);
                 }
             }
         });
@@ -169,7 +170,7 @@ public class Game3DRenderer extends SimpleApplication {
         final MotionEvent motionControl = new MotionEvent(mDiceModel, path);
         motionControl.setDirectionType(MotionEvent.Direction.PathAndRotation);
         motionControl.setRotation(new Quaternion().fromAngleNormalAxis(0, Vector3f.UNIT_Y));
-        motionControl.setInitialDuration(1f);
+        motionControl.setInitialDuration(2f);
 
         motionControl.play();
     }
