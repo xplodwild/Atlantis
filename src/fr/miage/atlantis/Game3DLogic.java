@@ -35,6 +35,7 @@ import fr.miage.atlantis.entities.GameEntity;
 import fr.miage.atlantis.entities.PlayerToken;
 import fr.miage.atlantis.entities.SeaSerpent;
 import fr.miage.atlantis.entities.Shark;
+import fr.miage.atlantis.entities.Whale;
 import fr.miage.atlantis.graphics.AnimationBrain;
 import fr.miage.atlantis.graphics.Game3DRenderer;
 import fr.miage.atlantis.graphics.ParticlesFactory;
@@ -266,18 +267,27 @@ public class Game3DLogic extends GameLogic {
                 });
             }
             break;
-                
+
             case GameEntity.ACTION_WHALE_NUKE: {
-            
-                /*
-                 * @TODO : Faire : Recuperation du tile, on check le nombre de playertoken sur le bateau
-                 * si > 0 on les sort du bateau, et les ajoute a la tile
-                 * enfin, on supprime le bateau
-                 */                        
+                final Whale whale = (Whale) source;
+                final Boat boat = (Boat) target;
+
+                // Les baleines nukent les bateaux si il y a au moins un joueur dedans, sinon
+                // le bateau reste intact.
+                if (boat.getOnboardTokens().size() > 0) {
+                    // Et il y a des gens: Ils tombent à l'eau, et le bateau disparait
+                    List<PlayerToken> onboard = boat.getOnboardTokens();
+
+                    for (PlayerToken pt : onboard) {
+                        pt.setState(pt.getState() & ~PlayerToken.STATE_ON_BOAT);
+                    }
+
+                    boat.die(this);
+                }
             }
             break;
-                
-                
+
+
         }
     }
 
