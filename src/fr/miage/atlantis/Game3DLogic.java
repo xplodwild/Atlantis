@@ -40,7 +40,6 @@ import fr.miage.atlantis.graphics.Game3DRenderer;
 import fr.miage.atlantis.graphics.ParticlesFactory;
 import fr.miage.atlantis.graphics.models.AbstractTileModel;
 import fr.miage.atlantis.graphics.models.AnimatedModel;
-import fr.miage.atlantis.graphics.models.DiceModel;
 import fr.miage.atlantis.graphics.models.PlayerModel;
 import fr.miage.atlantis.graphics.models.SeaSerpentModel;
 import fr.miage.atlantis.graphics.models.SharkModel;
@@ -48,7 +47,6 @@ import fr.miage.atlantis.logic.GameLogic;
 import fr.miage.atlantis.logic.GameTurn;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Main Game Engine loop class
@@ -128,11 +126,7 @@ public class Game3DLogic extends GameLogic {
                     if (!ent.moveToTile(Game3DLogic.this, dest)) {
                         // On est à la fin du chemin, mise à jour de l'animation de l'entité bougée
                         // car aucune action n'a eu lieu lors du déplacement
-                        String animation = AnimationBrain.getIdleAnimation(ent);
-
-                        if (animation != null) {
-                            ((AnimatedModel) entNode).playAnimation(animation);
-                        }
+                        ((AnimatedModel) entNode).playAnimation(AnimationBrain.getIdleAnimation(ent));
                     }
 
                     // Remise à zéro de l'orientation
@@ -147,10 +141,7 @@ public class Game3DLogic extends GameLogic {
         });
 
         // On détermine l'animation à jouer
-        String animation = AnimationBrain.getMovementAnimation(ent, dest);
-        if (animation != null) {
-            ((AnimatedModel) entNode).playAnimation(animation);
-        }
+        ((AnimatedModel) entNode).playAnimation(AnimationBrain.getMovementAnimation(ent, dest));
 
         // On lance le mouvement
         motionEvent.play();
@@ -225,16 +216,16 @@ public class Game3DLogic extends GameLogic {
                 final SharkModel sharkModel = (SharkModel) mRenderer.getEntitiesRenderer().getNodeFromEntity(shark);
                 PlayerModel playerModel = (PlayerModel) mRenderer.getEntitiesRenderer().getNodeFromEntity(token);
 
-                sharkModel.playAnimation(SharkModel.ANIMATION_ATTACK_SWIMMER, false, new AnimEventListener() {
+                sharkModel.playAnimation(SharkModel.ANIMATION_ATTACK_SWIMMER, false, true, new AnimEventListener() {
                     public void onAnimCycleDone(AnimControl control, AnimChannel channel, String animName) {
-                        sharkModel.playAnimation(SharkModel.ANIMATION_SWIM_CYCLE);
+                        sharkModel.playAnimation(AnimationBrain.getIdleAnimation(shark));
                         control.removeListener(this);
                     }
 
                     public void onAnimChange(AnimControl control, AnimChannel channel, String animName) {
                     }
                 });
-                playerModel.playAnimation(PlayerModel.ANIMATION_EATEN_BY_SHARK, false, new AnimEventListener() {
+                playerModel.playAnimation(PlayerModel.ANIMATION_EATEN_BY_SHARK, false, true, new AnimEventListener() {
                     public void onAnimCycleDone(AnimControl control, AnimChannel channel, String animName) {
                         token.die(Game3DLogic.this);
                         control.removeListener(this);
@@ -255,16 +246,16 @@ public class Game3DLogic extends GameLogic {
                 ssModel.lookAt(playerModel.getLocalTranslation(), Vector3f.UNIT_Y);
                 ssModel.rotate(0, -90, 0);
 
-                ssModel.playAnimation(SeaSerpentModel.ANIMATION_ATTACK_CELL, false, new AnimEventListener() {
+                ssModel.playAnimation(SeaSerpentModel.ANIMATION_ATTACK_CELL, false, true, new AnimEventListener() {
                     public void onAnimCycleDone(AnimControl control, AnimChannel channel, String animName) {
-                        ssModel.playAnimation(SeaSerpentModel.ANIMATION_IDLE);
+                        ssModel.playAnimation(AnimationBrain.getIdleAnimation(ss));
                         control.removeListener(this);
                     }
 
                     public void onAnimChange(AnimControl control, AnimChannel channel, String animName) {
                     }
                 });
-                playerModel.playAnimation(PlayerModel.ANIMATION_EATEN_BY_SHARK, false, new AnimEventListener() {
+                playerModel.playAnimation(PlayerModel.ANIMATION_EATEN_BY_SHARK, false, true, new AnimEventListener() {
                     public void onAnimCycleDone(AnimControl control, AnimChannel channel, String animName) {
                         token.die(Game3DLogic.this);
                         control.removeListener(this);
@@ -316,10 +307,7 @@ public class Game3DLogic extends GameLogic {
     @Override
     public void onBoardBoat(final PlayerToken player, Boat b) {
         final PlayerModel model = (PlayerModel) mRenderer.getEntitiesRenderer().getNodeFromEntity(player);
-        String animation = AnimationBrain.getIdleAnimation(player);
-        if (animation != null) {
-            model.playAnimation(animation);
-        }
+        model.playAnimation(AnimationBrain.getIdleAnimation(player));
     }
 
     public void onUnitDie(GameEntity zombie) {

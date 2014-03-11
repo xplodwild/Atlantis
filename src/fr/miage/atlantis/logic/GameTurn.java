@@ -39,6 +39,7 @@ import java.util.List;
 public class GameTurn implements GameRenderListener {
 
     private final static boolean DBG_TRACE = true;
+    public final static boolean DBG_QUICKTEST = false;
 
     private TileAction mTileAction;
     private List<TileAction> mRemoteTiles;
@@ -61,7 +62,7 @@ public class GameTurn implements GameRenderListener {
     public GameTurn(GameLogic controller, Player p) {
         mPlayer = p;
         mController = controller;
-        mRemainingMoves = 3;
+        mRemainingMoves = DBG_QUICKTEST ? 1 : 3;
         mDiceRolled = false;
         mSunkenTile = null;
         mMoves = new ArrayList<EntityMove>();
@@ -137,7 +138,11 @@ public class GameTurn implements GameRenderListener {
         log("GameTurn: rollDice");
 
         mDiceRolled = true;
-        mDiceAction = mController.getDice().roll();
+        if (!DBG_QUICKTEST) {
+            mDiceAction = mController.getDice().roll();
+        } else {
+            mDiceAction = GameDice.FACE_WHALE;
+        }
         switch (mDiceAction) {
             case GameDice.FACE_SEASERPENT:
                 mRemainingDiceMoves = SeaSerpent.MAX_MOVES;

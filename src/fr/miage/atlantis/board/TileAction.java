@@ -70,12 +70,12 @@ public class TileAction {
      * Action de la tile volcan
      */
     public final static int ACTION_VOLCANO = 6;
-    
-    
+
+
     //--------------------------------------------------------------------------
     //TileAction sous les Tiles Beach
     //--------------------------------------------------------------------------
-    
+
     /** Nombre de tile action de type Spawn Animal Shark     */
     public final static int TILE_COUNT_ANIMAL_SHARK_UNDERBEACHTILE = 6;
     /** Nombre de tile action de type Spawn Animal Whale     */
@@ -100,11 +100,11 @@ public class TileAction {
     private final static int TILE_COUNT_WHIRL_UNDERBEACHTILE = 0;
     /** Nombre de tile action de type volcan     */
     private final static int TILE_COUNT_VOLCANO_UNDERBEACHTILE = 0;
-    
+
     //--------------------------------------------------------------------------
     //TileAction sous les Tiles Forest
     //--------------------------------------------------------------------------
-    
+
     /** Nombre de tile de type Spawn Requin*/
     public final static int TILE_COUNT_ANIMAL_SHARK_UNDERFORESTTILE = 6;
     /** Nombre de tile action de type Spawn Animal Whale */
@@ -130,12 +130,12 @@ public class TileAction {
     /** Nombre de tile action de type volcan     */
     private final static int TILE_COUNT_VOLCANO_UNDERFORESTTILE = 0;
     //--------------------------------------------------------------------------
-    
-    
+
+
     //--------------------------------------------------------------------------
     //TileAction sous les Tiles Mountain
     //--------------------------------------------------------------------------
-    
+
     /** Nombre de tile action de type Spawn Animal Shark     */
     public final static int TILE_COUNT_ANIMAL_SHARK_UNDERMOUNTAINTILE = 6;
     /** Nombre de tile action de type Spawn Animal Whale     */
@@ -157,10 +157,10 @@ public class TileAction {
     /** Nombre de tile action de type BonusBoat     */
     private final static int TILE_COUNT_BONUS_BOAT_UNDERMOUNTAINTILE = 4;
     /** Nombre de tile action de type tourbillon     */
-    private final static int TILE_COUNT_WHIRL_UNDERMOUNTAINTILE = 6;    
+    private final static int TILE_COUNT_WHIRL_UNDERMOUNTAINTILE = 6;
     /** Nombre de tile action de type volcan     */
     private final static int TILE_COUNT_VOLCANO_UNDERMOUNTAINTILE = 1;
-    
+
     /**
      * Defini si l'action est une action a realiser immediatement ou non
      */
@@ -231,11 +231,11 @@ public class TileAction {
             for (int i = 0; i < TileAction.TILE_COUNT_ANIMAL_SHARK_UNDERBEACHTILE; i++) {
                 sRandomizerBeach.add(TileAction.Factory.createSpawnEntity(TileAction.ENTITY_SHARK));
             }
-            
+
             for (int j = 0; j < TileAction.TILE_COUNT_CANCEL_SHARK_UNDERBEACHTILE; j++) {
                 sRandomizerBeach.add(TileAction.Factory.createCancelAnimal(TileAction.ENTITY_SHARK));
             }
-            
+
             for (int k = 0; k < TileAction.TILE_COUNT_MOVE_SHARK_UNDERBEACHTILE; k++) {
                 sRandomizerBeach.add(TileAction.Factory.createMoveAnimal(TileAction.ENTITY_SHARK));
             }
@@ -243,11 +243,11 @@ public class TileAction {
             for (int i = 0; i < TileAction.TILE_COUNT_ANIMAL_WHALE_UNDERBEACHTILE; i++) {
                 sRandomizerBeach.add(TileAction.Factory.createSpawnEntity(TileAction.ENTITY_WHALE));
             }
-            
+
             for (int j = 0; j < TileAction.TILE_COUNT_CANCEL_WHALE_UNDERBEACHTILE; j++) {
                 sRandomizerBeach.add(TileAction.Factory.createCancelAnimal(TileAction.ENTITY_WHALE));
             }
-            
+
             for (int k = 0; k < TileAction.TILE_COUNT_MOVE_WHALE_UNDERBEACHTILE; k++) {
                 sRandomizerBeach.add(TileAction.Factory.createMoveAnimal(TileAction.ENTITY_WHALE));
             }
@@ -259,7 +259,7 @@ public class TileAction {
             for (int i = 0; i < TileAction.TILE_COUNT_SPAWN_BOAT_UNDERBEACHTILE; i++) {
                 sRandomizerMountain.add(TileAction.Factory.createBonusBoat());
             }
-            
+
             for (int i = 0; i < TileAction.TILE_COUNT_BONUS_SWIM_UNDERBEACHTILE; i++) {
                 sRandomizerBeach.add(TileAction.Factory.createBonusSwim());
             }
@@ -273,8 +273,8 @@ public class TileAction {
             for (int i = 0; i < TileAction.TILE_COUNT_VOLCANO_UNDERBEACHTILE; i++) {
                 sRandomizerForest.add(TileAction.Factory.createWhirl());
             }
-            
-            
+
+
         }
 
         int random = new Random().nextInt(TileAction.sRandomizerBeach.size());
@@ -283,8 +283,8 @@ public class TileAction {
 
         return retour;
     }
-    
-    
+
+
     /**
      * Genere une action au hasard à placer sous un tile montagne
      *
@@ -333,11 +333,11 @@ public class TileAction {
             for (int i = 0; i < TileAction.TILE_COUNT_WHIRL_UNDERMOUNTAINTILE; i++) {
                 sRandomizerMountain.add(TileAction.Factory.createWhirl());
             }
-            
+
             for (int i = 0; i < TileAction.TILE_COUNT_VOLCANO_UNDERMOUNTAINTILE; i++) {
                 sRandomizerMountain.add(TileAction.Factory.createWhirl());
             }
-            
+
             sRandomizerMountain.add(TileAction.Factory.createVolcano());
         }
 
@@ -348,7 +348,7 @@ public class TileAction {
         return retour;
     }
 
-    
+
         /**
      * Genere une action au hasard à placer sous un tile foret
      *
@@ -408,10 +408,10 @@ public class TileAction {
 
         return retour;
     }
-    
-    
-    
-    
+
+
+
+
     /**
      * @TODO : Implementer (le reste de) la methode
      *
@@ -456,7 +456,7 @@ public class TileAction {
         // endroit sur le rendu. Ensuite, on relance moveToTile avec la logic pour effectivement
         // lancer les événements. Cela permet d'être sûr que la nouvelle entité est bien affichée
         // avant que d'autres animations se lancent.
-        System.out.println("Spawned entity: Moving to tile");        
+        System.out.println("Spawned entity: Moving to tile");
         spawnedEntity.moveToTile(null, tile);
         logic.onEntitySpawn(spawnedEntity);
         System.out.println("Spawned entity: Triggering events");

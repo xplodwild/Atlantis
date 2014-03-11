@@ -19,8 +19,6 @@
 package fr.miage.atlantis.graphics.models;
 
 import com.jme3.asset.AssetManager;
-import com.jme3.math.Quaternion;
-import com.jme3.scene.Node;
 
 /**
  *
@@ -38,10 +36,7 @@ public class SeaSerpentModel extends AnimatedModel {
         super(am, "Models/serpentA.mesh.xml", "Textures/seaserpent.png",
                 "Textures/seaserpent_normal.png");
 
-        getModelNode().setLocalRotation(new Quaternion(new float[]{0, 90, 0}));
-
         getModel().setLocalTranslation(-2, -3, 24);
-
         playAnimation(ANIMATION_IDLE);
     }
 

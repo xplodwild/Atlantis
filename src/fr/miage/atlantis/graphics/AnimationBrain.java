@@ -37,54 +37,91 @@ import java.util.Random;
  */
 public class AnimationBrain {
 
-    public static String getIdleAnimation(GameEntity ent) {
+    public static class State {
+        public State(String a) {
+            this(a, 0);
+        }
+
+        public State(String a, float y) {
+            animationName = a;
+            yOffset = y;
+        }
+
+        public State(String a, float y, boolean aT) {
+            animationName = a;
+            yOffset = y;
+            animateTransition = aT;
+        }
+
+        /**
+         * Nom de l'animation à jouer
+         */
+        public String animationName;
+
+        /**
+         * Offset d'angle Y
+         */
+        public float yOffset;
+
+        /**
+         * Mettre ou non en boucle
+         */
+        public boolean loop = true;
+
+        /**
+         * Animer ou non la transition
+         */
+        public boolean animateTransition = true;
+    }
+
+    public static State getIdleAnimation(GameEntity ent) {
         if (ent instanceof PlayerToken) {
             PlayerToken pt = (PlayerToken) ent;
 
             if (pt.getState() == PlayerToken.STATE_SWIMMING) {
-                return PlayerModel.ANIMATION_SWIM_IDLE;
+                return new State(PlayerModel.ANIMATION_SWIM_IDLE);
             } else {
                 int idle = new Random().nextInt(3);
                 switch (idle) {
                     case 0:
-                        return PlayerModel.ANIMATION_LAND_IDLE_1;
+                        return new State(PlayerModel.ANIMATION_LAND_IDLE_1);
 
                     case 1:
-                        return PlayerModel.ANIMATION_LAND_IDLE_2;
+                        return new State(PlayerModel.ANIMATION_LAND_IDLE_2);
 
                     case 2:
-                        return PlayerModel.ANIMATION_LAND_IDLE_3;
+                        return new State(PlayerModel.ANIMATION_LAND_IDLE_3);
                 }
             }
         } else if (ent instanceof SeaSerpent) {
-            return SeaSerpentModel.ANIMATION_IDLE;
+            return new State(SeaSerpentModel.ANIMATION_IDLE, 90.0f);
         } else if (ent instanceof Shark) {
-            return SharkModel.ANIMATION_SWIM_CYCLE;
+            return new State(SharkModel.ANIMATION_SWIM_CYCLE);
         } else if (ent instanceof Whale) {
-            return WhaleModel.ANIMATION_IDLE;
+            return new State(WhaleModel.ANIMATION_IDLE);
         } else if (ent instanceof Boat) {
-            return BoatModel.ANIMATION_BOAT_IDLE;
+            return new State(BoatModel.ANIMATION_BOAT_IDLE);
         }
 
         return null;
     }
 
-    public static String getMovementAnimation(GameEntity ent, GameTile dest) {
+    public static State getMovementAnimation(GameEntity ent, GameTile dest) {
         if (ent instanceof PlayerToken) {
             PlayerToken pt = (PlayerToken) ent;
 
             if (dest.getHeight() == 0
                     && pt.getState() != PlayerToken.STATE_ON_BOAT) {
-                return PlayerModel.ANIMATION_SWIM_CYCLE;
+                return new State(PlayerModel.ANIMATION_SWIM_CYCLE);
             } else {
-                return PlayerModel.ANIMATION_WALK_CYCLE;
+                return new State(PlayerModel.ANIMATION_WALK_CYCLE);
             }
         } else if (ent instanceof SeaSerpent) {
-            return SeaSerpentModel.ANIMATION_IDLE;
+            return new State(SeaSerpentModel.ANIMATION_SWIM_CYCLE, 0.0f, false);
         } else if (ent instanceof Shark) {
-            return SharkModel.ANIMATION_SWIM_CYCLE;
+            return new State(SharkModel.ANIMATION_SWIM_CYCLE, 120.0f);
         } else if (ent instanceof Whale) {
-            return WhaleModel.ANIMATION_SWIM;
+            return new State(WhaleModel.ANIMATION_SWIM);
         }
 
         return null;

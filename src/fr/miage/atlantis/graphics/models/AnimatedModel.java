@@ -23,13 +23,15 @@ import com.jme3.animation.AnimControl;
 import com.jme3.animation.AnimEventListener;
 import com.jme3.animation.LoopMode;
 import com.jme3.asset.AssetManager;
+import com.jme3.math.Quaternion;
+import fr.miage.atlantis.graphics.AnimationBrain;
 
 /**
  *
  */
 public class AnimatedModel extends StaticModel {
 
-    private final static float BLEND_TIME = 0.3f;
+    private final static float BLEND_TIME = 0.2f;
 
     private AnimControl mControl;
     private AnimChannel mChannel;
@@ -43,12 +45,13 @@ public class AnimatedModel extends StaticModel {
     }
 
     public void playAnimation(String animation) {
-        playAnimation(animation, true, null);
+        playAnimation(animation, true, true, null);
     }
 
-    public void playAnimation(String animation, boolean loop, AnimEventListener listener) {
+    public void playAnimation(String animation, boolean loop, boolean animateTransition,
+            AnimEventListener listener) {
         mChannel.setLoopMode(loop ? LoopMode.Loop : LoopMode.DontLoop);
-        mChannel.setAnim(animation, BLEND_TIME);
+        mChannel.setAnim(animation, animateTransition ? BLEND_TIME : 0.0f);
 
         if (listener != null) {
             mChannel.getControl().addListener(listener);
@@ -60,6 +63,19 @@ public class AnimatedModel extends StaticModel {
             // la même animation ne seront pas tous identiques.
             mChannel.setTime((float) Math.random() * mChannel.getAnimMaxTime());
         }
+    }
+
+    public void playAnimation(AnimationBrain.State state, AnimEventListener listener) {
+        if (state != null && state.animationName != null) {
+            playAnimation(state.animationName, state.loop, state.animateTransition, listener);
+            getModelNode().setLocalRotation(new Quaternion(new float[]{
+                0.0f, state.yOffset * 180.0f / 3.1415926f, 0.0f
+            }));
+        }
+    }
+
+    public void playAnimation(AnimationBrain.State state) {
+        playAnimation(state, null);
     }
 
     public void printAnimations() {
