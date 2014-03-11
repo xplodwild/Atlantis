@@ -52,10 +52,13 @@ public class Whale extends Animal {
      * @param ent Entité qui croise le whale
      */
     @Override
-    public boolean onEntityCross(GameLogic logic, GameEntity ent) {
+    public boolean onEntityCross(GameLogic logic, GameEntity boat) {    
 
-        //TODO : Implementer la methode
-
-        throw new UnsupportedOperationException("Not implemented");
+        if (boat instanceof Boat) {
+            Boat bt = (Boat) boat;
+            // Les baleines retournent les bateau habités
+            logic.onEntityAction(this, bt, GameEntity.ACTION_WHALE_NUKE);
+        }
+        return false;
     }
 }

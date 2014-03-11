@@ -266,6 +266,18 @@ public class Game3DLogic extends GameLogic {
                 });
             }
             break;
+                
+            case GameEntity.ACTION_WHALE_NUKE: {
+            
+                /*
+                 * @TODO : Faire : Recuperation du tile, on check le nombre de playertoken sur le bateau
+                 * si > 0 on les sort du bateau, et les ajoute a la tile
+                 * enfin, on supprime le bateau
+                 */                        
+            }
+            break;
+                
+                
         }
     }
 

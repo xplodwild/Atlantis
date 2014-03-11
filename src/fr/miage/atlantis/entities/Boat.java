@@ -92,9 +92,11 @@ public class Boat extends GameEntity {
                 return false;
             }
         } else if (ent instanceof Whale) {
-            // Une baleine rencontre le bateau: Les joueurs tombent à l'eau, le bateau sort du jeu.
-            // On notifie via moveToTile pour lancer les éventuels événements liés à ce changement.
-            throw new UnsupportedOperationException("Not implemented");
+                       
+            Whale wh = (Whale) ent;
+            // Les baleines retournent les bateau habités            
+            logic.onEntityAction(this, wh, GameEntity.ACTION_WHALE_NUKE);
+        
         }
 
         return false;

@@ -60,7 +60,6 @@ public class Shark extends Animal {
         }
 
         //TODO : Finir d'implementer pour les autres entité, fix le retour
-
         return false;
     }
 }
