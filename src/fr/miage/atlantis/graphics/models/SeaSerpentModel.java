@@ -37,7 +37,6 @@ public class SeaSerpentModel extends AnimatedModel {
                 "Textures/seaserpent_normal.png");
 
         getModel().setLocalTranslation(-2, -3, 24);
-        playAnimation(ANIMATION_IDLE);
     }
 
 

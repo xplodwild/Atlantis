@@ -310,6 +310,7 @@ public class Game3DLogic extends GameLogic {
         model.playAnimation(AnimationBrain.getSpawnAnimation(spawned), new AnimEventListener() {
             public void onAnimCycleDone(AnimControl control, AnimChannel channel, String animName) {
                 model.playAnimation(AnimationBrain.getIdleAnimation(spawned));
+                control.removeListener(this);
             }
 
             public void onAnimChange(AnimControl control, AnimChannel channel, String animName) {
@@ -394,6 +395,9 @@ public class Game3DLogic extends GameLogic {
 
                 // On notifie le tour du mouvement
                 currentTurn.moveEntity(mPickedEntity, b);
+                
+                // Remise à zéro
+                mPickedEntity = null;
             } else {
                 // On assume ici que lorsqu'on picke une entité, on veut picker une tile ou un bateau
                 // après, puisqu'on a des mouvements restant (et qu'un tour est forcément séquentiel)

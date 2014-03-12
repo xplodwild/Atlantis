@@ -55,7 +55,7 @@ public class EntitiesRenderer extends Node {
     }
 
     public AnimatedModel addEntity(GameEntity ent) {
-        Node output = null;
+        AnimatedModel output = null;
         if (ent instanceof Boat) {
             output = addBoat((Boat) ent);
         } else if (ent instanceof PlayerToken) {
@@ -80,7 +80,8 @@ public class EntitiesRenderer extends Node {
             output.setLocalTranslation(tile.getRandomizedTileTopCenter());
         }
 
-        return (AnimatedModel) output;
+        output.playAnimation(AnimationBrain.getIdleAnimation(ent));
+        return output;
     }
 
     public void removeEntity(GameEntity ent) {
@@ -98,28 +99,28 @@ public class EntitiesRenderer extends Node {
         return mNodeToEntity.get(node);
     }
 
-    private Node addBoat(Boat b) {
+    private AnimatedModel addBoat(Boat b) {
         BoatModel model = new BoatModel(mAssetManager);
         return model;
     }
 
-    private Node addPlayer(PlayerToken p) {
+    private AnimatedModel addPlayer(PlayerToken p) {
         PlayerModel model = new PlayerModel(mAssetManager,
                 PlayerModel.intToColor(p.getPlayer().getNumber()));
         return model;
     }
 
-    private Node addSeaSerpent(SeaSerpent s) {
+    private AnimatedModel addSeaSerpent(SeaSerpent s) {
         SeaSerpentModel model = new SeaSerpentModel(mAssetManager);
         return model;
     }
 
-    private Node addShark(Shark s) {
+    private AnimatedModel addShark(Shark s) {
         SharkModel model = new SharkModel(mAssetManager);
         return model;
     }
 
-    private Node addWhale(Whale w) {
+    private AnimatedModel addWhale(Whale w) {
         WhaleModel model = new WhaleModel(mAssetManager);
         return model;
     }

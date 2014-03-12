@@ -33,7 +33,6 @@ public class SharkModel extends AnimatedModel {
 
     public SharkModel(AssetManager am) {
         super(am, "Models/sharkA.mesh.xml", "Textures/shark.png", null);
-        playAnimation(ANIMATION_SWIM_CYCLE);
     }
 
 }
