@@ -37,8 +37,6 @@ import fr.miage.atlantis.entities.GameEntity;
 import fr.miage.atlantis.graphics.hud.HudAnimator;
 import fr.miage.atlantis.graphics.hud.TileActionDisplay;
 import fr.miage.atlantis.graphics.models.DiceModel;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -56,15 +54,13 @@ public class Game3DRenderer extends SimpleApplication {
     private EntitiesRenderer mEntitiesRenderer;
     private InputActionListener mInputListener;
     private DiceModel mDiceModel;
-    private List<FutureCallback> mFutureCallbacks;
-    private List<FutureCallback> mFutureCallbacksDeletion;
+    private FutureUpdater mFutureUpdater;
     private HudAnimator mHudAnimator;
 
     public Game3DRenderer(Game3DLogic parent) {
         mParent = parent;
         mHudAnimator = new HudAnimator();
-        mFutureCallbacks = new ArrayList<FutureCallback>();
-        mFutureCallbacksDeletion = new ArrayList<FutureCallback>();
+        mFutureUpdater = new FutureUpdater();
     }
 
     @Override
@@ -175,7 +171,7 @@ public class Game3DRenderer extends SimpleApplication {
                             mParent.getCurrentTurn().onDiceRollFinished();
                         }
                     };
-                    addFutureTimeCallback(fc);
+                    mFutureUpdater.addFutureTimeCallback(fc);
                 }
             }
         });
@@ -189,17 +185,7 @@ public class Game3DRenderer extends SimpleApplication {
         motionControl.play();
     }
 
-    /**
-     * Appelle un FutureCallback après timeFromNow secondes de rendu écoulées
-     * @param cb Le callback à appeler
-     */
-    public void addFutureTimeCallback(FutureCallback cb) {
-        // Le rendu survient dans un GLThread à part. Du coup, on verouille la liste quand on
-        // la modifie.
-        synchronized (this) {
-            mFutureCallbacks.add(cb);
-        }
-    }
+
 
     int FRAME_COUNT = 0;
 
@@ -219,7 +205,7 @@ public class Game3DRenderer extends SimpleApplication {
             mHudAnimator.animateFadeIn(tad);
             guiNode.attachChild(tad);
             // ---
-            addFutureTimeCallback(new FutureCallback(2.0f) {
+            mFutureUpdater.addFutureTimeCallback(new FutureCallback(2.0f) {
                 @Override
                 public void onFutureHappened() {
                     mHudAnimator.animateFadeOut(tad);
@@ -230,20 +216,8 @@ public class Game3DRenderer extends SimpleApplication {
         // Mise à jour des animations du HUD
         mHudAnimator.update(tpf);
 
-        // Traitement de la file de FutureCallbacks. On traite d'abord les callbacks, puis on
-        // supprime les callbacks qui sont terminés/survenus.
-        synchronized (this) {
-            for (FutureCallback cb : mFutureCallbacks) {
-                if (cb.decreaseTime(tpf)) {
-                    mFutureCallbacksDeletion.add(cb);
-                }
-            }
-
-            for (FutureCallback cb : mFutureCallbacksDeletion) {
-                mFutureCallbacks.remove(cb);
-            }
-            mFutureCallbacksDeletion.clear();
-        }
+        // Mise à jour des callbacks temporels
+        mFutureUpdater.update(tpf);
     }
 
     @Override
