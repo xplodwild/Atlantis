@@ -22,6 +22,7 @@ import com.jme3.animation.AnimChannel;
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.AnimEventListener;
 import com.jme3.animation.LoopMode;
+import com.jme3.animation.SkeletonControl;
 import com.jme3.asset.AssetManager;
 import com.jme3.math.Quaternion;
 import fr.miage.atlantis.graphics.AnimationBrain;
@@ -42,6 +43,10 @@ public class AnimatedModel extends StaticModel {
 
         mControl = getModel().getControl(AnimControl.class);
         mChannel = mControl.createChannel();
+        
+        // On active l'hardware skinning
+        SkeletonControl skeletonControl = getModel().getControl(SkeletonControl.class);
+        skeletonControl.setHardwareSkinningPreferred(true);
     }
 
     public void playAnimation(String animation) {

@@ -35,6 +35,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import fr.miage.atlantis.board.GameTile;
+import fr.miage.atlantis.entities.Boat;
 import fr.miage.atlantis.entities.GameEntity;
 import fr.miage.atlantis.entities.PlayerToken;
 import fr.miage.atlantis.entities.SeaSerpent;
@@ -43,6 +44,7 @@ import fr.miage.atlantis.entities.Whale;
 import fr.miage.atlantis.graphics.models.EmptyTileModel;
 import fr.miage.atlantis.graphics.models.TileModel;
 import fr.miage.atlantis.logic.GameLogic;
+import java.util.List;
 
 /**
  *
@@ -50,9 +52,9 @@ import fr.miage.atlantis.logic.GameLogic;
 public class InputActionListener {
 
     private final static int REQUEST_NONE = -1;
-    public final static int REQUEST_ENTITY_PICK = 0;
-    public final static int REQUEST_TILE_PICK = 1;
-    private final static int REQUEST_MAX = 2;
+
+    public final static int REQUEST_ENTITY_PICK = (1 << 0);
+    public final static int REQUEST_TILE_PICK   = (1 << 1);
 
     private final static String INPUTMAP_MOUSE_HOVER = "mouse_hover";
     private final static String INPUTMAP_MOUSE_CLICK = "mouse_click";
@@ -89,7 +91,8 @@ public class InputActionListener {
 
                 if (result != null && result.geometry != null) {
                     // On a un résultat et qu'il correspond aux contraintes, on l'highlight
-                    if (mPickingRequest == REQUEST_ENTITY_PICK) {
+                    if ((mPickingRequest & REQUEST_ENTITY_PICK) != 0
+                            && result.source == PickingResult.SOURCE_ENTITY) {
                         // On retrouve l'entité et on la passe.
                         GameEntity ent = getEntityFromNode(result.geometry);
 
@@ -100,7 +103,8 @@ public class InputActionListener {
                                 mPreviousGeometry = result.geometry;
                             }
                         }
-                    } else if (mPickingRequest == REQUEST_TILE_PICK) {
+                    } else if ((mPickingRequest & REQUEST_TILE_PICK) != 0
+                            && result.source == PickingResult.SOURCE_BOARD) {
                         // On retrouve la tile et on la passe.
                         GameTile tile = getTileFromNode(result.geometry);
 
@@ -131,7 +135,8 @@ public class InputActionListener {
                     int request = mPickingRequest;
                     mPickingRequest = REQUEST_NONE;
 
-                    if (request == REQUEST_ENTITY_PICK) {
+                    if ((mPickingRequest & REQUEST_ENTITY_PICK) != 0
+                            && result.source == PickingResult.SOURCE_ENTITY) {
                         // On retrouve l'entité et on la passe.
                         // Hierarchie: submesh0.getParent(mesh).getParent(modelNode).getParent(node)
                         GameEntity ent = getEntityFromNode(result.geometry);
@@ -142,7 +147,8 @@ public class InputActionListener {
                             // On relance la requête
                             mPickingRequest = request;
                         }
-                    } else if (request == REQUEST_TILE_PICK) {
+                    } else if ((mPickingRequest & REQUEST_TILE_PICK) != 0
+                            && result.source == PickingResult.SOURCE_BOARD) {
                         // On retrouve la tile et on la passe
                         GameTile tile = getTileFromNode(result.geometry);
 
@@ -179,26 +185,26 @@ public class InputActionListener {
         inputManager.addListener(mMouseClickListener, INPUTMAP_MOUSE_CLICK);
     }
 
-    public void requestEntityPicking(GameLogic.EntityPickRequest request) {
-        requestPicking(REQUEST_ENTITY_PICK);
-        mEntityRequest = request;
-    }
+    public void requestPicking(GameLogic.EntityPickRequest entRq, GameLogic.TilePickRequest tileRq) {
+        int flag = 0;
+        if (entRq != null) {
+            flag |= REQUEST_ENTITY_PICK;
+        }
+        if (tileRq != null) {
+            flag |= REQUEST_TILE_PICK;
+        }
 
-    public void requestTilePicking(GameLogic.TilePickRequest request) {
-        requestPicking(REQUEST_TILE_PICK);
-        mTileRequest = request;
+        requestPicking(flag);
+        mEntityRequest = entRq;
+        mTileRequest = tileRq;
     }
 
     /**
      * Demande à ce listener d'effectuer un picking en particulier. Le résultat sera rapporté
      * au GameLogic correspondant.
-     * @param request L'une des constantes REQUEST_** de cette classe
+     * @param request Un ou des flags REQUEST_** de cette classe
      */
     private void requestPicking(int request) {
-        if (request < 0 || request >= REQUEST_MAX) {
-            throw new IllegalArgumentException("Request must be one of InputActionListener.REQUEST_**");
-        }
-
         // En théorie quand on request un picking, on est en état "NONE", c'est-à-dire qu'aucune
         // autre requête n'est en cours. Si on passe d'une requête à une autre, on a peut être
         // un événement d'attente manquant.
@@ -221,13 +227,18 @@ public class InputActionListener {
         Ray ray = new Ray(click3d, dir);
 
         PickingResult output = null;
-        if (mPickingRequest == REQUEST_ENTITY_PICK) {
+
+        // On commence par tester les entités, si ça fait partie de la requête
+        if ((mPickingRequest & REQUEST_ENTITY_PICK) != 0) {
             // On teste si on touche une entité
             mRenderer.getEntitiesRenderer().updateModelBound();
             mRenderer.getEntitiesRenderer().collideWith(ray, results);
 
             output = processPickingOutput(results, PickingResult.SOURCE_ENTITY);
-        } else if (mPickingRequest == REQUEST_TILE_PICK) {
+        }
+
+        // Si on a pas de sortie, et si on pick les tiles
+        if (output == null && (mPickingRequest & REQUEST_TILE_PICK) != 0) {
             // On teste si on touche un élément du plateau (tiles).
             mRenderer.getBoardRenderer().collideWith(ray, results);
 
@@ -273,7 +284,6 @@ public class InputActionListener {
     private boolean checkPickingConstraints(GameLogic.EntityPickRequest request, GameEntity ent) {
         if ((request.pickingRestriction & GameLogic.EntityPickRequest.FLAG_PICK_PLAYER_ENTITIES) != 0) {
             // On veut picker un pion du joueur. On vérifie que l'entité est bien cela.
-            // @TODO: Bateau!
 
             // On vérifie que c'est bien un pion
             if ((ent instanceof PlayerToken)) {
@@ -281,6 +291,47 @@ public class InputActionListener {
 
                 // On vérifie que le pion appartient au joueur
                 if (pt.getPlayer() == request.player) {
+                    return true;
+                }
+            } else if ((ent instanceof Boat)) {
+                // Si c'est un bateau, il "appartient" au joueur si :
+                // - Soit le joueur actuel a la majorité de pions sur le bateau
+                // - Soit il y a un nombre égal de pions de chaque joueur sur le bateau
+                Boat b = (Boat) ent;
+                List<PlayerToken> pions = b.getOnboardTokens();
+                if (pions.size() > 0) {
+                    int tokensBelongToMe = 0;
+                    for (PlayerToken pt : pions) {
+                        if (pt.getPlayer() == request.player) {
+                            tokensBelongToMe++;
+                        }
+                    }
+
+                    // Déjà, si on a aucun pion à nous, on continue pas
+                    if (tokensBelongToMe > 0) {
+                        // Un bateau n'ayant que 3 places, si on a plus qu'un pion sur le bateau, il
+                        // est à nous
+                        if (tokensBelongToMe > 1) {
+                            return true;
+                        }
+
+                        // Sinon on vérifie qu'on a un pion de chacun
+                        if (pions.size() == 1) {
+                            return true;
+                        } else if (pions.size() == 2) {
+                            // Sachant qu'on a exactement un pion et qu'il y a 2 pions en tout,
+                            // on a forcément le même nombre, donc c'est bon.
+                            return true;
+                        } else if (pions.size() == 3) {
+                            if (pions.get(0).getPlayer() != pions.get(1).getPlayer() &&
+                                    pions.get(0).getPlayer() != pions.get(2).getPlayer() &&
+                                    pions.get(1).getPlayer() != pions.get(2).getPlayer()) {
+                                return true;
+                            }
+                        }
+                    }
+                } else {
+                    // N'importe qui peut contrôler un bateau vide
                     return true;
                 }
             }
@@ -305,6 +356,26 @@ public class InputActionListener {
             // On veut picker une baleine
             if (ent instanceof Whale) {
                 return true;
+            }
+        }
+
+        if ((request.pickingRestriction & GameLogic.EntityPickRequest.FLAG_PICK_BOAT_WITHOUT_ROOM) != 0) {
+            // On veut picker un bateau n'ayant plus de place
+            if (ent instanceof Boat) {
+                Boat b = (Boat) ent;
+                if (!b.hasRoom()) {
+                    return true;
+                }
+            }
+        }
+
+        if ((request.pickingRestriction & GameLogic.EntityPickRequest.FLAG_PICK_BOAT_WITH_ROOM) != 0) {
+            // On veut picker un bateau ayant de la place
+            if (ent instanceof Boat) {
+                Boat b = (Boat) ent;
+                if (b.hasRoom()) {
+                    return true;
+                }
             }
         }
 

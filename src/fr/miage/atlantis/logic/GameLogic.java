@@ -59,6 +59,8 @@ public abstract class GameLogic implements GameTurnListener {
         public static final int FLAG_PICK_SHARK             = (1 << 1);
         public static final int FLAG_PICK_WHALE             = (1 << 2);
         public static final int FLAG_PICK_SEASERPENT        = (1 << 3);
+        public static final int FLAG_PICK_BOAT_WITH_ROOM    = (1 << 4);
+        public static final int FLAG_PICK_BOAT_WITHOUT_ROOM = (1 << 5);
 
         /**
          * Restriction des entités pouvant être pickées
@@ -210,14 +212,11 @@ public abstract class GameLogic implements GameTurnListener {
     public abstract void boot();
 
     /**
-     * Indique à la logique du jeu qu'on a besoin de sélectionner une entité
+     * Indique à la logique du jeu qu'on a besoin de sélectionner une entité ou une tile
+     * @param entRq Si non null, la requête permettant de filtrer les entités à picker
+     * @param tileRq Si non null, la requête permettant de filtrer les tiles à picker
      */
-    public abstract void requestEntityPick(EntityPickRequest request);
-
-    /**
-     * Indique à la logique du jeu qu'on a besoin de sélectionner une tile
-     */
-    public abstract void requestTilePick(TilePickRequest request);
+    public abstract void requestPick(EntityPickRequest entRq, TilePickRequest tileRq);
 
     /**
      * Signale au moteur de logique qu'on a pické une entité

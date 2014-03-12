@@ -32,10 +32,12 @@ import com.jme3.scene.plugins.blender.BlenderModelLoader;
 import fr.miage.atlantis.Game3DLogic;
 import fr.miage.atlantis.GameDice;
 import fr.miage.atlantis.board.GameTile;
+import fr.miage.atlantis.board.TileAction;
 import fr.miage.atlantis.entities.GameEntity;
+import fr.miage.atlantis.graphics.hud.AbstractDisplay;
+import fr.miage.atlantis.graphics.hud.HudAnimator;
+import fr.miage.atlantis.graphics.hud.TileActionDisplay;
 import fr.miage.atlantis.graphics.models.DiceModel;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -44,6 +46,8 @@ import java.util.Random;
  */
 public class Game3DRenderer extends SimpleApplication {
 
+    private static final boolean DEBUG_SHOW_STATS = false;
+
     private Node mSceneNode;
     private Environment mEnvironment;
     private Game3DLogic mParent;
@@ -51,19 +55,24 @@ public class Game3DRenderer extends SimpleApplication {
     private EntitiesRenderer mEntitiesRenderer;
     private InputActionListener mInputListener;
     private DiceModel mDiceModel;
-    private List<FutureCallback> mFutureCallbacks;
-    private List<FutureCallback> mFutureCallbacksDeletion;
+    private FutureUpdater mFutureUpdater;
+    private HudAnimator mHudAnimator;
 
     public Game3DRenderer(Game3DLogic parent) {
         mParent = parent;
-        mFutureCallbacks = new ArrayList<FutureCallback>();
-        mFutureCallbacksDeletion = new ArrayList<FutureCallback>();
+        mHudAnimator = new HudAnimator();
+        mFutureUpdater = new FutureUpdater();
     }
 
     @Override
     public void simpleInitApp() {
         // Pré-configuration
         assetManager.registerLoader(BlenderModelLoader.class, "blend");
+
+        if (!DEBUG_SHOW_STATS) {
+            setDisplayFps(false);
+            setDisplayStatView(false);
+        }
 
         // Configuration camera
         flyCam.setMoveSpeed(200.0f);
@@ -103,6 +112,8 @@ public class Game3DRenderer extends SimpleApplication {
 
         // Configuration du dé
         mDiceModel = new DiceModel(assetManager);
+
+
     }
 
     public BoardRenderer getBoardRenderer() {
@@ -121,27 +132,36 @@ public class Game3DRenderer extends SimpleApplication {
         return mParent;
     }
 
+    public HudAnimator getHudAnimator() {
+        return mHudAnimator;
+    }
+
+    public FutureUpdater getFuture() {
+        return mFutureUpdater;
+    }
+
     public void rollDiceAnimation(final int finalFace) {
         mSceneNode.attachChild(mDiceModel);
-        mDiceModel.setLocalTranslation(cam.getLocation().add(cam.getDirection().mult(100.0f)));
+        mDiceModel.setLocalTranslation(cam.getLocation().add(cam.getDirection().mult(150.0f)));
         mDiceModel.lookAt(cam.getLocation(), Vector3f.ZERO);
 
         // On créé le chemin
         final Random rand = new Random();
         final MotionPath path = new MotionPath();
         path.addWayPoint(mDiceModel.getLocalTranslation());
-        for (int i = 0; i < 10; i++) {
+
+        for (int i = 0; i < 2*3; i++) {
             path.addWayPoint(mDiceModel.getLocalTranslation()
                     .add(-5.0f + rand.nextFloat() * 10.0f,
                     -5.0f + rand.nextFloat() * 10.0f,
                     -5.0f + rand.nextFloat() * 10.0f));
         }
 
-        path.setPathSplineType(Spline.SplineType.CatmullRom);
+        path.setPathSplineType(Spline.SplineType.Bezier);
 
         path.addListener(new MotionPathListener() {
             public void onWayPointReach(MotionEvent motionControl, int wayPointIndex) {
-                if (wayPointIndex == 10) {
+                if (wayPointIndex + 1 == path.getNbWayPoints()) {
                     mDiceModel.setLocalRotation(Quaternion.IDENTITY);
 
                     if (finalFace == GameDice.FACE_SHARK) {
@@ -153,14 +173,14 @@ public class Game3DRenderer extends SimpleApplication {
                     }
 
                     // On laisse un peu de temps entre l'affichage et l'événement effectif
-                    FutureCallback fc = new FutureCallback(speed) {
+                    FutureCallback fc = new FutureCallback(2.0f) {
                         @Override
                         public void onFutureHappened() {
                             mSceneNode.detachChild(mDiceModel);
                             mParent.getCurrentTurn().onDiceRollFinished();
                         }
                     };
-                    addFutureTimeCallback(fc, 2.0f);
+                    mFutureUpdater.addFutureTimeCallback(fc);
                 }
             }
         });
@@ -169,23 +189,17 @@ public class Game3DRenderer extends SimpleApplication {
         final MotionEvent motionControl = new MotionEvent(mDiceModel, path);
         motionControl.setDirectionType(MotionEvent.Direction.PathAndRotation);
         motionControl.setRotation(new Quaternion().fromAngleNormalAxis(0, Vector3f.UNIT_Y));
-        motionControl.setInitialDuration(1f);
+        motionControl.setInitialDuration(2f);
 
         motionControl.play();
     }
 
-    /**
-     * Appelle un FutureCallback après timeFromNow secondes de rendu écoulées
-     * @param cb Le callback à appeler
-     * @param timeFromNow Le nombre de secondes à attendre
-     */
-    public void addFutureTimeCallback(FutureCallback cb, float timeFromNow) {
-        // Le rendu survient dans un GLThread à part. Du coup, on verouille la liste quand on
-        // la modifie.
-        synchronized (this) {
-            mFutureCallbacks.add(cb);
-        }
+    public void displayHudCenter(AbstractDisplay disp) {
+        disp.setPosition(cam.getWidth() / 2 - TileActionDisplay.IMAGE_WIDTH / 2,
+                    cam.getHeight() / 2 - TileActionDisplay.IMAGE_HEIGHT / 2);
+        guiNode.attachChild(disp);
     }
+
 
     int FRAME_COUNT = 0;
 
@@ -198,20 +212,11 @@ public class Game3DRenderer extends SimpleApplication {
             mParent.startGame();
         }
 
-        // Traitement de la file de FutureCallbacks. On traite d'abord les callbacks, puis on
-        // supprime les callbacks qui sont terminés/survenus.
-        synchronized (this) {
-            for (FutureCallback cb : mFutureCallbacks) {
-                if (cb.decreaseTime(tpf)) {
-                    mFutureCallbacksDeletion.add(cb);
-                }
-            }
+        // Mise à jour des animations du HUD
+        mHudAnimator.update(tpf);
 
-            for (FutureCallback cb : mFutureCallbacksDeletion) {
-                mFutureCallbacks.remove(cb);
-            }
-            mFutureCallbacksDeletion.clear();
-        }
+        // Mise à jour des callbacks temporels
+        mFutureUpdater.update(tpf);
     }
 
     @Override

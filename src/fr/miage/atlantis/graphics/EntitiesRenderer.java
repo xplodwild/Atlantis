@@ -27,6 +27,7 @@ import fr.miage.atlantis.entities.SeaSerpent;
 import fr.miage.atlantis.entities.Shark;
 import fr.miage.atlantis.entities.Whale;
 import fr.miage.atlantis.graphics.models.AbstractTileModel;
+import fr.miage.atlantis.graphics.models.AnimatedModel;
 import fr.miage.atlantis.graphics.models.BoatModel;
 import fr.miage.atlantis.graphics.models.PlayerModel;
 import fr.miage.atlantis.graphics.models.SeaSerpentModel;
@@ -53,8 +54,8 @@ public class EntitiesRenderer extends Node {
         mNodeToEntity = new HashMap<Node, GameEntity>();
     }
 
-    public void addEntity(GameEntity ent) {
-        Node output = null;
+    public AnimatedModel addEntity(GameEntity ent) {
+        AnimatedModel output = null;
         if (ent instanceof Boat) {
             output = addBoat((Boat) ent);
         } else if (ent instanceof PlayerToken) {
@@ -78,6 +79,9 @@ public class EntitiesRenderer extends Node {
             AbstractTileModel tile = mBoardRenderer.findTileModel(ent.getTile());
             output.setLocalTranslation(tile.getRandomizedTileTopCenter());
         }
+
+        output.playAnimation(AnimationBrain.getIdleAnimation(ent));
+        return output;
     }
 
     public void removeEntity(GameEntity ent) {
@@ -95,28 +99,28 @@ public class EntitiesRenderer extends Node {
         return mNodeToEntity.get(node);
     }
 
-    private Node addBoat(Boat b) {
+    private AnimatedModel addBoat(Boat b) {
         BoatModel model = new BoatModel(mAssetManager);
         return model;
     }
 
-    private Node addPlayer(PlayerToken p) {
+    private AnimatedModel addPlayer(PlayerToken p) {
         PlayerModel model = new PlayerModel(mAssetManager,
                 PlayerModel.intToColor(p.getPlayer().getNumber()));
         return model;
     }
 
-    private Node addSeaSerpent(SeaSerpent s) {
+    private AnimatedModel addSeaSerpent(SeaSerpent s) {
         SeaSerpentModel model = new SeaSerpentModel(mAssetManager);
         return model;
     }
 
-    private Node addShark(Shark s) {
+    private AnimatedModel addShark(Shark s) {
         SharkModel model = new SharkModel(mAssetManager);
         return model;
     }
 
-    private Node addWhale(Whale w) {
+    private AnimatedModel addWhale(Whale w) {
         WhaleModel model = new WhaleModel(mAssetManager);
         return model;
     }
