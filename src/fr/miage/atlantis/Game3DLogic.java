@@ -284,9 +284,17 @@ public class Game3DLogic extends GameLogic {
         }
     }
 
-    public void onEntitySpawn(GameEntity spawned) {
+    public void onEntitySpawn(final GameEntity spawned) {
         System.out.println("Game3DLogic: onEntitySpawn " + spawned);
-        AnimatedModel model = mRenderer.getEntitiesRenderer().addEntity(spawned);
+        final AnimatedModel model = mRenderer.getEntitiesRenderer().addEntity(spawned);
+        model.playAnimation(AnimationBrain.getSpawnAnimation(spawned), new AnimEventListener() {
+            public void onAnimCycleDone(AnimControl control, AnimChannel channel, String animName) {
+                model.playAnimation(AnimationBrain.getIdleAnimation(spawned));
+            }
+
+            public void onAnimChange(AnimControl control, AnimChannel channel, String animName) {
+            }
+        });
     }
 
     private MotionEvent generateTileSinkMotion(Node tileNode) {

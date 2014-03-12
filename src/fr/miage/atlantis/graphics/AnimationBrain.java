@@ -126,5 +126,16 @@ public class AnimationBrain {
 
         return null;
     }
-    
+
+    public static State getSpawnAnimation(GameEntity ent) {
+        if (ent instanceof Shark) {
+            return new State(SharkModel.ANIMATION_RISE);
+        } else if (ent instanceof SeaSerpent) {
+            return new State(SeaSerpentModel.ANIMATION_RISE);
+        } else if (ent instanceof Whale) {
+            return new State(WhaleModel.ANIMATION_RISE);
+        }
+
+        return null;
+    }
 }
