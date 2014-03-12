@@ -30,6 +30,45 @@ public class TileActionDisplay extends AbstractDisplay {
         super("HUD TileAction Display", assetManager);
     }
 
+    public static TileActionDisplay getTileForAction(TileAction action, AssetManager assetManager) {
+        TileActionDisplay tad = new TileActionDisplay(assetManager);
+
+        switch (action.getAction()) {
+            case TileAction.ACTION_CANCEL_ANIMAL:
+                tad.displayActionCancel(action.getEntity());
+                break;
+
+            case TileAction.ACTION_SPAWN_ENTITY:
+                tad.displayActionSpawn(action.getEntity());
+                break;
+
+            case TileAction.ACTION_MOVE_ANIMAL:
+                tad.displayActionTeleport(action.getEntity());
+                break;
+
+            case TileAction.ACTION_BONUS_BOAT:
+                tad.displayActionBonusBoat();
+                break;
+
+            case TileAction.ACTION_BONUS_SWIM:
+                tad.displayActionBonusSwim();
+                break;
+
+            case TileAction.ACTION_VOLCANO:
+                tad.displayActionVolcano();
+                break;
+
+            case TileAction.ACTION_WHIRL:
+                tad.displayActionWhirl();
+                break;
+
+            default:
+                throw new IllegalArgumentException("Invalid TileAction action value");
+        }
+
+        return tad;
+    }
+
     /**
      * Affiche une tile d'annulation d'action à l'écran
      * @param entity L'entité annulée, l'un de TileAction.ENTITY_**
@@ -70,9 +109,48 @@ public class TileActionDisplay extends AbstractDisplay {
             case TileAction.ENTITY_SEASERPENT:
                 // Téléportation de kraken
                 showImage("Interface/TileAction_Teleport_SeaSerpent.png");
+                break;
 
             default:
                 throw new IllegalStateException("Unknown Cancel Action Entity: " + entity);
         }
+    }
+
+    public void displayActionBonusSwim() {
+        showImage("Interface/TileAction_Move_Swimmer.png");
+    }
+
+    public void displayActionBonusBoat() {
+        showImage("Interface/TileAction_Move_Boat.png");
+    }
+
+    public void displayActionSpawn(int entity) {
+        switch (entity) {
+            case TileAction.ENTITY_BOAT:
+                // Spawn d'un bateau
+                showImage("Interface/TileAction_Spawn_Boat.png");
+                break;
+
+            case TileAction.ENTITY_SHARK:
+                // Spawn d'un requin
+                showImage("Interface/TileAction_Spawn_Shark.png");
+                break;
+
+            case TileAction.ENTITY_WHALE:
+                // Spawn d'une baleine
+                showImage("Interface/TileAction_Spawn_Whale.png");
+                break;
+
+            default:
+                throw new IllegalStateException("Unknown Spawn Action Entity: " + entity);
+        }
+    }
+
+    public void displayActionVolcano() {
+        showImage("Interface/TileAction_Volcano.png");
+    }
+
+    public void displayActionWhirl() {
+        showImage("Interface/TileAction_Whirlpool.png");
     }
 }

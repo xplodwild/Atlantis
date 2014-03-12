@@ -34,6 +34,7 @@ import fr.miage.atlantis.GameDice;
 import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.board.TileAction;
 import fr.miage.atlantis.entities.GameEntity;
+import fr.miage.atlantis.graphics.hud.AbstractDisplay;
 import fr.miage.atlantis.graphics.hud.HudAnimator;
 import fr.miage.atlantis.graphics.hud.TileActionDisplay;
 import fr.miage.atlantis.graphics.models.DiceModel;
@@ -131,6 +132,14 @@ public class Game3DRenderer extends SimpleApplication {
         return mParent;
     }
 
+    public HudAnimator getHudAnimator() {
+        return mHudAnimator;
+    }
+
+    public FutureUpdater getFuture() {
+        return mFutureUpdater;
+    }
+
     public void rollDiceAnimation(final int finalFace) {
         mSceneNode.attachChild(mDiceModel);
         mDiceModel.setLocalTranslation(cam.getLocation().add(cam.getDirection().mult(150.0f)));
@@ -185,6 +194,11 @@ public class Game3DRenderer extends SimpleApplication {
         motionControl.play();
     }
 
+    public void displayHudCenter(AbstractDisplay disp) {
+        disp.setPosition(cam.getWidth() / 2 - TileActionDisplay.IMAGE_WIDTH / 2,
+                    cam.getHeight() / 2 - TileActionDisplay.IMAGE_HEIGHT / 2);
+        guiNode.attachChild(disp);
+    }
 
 
     int FRAME_COUNT = 0;
@@ -196,21 +210,6 @@ public class Game3DRenderer extends SimpleApplication {
         // TEST == Evenements de test
         if (FRAME_COUNT == 10) {
             mParent.startGame();
-
-            // --- TEST HUD
-            final TileActionDisplay tad = new TileActionDisplay(assetManager);
-            tad.displayActionCancel(TileAction.ENTITY_SHARK);
-            tad.setPosition(cam.getWidth() / 2 - TileActionDisplay.IMAGE_WIDTH / 2,
-                    cam.getHeight() / 2 - TileActionDisplay.IMAGE_HEIGHT / 2);
-            mHudAnimator.animateFadeIn(tad);
-            guiNode.attachChild(tad);
-            // ---
-            mFutureUpdater.addFutureTimeCallback(new FutureCallback(2.0f) {
-                @Override
-                public void onFutureHappened() {
-                    mHudAnimator.animateFadeOut(tad);
-                }
-            });
         }
 
         // Mise à jour des animations du HUD

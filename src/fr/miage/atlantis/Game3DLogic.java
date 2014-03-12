@@ -36,8 +36,10 @@ import fr.miage.atlantis.entities.PlayerToken;
 import fr.miage.atlantis.entities.SeaSerpent;
 import fr.miage.atlantis.entities.Shark;
 import fr.miage.atlantis.graphics.AnimationBrain;
+import fr.miage.atlantis.graphics.FutureCallback;
 import fr.miage.atlantis.graphics.Game3DRenderer;
 import fr.miage.atlantis.graphics.ParticlesFactory;
+import fr.miage.atlantis.graphics.hud.TileActionDisplay;
 import fr.miage.atlantis.graphics.models.AbstractTileModel;
 import fr.miage.atlantis.graphics.models.AnimatedModel;
 import fr.miage.atlantis.graphics.models.PlayerModel;
@@ -174,7 +176,7 @@ public class Game3DLogic extends GameLogic {
                 if (motionEvent.getPath().getNbWayPoints() == wayPointIndex + 1) {
                     // On est à la fin de l'animation. On remplace la tile
                     // coulée par une WaterTile
-                    WaterTile newTile = getBoard().sinkTile(Game3DLogic.this, tile);
+                    final WaterTile newTile = getBoard().sinkTile(Game3DLogic.this, tile);
                     mRenderer.getBoardRenderer().replaceTile(tile, newTile);
 
                     // On fait en sorte que les nouveaux nageurs nagent
@@ -185,19 +187,32 @@ public class Game3DLogic extends GameLogic {
                         }
                     }
 
-                    // On lance l'action sous la tile, si c'est immédiat
-                    TileAction action = tile.getAction();
-                    if (action.isImmediate()) {
-                        onPlayTileAction(newTile, action);
-                    } else {
-                        System.out.println("TODO: Tile is not immediate: " + action.toString());
-                        // TODO: Stocker la tile dans les tiles du joueur
-                    }
+                    // D'abord, on affiche la tile "piochée" à l'écran
+                    final TileAction action = tile.getAction();
+                    final TileActionDisplay tad = TileActionDisplay.getTileForAction(action,
+                            mRenderer.getAssetManager());
+                    mRenderer.displayHudCenter(tad);
+                    mRenderer.getHudAnimator().animateFadeIn(tad);
 
-                    // Fin du tour, on notifie le tour si on l'a
-                    if (getCurrentTurn() != null) {
-                        getCurrentTurn().onSinkTileFinished();
-                    }
+                    // Ensuite, après l'affichage, on traite l'action
+                    mRenderer.getFuture().addFutureTimeCallback(new FutureCallback(2.0f) {
+                        @Override
+                        public void onFutureHappened() {
+                            mRenderer.getHudAnimator().animateFadeOut(tad);
+
+                            // On lance l'action sous la tile, si c'est immédiat
+                            if (action.isImmediate()) {
+                                onPlayTileAction(newTile, action);
+                            } else {
+                                System.out.println("TODO: Tile is not immediate: " + action.toString());
+                                // TODO: Stocker la tile dans les tiles du joueur
+                            }
+
+                            // Fin de l'action, étape suivante
+                            getCurrentTurn().onSinkTileFinished();
+                        }
+                    });
+
                 }
             }
         });
@@ -271,7 +286,7 @@ public class Game3DLogic extends GameLogic {
 
     public void onEntitySpawn(GameEntity spawned) {
         System.out.println("Game3DLogic: onEntitySpawn " + spawned);
-        mRenderer.getEntitiesRenderer().addEntity(spawned);
+        AnimatedModel model = mRenderer.getEntitiesRenderer().addEntity(spawned);
     }
 
     private MotionEvent generateTileSinkMotion(Node tileNode) {

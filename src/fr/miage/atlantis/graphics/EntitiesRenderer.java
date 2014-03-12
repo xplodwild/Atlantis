@@ -27,6 +27,7 @@ import fr.miage.atlantis.entities.SeaSerpent;
 import fr.miage.atlantis.entities.Shark;
 import fr.miage.atlantis.entities.Whale;
 import fr.miage.atlantis.graphics.models.AbstractTileModel;
+import fr.miage.atlantis.graphics.models.AnimatedModel;
 import fr.miage.atlantis.graphics.models.BoatModel;
 import fr.miage.atlantis.graphics.models.PlayerModel;
 import fr.miage.atlantis.graphics.models.SeaSerpentModel;
@@ -53,7 +54,7 @@ public class EntitiesRenderer extends Node {
         mNodeToEntity = new HashMap<Node, GameEntity>();
     }
 
-    public void addEntity(GameEntity ent) {
+    public AnimatedModel addEntity(GameEntity ent) {
         Node output = null;
         if (ent instanceof Boat) {
             output = addBoat((Boat) ent);
@@ -78,6 +79,8 @@ public class EntitiesRenderer extends Node {
             AbstractTileModel tile = mBoardRenderer.findTileModel(ent.getTile());
             output.setLocalTranslation(tile.getRandomizedTileTopCenter());
         }
+
+        return (AnimatedModel) output;
     }
 
     public void removeEntity(GameEntity ent) {
