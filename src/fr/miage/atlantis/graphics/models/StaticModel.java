@@ -34,6 +34,7 @@ import fr.miage.atlantis.graphics.ModelCache;
 public class StaticModel extends Node {
 
     private final static float DEFAULT_SCALE = 5.0f;
+    private final static boolean ENABLE_NORMAL_MAP = false;
 
     private Spatial mModel;
     private Material mMaterial;
@@ -74,7 +75,7 @@ public class StaticModel extends Node {
                 diffuseTex.setMinFilter(Texture.MinFilter.Trilinear);
                 mMaterial.setTexture("DiffuseMap", diffuseTex);
 
-                if (normalPath != null) {
+                if (ENABLE_NORMAL_MAP && normalPath != null) {
                     // Il faut calculer les tangentes pour que le lighting
                     // fonctionne avec une texture de normalmap
                     TangentBinormalGenerator.generate(mModel);
