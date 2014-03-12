@@ -52,6 +52,11 @@ public class PlayerToken extends GameEntity {
      */
     private int mPoints;
 
+    /**
+     * Bateau (si applicable) sur lequel est ce joueur
+     */
+    private Boat mBoat;
+
 
     /**
      * Constructeur des pions
@@ -67,15 +72,12 @@ public class PlayerToken extends GameEntity {
         mPlayer = p;
     }
 
-    
+
     @Override
     public boolean moveToTile(GameLogic logic, GameTile tile) {
         boolean result = super.moveToTile(logic, tile);
 
         if ((tile instanceof WaterTile) && mState == STATE_ON_LAND) {
-            // On était sur terre, et on est passé dans l'eau sans bateau (le cas échéant,
-            // moveToTile va trigger le onEntityCross de Boat, qui va placer ce PlayerToken
-            // en état ON_BOAT).
             setState(PlayerToken.STATE_SWIMMING);
         }
 
@@ -83,7 +85,6 @@ public class PlayerToken extends GameEntity {
     }
 
 
-    
 
     //--------------------------------------------------------------------------
     //GETTERS                                                                  |
@@ -99,6 +100,10 @@ public class PlayerToken extends GameEntity {
     public Player getPlayer() {
         return mPlayer;
     }
+
+    public Boat getBoat() {
+        return mBoat;
+    }
     //--------------------------------------------------------------------------
 
 
@@ -108,9 +113,16 @@ public class PlayerToken extends GameEntity {
     //SETTERS                                                                  |
     //--------------------------------------------------------------------------
 
-
     public void setState(int state) {
+        if (mState == STATE_ON_BOAT && state != STATE_ON_BOAT) {
+            // On n'est plus sur un bateau, donc on l'enlève pour éviter toute confusion
+            mBoat = null;
+        }
         mState = state;
+    }
+
+    public void setBoat(Boat b) {
+        mBoat = b;
     }
     //--------------------------------------------------------------------------
 }

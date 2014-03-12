@@ -21,6 +21,7 @@ import fr.miage.atlantis.GameDice;
 import fr.miage.atlantis.Player;
 import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.board.TileAction;
+import fr.miage.atlantis.entities.Boat;
 import fr.miage.atlantis.entities.EntityMove;
 import fr.miage.atlantis.entities.GameEntity;
 import fr.miage.atlantis.entities.SeaSerpent;
@@ -114,7 +115,7 @@ public class GameTurn implements GameRenderListener {
      * @param dest Tile destination
      */
     public void moveEntity(GameEntity ent, GameTile dest) {
-        log("GameTurn: moveEntity");
+        log("GameTurn: moveEntity (on tile)");
 
         // On log le mouvement
         // xplod: Pourquoi stocker le numero du tour ici? Surtout qu'on l'a pas
@@ -124,6 +125,24 @@ public class GameTurn implements GameRenderListener {
 
         // On le transmet au controlleur en attendant la suite
         mController.onUnitMove(ent, dest);
+    }
+
+    /**
+     * Déplace une entité sur un bateau donné
+     * @param ent L'entité qui se déplace
+     * @param dest Bateau ciblé
+     */
+    public void moveEntity(GameEntity ent, Boat dest) {
+        log("GameTurn: moveEntity (on boat)");
+
+        // On log le mouvement
+        // xplod: Pourquoi stocker le numero du tour ici? Surtout qu'on l'a pas
+        EntityMove move = new EntityMove(ent.getTile(), dest.getTile(), ent, -1);
+        mMoves.add(move);
+        mRemainingMoves--;
+
+        // On le transmet au controlleur en attendant la suite
+        mController.onUnitMove(ent, dest.getTile());
     }
 
     public void moveDiceEntity(GameEntity ent, GameTile dest) {
@@ -189,7 +208,7 @@ public class GameTurn implements GameRenderListener {
         // TODO
 
         // Sinon, on bouge nos entités. On laisse le joueur choisir que ses entités à lui.
-        requestPlayerEntityPicking();
+        requestPlayerMovePicking();
     }
 
     public void onPlayedTileAction() {
@@ -201,7 +220,7 @@ public class GameTurn implements GameRenderListener {
         if (mRemainingMoves > 0) {
             // On a encore des mouvements de ses unités possibles, alors on le fait.
             log("==> Remaining moves: " + mRemainingMoves);
-            requestPlayerEntityPicking();
+            requestPlayerMovePicking();
         } else if (mSunkenTile == null) {
             log("==> Tile sinking required!");
             // Il faut sinker une tile!
@@ -217,7 +236,7 @@ public class GameTurn implements GameRenderListener {
             request.requiredHeight = level;
             request.waterEdgeOnly = mController.getBoard().hasTileAtWaterEdge(level);
 
-            mController.requestTilePick(request);
+            mController.requestPick(null, request);
         } else if (mRemainingDiceMoves > 0) {
             // On a encore des mouvements de l'unité du dé possible
             log("==> Remaining dice moves: " + mRemainingDiceMoves);
@@ -270,11 +289,15 @@ public class GameTurn implements GameRenderListener {
      * Demande à la logique de jeu de picker des entités appartenant au joueur (PlayerToken, ou
      * bateau ayant un pion du joueur en cours dessus).
      */
-    private void requestPlayerEntityPicking() {
+    private void requestPlayerMovePicking() {
         GameLogic.EntityPickRequest request = new GameLogic.EntityPickRequest();
-        request.pickingRestriction = GameLogic.EntityPickRequest.FLAG_PICK_PLAYER_ENTITIES;
+        request.pickingRestriction =
+                (GameLogic.EntityPickRequest.FLAG_PICK_PLAYER_ENTITIES |
+                GameLogic.EntityPickRequest.FLAG_PICK_BOAT_WITH_ROOM |
+                GameLogic.EntityPickRequest.FLAG_PICK_BOAT_WITHOUT_ROOM);
+
         request.player = mPlayer;
-        mController.requestEntityPick(request);
+        mController.requestPick(request, null);
     }
 
     /**
@@ -300,7 +323,7 @@ public class GameTurn implements GameRenderListener {
                 throw new UnsupportedOperationException("Processing of face " + mDiceAction + " isn't supported yet");
         }
 
-        mController.requestEntityPick(request);
+        mController.requestPick(request, null);
     }
 
     //--------------------------------------------------------------------------
