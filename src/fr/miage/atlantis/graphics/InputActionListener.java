@@ -152,7 +152,7 @@ public class InputActionListener {
                         // On retrouve la tile et on la passe
                         GameTile tile = getTileFromNode(result.geometry);
 
-                        if (checkPickingConstraints(mTileRequest, tile)) {
+                        if (tile != null && checkPickingConstraints(mTileRequest, tile)) {
                             mRenderer.getLogic().onTilePicked(tile);
                         } else {
                             // On relance la requête

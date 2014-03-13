@@ -74,7 +74,7 @@ public class AnimatedModel extends StaticModel {
         if (state != null && state.animationName != null) {
             playAnimation(state.animationName, state.loop, state.animateTransition, listener);
             getModelNode().setLocalRotation(new Quaternion(new float[]{
-                0.0f, state.yOffset * 180.0f / 3.1415926f, 0.0f
+                0.0f, state.yOffset * 3.1415926f / 180.0f, 0.0f
             }));
         }
     }
