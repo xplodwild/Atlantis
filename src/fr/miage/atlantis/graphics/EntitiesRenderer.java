@@ -32,9 +32,11 @@ import fr.miage.atlantis.graphics.models.BoatModel;
 import fr.miage.atlantis.graphics.models.PlayerModel;
 import fr.miage.atlantis.graphics.models.SeaSerpentModel;
 import fr.miage.atlantis.graphics.models.SharkModel;
+import fr.miage.atlantis.graphics.models.StaticModel;
 import fr.miage.atlantis.graphics.models.WhaleModel;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -123,6 +125,13 @@ public class EntitiesRenderer extends Node {
     private AnimatedModel addWhale(Whale w) {
         WhaleModel model = new WhaleModel(mAssetManager);
         return model;
+    }
+    
+    public void updateAllCollisionData() {
+        Set<Node> nodes = mNodeToEntity.keySet();
+        for (Node node : nodes) {
+            ((StaticModel) node).updateCollisionData();
+        }
     }
 
 }
