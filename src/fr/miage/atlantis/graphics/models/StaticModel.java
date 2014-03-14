@@ -19,15 +19,11 @@
 package fr.miage.atlantis.graphics.models;
 
 import com.jme3.asset.AssetManager;
-import com.jme3.bounding.BoundingBox;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
-import com.jme3.scene.Geometry;
-import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import com.jme3.scene.debug.WireBox;
 import com.jme3.texture.Texture;
 import com.jme3.util.TangentBinormalGenerator;
 import fr.miage.atlantis.graphics.ModelCache;
@@ -39,7 +35,6 @@ public class StaticModel extends Node {
 
     private final static float DEFAULT_SCALE = 5.0f;
     private final static boolean ENABLE_NORMAL_MAP = false;
-    private final static boolean DEBUG_SHOW_BBOX = false;
 
     private Spatial mModel;
     private Material mMaterial;
@@ -99,36 +94,6 @@ public class StaticModel extends Node {
 
         mModelNode.attachChild(mModel);
         this.attachChild(mModelNode);
-        
-                
-        if (DEBUG_SHOW_BBOX) {
-            // affichage des bounding box
-            WireBox box = new WireBox();
-            box.fromBoundingBox((BoundingBox) mModel.getWorldBound());
-            Geometry bx = new Geometry("BBOX_DEBUG", box);
-            Material mat_box = new Material(am, "Common/MatDefs/Misc/Unshaded.j3md");
-            mat_box.setColor("Color", ColorRGBA.Blue);
-            bx.setMaterial(mat_box);
-            bx.updateModelBound();
-            mModelNode.attachChild(bx);
-        }
-    }
-
-    /**
-     * Met à jour les informations de collision (bounding boxes)
-     */
-    public void updateCollisionData() {
-        if (mModel instanceof Node) {
-            Node tmpNode = (Node) mModel;
-            Spatial child = tmpNode.getChild(0);
-            if (child instanceof Geometry) {
-                Geometry tmpGeo = (Geometry) child;
-                tmpGeo.getMesh().createCollisionData();
-                mModel.updateModelBound();
-                mModelNode.updateModelBound();
-                this.updateModelBound();
-            }
-        }
     }
 
     public Spatial getModel() {
