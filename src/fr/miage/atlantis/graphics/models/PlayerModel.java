@@ -19,6 +19,8 @@
 package fr.miage.atlantis.graphics.models;
 
 import com.jme3.asset.AssetManager;
+import com.jme3.scene.shape.Box;
+import fr.miage.atlantis.graphics.Utils;
 
 /**
  *
@@ -39,17 +41,22 @@ public class PlayerModel extends AnimatedModel {
     public final static String ANIMATION_LAND_IDLE_2 = "Land_Idle2";
     public final static String ANIMATION_LAND_IDLE_3 = "Land_Idle3";
 
-
-
     public final static String COLOR_BLUE = "blue";
     public final static String COLOR_GREEN = "green";
     public final static String COLOR_ORANGE = "orange";
     public final static String COLOR_RED = "red";
 
+    private final static String COLLISION_BONE_ATTACH = "UpperBody";
+
     public PlayerModel(AssetManager am, final String color) {
         super(am, "Models/Avatar_A.mesh.xml",
                 "Textures/player_" + color + ".png", null);
         getModelNode().setLocalTranslation(0, 1.5f, 0);
+
+        // On définit la forme spéciale de collision, car sinon le picking est décalé lorsque
+        // le personnage joue l'animation de nage
+        Box box = new Box(4, 12, 4);
+        setupCustomCollisionShape(Utils.generateInvisibleBox(am, box), COLLISION_BONE_ATTACH);
     }
 
     public static String intToColor(int i) {

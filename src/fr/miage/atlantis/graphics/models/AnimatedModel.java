@@ -25,12 +25,16 @@ import com.jme3.animation.LoopMode;
 import com.jme3.animation.SkeletonControl;
 import com.jme3.asset.AssetManager;
 import com.jme3.math.Quaternion;
+import com.jme3.scene.Geometry;
 import fr.miage.atlantis.graphics.AnimationBrain;
+import fr.miage.atlantis.graphics.BoneAttachControl;
 
 /**
  *
  */
 public class AnimatedModel extends StaticModel {
+
+    public final static String DATA_IS_CUSTOM_COLMODEL = "is_custom_colmodel";
 
     private final static float BLEND_TIME = 0.2f;
 
@@ -43,7 +47,7 @@ public class AnimatedModel extends StaticModel {
 
         mControl = getModel().getControl(AnimControl.class);
         mChannel = mControl.createChannel();
-        
+
         // On active l'hardware skinning
         SkeletonControl skeletonControl = getModel().getControl(SkeletonControl.class);
         skeletonControl.setHardwareSkinningPreferred(true);
@@ -89,4 +93,19 @@ public class AnimatedModel extends StaticModel {
         }
     }
 
+    /**
+     * Met en place la Geometry de collision placée en paramètre, et la colle automatiquement
+     * au bone nommé selon la variable boneName.
+     * Cette fonction se charge d'attacher automatiquement 'shape' a la scène, et à lui définir
+     * le bon UserData.
+     * @param shape La géométrie de collision à utiliser
+     * @param boneName Le nom du bone auquel attacher la géométrie
+     */
+    protected void setupCustomCollisionShape(final Geometry shape, final String boneName) {
+        // On a besoin d'une shape custom pour les collisions (picking souris) sur ce model.
+        // On attache la geometry à un bone, et on pick celle-ci
+        getModel().addControl(new BoneAttachControl(boneName, shape));
+        getModelNode().attachChild(shape);
+        shape.setUserData(DATA_IS_CUSTOM_COLMODEL, getModel());
+    }
 }

@@ -41,6 +41,7 @@ import fr.miage.atlantis.entities.PlayerToken;
 import fr.miage.atlantis.entities.SeaSerpent;
 import fr.miage.atlantis.entities.Shark;
 import fr.miage.atlantis.entities.Whale;
+import fr.miage.atlantis.graphics.models.AnimatedModel;
 import fr.miage.atlantis.graphics.models.EmptyTileModel;
 import fr.miage.atlantis.graphics.models.TileModel;
 import fr.miage.atlantis.logic.GameLogic;
@@ -264,6 +265,10 @@ public class InputActionListener {
                 // TODO: Exporter proprement de blender
                 Spatial spatial = ((Node) ((Node) etm.getModel()).getChild(0)).getChild(0);
                 output.geometry = ((Geometry) spatial);
+            } else if (result.getGeometry().getUserDataKeys().contains(AnimatedModel.DATA_IS_CUSTOM_COLMODEL)) {
+                // On a pické un modèle de collision custom. On renvoie le vrai modèle du coup.
+                Node childModelNode = (Node) result.getGeometry().getUserData(AnimatedModel.DATA_IS_CUSTOM_COLMODEL);
+                output.geometry = (Geometry) childModelNode.getChild(0);
             } else {
                 output.geometry = result.getGeometry();
             }
