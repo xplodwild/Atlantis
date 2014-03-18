@@ -74,7 +74,7 @@ public class GameBoardTests extends TestCase {
         // On créé un board
         assertTrue(this.mGameBoard.getFirstTile() instanceof BorderTile);
         
-        //Teste si la frontièr 47 est présente
+        //Teste si la frontière 47 est présente
         assertTrue(this.mGameBoard.getTileSet().get("Border #47").isOnBoard());
         
         // La tile est forcément au bord de l'eau
@@ -151,10 +151,10 @@ public class GameBoardTests extends TestCase {
             assertTrue(true);
         }
         
-        @Rule
-        public ExpectedException exception = ExpectedException.none();
+        //@Rule
+        ExpectedException exception = ExpectedException.none();
 
-        @Test  
+        //@Test  
         exception.expect(IndexOutOfBoundsException.class);
         
     }
