@@ -31,7 +31,6 @@ import de.lessvoid.nifty.builder.PanelBuilder;
 import de.lessvoid.nifty.builder.ScreenBuilder;
 import de.lessvoid.nifty.controls.Console;
 import de.lessvoid.nifty.controls.ConsoleCommands;
-import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
 import de.lessvoid.nifty.controls.console.builder.ConsoleBuilder;
 import fr.miage.atlantis.gui.console.commands.HelpCommand;
 import fr.miage.atlantis.gui.controllers.ConsoleController;
@@ -50,7 +49,7 @@ import javax.swing.SwingUtilities;
  */
 
 
-public class GuiConsole{
+public final class GuiConsole{
     
     
     private static final String STYLE_FILE="nifty-default-styles.xml";
@@ -121,59 +120,48 @@ public class GuiConsole{
                 panel(new PanelBuilder("panel1") {{
                     childLayoutCenter(); // panel properties, add more...               
  
+                          
                     /**
-                     * Ajoute des boutons dans ce panel 
-                     */   
-                    control(new ButtonBuilder("Bouton_2", "Go to menu"){{
-                        alignRight();
-                        this.marginTop("10%");
-                        this.marginBottom("10%");                    
-                        valignCenter();
-                        height("10%");
-                        width("20%");
-                        interactOnClick("lolFct()");
+                     * Ajoute une console
+                     */
+                    control(new ConsoleBuilder("console") {{
+                         width("50%");
+                         lines(15);
 
-                    }});                 
-                
-                 
-                    
-                   /**
-                    * Ajoute une console
-                    */
-                   control(new ConsoleBuilder("console") {{
-                        width("50%");
-                        lines(15);
-                        
-                        this.valignTop();
-                        this.alignLeft();
-                        
-                        onStartScreenEffect(new EffectBuilder("move") {{
-                          length(150);
-                          inherit();
-                          neverStopRendering(true);
-                          effectParameter("mode", "in");
-                          effectParameter("direction", "top");
-                        }});
-                    }});   
-                  
-                
-                //On peut ajouter d'autres elements ici
+                         this.valignTop();
+                         this.alignLeft();
+
+                         onStartScreenEffect(new EffectBuilder("move") {{
+                           length(150);
+                           inherit();
+                           neverStopRendering(true);
+                           effectParameter("mode", "in");
+                           effectParameter("direction", "top");
+                         }});
+                     }}); 
+                    //</control>
+                }});
+                // </panel>
             }});
-            // </panel>
-          }});
-        // </layer>
-      }}.build(mNifty));   
+            // </layer>
+        }}.build(mNifty));   
         // </screen> 
         
+        System.out.println(this.mNiftyDisplay);
+        System.out.println(this.mNifty);        
+        System.out.println(this.mNifty.getScreen("ConsoleHUD"));
+        System.out.println(this.mNifty.getScreen("ConsoleHUD").findElementByName("console"));
+        System.out.println(this.mNifty.getScreen("ConsoleHUD").findElementByName("console").getNiftyControl(Console.class));
         
-        mNifty.gotoScreen("HUD"); // start the screen
-
+        
     
         // get the console control (this assumes that there is a console in the current screen with the id="console"
-        mConsole = getNifty().getScreen("HUD").findElementByName("console").getNiftyControl(Console.class);
-   
-
-
+        mConsole = this.getNifty().getScreen("ConsoleHUD").findElementByName("console").getNiftyControl(Console.class);
+        
+        
+        //@TODO : AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH MON OBJET EST DEFINI MAIS NULLPOINTEREXCEPTION DERRIERE WTF ?!
+        System.out.println(mConsole);        
+        
 
         // output hello to the console
         mConsole.output("Starting console");
@@ -260,7 +248,6 @@ public class GuiConsole{
     
     
     public Nifty getNifty(){
-        return this.mNifty;
-        
+        return this.mNifty;        
     } 
 }
