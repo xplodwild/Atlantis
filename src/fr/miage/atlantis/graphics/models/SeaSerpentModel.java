@@ -36,8 +36,7 @@ public class SeaSerpentModel extends AnimatedModel {
         super(am, "Models/serpentA.mesh.xml", "Textures/seaserpent.png",
                 "Textures/seaserpent_normal.png");
 
-        getModelNode().setLocalTranslation(-2, 0, 24);
-        playAnimation(ANIMATION_IDLE);
+        getModel().setLocalTranslation(-2, -3, 24);
     }
 
 

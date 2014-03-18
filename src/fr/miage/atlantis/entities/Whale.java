@@ -32,7 +32,7 @@ public class Whale extends Animal {
     /**
      * Nombre maximal de movements
      */
-    private final static int MAX_MOVES = 3;
+    public final static int MAX_MOVES = 3;
 
 
     /**
@@ -44,6 +44,7 @@ public class Whale extends Animal {
         super("Whale", MAX_MOVES);
     }
 
+
     /**
      * Resultat d'un croisement entres entitées
      *
@@ -52,6 +53,12 @@ public class Whale extends Animal {
      */
     @Override
     public boolean onEntityCross(GameLogic logic, GameEntity ent) {
-        throw new UnsupportedOperationException("Not implemented");
+        if (ent instanceof Boat) {
+            Boat bt = (Boat) ent;
+            // Les baleines retournent les bateau habités
+            logic.onEntityAction(this, bt, GameEntity.ACTION_WHALE_NUKE);
+            return true;
+        }
+        return false;
     }
 }

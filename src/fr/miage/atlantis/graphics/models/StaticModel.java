@@ -22,8 +22,11 @@ import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.shape.Box;
+import com.jme3.texture.Texture;
 import com.jme3.util.TangentBinormalGenerator;
 import fr.miage.atlantis.graphics.ModelCache;
 
@@ -33,6 +36,7 @@ import fr.miage.atlantis.graphics.ModelCache;
 public class StaticModel extends Node {
 
     private final static float DEFAULT_SCALE = 5.0f;
+    private final static boolean ENABLE_NORMAL_MAP = false;
 
     private Spatial mModel;
     private Material mMaterial;
@@ -65,13 +69,15 @@ public class StaticModel extends Node {
 
             if (cachedMat != null) {
                 System.out.println("USING CACHED MATERIAL");
-                mMaterial = cachedMat;
+                mMaterial = cachedMat.clone();
             } else {
                 System.out.println("GENERATING NEW MATERIAL");
                 mMaterial = new Material(am, "Common/MatDefs/Light/Lighting.j3md");
-                mMaterial.setTexture("DiffuseMap", am.loadTexture(diffusePath));
+                Texture diffuseTex = am.loadTexture(diffusePath);
+                diffuseTex.setMinFilter(Texture.MinFilter.Trilinear);
+                mMaterial.setTexture("DiffuseMap", diffuseTex);
 
-                if (normalPath != null) {
+                if (ENABLE_NORMAL_MAP && normalPath != null) {
                     // Il faut calculer les tangentes pour que le lighting
                     // fonctionne avec une texture de normalmap
                     TangentBinormalGenerator.generate(mModel);
@@ -80,6 +86,7 @@ public class StaticModel extends Node {
 
                 mMaterial.setBoolean("UseMaterialColors", true);
                 mMaterial.setColor("Ambient", ColorRGBA.White);
+                mMaterial.setColor("Diffuse", ColorRGBA.DarkGray);
 
                 ModelCache.getInstance().putMaterial(cacheKey, mMaterial);
             }

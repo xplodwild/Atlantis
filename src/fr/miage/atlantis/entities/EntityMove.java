@@ -82,5 +82,9 @@ public class EntityMove {
     public GameEntity getEntity() {
         return mEntity;
     }
+    
+    public int getTurnNumber(){
+        return this.mTurnNumber;
+    }
     //--------------------------------------------------------------------------
 }

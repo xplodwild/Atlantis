@@ -18,7 +18,6 @@
 
 package fr.miage.atlantis.entities;
 
-import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.logic.GameLogic;
 
 /**
@@ -33,7 +32,8 @@ public class Shark extends Animal {
     /**
      * Nombre maximal de movements
      */
-    private final static int MAX_MOVES = 2;
+    public final static int MAX_MOVES = 2;
+
 
     /**
      * Constructeur de Requin
@@ -45,7 +45,6 @@ public class Shark extends Animal {
     }
 
     
-
     /**
      * Resultat d'un croisement entres entitées
      *
@@ -54,6 +53,13 @@ public class Shark extends Animal {
      */
     @Override
     public boolean onEntityCross(GameLogic logic, GameEntity ent) {
-        throw new UnsupportedOperationException("Not implemented");
+        if (ent instanceof PlayerToken) {
+            PlayerToken pt = (PlayerToken) ent;
+            // Les sharks mangent les petits humains
+            logic.onEntityAction(this, ent, GameEntity.ACTION_SHARK_EAT);
+        }
+
+        //TODO : Finir d'implementer pour les autres entité, fix le retour
+        return false;
     }
 }

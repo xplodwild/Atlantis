@@ -17,7 +17,6 @@
  */
 package fr.miage.atlantis.entities;
 
-import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.logic.GameLogic;
 import java.util.ArrayList;
 import java.util.List;
@@ -64,6 +63,18 @@ public class Boat extends GameEntity {
     }
 
     /**
+     * Retourne le numéro du slot du PlayerToken
+     */
+    public int getPlayerSlot(PlayerToken token) {
+        int pos = mOnboard.indexOf(token);
+        if (pos >= 0) {
+            return pos;
+        } else {
+            throw new IllegalArgumentException("This PlayerToken isn't on this boat!");
+        }
+    }
+
+    /**
      * Test si il y a toujours de la place dans le bateau
      *
      * @return true si il y a de la place, false sinon
@@ -78,26 +89,8 @@ public class Boat extends GameEntity {
 
     @Override
     public boolean onEntityCross(GameLogic logic, GameEntity ent) {
-        if (ent instanceof PlayerToken) {
-            System.out.println("Player is crossing a boat!");
-            // Un joueur rencontre ce bateau, si il y a de la place, il monte!
-            if (hasRoom()) {
-                PlayerToken pt = (PlayerToken) ent;
-                pt.setState(PlayerToken.STATE_ON_BOAT);
-                addPlayer(pt);
-                System.out.println("Added player token onboard the boat");
-                logic.onBoardBoat(pt, this);
-                return true;
-            } else {
-                // Tant pis.
-                return false;
-            }
-        } else if (ent instanceof Whale) {
-            // Une baleine rencontre le bateau: Les joueurs tombent à l'eau, le bateau sort du jeu.
-            // On notifie via moveToTile pour lancer les éventuels événements liés à ce changement.
-            throw new UnsupportedOperationException("Not implemented");
-        }
-
+        // Pas besoin de traiter la baleine ici, puisque les événements sont traités dans les deux
+        // sens dans GameEntity.
         return false;
     }
 
