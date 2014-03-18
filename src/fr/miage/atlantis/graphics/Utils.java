@@ -25,11 +25,20 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.shape.Box;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  */
 public class Utils {
+
+    private static class BoxGeoPair {
+        public Box box;
+        public Geometry geo;
+    }
+
+    private static final List<BoxGeoPair> mBoxCache = new ArrayList<BoxGeoPair>();
 
     /**
      * Génère un material transparent (invisible)
@@ -52,10 +61,31 @@ public class Utils {
      * @return Geometry cube
      */
     public static Geometry generateInvisibleBox(AssetManager am, Box box) {
-        Geometry geom = new Geometry("Custom_Col_Box", box);
-        geom.setQueueBucket(RenderQueue.Bucket.Sky);
-        geom.setMaterial(generateTransparentMaterial(am));
-        geom.setShadowMode(RenderQueue.ShadowMode.Off);
-        return geom;
+        // On cherche d'abord dans le cache
+        BoxGeoPair cache = null;
+        for (BoxGeoPair pair : mBoxCache) {
+            if (pair.box.equals(box)) {
+                cache = pair;
+            }
+        }
+
+        Geometry output;
+        if (cache == null) {
+            // Pas dans le cache, on créé le modèle de cube
+            output = new Geometry("Custom_Col_Box", box);
+            output.setQueueBucket(RenderQueue.Bucket.Sky);
+            output.setMaterial(generateTransparentMaterial(am));
+            output.setShadowMode(RenderQueue.ShadowMode.Off);
+
+            // On met en cache
+            BoxGeoPair cachePair = new BoxGeoPair();
+            cachePair.geo = output;
+            cachePair.box = box;
+        } else {
+            // En cache, on clone pour aller plus vite. On peut réutiliser le material.
+            output = cache.geo.clone();
+        }
+
+        return output;
     }
 }
