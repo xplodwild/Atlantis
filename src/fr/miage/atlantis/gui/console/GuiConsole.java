@@ -147,22 +147,14 @@ public final class GuiConsole{
         }}.build(mNifty));   
         // </screen> 
         
-        System.out.println(this.mNiftyDisplay);
-        System.out.println(this.mNifty);        
-        System.out.println(this.mNifty.getScreen("ConsoleHUD"));
-        System.out.println(this.mNifty.getScreen("ConsoleHUD").findElementByName("console"));
-        System.out.println(this.mNifty.getScreen("ConsoleHUD").findElementByName("console").getNiftyControl(Console.class));
+        this.mNifty.gotoScreen("ConsoleHUD");
         
         
     
         // get the console control (this assumes that there is a console in the current screen with the id="console"
         mConsole = this.getNifty().getScreen("ConsoleHUD").findElementByName("console").getNiftyControl(Console.class);
         
-        
-        //@TODO : AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH MON OBJET EST DEFINI MAIS NULLPOINTEREXCEPTION DERRIERE WTF ?!
-        System.out.println(mConsole);        
-        
-
+       
         // output hello to the console
         mConsole.output("Starting console");
 
