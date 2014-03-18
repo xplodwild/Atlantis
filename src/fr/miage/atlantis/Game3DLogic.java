@@ -47,11 +47,11 @@ import fr.miage.atlantis.graphics.models.PlayerModel;
 import fr.miage.atlantis.graphics.models.SeaSerpentModel;
 import fr.miage.atlantis.graphics.models.SharkModel;
 import fr.miage.atlantis.graphics.models.StaticModel;
-import fr.miage.atlantis.gui.console.GuiConsole;
 import fr.miage.atlantis.logic.GameLogic;
 import fr.miage.atlantis.logic.GameTurn;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Main Game Engine loop class
@@ -67,7 +67,7 @@ public class Game3DLogic extends GameLogic {
 
     public Game3DLogic() {
         super();
-        mRenderer = new GuiConsole(this);
+        mRenderer = new Game3DRenderer(this);
     }
 
     @Override
@@ -85,7 +85,9 @@ public class Game3DLogic extends GameLogic {
             List<PlayerToken> tokens = p.getTokens();
 
             for (PlayerToken token : tokens) {
-                token.moveToTile(this, getBoard().getTileSet().get("Beach #3"));
+                int rand=new Random().nextInt(15)+1;
+                    token.moveToTile(this, getBoard().getTileSet().get("Beach #"+rand));
+                
                 mRenderer.getEntitiesRenderer().addEntity(token);
             }
         }
