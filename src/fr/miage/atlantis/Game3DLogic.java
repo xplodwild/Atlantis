@@ -47,6 +47,7 @@ import fr.miage.atlantis.graphics.models.PlayerModel;
 import fr.miage.atlantis.graphics.models.SeaSerpentModel;
 import fr.miage.atlantis.graphics.models.SharkModel;
 import fr.miage.atlantis.graphics.models.StaticModel;
+import fr.miage.atlantis.gui.console.GuiConsole;
 import fr.miage.atlantis.logic.GameLogic;
 import fr.miage.atlantis.logic.GameTurn;
 import java.util.ArrayList;
@@ -66,7 +67,7 @@ public class Game3DLogic extends GameLogic {
 
     public Game3DLogic() {
         super();
-        mRenderer = new Game3DRenderer(this);
+        mRenderer = new GuiConsole(this);
     }
 
     @Override
