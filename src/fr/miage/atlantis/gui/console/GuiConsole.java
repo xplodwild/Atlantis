@@ -32,6 +32,7 @@ import de.lessvoid.nifty.builder.ScreenBuilder;
 import de.lessvoid.nifty.controls.Console;
 import de.lessvoid.nifty.controls.ConsoleCommands;
 import de.lessvoid.nifty.controls.console.builder.ConsoleBuilder;
+import fr.miage.atlantis.gui.console.commands.ClearConsoleCommand;
 import fr.miage.atlantis.gui.console.commands.HelpCommand;
 import fr.miage.atlantis.gui.console.commands.QuitCommand;
 import fr.miage.atlantis.gui.controllers.ConsoleController;
@@ -48,8 +49,6 @@ import javax.swing.SwingUtilities;
  * @version 1.0
  * @date 03/03/2014  
  */
-
-
 public final class GuiConsole{
     
     
@@ -68,6 +67,14 @@ public final class GuiConsole{
     private NiftyJmeDisplay mNiftyDisplay;
 
  
+    /**
+     * Constructeur de GuiConsole
+     * 
+     * @param Am AssestManager
+     * @param Vp GuiViewport : Attention a ne pas passer le viewPort mais bien guiViewport
+     * @param Ar AudioRenderer
+     * @param Im InputManager
+     */
     public GuiConsole(AssetManager Am,ViewPort Vp,AudioRenderer Ar,InputManager Im) {        
         this.mAm=Am;
         this.maudioRenderer=Ar;
@@ -178,11 +185,14 @@ public final class GuiConsole{
        
         ConsoleCommands.ConsoleCommand help = new HelpCommand();
         ConsoleCommands.ConsoleCommand quit = new QuitCommand();
+        ConsoleCommands.ConsoleCommand clear = new ClearConsoleCommand(this.mConsole);
         
         consoleCommands.registerCommand("help", help);
         consoleCommands.registerCommand("-h", help);
         consoleCommands.registerCommand("quit", quit);
-
+        consoleCommands.registerCommand("clear", clear);
+        
+        
 
         // finally enable command completion
         consoleCommands.enableCommandCompletion(true);

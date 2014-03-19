@@ -18,33 +18,39 @@
 
 package fr.miage.atlantis.gui.console.commands;
 
+import de.lessvoid.nifty.controls.Console;
 import de.lessvoid.nifty.controls.ConsoleCommands;
 
 
 /**
- * Help command of the console
+ * Clear command of the console
  *
  * @author AtlantisTeam
  * @version 1.0
  * @date 03/03/2014
  */
-public class HelpCommand implements ConsoleCommands.ConsoleCommand {
+public class ClearConsoleCommand implements ConsoleCommands.ConsoleCommand {
+
+    /**
+     * Console sur laquelle on execute la commande
+     */
+    private Console mConsole;
+    
+    /**
+     * Constructeur de la commande
+     * 
+     * @param mConsole Console sur laquelle on execute le clear
+     */
+    public ClearConsoleCommand(Console mConsole) {
+        this.mConsole=mConsole;
+    }
     
     /**
      * Methode executée lors de l'appel de la commande
      * @param args arguments passés à la commande
      */
     @Override
-    public void execute(final String[] args) {
-        
-        /*
-         * Nous redirigeons les sorties System.out.println vers notre console;
-         * Il est donc possible de definir nos sortie simplement via sysout.
-         */
-        
-        //On liste ici toutes les commandes executable dans la console 
-        System.out.println("clear       :   Clear the console");
-        System.out.println("help | -h   :   Help contextual menu");
-        System.out.println("quit        :   Quit the game properly");        
+    public void execute(final String[] args) {        
+        mConsole.clear();      
     }
 }

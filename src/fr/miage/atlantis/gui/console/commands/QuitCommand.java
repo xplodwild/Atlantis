@@ -29,6 +29,11 @@ import de.lessvoid.nifty.controls.ConsoleCommands;
  * @date 03/03/2014
  */
 public class QuitCommand implements ConsoleCommands.ConsoleCommand {
+    
+    /**
+     * Methode executée lors de l'appel de la commande
+     * @param args arguments passés à la commande
+     */
     @Override
     public void execute(final String[] args) {
         
