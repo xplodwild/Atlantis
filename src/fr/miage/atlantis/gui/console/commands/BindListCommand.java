@@ -18,40 +18,32 @@
 
 package fr.miage.atlantis.gui.console.commands;
 
+import de.lessvoid.nifty.controls.Console;
 import de.lessvoid.nifty.controls.ConsoleCommands;
 
 
 /**
- * Help command of the console
+ * BindList command of the console
  *
  * @author AtlantisTeam
  * @version 1.0
  * @date 03/03/2014
  */
-public class HelpCommand implements ConsoleCommands.ConsoleCommand {
+public class BindListCommand implements ConsoleCommands.ConsoleCommand {
+
     
     /**
      * Methode executée lors de l'appel de la commande
      * @param args arguments passés à la commande
      */
     @Override
-    public void execute(final String[] args) {
-        
-        /*
-         * Nous redirigeons les sorties System.out.println vers notre console;
-         * Il est donc possible de definir nos sortie simplement via sysout.
-         */
-        
-        //On liste ici toutes les commandes executable dans la console 
-        //Sys.out.print car la console saute déjà des lignes par défaut.
-
+    public void execute(final String[] args) { 
         System.out.print("");
         System.out.print("____________________________________________________");
         System.out.print("|                                                   |");  
-        System.out.print("| bindlist    :   List the key bindings             |");
-        System.out.print("| clear       :   Clear the console                 |");
-        System.out.print("| help | -h   :   Help contextual menu              |");
-        System.out.print("| quit        :   Quit the game properly            |"); 
-        System.out.print("|___________________________________________________|");
+        System.out.print("| F1          :   Toggle console                    |");
+        System.out.print("|                                                   |");  
+        System.out.print("| add more @console.commands BindListCommand.java   |");
+        System.out.print("|___________________________________________________|");        
     }
 }

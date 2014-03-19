@@ -32,6 +32,7 @@ import de.lessvoid.nifty.builder.ScreenBuilder;
 import de.lessvoid.nifty.controls.Console;
 import de.lessvoid.nifty.controls.ConsoleCommands;
 import de.lessvoid.nifty.controls.console.builder.ConsoleBuilder;
+import fr.miage.atlantis.gui.console.commands.BindListCommand;
 import fr.miage.atlantis.gui.console.commands.ClearConsoleCommand;
 import fr.miage.atlantis.gui.console.commands.HelpCommand;
 import fr.miage.atlantis.gui.console.commands.QuitCommand;
@@ -185,18 +186,18 @@ public final class GuiConsole{
        
         ConsoleCommands.ConsoleCommand help = new HelpCommand();
         ConsoleCommands.ConsoleCommand quit = new QuitCommand();
-        ConsoleCommands.ConsoleCommand clear = new ClearConsoleCommand(this.mConsole);
+        ConsoleCommands.ConsoleCommand binds = new BindListCommand();
+        ConsoleCommands.ConsoleCommand clear = new ClearConsoleCommand(GuiConsole.mConsole);
         
         consoleCommands.registerCommand("help", help);
         consoleCommands.registerCommand("-h", help);
         consoleCommands.registerCommand("quit", quit);
         consoleCommands.registerCommand("clear", clear);
-        
-        
+        consoleCommands.registerCommand("bindlist", binds);
+                
 
         // finally enable command completion
         consoleCommands.enableCommandCompletion(true);
-
     
         //Start redirection console
         GuiConsole.redirectSystemStreams();       
