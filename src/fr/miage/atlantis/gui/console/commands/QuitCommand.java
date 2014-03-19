@@ -22,23 +22,21 @@ import de.lessvoid.nifty.controls.ConsoleCommands;
 
 
 /**
- * Help command of the console
+ * Quit command of the console
  *
  * @author AtlantisTeam
  * @version 1.0
  * @date 03/03/2014
  */
-public class HelpCommand implements ConsoleCommands.ConsoleCommand {
+public class QuitCommand implements ConsoleCommands.ConsoleCommand {
     @Override
     public void execute(final String[] args) {
         
-        /*
-         * Nous redirigeons les sorties System.out.println vers notre console;
-         * Il est donc possible de definir nos sortie simplement via sysout.
-         */
+        /**
+         * @TODO :
+         * Définir ici les fermetures de connexions en cas de multijoueur etc
+         */       
         
-        //On liste ici toutes les commandes executable dans la console 
-        System.out.println("help | -h   :   Help contextual menu");
-        System.out.println("quit        :   Quit the game properly");        
+        System.exit(0);        
     }
 }

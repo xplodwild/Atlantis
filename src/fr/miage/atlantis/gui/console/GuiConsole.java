@@ -33,6 +33,7 @@ import de.lessvoid.nifty.controls.Console;
 import de.lessvoid.nifty.controls.ConsoleCommands;
 import de.lessvoid.nifty.controls.console.builder.ConsoleBuilder;
 import fr.miage.atlantis.gui.console.commands.HelpCommand;
+import fr.miage.atlantis.gui.console.commands.QuitCommand;
 import fr.miage.atlantis.gui.controllers.ConsoleController;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -90,13 +91,12 @@ public final class GuiConsole{
         
         
         mNifty.addScreen("ConsoleHUD", new ScreenBuilder("ConsoleHUD"){{            
-                        
-            
+                                    
             /**
              * Ajoute un controlleur perso a cet ecran
              */
-            controller(new ConsoleController()); // Screen properties       
- 
+            controller(new ConsoleController()); 
+             
             /**
              * Création du Layer sur cet ecran.
              */
@@ -130,6 +130,7 @@ public final class GuiConsole{
 
                          this.valignTop();
                          this.alignLeft();
+                       
 
                          onStartScreenEffect(new EffectBuilder("move") {{
                            length(150);
@@ -174,10 +175,13 @@ public final class GuiConsole{
 
         // create another command (this time we can even register arguments with nifty so that the command completion will work with arguments too)
       
+       
         ConsoleCommands.ConsoleCommand help = new HelpCommand();
+        ConsoleCommands.ConsoleCommand quit = new QuitCommand();
         
         consoleCommands.registerCommand("help", help);
         consoleCommands.registerCommand("-h", help);
+        consoleCommands.registerCommand("quit", quit);
 
 
         // finally enable command completion
@@ -227,11 +231,13 @@ public final class GuiConsole{
      */
     private static void updateTextPane(final String text) {
         SwingUtilities.invokeLater(new Runnable() {
-          public void run() {
-              mConsole.output(text);
-          }
+            public void run() {
+                mConsole.output(text);
+            }
         });
     }
+    
+    
     
     
     //--------------------------------------------------------------------------
