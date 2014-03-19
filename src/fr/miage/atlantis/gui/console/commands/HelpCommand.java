@@ -43,8 +43,12 @@ public class HelpCommand implements ConsoleCommands.ConsoleCommand {
          */
         
         //On liste ici toutes les commandes executable dans la console 
-        System.out.println("clear       :   Clear the console");
-        System.out.println("help | -h   :   Help contextual menu");
-        System.out.println("quit        :   Quit the game properly");        
+        System.out.print("");
+        System.out.print("____________________________________________________");
+        System.out.print("|                                                   |");
+        System.out.print("| clear       :   Clear the console                 |");
+        System.out.print("| help | -h   :   Help contextual menu              |");
+        System.out.print("| quit        :   Quit the game properly            |"); 
+        System.out.print("|___________________________________________________|");
     }
 }
