@@ -114,8 +114,8 @@ public class Game3DRenderer extends SimpleApplication {
         // Configuration du dé
         mDiceModel = new DiceModel(assetManager);
 
-        mConsole = new GuiConsole(assetManager,viewPort,audioRenderer,inputManager);
-        //mConsole.getNifty().gotoScreen("ConsoleHUD"); // start the screen
+        mConsole = new GuiConsole(assetManager,guiViewPort,audioRenderer,inputManager);
+       
         
     }
 

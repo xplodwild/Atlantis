@@ -705,13 +705,8 @@ public final class GameBoard {
 
        temp=(WaterTile)this.mTileSet.get("Water #47");
        ss = new SeaSerpent();
-       ss.moveToTile(null, temp);
-
+       ss.moveToTile(null, temp);       
        //-----------------------------------------------------------------------
-
-       //Affiche chaques tiles et son detail
-
-       this.printAllTiles();
     }
 
 
