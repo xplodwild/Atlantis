@@ -52,6 +52,8 @@ import fr.miage.atlantis.logic.GameTurn;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Main Game Engine loop class
@@ -64,6 +66,12 @@ public class Game3DLogic extends GameLogic {
 
     private Game3DRenderer mRenderer;
     private GameEntity mPickedEntity;
+    
+     /**
+     * Instance du logger Java
+     */
+    private static final Logger logger = Logger.getLogger(Game3DLogic.class.getName());
+    
 
     public Game3DLogic() {
         super();
@@ -102,7 +110,8 @@ public class Game3DLogic extends GameLogic {
 
     public void onTurnStart(Player p) {
         // TODO: Animations
-        System.out.println("Game3DLogic: onTurnStart");
+        logger.log(Level.FINE, "Game3DLogic: onTurnStart()", new Object[]{});  
+        
         getCurrentTurn().onTurnStarted();
     }
 
@@ -144,7 +153,7 @@ public class Game3DLogic extends GameLogic {
         motionEvent.getPath().addListener(new MotionPathListener() {
             public void onWayPointReach(MotionEvent control, int wayPointIndex) {
                 if (control.getPath().getNbWayPoints() == wayPointIndex + 1) {
-                    System.out.println("Game3DLogic: Waypoint reached, processing events");
+                    logger.log(Level.FINE, "Game3DLogic: Waypoint reached, processing events", new Object[]{});
                     // On bouge effectivement le joueur de tile. Note: On fait cette action à la
                     // fin de l'animation pour pouvoir proprement enchainer les actions (exemple:
                     // on marche sur un requin ou un bateau). Ainsi, le GameTurn attend avant de
@@ -175,13 +184,14 @@ public class Game3DLogic extends GameLogic {
 
     public void onDiceRoll(int face) {
         // On a besoin de lancer le dé
-        System.out.println("Game3DLogic: onDiceRoll");
+        logger.log(Level.FINE, "Game3DLogic: onDiceRoll", new Object[]{});
         mRenderer.rollDiceAnimation(face);
     }
 
     public void onSinkTile(final GameTile tile) {
         AbstractTileModel tileNode = mRenderer.getBoardRenderer().findTileModel(tile);
         if (tileNode == null) {
+            logger.log(Level.SEVERE, "Aucune node 3D trouvée pour la tile de destination!", new Object[]{});
             throw new IllegalStateException("Aucune node 3D trouvée pour la tile de destination!");
         }
 
@@ -228,7 +238,8 @@ public class Game3DLogic extends GameLogic {
                             if (action.isImmediate()) {
                                 onPlayTileAction(newTile, action);
                             } else {
-                                System.out.println("TODO: Tile is not immediate: " + action.toString());
+                                
+                                logger.log(Level.WARNING, "TODO: Tile is not immediate: " + action.toString(), new Object[]{});
                                 // TODO: Stocker la tile dans les tiles du joueur
                             }
 
@@ -330,7 +341,8 @@ public class Game3DLogic extends GameLogic {
     }
 
     public void onEntitySpawn(final GameEntity spawned) {
-        System.out.println("Game3DLogic: onEntitySpawn " + spawned);
+        logger.log(Level.FINE, "Game3DLogic: onEntitySpawn ", new Object[]{});
+        
         final AnimatedModel model = mRenderer.getEntitiesRenderer().addEntity(spawned);
         model.playAnimation(AnimationBrain.getSpawnAnimation(spawned), new AnimEventListener() {
             public void onAnimCycleDone(AnimControl control, AnimChannel channel, String animName) {
@@ -395,14 +407,15 @@ public class Game3DLogic extends GameLogic {
     @Override
     public void requestPick(EntityPickRequest entRq, TilePickRequest tileRq) {
         // On a besoin de picker une entité
-        System.out.println("Game3DLogic: requestPick");
+        
+        logger.log(Level.FINE, "Game3DLogic: requestPick ", new Object[]{});
         mRenderer.getInputListener().requestPicking(entRq, tileRq);
     }
 
     @Override
     public void onEntityPicked(GameEntity ent) {
-        System.out.println("Entity picked: " + ent);
-
+        logger.log(Level.FINE, "Game3DLogic: Entity picked ", new Object[]{ent});
+       
         GameTurn currentTurn = mRenderer.getLogic().getCurrentTurn();
 
         if (currentTurn.getRemainingMoves() > 0) {
@@ -467,7 +480,7 @@ public class Game3DLogic extends GameLogic {
 
     @Override
     public void onTilePicked(GameTile tile) {
-        System.out.println("Tile " + tile.getName() + " picked!");
+        logger.log(Level.FINE, "Game3DLogic: Tile picked ", new Object[]{tile.getName()});
 
         GameTurn currentTurn = mRenderer.getLogic().getCurrentTurn();
         if (currentTurn.getRemainingMoves() > 0) {
