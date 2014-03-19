@@ -364,22 +364,24 @@ public class InputActionListener {
             }
         }
 
-        if ((request.pickingRestriction & GameLogic.EntityPickRequest.FLAG_PICK_BOAT_WITHOUT_ROOM) != 0) {
-            // On veut picker un bateau n'ayant plus de place
-            if (ent instanceof Boat) {
-                Boat b = (Boat) ent;
-                if (!b.hasRoom()) {
-                    return true;
+        if (request.player == null) {
+            if ((request.pickingRestriction & GameLogic.EntityPickRequest.FLAG_PICK_BOAT_WITHOUT_ROOM) != 0) {
+                // On veut picker un bateau n'ayant plus de place
+                if (ent instanceof Boat) {
+                    Boat b = (Boat) ent;
+                    if (!b.hasRoom()) {
+                        return true;
+                    }
                 }
             }
-        }
 
-        if ((request.pickingRestriction & GameLogic.EntityPickRequest.FLAG_PICK_BOAT_WITH_ROOM) != 0) {
-            // On veut picker un bateau ayant de la place
-            if (ent instanceof Boat) {
-                Boat b = (Boat) ent;
-                if (b.hasRoom()) {
-                    return true;
+            if ((request.pickingRestriction & GameLogic.EntityPickRequest.FLAG_PICK_BOAT_WITH_ROOM) != 0) {
+                // On veut picker un bateau ayant de la place
+                if (ent instanceof Boat) {
+                    Boat b = (Boat) ent;
+                    if (b.hasRoom()) {
+                        return true;
+                    }
                 }
             }
         }
