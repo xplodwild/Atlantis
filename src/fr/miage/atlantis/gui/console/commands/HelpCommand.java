@@ -53,5 +53,6 @@ public class HelpCommand implements ConsoleCommands.ConsoleCommand {
         System.out.print("| help | -h   :   Help contextual menu              |");
         System.out.print("| quit        :   Quit the game properly            |"); 
         System.out.print("|___________________________________________________|");
+        System.out.print("");
     }
 }

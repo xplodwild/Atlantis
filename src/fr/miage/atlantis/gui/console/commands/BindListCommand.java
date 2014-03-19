@@ -44,6 +44,7 @@ public class BindListCommand implements ConsoleCommands.ConsoleCommand {
         System.out.print("| F1          :   Toggle console                    |");
         System.out.print("|                                                   |");  
         System.out.print("| add more @console.commands BindListCommand.java   |");
-        System.out.print("|___________________________________________________|");        
+        System.out.print("|___________________________________________________|");
+        System.out.print("");
     }
 }

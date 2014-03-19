@@ -29,6 +29,8 @@ import fr.miage.atlantis.entities.Shark;
 import fr.miage.atlantis.entities.Whale;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Classe representant un tour de jeu
@@ -39,7 +41,7 @@ import java.util.List;
  */
 public class GameTurn implements GameRenderListener {
 
-    private final static boolean DBG_TRACE = true;
+    
     public final static boolean DBG_QUICKTEST = false;
 
     private TileAction mTileAction;
@@ -53,7 +55,15 @@ public class GameTurn implements GameRenderListener {
     private boolean mTurnIsOver;
     private int mRemainingMoves;
     private int mRemainingDiceMoves;
+    
+    /**
+     * Instance du logger Java
+     */
+    private static final Logger logger = Logger.getLogger(GameTurn.class.getName());
 
+    
+    
+    
     /**
      * Constructeur de GameTurn
      *
@@ -69,17 +79,14 @@ public class GameTurn implements GameRenderListener {
         mMoves = new ArrayList<EntityMove>();
     }
 
-    private void log(String str) {
-        if (DBG_TRACE) System.out.println(str);
-    }
-
+  
     /**
      * Demarre le début du tour de jeu du joueur courant
      */
     public void startTurn() {
-        log("GameTurn: startTurn()");
+        
+        logger.log(Level.FINE, "GameTurn: startTurn()", new Object[]{});     
         mController.onTurnStart(mPlayer);
-
 
 
         //////
@@ -103,7 +110,7 @@ public class GameTurn implements GameRenderListener {
     }
 
     private void finishTurn() {
-        log("GameTurn: finishTurn");
+        logger.log(Level.FINE, "GameTurn: finishTurn()", new Object[]{}); 
         mTurnIsOver = true;
         mController.nextTurn();
     }
@@ -115,7 +122,7 @@ public class GameTurn implements GameRenderListener {
      * @param dest Tile destination
      */
     public void moveEntity(GameEntity ent, GameTile dest) {
-        log("GameTurn: moveEntity (on tile)");
+        logger.log(Level.FINE, "GameTurn: moveEntity (on tile)", new Object[]{});        
 
         // On log le mouvement
         // xplod: Pourquoi stocker le numero du tour ici? Surtout qu'on l'a pas
@@ -133,7 +140,7 @@ public class GameTurn implements GameRenderListener {
      * @param dest Bateau ciblé
      */
     public void moveEntity(GameEntity ent, Boat dest) {
-        log("GameTurn: moveEntity (on boat)");
+        logger.log(Level.FINE, "GameTurn: moveEntity (on boat)", new Object[]{});
 
         // On log le mouvement
         // xplod: Pourquoi stocker le numero du tour ici? Surtout qu'on l'a pas
@@ -146,7 +153,7 @@ public class GameTurn implements GameRenderListener {
     }
 
     public void moveDiceEntity(GameEntity ent, GameTile dest) {
-        log("GameTurn: moveDiceEntity");
+        logger.log(Level.FINE, "GameTurn: moveDiceEntity ", new Object[]{});        
 
         // TODO: Faut-il logger ces mouvements aussi?
         mRemainingDiceMoves--;
@@ -154,7 +161,7 @@ public class GameTurn implements GameRenderListener {
     }
 
     public int rollDice() {
-        log("GameTurn: rollDice");
+        logger.log(Level.FINE, "GameTurn: rollDice ", new Object[]{});        
 
         mDiceRolled = true;
         if (!DBG_QUICKTEST) {
@@ -203,7 +210,8 @@ public class GameTurn implements GameRenderListener {
     }
 
     public void onTurnStarted() {
-        log("GameTurn: onTurnStarted()");
+        logger.log(Level.FINE, "GameTurn: onTurnStarted() ", new Object[]{});
+        
         // Le tour commence : on peut utiliser une tile de notre stock local
         // TODO
 
@@ -216,13 +224,15 @@ public class GameTurn implements GameRenderListener {
     }
 
     public void onUnitMoveFinished() {
-        log("GameTurn: onUnitMoveFinished()");
+        logger.log(Level.FINE, "GameTurn: onUnitMoveFinished() ", new Object[]{});
+        
         if (mRemainingMoves > 0) {
             // On a encore des mouvements de ses unités possibles, alors on le fait.
-            log("==> Remaining moves: " + mRemainingMoves);
+            logger.log(Level.FINE, "GameTurn: ==> Remaining moves: " + mRemainingMoves, new Object[]{});               
             requestPlayerMovePicking();
         } else if (mSunkenTile == null) {
-            log("==> Tile sinking required!");
+            logger.log(Level.FINE, "GameTurn: ==> Tile sinking required! ", new Object[]{});
+           
             // Il faut sinker une tile!
             GameLogic.TilePickRequest request = new GameLogic.TilePickRequest();
             request.pickNearTile = null;
@@ -239,7 +249,7 @@ public class GameTurn implements GameRenderListener {
             mController.requestPick(null, request);
         } else if (mRemainingDiceMoves > 0) {
             // On a encore des mouvements de l'unité du dé possible
-            log("==> Remaining dice moves: " + mRemainingDiceMoves);
+            logger.log(Level.FINE, "GameTurn: ==> Remaining dice moves: " + mRemainingDiceMoves, new Object[]{});            
             requestDiceEntityPicking();
         } else {
             // On a plus de mouvements d'unités, on a coulé la tile, et on a bougé les unités
@@ -271,7 +281,7 @@ public class GameTurn implements GameRenderListener {
         } else {
             // Pas d'entité du type du dé a bouger. Le dé étant la dernière étape d'un tour,
             // on a terminé.
-            log("GameTurn: No entity of type " + entityType.toString() + " on the board. Finish turn.");
+            logger.log(Level.FINE, "GameTurn: No entity of type " + entityType.toString() + " on the board. Finish turn.", new Object[]{});            
             finishTurn();
         }
     }
