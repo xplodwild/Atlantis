@@ -225,7 +225,7 @@ public class TileAction {
      * @return A random ActionTile
      */
     public static TileAction generateRandomTileActionBeach() {
-        if (TileAction.sRandomizerBeach == null) {
+        if (TileAction.sRandomizerBeach == null || TileAction.sRandomizerBeach.isEmpty()) {
             sRandomizerBeach = new ArrayList<TileAction>();
 
             for (int i = 0; i < TileAction.TILE_COUNT_ANIMAL_SHARK_UNDERBEACHTILE; i++) {
@@ -291,7 +291,7 @@ public class TileAction {
      * @return A random ActionTile
      */
     public static TileAction generateRandomTileActionMountain() {
-        if (TileAction.sRandomizerMountain == null) {
+        if (TileAction.sRandomizerMountain == null || TileAction.sRandomizerMountain.isEmpty()) {
             sRandomizerMountain = new ArrayList<TileAction>();
 
             for (int i = 0; i < TileAction.TILE_COUNT_ANIMAL_SHARK_UNDERMOUNTAINTILE; i++) {
@@ -355,7 +355,7 @@ public class TileAction {
      * @return A random ActionTile
      */
     public static TileAction generateRandomTileActionForest() {
-        if (TileAction.sRandomizerForest == null) {
+        if (TileAction.sRandomizerForest == null || TileAction.sRandomizerForest.isEmpty()) {
             sRandomizerForest = new ArrayList<TileAction>();
 
             for (int i = 0; i < TileAction.TILE_COUNT_ANIMAL_SHARK_UNDERFORESTTILE; i++) {

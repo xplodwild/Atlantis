@@ -45,18 +45,43 @@ public class GameBoardTest {
     @Test
     public void testIsTileAtWaterEdge() {
         System.out.println("isTileAtWaterEdge");
-        GameTile tile = null;
         GameBoard instance = new GameBoard();
-        boolean expResult = false;
+        
+        // Au bord de l'eau
+        GameTile tile = instance.getTileSet().get("Water #37");
+        boolean expResult = true;
         boolean result = instance.isTileAtWaterEdge(tile);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        
+        // Au milieu de l'eau
+        tile = instance.getTileSet().get("Water #11");
+        expResult = true;
+        result = instance.isTileAtWaterEdge(tile);
+        assertEquals(expResult, result);
+        
+        // Sur la côte
+        tile = instance.getTileSet().get("Water #37");
+        tile = tile.getRightTile();
+        expResult = true;
+        result = instance.isTileAtWaterEdge(tile);
+        assertEquals(expResult, result);
+        
+        // Test de la tuile enclavée
+        tile = tile.getRightBottomTile();
+        expResult = false;
+        result = instance.isTileAtWaterEdge(tile);
+        assertEquals(expResult, result);
+        
+        //Test de suite proche de la tuile d'eau centrale de l'île.
+        tile = tile.getRightBottomTile();
+        expResult = true;
+        result = instance.isTileAtWaterEdge(tile);
+        assertEquals(expResult, result);
     }
-
+    
     /**
      * Test of getTileSet method, of class GameBoard.
-     */
+     *
     @Test
     public void testGetTileSet() {
         System.out.println("getTileSet");
@@ -70,7 +95,7 @@ public class GameBoardTest {
 
     /**
      * Test of getFirstTile method, of class GameBoard.
-     */
+     *
     @Test
     public void testGetFirstTile() {
         System.out.println("getFirstTile");
@@ -84,7 +109,7 @@ public class GameBoardTest {
 
     /**
      * Test of generateRandomTile method, of class GameBoard.
-     */
+     *
     @Test
     public void testGenerateRandomTile() {
         System.out.println("generateRandomTile");
@@ -98,7 +123,7 @@ public class GameBoardTest {
 
     /**
      * Test of hasTileAtLevel method, of class GameBoard.
-     */
+     *
     @Test
     public void testHasTileAtLevel() {
         System.out.println("hasTileAtLevel");
@@ -113,7 +138,7 @@ public class GameBoardTest {
 
     /**
      * Test of sinkTile method, of class GameBoard.
-     */
+     *
     @Test
     public void testSinkTile() {
         System.out.println("sinkTile");
@@ -129,7 +154,7 @@ public class GameBoardTest {
 
     /**
      * Test of canPlaceTile method, of class GameBoard.
-     */
+     *
     @Test
     public void testCanPlaceTile() {
         System.out.println("canPlaceTile");
@@ -143,7 +168,7 @@ public class GameBoardTest {
 
     /**
      * Test of placeTileAtTheRightOf method, of class GameBoard.
-     */
+     *
     @Test
     public void testPlaceTileAtTheRightOf() {
         System.out.println("placeTileAtTheRightOf");
@@ -157,7 +182,7 @@ public class GameBoardTest {
 
     /**
      * Test of placeTileAtTheLeftOf method, of class GameBoard.
-     */
+     *
     @Test
     public void testPlaceTileAtTheLeftOf() {
         System.out.println("placeTileAtTheLeftOf");
@@ -171,7 +196,7 @@ public class GameBoardTest {
 
     /**
      * Test of placeTileAtTheBottomRightOf method, of class GameBoard.
-     */
+     *
     @Test
     public void testPlaceTileAtTheBottomRightOf() {
         System.out.println("placeTileAtTheBottomRightOf");
@@ -185,7 +210,7 @@ public class GameBoardTest {
 
     /**
      * Test of placeTileAtTheBottomLeftOf method, of class GameBoard.
-     */
+     *
     @Test
     public void testPlaceTileAtTheBottomLeftOf() {
         System.out.println("placeTileAtTheBottomLeftOf");
@@ -199,7 +224,7 @@ public class GameBoardTest {
 
     /**
      * Test of printAllTiles method, of class GameBoard.
-     */
+     *
     @Test
     public void testPrintAllTiles() {
         System.out.println("printAllTiles");
@@ -211,7 +236,7 @@ public class GameBoardTest {
 
     /**
      * Test of hasEntityOfType method, of class GameBoard.
-     */
+     *
     @Test
     public void testHasEntityOfType() {
         System.out.println("hasEntityOfType");
@@ -226,7 +251,7 @@ public class GameBoardTest {
 
     /**
      * Test of hasTileAtWaterEdge method, of class GameBoard.
-     */
+     *
     @Test
     public void testHasTileAtWaterEdge() {
         System.out.println("hasTileAtWaterEdge");
@@ -238,4 +263,5 @@ public class GameBoardTest {
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
+    */
 }
