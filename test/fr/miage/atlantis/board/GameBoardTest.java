@@ -111,16 +111,14 @@ public class GameBoardTest {
 
     /**
      * Test of getFirstTile method, of class GameBoard.
-     *
+     */
     @Test
     public void testGetFirstTile() {
         System.out.println("getFirstTile");
         GameBoard instance = new GameBoard();
-        GameTile expResult = null;
-        GameTile result = instance.getFirstTile();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        
+        String result = instance.getFirstTile().getName();
+        assertEquals("Border #1", result);
     }
 
     /**
