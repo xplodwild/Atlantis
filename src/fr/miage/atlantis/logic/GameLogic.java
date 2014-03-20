@@ -73,6 +73,11 @@ public abstract class GameLogic implements GameTurnListener {
          * la restriction s'appliquera au joueur passé ici
          */
         public Player player;
+
+        @Override
+        public String toString() {
+            return "EntityPickRequest: restriction flags=" + pickingRestriction + "; player=" + player;
+        }
     }
 
     public static class TilePickRequest {
@@ -92,6 +97,12 @@ public abstract class GameLogic implements GameTurnListener {
          * pourront être pickées
          */
         public int requiredHeight = -1;
+
+        @Override
+        public String toString() {
+            return "TilePickRequest: pickNearTile=" + pickNearTile + "; waterEdgeOnly=" + waterEdgeOnly
+                    + "; requiredHeight=" + requiredHeight;
+        }
     }
 
     /**
