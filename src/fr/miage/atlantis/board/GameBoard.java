@@ -844,12 +844,6 @@ public final class GameBoard {
         return newTile;
     }
 
-    public boolean canPlaceTile() {
-        boolean canPlace=false;
-
-        return canPlace;
-    }
-
 
     /**
      * Permet de place un Tile a la droite d'un autre, tout en updatant les Tile adjacents.

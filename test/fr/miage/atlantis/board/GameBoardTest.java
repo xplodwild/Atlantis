@@ -167,20 +167,6 @@ public class GameBoardTest {
     }
 
     /**
-     * Test of canPlaceTile method, of class GameBoard.
-     *
-    @Test
-    public void testCanPlaceTile() {
-        System.out.println("canPlaceTile");
-        GameBoard instance = new GameBoard();
-        boolean expResult = false;
-        boolean result = instance.canPlaceTile();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
      * Test of placeTileAtTheRightOf method, of class GameBoard.
      *
     @Test
