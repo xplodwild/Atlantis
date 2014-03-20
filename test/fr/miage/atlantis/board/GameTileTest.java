@@ -5,6 +5,7 @@
 package fr.miage.atlantis.board;
 
 import fr.miage.atlantis.entities.GameEntity;
+import fr.miage.atlantis.entities.Shark;
 import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -44,11 +45,11 @@ public class GameTileTest {
     @Test
     public void testAddEntity() {
         System.out.println("addEntity");
-        GameEntity gE = null;
-        GameTile instance = null;
-        instance.addEntity(gE);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        GameBoard board = new GameBoard();
+        GameEntity gE = new Shark();
+        GameTile tile = board.getTileSet().get("Water #37");
+        tile.addEntity(gE);
+        assertEquals(gE, tile.getEntities().get(0));
     }
 
     /**
