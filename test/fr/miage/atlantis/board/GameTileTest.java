@@ -40,7 +40,8 @@ public class GameTileTest {
     }
 
     /**
-     * Test of addEntity method, of class GameTile.
+     * Test si l'entité ajouté sur la tile, s'ajoute
+     * 
      */
     @Test
     public void testAddEntity() {
@@ -58,11 +59,13 @@ public class GameTileTest {
     @Test
     public void testRemoveEntity() {
         System.out.println("removeEntity");
-        GameEntity gE = null;
-        GameTile instance = null;
-        instance.removeEntity(gE);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        GameBoard board = new GameBoard();
+        GameEntity entity = new Shark();
+        GameTile tile = board.getTileSet().get("Water #37");
+        tile.addEntity(entity);
+        assertEquals(entity, tile.getEntities().get(0));
+        tile.removeEntity(entity);
+        assertTrue(tile.getEntities().isEmpty());
     }
 
     /**
