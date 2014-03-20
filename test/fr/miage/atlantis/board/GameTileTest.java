@@ -54,7 +54,8 @@ public class GameTileTest {
     }
 
     /**
-     * Test of removeEntity method, of class GameTile.
+     * Ajoute une entité sur une tuile et la supprime.
+     * Test si l'entité sur la tuile a bien été suprimé.
      */
     @Test
     public void testRemoveEntity() {
@@ -69,15 +70,15 @@ public class GameTileTest {
     }
 
     /**
-     * Test of removeFromBoard method, of class GameTile.
+     * Test si la tile a bien été enlevé de la board
      */
     @Test
     public void testRemoveFromBoard() {
         System.out.println("removeFromBoard");
-        GameTile instance = null;
-        instance.removeFromBoard();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        GameBoard board = new GameBoard();
+        GameTile tile = board.getTileSet().get("Beach #1");       
+        tile.removeFromBoard();
+        assertFalse(tile.isOnBoard());
     }
 
     /**
