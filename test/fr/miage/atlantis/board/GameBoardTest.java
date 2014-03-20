@@ -6,6 +6,7 @@ package fr.miage.atlantis.board;
 
 import fr.miage.atlantis.logic.GameLogic;
 import java.util.Map;
+import java.util.Set;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -72,7 +73,7 @@ public class GameBoardTest {
         result = instance.isTileAtWaterEdge(tile);
         assertEquals(expResult, result);
         
-        //Test de suite proche de la tuile d'eau centrale de l'île.
+        //Test de tuile proche de la tuile d'eau centrale de l'île.
         tile = tile.getRightBottomTile();
         expResult = true;
         result = instance.isTileAtWaterEdge(tile);
@@ -81,16 +82,31 @@ public class GameBoardTest {
     
     /**
      * Test of getTileSet method, of class GameBoard.
-     *
+     */
     @Test
     public void testGetTileSet() {
         System.out.println("getTileSet");
         GameBoard instance = new GameBoard();
-        Map expResult = null;
-        Map result = instance.getTileSet();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        
+        // On vénifie que le set contient le bon nombre de tuiles.
+        int bt = 0;
+        int ft = 0;
+        int mt = 0;
+        Set<String> lks = instance.getTileSet().keySet();
+        for(String key : lks){
+            if(instance.getTileSet().get(key) instanceof BeachTile){
+                bt++;
+            }
+            if(instance.getTileSet().get(key) instanceof ForestTile){
+                ft++;
+            }
+            if(instance.getTileSet().get(key) instanceof MountainTile){
+                mt++;
+            }
+        }
+        assertEquals(16,bt);
+        assertEquals(16,ft);
+        assertEquals(8,mt);
     }
 
     /**
