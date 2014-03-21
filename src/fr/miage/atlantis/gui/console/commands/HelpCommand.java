@@ -48,10 +48,11 @@ public class HelpCommand implements ConsoleCommands.ConsoleCommand {
         System.out.print("");
         System.out.print("____________________________________________________");
         System.out.print("|                                                   |");  
-        System.out.print("| bindlist    :   List the key bindings             |");
-        System.out.print("| clear       :   Clear the console                 |");
-        System.out.print("| help | -h   :   Help contextual menu              |");
-        System.out.print("| quit        :   Quit the game properly            |"); 
+        System.out.print("| bindlist    :   Liste les raccourcis clavier      |");
+        System.out.print("| clear       :   Efface la console                 |");
+        System.out.print("| help        :   Affiche l'aide                    |");
+        System.out.print("| debug -h    :   Log les message de debug          |");
+        System.out.print("| quit        :   Quitte le jeu                     |"); 
         System.out.print("|___________________________________________________|");
         System.out.print("");
     }

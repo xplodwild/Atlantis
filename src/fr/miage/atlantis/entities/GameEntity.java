@@ -20,6 +20,8 @@ package fr.miage.atlantis.entities;
 
 import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.logic.GameLogic;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Classe mère qui gère les entitées de jeu
@@ -38,6 +40,8 @@ public class GameEntity {
     public final static int ACTION_SEASERPENT_CRUSH = 2;
     public final static int ACTION_PLAYER_ESCAPE = 3;
 
+    private static final Logger logger = Logger.getLogger(GameEntity.class.getName());
+    
     /**
      * Nom de l'entité
      */
@@ -76,8 +80,8 @@ public class GameEntity {
         tile.addEntity(this);
         mTile = tile;
 
-        System.out.println("MOVE " + mName + " TO " + tile.getName());
-
+        logger.log(Level.INFO, "MOVE " + mName + " TO " + tile.getName(),new Object[]{this,tile});
+       
         boolean somethingHappened = false;
         if (logic != null) {
             // On trigger les événements des autres entités présentes sur la tile

@@ -24,6 +24,8 @@ import fr.miage.atlantis.entities.Whale;
 import fr.miage.atlantis.logic.GameLogic;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Classe représentant les faces arrières des tiles du plateau de jeu
@@ -179,6 +181,11 @@ public class TileAction {
     private static ArrayList<TileAction> sRandomizerForest;
     private static ArrayList<TileAction> sRandomizerMountain;
 
+    
+    private static final Logger logger = Logger.getLogger(GameBoard.class.getName());
+    
+    
+    
     private TileAction(int action, int entity, boolean isImmediate,
             boolean isTriggerable, boolean isVolcano) {
         mAction = action;
@@ -456,10 +463,10 @@ public class TileAction {
         // endroit sur le rendu. Ensuite, on relance moveToTile avec la logic pour effectivement
         // lancer les événements. Cela permet d'être sûr que la nouvelle entité est bien affichée
         // avant que d'autres animations se lancent.
-        System.out.println("Spawned entity: Moving to tile");
+        logger.log(Level.FINE, "Spawned entity: Moving to tile", new Object[]{});
         spawnedEntity.moveToTile(null, tile);
         logic.onEntitySpawn(spawnedEntity);
-        System.out.println("Spawned entity: Triggering events");
+        logger.log(Level.FINE, "Spawned entity: Triggering events", new Object[]{});
         spawnedEntity.moveToTile(logic, tile);
     }
 

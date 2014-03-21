@@ -35,11 +35,16 @@ import de.lessvoid.nifty.controls.console.builder.ConsoleBuilder;
 import fr.miage.atlantis.gui.console.commands.BindListCommand;
 import fr.miage.atlantis.gui.console.commands.ClearConsoleCommand;
 import fr.miage.atlantis.gui.console.commands.HelpCommand;
+import fr.miage.atlantis.gui.console.commands.LoggingCommand;
 import fr.miage.atlantis.gui.console.commands.QuitCommand;
 import fr.miage.atlantis.gui.controllers.ConsoleController;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
 
 
@@ -165,9 +170,8 @@ public final class GuiConsole{
         
        
         // output hello to the console
-        mConsole.output("Starting console");
-
-
+        mConsole.output("Demarrage de la console");
+        mConsole.output("Tapez help pour afficher la liste des commandes disponible.");
 
         // create the console commands class and attach it to the console
         ConsoleCommands consoleCommands = new ConsoleCommands(mNifty, mConsole);
@@ -187,6 +191,7 @@ public final class GuiConsole{
         ConsoleCommands.ConsoleCommand help = new HelpCommand();
         ConsoleCommands.ConsoleCommand quit = new QuitCommand();
         ConsoleCommands.ConsoleCommand binds = new BindListCommand();
+        ConsoleCommands.ConsoleCommand logs = new LoggingCommand();
         ConsoleCommands.ConsoleCommand clear = new ClearConsoleCommand(GuiConsole.mConsole);
         
         consoleCommands.registerCommand("help", help);
@@ -194,6 +199,7 @@ public final class GuiConsole{
         consoleCommands.registerCommand("quit", quit);
         consoleCommands.registerCommand("clear", clear);
         consoleCommands.registerCommand("bindlist", binds);
+        consoleCommands.registerCommand("debug", logs);
                 
 
         // finally enable command completion
@@ -209,10 +215,9 @@ public final class GuiConsole{
     /**
      * Redirection du flux de messages System.out / System.err vers la console     * 
      * 
-     */
-    
+     */    
     private static void redirectSystemStreams() {
-        OutputStream out = new OutputStream() {
+       /* final OutputStream out = new OutputStream() {
 
         @Override
         public void write(final int b) throws IOException {
@@ -228,33 +233,41 @@ public final class GuiConsole{
         public void write(byte[] b) throws IOException {
           write(b, 0, b.length);
         }
-        };
+        };*/
 
-        System.setOut(new PrintStream(out, true));
-        System.setErr(new PrintStream(out, true));
-    }
-    
-    
-    /**
-     * Update affichage de la console avec les flux données
-     * 
-     * @param text 
-     */
-    private static void updateTextPane(final String text) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                mConsole.output(text);
+        Handler customHandler = new Handler() {
+
+            @Override
+            public void close() throws SecurityException {
             }
-        });
+
+            @Override
+            public void flush() {
+            }
+
+            @Override
+            public void publish(LogRecord record) {
+                // default ConsoleHandler will take care of >= INFO
+                //if (record.getLevel().intValue() < Level.ALL.intValue()) {
+                String text=record.getMessage();
+                System.out.println(text);
+                mConsole.output(text); 
+
+            }
+        };
+        
+        customHandler.setLevel(Level.FINEST);
+        
+        Logger.getGlobal().addHandler(customHandler);       
+        
     }
     
-    
-    
+        
     
     //--------------------------------------------------------------------------
     //GETTERS
     //--------------------------------------------------------------------------
-    
+        
     
     public Nifty getNifty(){
         return this.mNifty;        
