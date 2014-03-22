@@ -195,7 +195,11 @@ public class InputActionListener {
             flag |= REQUEST_TILE_PICK;
         }
 
-        requestPicking(flag);
+        if (requestPicking(flag)) {
+            System.out.println(tileRq);
+            System.out.println(entRq);
+            System.out.println("============================================");
+        }
         mEntityRequest = entRq;
         mTileRequest = tileRq;
     }
@@ -205,15 +209,25 @@ public class InputActionListener {
      * au GameLogic correspondant.
      * @param request Un ou des flags REQUEST_** de cette classe
      */
-    private void requestPicking(int request) {
+    private boolean requestPicking(int request) {
+        boolean pleaseLog = false;
+
         // En théorie quand on request un picking, on est en état "NONE", c'est-à-dire qu'aucune
         // autre requête n'est en cours. Si on passe d'une requête à une autre, on a peut être
         // un événement d'attente manquant.
         if (mPickingRequest != REQUEST_NONE) {
             System.out.println("WARN: Previous picking request wasn't complete! An event might be missing!");
+            System.out.println("============================================");
+            System.out.println("Previous picking request: " + mPickingRequest);
+            System.out.println("Incoming request: " + request);
+            System.out.println(mTileRequest);
+            System.out.println(mEntityRequest);
+            System.out.println("============================================");
+            pleaseLog = true;
         }
 
         mPickingRequest = request;
+        return pleaseLog;
     }
 
     private PickingResult performPicking() {
@@ -364,22 +378,24 @@ public class InputActionListener {
             }
         }
 
-        if ((request.pickingRestriction & GameLogic.EntityPickRequest.FLAG_PICK_BOAT_WITHOUT_ROOM) != 0) {
-            // On veut picker un bateau n'ayant plus de place
-            if (ent instanceof Boat) {
-                Boat b = (Boat) ent;
-                if (!b.hasRoom()) {
-                    return true;
+        if (request.player == null) {
+            if ((request.pickingRestriction & GameLogic.EntityPickRequest.FLAG_PICK_BOAT_WITHOUT_ROOM) != 0) {
+                // On veut picker un bateau n'ayant plus de place
+                if (ent instanceof Boat) {
+                    Boat b = (Boat) ent;
+                    if (!b.hasRoom()) {
+                        return true;
+                    }
                 }
             }
-        }
 
-        if ((request.pickingRestriction & GameLogic.EntityPickRequest.FLAG_PICK_BOAT_WITH_ROOM) != 0) {
-            // On veut picker un bateau ayant de la place
-            if (ent instanceof Boat) {
-                Boat b = (Boat) ent;
-                if (b.hasRoom()) {
-                    return true;
+            if ((request.pickingRestriction & GameLogic.EntityPickRequest.FLAG_PICK_BOAT_WITH_ROOM) != 0) {
+                // On veut picker un bateau ayant de la place
+                if (ent instanceof Boat) {
+                    Boat b = (Boat) ent;
+                    if (b.hasRoom()) {
+                        return true;
+                    }
                 }
             }
         }

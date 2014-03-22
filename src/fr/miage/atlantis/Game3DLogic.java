@@ -66,6 +66,7 @@ public class Game3DLogic extends GameLogic {
 
     private Game3DRenderer mRenderer;
     private GameEntity mPickedEntity;
+
     
      /**
      * Instance du logger Java
@@ -73,9 +74,13 @@ public class Game3DLogic extends GameLogic {
     private static final Logger logger = Logger.getGlobal();
     
 
+    private int mBypassCallbackCount;
+
+
     public Game3DLogic() {
         super();
         mRenderer = new Game3DRenderer(this);
+        mBypassCallbackCount = 0;
     }
 
     @Override
@@ -167,9 +172,12 @@ public class Game3DLogic extends GameLogic {
                     // Remise à zéro de l'orientation
                     entNode.setLocalRotation(Quaternion.IDENTITY);
 
-                    // On notifie le jeu, toutes les actions nécessaires sont faites.
-                    if (getCurrentTurn() != null) {
+                    // On notifie le jeu, toutes les actions nécessaires sont faites (si on
+                    // ne saute pas la notification, si c'est appelé d'un autre événement).
+                    if (getCurrentTurn() != null && mBypassCallbackCount <= 0) {
                         getCurrentTurn().onUnitMoveFinished();
+                    } else if (mBypassCallbackCount > 0) {
+                        mBypassCallbackCount--;
                     }
                 }
             }
@@ -217,6 +225,7 @@ public class Game3DLogic extends GameLogic {
                     List<GameEntity> newTileEntities = new ArrayList<GameEntity>(newTile.getEntities());
                     for (GameEntity ent : newTileEntities) {
                         if (ent instanceof PlayerToken) {
+                            mBypassCallbackCount++;
                             onUnitMove(ent, newTile);
                         }
                     }
