@@ -67,11 +67,17 @@ public class Game3DLogic extends GameLogic {
     private Game3DRenderer mRenderer;
     private GameEntity mPickedEntity;
     private int mBypassCallbackCount;
+    private List<EntityPickRequest> mEntRequestHistory;
+    private List<TilePickRequest> mTileRequestHistory;
+    private boolean mCanCancelPickingAction;
 
     public Game3DLogic() {
         super();
         mRenderer = new Game3DRenderer(this);
         mBypassCallbackCount = 0;
+        mEntRequestHistory = new ArrayList<EntityPickRequest>();
+        mTileRequestHistory = new ArrayList<TilePickRequest>();
+        mCanCancelPickingAction = false;
     }
 
     @Override
@@ -100,6 +106,31 @@ public class Game3DLogic extends GameLogic {
         mRenderer.getEntitiesRenderer().addEntity(boat1);
 
         super.startGame();
+    }
+
+    /**
+     * Remet à zéro les éléments pickée et relance le dernier picking
+     */
+    public boolean resetPickingAction() {
+        assert mEntRequestHistory.size() == mTileRequestHistory.size();
+
+        if (mCanCancelPickingAction && mEntRequestHistory.size() > 1
+                && mTileRequestHistory.size() > 1) {
+            // On relance la requête avant la dernière requête
+            int reqId = mTileRequestHistory.size() - 2;
+            TilePickRequest tileRq = mTileRequestHistory.get(reqId);
+            EntityPickRequest entRq = mEntRequestHistory.get(reqId);
+            mRenderer.getInputListener().forceResetRequest();
+            requestPick(entRq, tileRq);
+
+            // Une seule action peut être annulée.
+            mCanCancelPickingAction = false;
+
+            return true;
+        } else {
+            // Rien à relancer ou pas possible
+            return false;
+        }
     }
 
     public void onTurnStart(Player p) {
@@ -439,6 +470,9 @@ public class Game3DLogic extends GameLogic {
     public void requestPick(EntityPickRequest entRq, TilePickRequest tileRq) {
         // On a besoin de picker une entité
         System.out.println("Game3DLogic: requestPick");
+        mEntRequestHistory.add(entRq);
+        mTileRequestHistory.add(tileRq);
+
         mRenderer.getInputListener().requestPicking(entRq, tileRq);
     }
 
@@ -466,6 +500,7 @@ public class Game3DLogic extends GameLogic {
 
                 // Remise à zéro
                 mPickedEntity = null;
+                mCanCancelPickingAction = false;
             } else {
                 // On assume ici que lorsqu'on picke une entité, on veut picker une tile ou un bateau
                 // après, puisqu'on a des mouvements restant (et qu'un tour est forcément séquentiel)
@@ -494,6 +529,7 @@ public class Game3DLogic extends GameLogic {
 
                 // On lance la requête
                 requestPick(entPick, tilePick);
+                mCanCancelPickingAction = true;
             }
         } else if (currentTurn.hasRolledDice() && currentTurn.getRemainingDiceMoves() > 0) {
             // Le dé a été lancé, et on a des mouvements de dé restant. La seule chose possible, c'est
@@ -506,6 +542,7 @@ public class Game3DLogic extends GameLogic {
             tilePick.requiredHeight = 0;
 
             requestPick(null, tilePick);
+            mCanCancelPickingAction = true;
         }
     }
 
@@ -526,6 +563,7 @@ public class Game3DLogic extends GameLogic {
         }
 
         mPickedEntity = null;
+        mCanCancelPickingAction = false;
     }
 
     @Override
