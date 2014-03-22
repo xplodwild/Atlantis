@@ -77,25 +77,25 @@ public class TileAction {
     //--------------------------------------------------------------------------
 
     /** Nombre de tile action de type Spawn Animal Shark     */
-    public final static int TILE_COUNT_ANIMAL_SHARK_UNDERBEACHTILE = 6;
+    public final static int TILE_COUNT_ANIMAL_SHARK_UNDERBEACHTILE = 3;
     /** Nombre de tile action de type Spawn Animal Whale     */
-    public final static int TILE_COUNT_ANIMAL_WHALE_UNDERBEACHTILE = 5;
+    public final static int TILE_COUNT_ANIMAL_WHALE_UNDERBEACHTILE = 3;
     /** Nombre de tile action de type Move Animal Shark     */
-    private final static int TILE_COUNT_MOVE_SHARK_UNDERBEACHTILE = 2;
+    private final static int TILE_COUNT_MOVE_SHARK_UNDERBEACHTILE = 1;
     /** Nombre de tile action de type Move Animal Whale     */
-    private final static int TILE_COUNT_MOVE_WHALE_UNDERBEACHTILE = 2;
+    private final static int TILE_COUNT_MOVE_WHALE_UNDERBEACHTILE = 1;
     /** Nombre de tile action de type Move Animal Seaserpent     */
-    private final static int TILE_COUNT_MOVE_SEASERPENT_UNDERBEACHTILE = 2;
+    private final static int TILE_COUNT_MOVE_SEASERPENT_UNDERBEACHTILE = 1;
     /** Nombre de tile action de type Cancel Animal Shark     */
-    private final static int TILE_COUNT_CANCEL_SHARK_UNDERBEACHTILE = 3;
+    private final static int TILE_COUNT_CANCEL_SHARK_UNDERBEACHTILE = 1;
     /** Nombre de tile action de type Cancel Animal Whale     */
-    private final static int TILE_COUNT_CANCEL_WHALE_UNDERBEACHTILE = 3;
+    private final static int TILE_COUNT_CANCEL_WHALE_UNDERBEACHTILE = 0;
     /** Nombre de tile action de type Spawn Boat     */
-    private final static int TILE_COUNT_SPAWN_BOAT_UNDERBEACHTILE = 3;
+    private final static int TILE_COUNT_SPAWN_BOAT_UNDERBEACHTILE = 1;
     /** Nombre de tile action de type BonusSwim     */
-    private final static int TILE_COUNT_BONUS_SWIM_UNDERBEACHTILE = 4;
+    private final static int TILE_COUNT_BONUS_SWIM_UNDERBEACHTILE = 3;
     /** Nombre de tile action de type BonusBoat     */
-    private final static int TILE_COUNT_BONUS_BOAT_UNDERBEACHTILE = 4;
+    private final static int TILE_COUNT_BONUS_BOAT_UNDERBEACHTILE = 2;
     /** Nombre de tile action de type tourbillon     */
     private final static int TILE_COUNT_WHIRL_UNDERBEACHTILE = 0;
     /** Nombre de tile action de type volcan     */
@@ -106,27 +106,27 @@ public class TileAction {
     //--------------------------------------------------------------------------
 
     /** Nombre de tile de type Spawn Requin*/
-    public final static int TILE_COUNT_ANIMAL_SHARK_UNDERFORESTTILE = 6;
+    public final static int TILE_COUNT_ANIMAL_SHARK_UNDERFORESTTILE = 2;
     /** Nombre de tile action de type Spawn Animal Whale */
-    public final static int TILE_COUNT_ANIMAL_WHALE_UNDERFORESTTILE = 5;
+    public final static int TILE_COUNT_ANIMAL_WHALE_UNDERFORESTTILE = 2;
     /** Nombre de tile action de type Move Animal Shark  */
-    private final static int TILE_COUNT_MOVE_SHARK_UNDERFORESTTILE = 2;
+    private final static int TILE_COUNT_MOVE_SHARK_UNDERFORESTTILE = 1;
     /** Nombre de tile action de type Move Animal Whale  */
-    private final static int TILE_COUNT_MOVE_WHALE_UNDERFORESTTILE = 2;
+    private final static int TILE_COUNT_MOVE_WHALE_UNDERFORESTTILE = 1;
     /** Nombre de tile action de type Move Animal Seaserpent    */
-    private final static int TILE_COUNT_MOVE_SEASERPENT_UNDERFORESTTILE = 2;
+    private final static int TILE_COUNT_MOVE_SEASERPENT_UNDERFORESTTILE = 1;
     /** Nombre de tile action de type Cancel Animal Shark    */
-    private final static int TILE_COUNT_CANCEL_SHARK_UNDERFORESTTILE = 3;
+    private final static int TILE_COUNT_CANCEL_SHARK_UNDERFORESTTILE = 1;
     /** Nombre de tile action de type Cancel Animal Whale     */
-    private final static int TILE_COUNT_CANCEL_WHALE_UNDERFORESTTILE = 3;
+    private final static int TILE_COUNT_CANCEL_WHALE_UNDERFORESTTILE = 2;
     /** Nombre de tile action de type Spawn Boat     */
     private final static int TILE_COUNT_SPAWN_BOAT_UNDERFORESTTILE = 3;
     /** Nombre de tile action de type BonusSwim     */
-    private final static int TILE_COUNT_BONUS_SWIM_UNDERFORESTTILE = 4;
+    private final static int TILE_COUNT_BONUS_SWIM_UNDERFORESTTILE = 1;
     /** Nombre de tile action de type BonusBoat     */
-    private final static int TILE_COUNT_BONUS_BOAT_UNDERFORESTTILE = 4;
+    private final static int TILE_COUNT_BONUS_BOAT_UNDERFORESTTILE = 0;
     /** Nombre de tile action de type tourbillon     */
-    private final static int TILE_COUNT_WHIRL_UNDERFORESTTILE = 0;
+    private final static int TILE_COUNT_WHIRL_UNDERFORESTTILE = 2;
     /** Nombre de tile action de type volcan     */
     private final static int TILE_COUNT_VOLCANO_UNDERFORESTTILE = 0;
     //--------------------------------------------------------------------------
@@ -137,27 +137,27 @@ public class TileAction {
     //--------------------------------------------------------------------------
 
     /** Nombre de tile action de type Spawn Animal Shark     */
-    public final static int TILE_COUNT_ANIMAL_SHARK_UNDERMOUNTAINTILE = 6;
+    public final static int TILE_COUNT_ANIMAL_SHARK_UNDERMOUNTAINTILE = 1;
     /** Nombre de tile action de type Spawn Animal Whale     */
-    public final static int TILE_COUNT_ANIMAL_WHALE_UNDERMOUNTAINTILE = 5;
+    public final static int TILE_COUNT_ANIMAL_WHALE_UNDERMOUNTAINTILE = 0;
     /** Nombre de tile action de type Move Animal Shark     */
-    private final static int TILE_COUNT_MOVE_SHARK_UNDERMOUNTAINTILE = 2;
+    private final static int TILE_COUNT_MOVE_SHARK_UNDERMOUNTAINTILE = 0;
     /** Nombre de tile action de type Move Animal Whale     */
-    private final static int TILE_COUNT_MOVE_WHALE_UNDERMOUNTAINTILE = 2;
+    private final static int TILE_COUNT_MOVE_WHALE_UNDERMOUNTAINTILE = 0;
     /** Nombre de tile action de type Move Animal Seaserpent     */
-    private final static int TILE_COUNT_MOVE_SEASERPENT_UNDERMOUNTAINTILE = 2;
+    private final static int TILE_COUNT_MOVE_SEASERPENT_UNDERMOUNTAINTILE = 0;
     /** Nombre de tile action de type Cancel Animal Shark     */
-    private final static int TILE_COUNT_CANCEL_SHARK_UNDERMOUNTAINTILE = 3;
+    private final static int TILE_COUNT_CANCEL_SHARK_UNDERMOUNTAINTILE = 1;
     /** Nombre de tile action de type Cancel Animal Whale     */
-    private final static int TILE_COUNT_CANCEL_WHALE_UNDERMOUNTAINTILE = 3;
+    private final static int TILE_COUNT_CANCEL_WHALE_UNDERMOUNTAINTILE = 1;
     /** Nombre de tile action de type Spawn Boat     */
-    private final static int TILE_COUNT_SPAWN_BOAT_UNDERMOUNTAINTILE = 3;
+    private final static int TILE_COUNT_SPAWN_BOAT_UNDERMOUNTAINTILE = 0;
     /** Nombre de tile action de type BonusSwim     */
-    private final static int TILE_COUNT_BONUS_SWIM_UNDERMOUNTAINTILE = 4;
+    private final static int TILE_COUNT_BONUS_SWIM_UNDERMOUNTAINTILE = 0;
     /** Nombre de tile action de type BonusBoat     */
-    private final static int TILE_COUNT_BONUS_BOAT_UNDERMOUNTAINTILE = 4;
+    private final static int TILE_COUNT_BONUS_BOAT_UNDERMOUNTAINTILE = 0;
     /** Nombre de tile action de type tourbillon     */
-    private final static int TILE_COUNT_WHIRL_UNDERMOUNTAINTILE = 6;
+    private final static int TILE_COUNT_WHIRL_UNDERMOUNTAINTILE = 4;
     /** Nombre de tile action de type volcan     */
     private final static int TILE_COUNT_VOLCANO_UNDERMOUNTAINTILE = 1;
 
