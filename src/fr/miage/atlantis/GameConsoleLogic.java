@@ -103,4 +103,9 @@ public class GameConsoleLogic extends GameLogic {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
+    public void onPlayerDismountBoat(PlayerToken player, Boat b) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

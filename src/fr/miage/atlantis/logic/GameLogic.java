@@ -21,7 +21,9 @@ import fr.miage.atlantis.GameDice;
 import fr.miage.atlantis.Player;
 import fr.miage.atlantis.board.GameBoard;
 import fr.miage.atlantis.board.GameTile;
+import fr.miage.atlantis.entities.Boat;
 import fr.miage.atlantis.entities.GameEntity;
+import fr.miage.atlantis.entities.PlayerToken;
 
 /**
  * Classe représentant toute la partie logique du jeu
@@ -242,5 +244,10 @@ public abstract class GameLogic implements GameTurnListener {
      * @param tile La tile pickée
      */
     public abstract void onTilePicked(GameTile tile);
+
+    /**
+     * Signale au moteur logique qu'on est descendu d'un bateau
+     */
+    public abstract void onPlayerDismountBoat(PlayerToken player, Boat b);
     //--------------------------------------------------------------------------
 }

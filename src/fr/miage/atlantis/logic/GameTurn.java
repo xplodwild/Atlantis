@@ -21,9 +21,11 @@ import fr.miage.atlantis.GameDice;
 import fr.miage.atlantis.Player;
 import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.board.TileAction;
+import fr.miage.atlantis.board.WaterTile;
 import fr.miage.atlantis.entities.Boat;
 import fr.miage.atlantis.entities.EntityMove;
 import fr.miage.atlantis.entities.GameEntity;
+import fr.miage.atlantis.entities.PlayerToken;
 import fr.miage.atlantis.entities.SeaSerpent;
 import fr.miage.atlantis.entities.Shark;
 import fr.miage.atlantis.entities.Whale;
@@ -122,6 +124,22 @@ public class GameTurn implements GameRenderListener {
         EntityMove move = new EntityMove(ent.getTile(), dest, ent, -1);
         mMoves.add(move);
         mRemainingMoves--;
+
+        // Si on est un joueur et qu'on a pické une tile, on s'enlève du bateau (si on était
+        // dessus avant).
+        if (ent instanceof PlayerToken) {
+            PlayerToken pt = (PlayerToken) ent;
+            if (pt.getState() == PlayerToken.STATE_ON_BOAT) {
+                Boat b = pt.getBoat();
+                b.removePlayer(pt);
+                if (dest instanceof WaterTile) {
+                    pt.setState(PlayerToken.STATE_SWIMMING);
+                } else {
+                    pt.setState(PlayerToken.STATE_ON_LAND);
+                }
+                mController.onPlayerDismountBoat(pt, b);
+            }
+        }
 
         // On le transmet au controlleur en attendant la suite
         mController.onUnitMove(ent, dest);

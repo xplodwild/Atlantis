@@ -63,6 +63,15 @@ public class Boat extends GameEntity {
     }
 
     /**
+     * Enlève un PlayerToken du bateau
+     *
+     * @param token Token a enlever
+     */
+    public void removePlayer(PlayerToken token) {
+        mOnboard.remove(token);
+    }
+
+    /**
      * Retourne le numéro du slot du PlayerToken
      */
     public int getPlayerSlot(PlayerToken token) {
