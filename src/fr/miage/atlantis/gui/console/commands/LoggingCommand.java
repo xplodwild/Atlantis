@@ -17,7 +17,9 @@
  */
 package fr.miage.atlantis.gui.console.commands;
 
+import de.lessvoid.nifty.controls.Console;
 import de.lessvoid.nifty.controls.ConsoleCommands;
+import fr.miage.atlantis.gui.console.GuiConsole;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -40,9 +42,14 @@ public class LoggingCommand implements ConsoleCommands.ConsoleCommand {
      */
     @Override
     public void execute(final String[] args) {
-        String s1 = args[1];
+        String s1 = null;
+        if(args.length>1 ){        
+            s1 = args[1];
+        }
         int nb1 = -99;
 
+        Console csl=GuiConsole.getConsole();
+        
         if ("-all".equals(s1)) {
             nb1 = 1;
         }
@@ -55,7 +62,7 @@ public class LoggingCommand implements ConsoleCommands.ConsoleCommand {
         if ("-off".equals(s1)) {
             nb1 = 4;
         }
-        if ("-h".equals(s1)) {
+        if ("-h".equals(s1) || "-help".equals(s1)) {
             nb1 = 5;
         }
 
@@ -63,50 +70,28 @@ public class LoggingCommand implements ConsoleCommands.ConsoleCommand {
         switch (nb1) {
 
             case 1:
-
-               
-                
-                Logger.getGlobal().setLevel(Level.ALL);
-                
-                Logger.getGlobal().info("This is a info-level message");
-                Logger.getGlobal().config("This is a config-level message");
-                Logger.getGlobal().fine("This is a fine-level message");
-                Logger.getGlobal().finer("This is a finer-level message");
-                Logger.getGlobal().finest("This is a finest-level message");
-                
-                Logger.getGlobal().finest(Logger.getGlobal().getLevel().toString());
-
+                Logger.getGlobal().setLevel(Level.ALL);        
                 break;
 
-            case 2:
-                
+            case 2:                
                 Logger.getGlobal().setLevel(Level.WARNING);
                 break;
-
             case 3:
                 Logger.getGlobal().setLevel(Level.SEVERE);
                 break;
-
             case 4:
                 Logger.getGlobal().setLevel(Level.OFF);
                 break;
 
-            case 5:
-                System.out.println("");
-                System.out.print("Les arguments suivants sont supportes :");
-                System.out.print("-all : log tout les messages");
-                System.out.print("-warning : log les avertissements et les erreurs");
-                System.out.print("-error : log uniquement les erreurs");
-                System.out.print("-off : arrete de logger les messages");
-                System.out.println("");
-                break;
-
+            case 5:  
             default:
-                System.out.println("");
-                System.out.print("L'argument donne n'est pas supporte.");
-                System.out.print("Attendu :debug -all | -warning | -error | -off");
-                System.out.print("Recu : " + s1);
-                System.out.println("");
+                csl.output("");
+                csl.output("Les arguments suivants sont supportes :");
+                csl.output("-all : log tout les messages");
+                csl.output("-warning : log les avertissements et les erreurs");
+                csl.output("-error : log uniquement les erreurs");
+                csl.output("-off : arrete de logger les messages");
+                csl.output("");
                 break;
         }
 

@@ -42,7 +42,7 @@ import java.util.logging.Logger;
 public class GameTurn implements GameRenderListener {
 
     
-    public final static boolean DBG_QUICKTEST = false;
+    public static boolean DBG_QUICKTEST = false;
 
     private TileAction mTileAction;
     private List<TileAction> mRemoteTiles;

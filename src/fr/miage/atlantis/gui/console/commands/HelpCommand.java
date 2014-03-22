@@ -18,7 +18,9 @@
 
 package fr.miage.atlantis.gui.console.commands;
 
+import de.lessvoid.nifty.controls.Console;
 import de.lessvoid.nifty.controls.ConsoleCommands;
+import fr.miage.atlantis.gui.console.GuiConsole;
 
 
 /**
@@ -36,24 +38,19 @@ public class HelpCommand implements ConsoleCommands.ConsoleCommand {
      */
     @Override
     public void execute(final String[] args) {
-        
-        /*
-         * Nous redirigeons les sorties System.out.println vers notre console;
-         * Il est donc possible de definir nos sortie simplement via sysout.
-         */
-        
+                
         //On liste ici toutes les commandes executable dans la console 
-        //Sys.out.print car la console saute déjà des lignes par défaut.
-
-        System.out.print("");
-        System.out.print("____________________________________________________");
-        System.out.print("|                                                   |");  
-        System.out.print("| bindlist    :   Liste les raccourcis clavier      |");
-        System.out.print("| clear       :   Efface la console                 |");
-        System.out.print("| help        :   Affiche l'aide                    |");
-        System.out.print("| debug -h    :   Log les message de debug          |");
-        System.out.print("| quit        :   Quitte le jeu                     |"); 
-        System.out.print("|___________________________________________________|");
-        System.out.print("");
+        Console csl=GuiConsole.getConsole();
+                
+        csl.output("");
+        csl.output("____________________________________________________");
+        csl.output("|                                                   |");  
+        csl.output("| bindlist    :   Liste les raccourcis clavier      |");
+        csl.output("| clear       :   Efface la console                 |");
+        csl.output("| help        :   Affiche l'aide                    |");
+        csl.output("| debug -h    :   Log les message de debug          |");
+        csl.output("| quit        :   Quitte le jeu                     |"); 
+        csl.output("|___________________________________________________|");
+        csl.output("");
     }
 }

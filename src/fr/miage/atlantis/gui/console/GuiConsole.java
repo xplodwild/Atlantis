@@ -18,9 +18,13 @@
 
 package fr.miage.atlantis.gui.console;
 
+import static com.jme3.app.SimpleApplication.INPUT_MAPPING_HIDE_STATS;
 import com.jme3.asset.AssetManager;
 import com.jme3.audio.AudioRenderer;
 import com.jme3.input.InputManager;
+import com.jme3.input.KeyInput;
+import com.jme3.input.controls.ActionListener;
+import com.jme3.input.controls.KeyTrigger;
 
 import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.ViewPort;
@@ -32,20 +36,18 @@ import de.lessvoid.nifty.builder.ScreenBuilder;
 import de.lessvoid.nifty.controls.Console;
 import de.lessvoid.nifty.controls.ConsoleCommands;
 import de.lessvoid.nifty.controls.console.builder.ConsoleBuilder;
+import de.lessvoid.nifty.effects.EffectEventId;
 import fr.miage.atlantis.gui.console.commands.BindListCommand;
 import fr.miage.atlantis.gui.console.commands.ClearConsoleCommand;
 import fr.miage.atlantis.gui.console.commands.HelpCommand;
 import fr.miage.atlantis.gui.console.commands.LoggingCommand;
 import fr.miage.atlantis.gui.console.commands.QuitCommand;
 import fr.miage.atlantis.gui.controllers.ConsoleController;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintStream;
+import fr.miage.atlantis.logic.GameTurn;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
-import javax.swing.SwingUtilities;
 
 
 /**
@@ -71,6 +73,7 @@ public final class GuiConsole{
     private Nifty mNifty;
     
     private NiftyJmeDisplay mNiftyDisplay;
+    private static final  String INPUT_TOGGLE_CONSOLE="toggle_console";
 
  
     /**
@@ -104,7 +107,9 @@ public final class GuiConsole{
         
         
         mNifty.addScreen("ConsoleHUD", new ScreenBuilder("ConsoleHUD"){{            
-                                    
+               
+            
+            
             /**
              * Ajoute un controlleur perso a cet ecran
              */
@@ -143,13 +148,22 @@ public final class GuiConsole{
 
                          this.valignTop();
                          this.alignLeft();
-                       
+                         
+                         this.visible(false);
 
-                         onStartScreenEffect(new EffectBuilder("move") {{
+                        
+                         this.onShowEffect(new EffectBuilder("move") {{
                            length(150);
                            inherit();
                            neverStopRendering(true);
                            effectParameter("mode", "in");
+                           effectParameter("direction", "top");
+                         }});
+                                                  
+                         this.onHideEffect(new EffectBuilder("move") {{
+                           length(150);                           
+                           inherit();                          
+                           effectParameter("mode", "out");
                            effectParameter("direction", "top");
                          }});
                      }}); 
@@ -171,7 +185,8 @@ public final class GuiConsole{
        
         // output hello to the console
         mConsole.output("Demarrage de la console");
-        mConsole.output("Tapez help pour afficher la liste des commandes disponible.");
+        mConsole.output("");
+        mConsole.output("Tapez help pour afficher la liste des commandes disponible...");
 
         // create the console commands class and attach it to the console
         ConsoleCommands consoleCommands = new ConsoleCommands(mNifty, mConsole);
@@ -206,9 +221,70 @@ public final class GuiConsole{
         consoleCommands.enableCommandCompletion(true);
     
         //Start redirection console
-        GuiConsole.redirectSystemStreams();       
+        GuiConsole.redirectSystemStreams();      
+        
+        
+        
+        
+        
+        
+        mConsole.disable();        
+        
+        //Genere les keybinding 
+        this.generateConsoleKeyMap();
     }
     
+    
+    
+    private void generateConsoleKeyMap(){
+        //Bind la touche de la console
+        this.getInputManager().addMapping(INPUT_TOGGLE_CONSOLE, new KeyTrigger(KeyInput.KEY_F12));
+        this.getInputManager().addListener(this.toggleConsole(), INPUT_TOGGLE_CONSOLE);
+        
+        //Bind la touche d'activation du quicktest
+        this.getInputManager().addMapping("quicktest", new KeyTrigger(KeyInput.KEY_F11));
+        this.getInputManager().addListener(this.toggleQuicktest(), "quicktest");
+    }
+
+    
+    
+    
+    
+    private ActionListener toggleConsole(){
+        return new ActionListener() {
+
+            public void onAction(String name, boolean isPressed, float tpf) {                
+                if(isPressed){
+                    if(GuiConsole.mConsole.isEnabled()){
+                        GuiConsole.mConsole.setEnabled(false);
+                        GuiConsole.mConsole.getElement().setVisible(false);
+                    }else{
+                        GuiConsole.mConsole.setEnabled(true);
+                        GuiConsole.mConsole.getElement().setVisible(true);
+                    }
+                }
+                
+            }
+        };
+    }
+    
+    private ActionListener toggleQuicktest(){
+        return new ActionListener() {
+
+            public void onAction(String name, boolean isPressed, float tpf) { 
+                 if(isPressed){
+                    GuiConsole.mConsole.output("");
+                    if(GameTurn.DBG_QUICKTEST){
+                        GuiConsole.mConsole.output("Désactivation du mode QuickTest");
+                        GameTurn.DBG_QUICKTEST = false;  
+                    }else{
+                        GuiConsole.mConsole.output("Activation du mode QuickTest");
+                        GameTurn.DBG_QUICKTEST = true;  
+                    }                    
+                 }
+            }
+        };
+    }
     
 
    
@@ -217,24 +293,7 @@ public final class GuiConsole{
      * 
      */    
     private static void redirectSystemStreams() {
-       /* final OutputStream out = new OutputStream() {
-
-        @Override
-        public void write(final int b) throws IOException {
-          updateTextPane(String.valueOf((char) b));
-        }
-
-        @Override
-        public void write(byte[] b, int off, int len) throws IOException {
-          updateTextPane(new String(b, off, len));
-        }
-
-        @Override
-        public void write(byte[] b) throws IOException {
-          write(b, 0, b.length);
-        }
-        };*/
-
+      
         Handler customHandler = new Handler() {
 
             @Override
@@ -246,20 +305,15 @@ public final class GuiConsole{
             }
 
             @Override
-            public void publish(LogRecord record) {
-                // default ConsoleHandler will take care of >= INFO
-                //if (record.getLevel().intValue() < Level.ALL.intValue()) {
+            public void publish(LogRecord record) {                
                 String text=record.getMessage();
                 System.out.println(text);
                 mConsole.output(text); 
-
             }
         };
         
-        customHandler.setLevel(Level.FINEST);
-        
-        Logger.getGlobal().addHandler(customHandler);       
-        
+        customHandler.setLevel(Level.FINEST);        
+        Logger.getGlobal().addHandler(customHandler);               
     }
     
         
@@ -272,4 +326,13 @@ public final class GuiConsole{
     public Nifty getNifty(){
         return this.mNifty;        
     } 
+    
+    
+    public static Console getConsole(){
+        return GuiConsole.mConsole;
+    }
+    
+    public InputManager getInputManager() {
+        return minputManager;
+    }
 }
