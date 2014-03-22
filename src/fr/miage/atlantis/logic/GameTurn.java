@@ -59,7 +59,7 @@ public class GameTurn implements GameRenderListener {
     /**
      * Instance du logger Java
      */
-    private static final Logger logger = Logger.getLogger(GameTurn.class.getName());
+    private static final Logger logger = Logger.getGlobal();
 
     
     

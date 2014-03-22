@@ -68,7 +68,7 @@ public final class GameBoard {
     private ArrayList<GameTile> randomiser;
 
 
-    private static final Logger logger = Logger.getLogger(GameBoard.class.getName());
+    private static final Logger logger = Logger.getGlobal();
     
     
     /**

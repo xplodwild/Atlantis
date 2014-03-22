@@ -40,7 +40,7 @@ public class GameEntity {
     public final static int ACTION_SEASERPENT_CRUSH = 2;
     public final static int ACTION_PLAYER_ESCAPE = 3;
 
-    private static final Logger logger = Logger.getLogger(GameEntity.class.getName());
+    private static final Logger logger = Logger.getGlobal();
     
     /**
      * Nom de l'entité
@@ -80,7 +80,7 @@ public class GameEntity {
         tile.addEntity(this);
         mTile = tile;
 
-        logger.log(Level.INFO, "MOVE " + mName + " TO " + tile.getName(),new Object[]{this,tile});
+        logger.log(Level.FINE, "MOVE " + mName + " TO " + tile.getName(),new Object[]{this,tile});
        
         boolean somethingHappened = false;
         if (logic != null) {
