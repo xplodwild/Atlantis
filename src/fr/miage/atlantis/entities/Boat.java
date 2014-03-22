@@ -17,6 +17,7 @@
  */
 package fr.miage.atlantis.entities;
 
+import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.logic.GameLogic;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +48,24 @@ public class Boat extends GameEntity {
     public Boat() {
         super("Boat");
         this.mOnboard = new ArrayList();
+    }
+
+     /**
+     * Deplace cette entité sur le Tile tile, avec la logique de jeu logic
+     *
+     * @param logic Logique de jeu à adopter
+     * @param tile Tile ou l'on deplace l'entité
+     * @return true si une action s'est déroulée via onEntityCross
+     */
+    @Override
+    public boolean moveToTile(GameLogic logic, GameTile tile) {
+        // On déplace les entités qui sont sur le bateau aussi. On passe pas la logique en
+        // argument pour ne pas déclencher les événements de onEntityCross.
+        for (PlayerToken passenger : mOnboard) {
+            passenger.moveToTile(null, tile);
+        }
+        
+        return super.moveToTile(logic, tile);
     }
 
     /**

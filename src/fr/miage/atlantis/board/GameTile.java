@@ -168,6 +168,34 @@ public abstract class GameTile {
         mIsOnBoard = false;
     }
 
+    /**
+     * Retourne une tile border avec le flag escape adjacente, ou null si il n'y en a pas
+     * @return une tile border avec le flag escape adjacente, ou null si il n'y en a pas
+     */
+    public BorderTile findEscapeBorder() {
+        if (mLeftBottomTile instanceof BorderTile &&
+                ((BorderTile) mLeftBottomTile).isEscapeBorder()) {
+            return (BorderTile) mLeftBottomTile;
+        } else if (mLeftTile instanceof BorderTile &&
+                ((BorderTile) mLeftTile).isEscapeBorder()) {
+            return (BorderTile) mLeftTile;
+        } else if (mLeftUpperTile instanceof BorderTile &&
+                ((BorderTile) mLeftUpperTile).isEscapeBorder()) {
+            return (BorderTile) mLeftUpperTile;
+        } else if (mRightBottomTile instanceof BorderTile &&
+                ((BorderTile) mRightBottomTile).isEscapeBorder()) {
+            return (BorderTile) mRightBottomTile;
+        } else if (mRightTile instanceof BorderTile &&
+                ((BorderTile) mRightTile).isEscapeBorder()) {
+            return (BorderTile) mRightTile;
+        } else if (mRightUpperTile instanceof BorderTile &&
+                ((BorderTile) mRightUpperTile).isEscapeBorder()) {
+            return (BorderTile) mRightUpperTile;
+        }
+
+        return null;
+    }
+
 
     @Override
     public String toString(){

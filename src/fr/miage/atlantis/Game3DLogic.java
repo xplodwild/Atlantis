@@ -27,6 +27,7 @@ import com.jme3.math.Quaternion;
 import com.jme3.math.Spline;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
+import fr.miage.atlantis.board.BorderTile;
 import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.board.TileAction;
 import fr.miage.atlantis.board.WaterTile;
@@ -179,6 +180,19 @@ public class Game3DLogic extends GameLogic {
                                     entNode.setLocalTranslation(-10, 0, 0);
                                     break;
                             }
+                        }
+                    }
+
+                    // On vérifie si la tile est une tile d'escape, et on lance l'animation
+                    // d'escape si c'est le cas
+                    if (dest instanceof WaterTile && ent instanceof PlayerToken) {
+                        WaterTile wt = (WaterTile) dest;
+                        PlayerToken pt = (PlayerToken) ent;
+
+                        if (wt.isLandingTile()) {
+                            mBypassCallbackCount++;
+                            onUnitMove(ent, wt.findEscapeBorder());
+                            pt.setState(PlayerToken.STATE_SAFE);
                         }
                     }
 
