@@ -301,6 +301,19 @@ public class InputActionListener {
      * @return true si l'entité respecte au moins une condition, false sinon
      */
     private boolean checkPickingConstraints(GameLogic.EntityPickRequest request, GameEntity ent) {
+        // On vérifie tout d'abord la contrainte de tile alentour, s'il y en a une.
+        if (request.pickNearTile != null) {
+            GameTile tile = ent.getTile();
+            if (tile.getLeftBottomTile() != request.pickNearTile &&
+                    tile.getLeftTile() != request.pickNearTile &&
+                    tile.getLeftUpperTile() != request.pickNearTile &&
+                    tile.getRightBottomTile() != request.pickNearTile &&
+                    tile.getRightTile() != request.pickNearTile &&
+                    tile.getRightUpperTile() != request.pickNearTile) {
+                return false;
+            }
+        }
+
         if ((request.pickingRestriction & GameLogic.EntityPickRequest.FLAG_PICK_PLAYER_ENTITIES) != 0) {
             // On veut picker un pion du joueur. On vérifie que l'entité est bien cela.
 

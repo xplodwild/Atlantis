@@ -76,6 +76,12 @@ public abstract class GameLogic implements GameTurnListener {
          */
         public Player player;
 
+        /**
+         * Permet de sélectionner uniquement les entités étant dans les tiles autour
+         * de la tile indiquée.
+         */
+        public GameTile pickNearTile;
+
         @Override
         public String toString() {
             return "EntityPickRequest: restriction flags=" + pickingRestriction + "; player=" + player;
