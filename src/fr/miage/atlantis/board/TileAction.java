@@ -257,7 +257,7 @@ public class TileAction {
             }
 
             for (int i = 0; i < TileAction.TILE_COUNT_SPAWN_BOAT_UNDERBEACHTILE; i++) {
-                sRandomizerMountain.add(TileAction.Factory.createBonusBoat());
+                sRandomizerBeach.add(TileAction.Factory.createSpawnEntity(TileAction.ENTITY_BOAT));
             }
 
             for (int i = 0; i < TileAction.TILE_COUNT_BONUS_SWIM_UNDERBEACHTILE; i++) {
@@ -268,10 +268,10 @@ public class TileAction {
                 sRandomizerBeach.add(TileAction.Factory.createBonusBoat());
             }
             for (int i = 0; i < TileAction.TILE_COUNT_WHIRL_UNDERBEACHTILE; i++) {
-                sRandomizerForest.add(TileAction.Factory.createWhirl());
+                sRandomizerBeach.add(TileAction.Factory.createWhirl());
             }
             for (int i = 0; i < TileAction.TILE_COUNT_VOLCANO_UNDERBEACHTILE; i++) {
-                sRandomizerForest.add(TileAction.Factory.createWhirl());
+                sRandomizerBeach.add(TileAction.Factory.createVolcano());
             }
 
 
@@ -319,7 +319,7 @@ public class TileAction {
             }
 
             for (int i = 0; i < TileAction.TILE_COUNT_SPAWN_BOAT_UNDERMOUNTAINTILE; i++) {
-                sRandomizerMountain.add(TileAction.Factory.createBonusBoat());
+                sRandomizerMountain.add(TileAction.Factory.createSpawnEntity(TileAction.ENTITY_BOAT));
             }
 
             for (int i = 0; i < TileAction.TILE_COUNT_BONUS_SWIM_UNDERMOUNTAINTILE; i++) {
@@ -335,10 +335,8 @@ public class TileAction {
             }
 
             for (int i = 0; i < TileAction.TILE_COUNT_VOLCANO_UNDERMOUNTAINTILE; i++) {
-                sRandomizerMountain.add(TileAction.Factory.createWhirl());
+                sRandomizerMountain.add(TileAction.Factory.createVolcano());
             }
-
-            sRandomizerMountain.add(TileAction.Factory.createVolcano());
         }
 
         int random = new Random().nextInt(TileAction.sRandomizerMountain.size());
@@ -383,7 +381,7 @@ public class TileAction {
             }
 
             for (int i = 0; i < TileAction.TILE_COUNT_SPAWN_BOAT_UNDERFORESTTILE; i++) {
-                sRandomizerForest.add(TileAction.Factory.createBonusBoat());
+                sRandomizerForest.add(TileAction.Factory.createSpawnEntity(TileAction.ENTITY_BOAT));
             }
 
             for (int i = 0; i < TileAction.TILE_COUNT_BONUS_SWIM_UNDERFORESTTILE; i++) {
@@ -398,7 +396,7 @@ public class TileAction {
                 sRandomizerForest.add(TileAction.Factory.createWhirl());
             }
             for (int i = 0; i < TileAction.TILE_COUNT_VOLCANO_UNDERFORESTTILE; i++) {
-                sRandomizerForest.add(TileAction.Factory.createWhirl());
+                sRandomizerForest.add(TileAction.Factory.createVolcano());
             }
         }
 

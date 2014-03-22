@@ -708,10 +708,6 @@ public final class GameBoard {
        ss.moveToTile(null, temp);
 
        //-----------------------------------------------------------------------
-
-       //Affiche chaques tiles et son detail
-
-       this.printAllTiles();
     }
 
 
