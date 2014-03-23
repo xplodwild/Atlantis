@@ -37,6 +37,7 @@ import de.lessvoid.nifty.controls.Console;
 import de.lessvoid.nifty.controls.ConsoleCommands;
 import de.lessvoid.nifty.controls.console.builder.ConsoleBuilder;
 import de.lessvoid.nifty.effects.EffectEventId;
+import fr.miage.atlantis.graphics.Game3DRenderer;
 import fr.miage.atlantis.gui.console.commands.BindListCommand;
 import fr.miage.atlantis.gui.console.commands.ClearConsoleCommand;
 import fr.miage.atlantis.gui.console.commands.HelpCommand;
@@ -67,8 +68,12 @@ public final class GuiConsole{
     private ViewPort mViewPort;
     private AudioRenderer maudioRenderer; 
     private InputManager minputManager;
+    private Game3DRenderer mGame3DRenderer;
+    
+
     
     private static Console mConsole;
+    
     
     private Nifty mNifty;
     
@@ -84,11 +89,12 @@ public final class GuiConsole{
      * @param Ar AudioRenderer
      * @param Im InputManager
      */
-    public GuiConsole(AssetManager Am,ViewPort Vp,AudioRenderer Ar,InputManager Im) {        
+    public GuiConsole(AssetManager Am,ViewPort Vp,AudioRenderer Ar,InputManager Im,Game3DRenderer g3dr) {        
         this.mAm=Am;
         this.maudioRenderer=Ar;
         this.minputManager=Im;
         this.mViewPort=Vp;
+        this.mGame3DRenderer=g3dr;
         
         this.mNiftyDisplay = new NiftyJmeDisplay(mAm, minputManager, maudioRenderer, mViewPort);
         
@@ -244,6 +250,10 @@ public final class GuiConsole{
         //Bind la touche d'activation du quicktest
         this.getInputManager().addMapping("quicktest", new KeyTrigger(KeyInput.KEY_F11));
         this.getInputManager().addListener(this.toggleQuicktest(), "quicktest");
+        
+        //Bind la touche d'activation des stats
+        this.getInputManager().addMapping("fps", new KeyTrigger(KeyInput.KEY_F10));
+        this.getInputManager().addListener(this.toggleFps(), "fps");
     }
 
     
@@ -275,12 +285,24 @@ public final class GuiConsole{
                  if(isPressed){
                     GuiConsole.mConsole.output("");
                     if(GameTurn.DBG_QUICKTEST){
-                        GuiConsole.mConsole.output("Désactivation du mode QuickTest");
+                        GuiConsole.mConsole.output("Desactivation du mode QuickTest");
                         GameTurn.DBG_QUICKTEST = false;  
                     }else{
                         GuiConsole.mConsole.output("Activation du mode QuickTest");
                         GameTurn.DBG_QUICKTEST = true;  
                     }                    
+                 }
+            }
+        };
+    }
+    
+    private ActionListener toggleFps(){
+        return new ActionListener() {
+
+            public void onAction(String name, boolean isPressed, float tpf) { 
+                 if(isPressed){
+                    Game3DRenderer g3rdr=GuiConsole.this.getGame3DRenderer();
+                    g3rdr.toggleGraphicsStats();                            
                  }
             }
         };
@@ -334,5 +356,9 @@ public final class GuiConsole{
     
     public InputManager getInputManager() {
         return minputManager;
+    }
+    
+    public Game3DRenderer getGame3DRenderer() {
+        return mGame3DRenderer;
     }
 }

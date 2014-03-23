@@ -46,8 +46,8 @@ import java.util.Random;
  */
 public class Game3DRenderer extends SimpleApplication {
 
-    private static final boolean DEBUG_SHOW_STATS = false;
-
+    
+    private boolean mDisplayGraphicalStats = false;
     private Node mSceneNode;
     private Environment mEnvironment;
     private Game3DLogic mParent;
@@ -69,11 +69,9 @@ public class Game3DRenderer extends SimpleApplication {
     public void simpleInitApp() {
         // Pré-configuration
         assetManager.registerLoader(BlenderModelLoader.class, "blend");
-
-        if (!DEBUG_SHOW_STATS) {
-            setDisplayFps(false);
-            setDisplayStatView(false);
-        }
+        
+        setDisplayFps(false);            
+        setDisplayStatView(false);        
 
         // Configuration camera
         flyCam.setMoveSpeed(200.0f);
@@ -114,11 +112,23 @@ public class Game3DRenderer extends SimpleApplication {
         // Configuration du dé
         mDiceModel = new DiceModel(assetManager);
 
-        mConsole = new GuiConsole(assetManager,guiViewPort,audioRenderer,inputManager);
+        mConsole = new GuiConsole(assetManager,guiViewPort,audioRenderer,inputManager,this);
        
         
     }
 
+    public void toggleGraphicsStats(){
+        if (!mDisplayGraphicalStats) {
+            mDisplayGraphicalStats=true;
+            setDisplayFps(true);            
+            setDisplayStatView(true);
+        }else{
+            mDisplayGraphicalStats=false;
+            setDisplayFps(false);            
+            setDisplayStatView(false); 
+        }
+    }    
+    
     public BoardRenderer getBoardRenderer() {
         return mBoardRenderer;
     }

@@ -44,12 +44,15 @@ public class HelpCommand implements ConsoleCommands.ConsoleCommand {
                 
         csl.output("");
         csl.output("____________________________________________________");
+        csl.output("| Console command list                              |"); 
+        csl.output("____________________________________________________");
         csl.output("|                                                   |");  
         csl.output("| bindlist    :   Liste les raccourcis clavier      |");
         csl.output("| clear       :   Efface la console                 |");
         csl.output("| help        :   Affiche l'aide                    |");
         csl.output("| debug -h    :   Log les message de debug          |");
         csl.output("| quit        :   Quitte le jeu                     |"); 
+        csl.output("| @TODO : ajouter les cmd toggle fps / quicktest    |"); 
         csl.output("|___________________________________________________|");
         csl.output("");
     }

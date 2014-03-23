@@ -45,10 +45,12 @@ public class BindListCommand implements ConsoleCommands.ConsoleCommand {
         
         csl.output("");
         csl.output("____________________________________________________");
+        csl.output("| Keyboard bind list                                |"); 
+        csl.output("____________________________________________________");
         csl.output("|                                                   |");  
-        csl.output("| F12           :   Toggle console                  |");
+        csl.output("| F10           :   Toggle FPS & Graphics info      |");  
         csl.output("| F11           :   Toggle QuickTest mod            |");  
-        csl.output("| add more @console.commands BindListCommand.java   |");
+        csl.output("| F12           :   Toggle console                  |"); 
         csl.output("|___________________________________________________|");
         csl.output("");
     }
