@@ -327,9 +327,10 @@ public class Game3DLogic extends GameLogic {
                             if (action.isImmediate()) {
                                 onPlayTileAction(newTile, action);
                             } else {
-
-                                logger.log(Level.WARNING, "TODO: Tile is not immediate: " + action.toString(), new Object[]{});
-                                // TODO: Stocker la tile dans les tiles du joueur
+                                // L'action est pas immédiate, on stock la tile dans la pile du
+                                // joueur.
+                                Player player = getCurrentTurn().getPlayer();
+                                player.addActionTile(action);
                             }
 
                             // Fin de l'action, étape suivante

@@ -86,29 +86,8 @@ public class GameTurn implements GameRenderListener {
      * Demarre le début du tour de jeu du joueur courant
      */
     public void startTurn() {
-
         logger.log(Level.FINE, "GameTurn: startTurn()", new Object[]{});
         mController.onTurnStart(mPlayer);
-
-
-        //////
-
-        //Peu jouer une carte TileAction dans son pool de tiles
-
-        //3 Déplacement de pions
-
-        //Coule un Tile
-
-        //Effectue l'action du tile ou le stocke
-
-        //Roll the dice
-
-        //Le cas echeant bouge une entity
-
-        //Le cas echeant execute les actions entity necessaires
-
-        //Met l'attribut mTurnIsOver a true pour boucler le tour
-
     }
 
     private void finishTurn() {
@@ -277,10 +256,9 @@ public class GameTurn implements GameRenderListener {
 
                 mController.requestPick(null, request);
             } else {
-                // Le tour commence : on peut utiliser une tile de notre stock local
-                // TODO
-
-                // Sinon, on bouge nos entités. On laisse le joueur choisir que ses entités à lui.
+                // Le tour (normal) du joueur commence. Il peut bouger ses entités comme il le
+                // souhaite, ou utiliser une de ses tiles d'action. Les tiles d'actions sont
+                // déclenchées via le GUI à partir du moment où aucune entité n'est bougée.
                 requestPlayerMovePicking();
             }
         }
