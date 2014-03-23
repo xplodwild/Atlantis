@@ -93,8 +93,7 @@ public class Game3DLogic extends GameLogic {
 
     @Override
     public void boot() {
-        mRenderer.start();
-        prepareGame(new String[]{"Romain", "Olivier"});
+    mRenderer.start();        
     }
 
     @Override

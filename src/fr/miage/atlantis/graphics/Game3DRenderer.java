@@ -221,16 +221,10 @@ public class Game3DRenderer extends SimpleApplication {
     }
 
 
-    int FRAME_COUNT = 0;
-
     @Override
     public void simpleUpdate(float tpf) {
-        FRAME_COUNT++;
 
-        // TEST == Evenements de test
-        if (FRAME_COUNT == 10) {
-            mParent.startGame();
-        }
+
 
         // Mise à jour des animations du HUD
         mHudAnimator.update(tpf);

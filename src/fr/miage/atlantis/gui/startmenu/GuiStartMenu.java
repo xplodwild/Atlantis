@@ -14,6 +14,7 @@ import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.ViewPort;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.EffectBuilder;
+import de.lessvoid.nifty.builder.ElementBuilder;
 import de.lessvoid.nifty.builder.ImageBuilder;
 import de.lessvoid.nifty.builder.LayerBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
@@ -87,11 +88,15 @@ public class GuiStartMenu {
 
 
 
+        this.mNifty.fromXmlWithoutStartScreen("GUI/startScreen.xml");
+        
+        ((StartScreenController)this.mNifty.getScreen("start").getScreenController()).set3DRenderer(this.mGame3DRenderer);
+
 
         /*
          * Créé l'instance de l'ecran d'acceuil du jeu 
          */
-        mNifty.addScreen("start", new ScreenBuilder("start") {
+        mNifty.addScreen("start11", new ScreenBuilder("start11") {
             {
                 /**
                  * Ajoute un controlleur a cet ecran
@@ -155,7 +160,7 @@ public class GuiStartMenu {
                                         this.backgroundColor(new Color(0f, 0f, 0f, 0.5f));
                                         //Proprieté de taille et d'alignement du panel
                                         this.alignRight();
-                                        this.valign(VAlign.Top);
+                                        this.valignTop();
                                         this.width("100%");
                                         this.height("15%");
 
@@ -171,19 +176,20 @@ public class GuiStartMenu {
                                                 this.height("75%");
                                                 this.valignCenter();
                                                 this.alignCenter();
+                                                this.paddingLeft("3%");
 
                                                 //Crée le texte Joueur 1
-                                                this.text(new TextBuilder("pseudo_1") {
+                                                this.text(new TextBuilder("input") {
                                                     {
+
                                                         this.font("Fonts/sansitc.fnt");
                                                         this.text("Joueur 1");
-                                                        this.color(Color.WHITE);this.backgroundColor(Color.WHITE);
-                                                        
+                                                        this.color(new Color(0, 0.376f, 0.67f, 1));
                                                     }
                                                 });
 
                                                 //Créé la zone de texte ou taper le pseudo du joueur 1
-                                                this.control(new TextFieldBuilder("input", "hello textfield") {
+                                                this.control(new TextFieldBuilder("inputJ1", "hello textfield") {
                                                     {
                                                         this.width("80%");
                                                         this.backgroundColor(Color.NONE);
@@ -199,11 +205,13 @@ public class GuiStartMenu {
                                                 this.height("75%");
                                                 this.valignCenter();
                                                 this.alignCenter();
+                                                this.paddingLeft("3%");
 
-                                                this.text(new TextBuilder("pseudo_1") {
+                                                this.text(new TextBuilder("pseudo_2") {
                                                     {
                                                         this.font("Fonts/sansitc.fnt");
-                                                        this.text("Joueur 1");
+                                                        this.text("Joueur 2");
+                                                        this.color(new Color(0.203f, 0.606f, 0.078f, 1));
                                                     }
                                                 });
 
@@ -224,11 +232,13 @@ public class GuiStartMenu {
                                                 this.height("75%");
                                                 this.valignCenter();
                                                 this.alignCenter();
+                                                this.paddingLeft("3%");
 
-                                                this.text(new TextBuilder("pseudo_1") {
+                                                this.text(new TextBuilder("pseudo_3") {
                                                     {
                                                         this.font("Fonts/sansitc.fnt");
-                                                        this.text("Joueur 1");
+                                                        this.text("Joueur 3");
+                                                        this.color(new Color(0.929f, 0.627f, 0f, 1));
                                                     }
                                                 });
 
@@ -249,11 +259,13 @@ public class GuiStartMenu {
                                                 this.height("75%");
                                                 this.valignCenter();
                                                 this.alignCenter();
+                                                this.paddingLeft("3%");
 
-                                                this.text(new TextBuilder("pseudo_1") {
+                                                this.text(new TextBuilder("pseudo_4") {
                                                     {
                                                         this.font("Fonts/sansitc.fnt");
-                                                        this.text("Joueur 1");
+                                                        this.text("Joueur 4");
+                                                        this.color(new Color(0.776f, 0f, 0.043f, 1));
                                                     }
                                                 });
 
@@ -283,7 +295,7 @@ public class GuiStartMenu {
 
                                         this.backgroundColor(new Color(0.8f, 0.8f, 0.8f, 0.75f));
                                         this.alignRight();
-                                        this.valign(VAlign.Bottom);
+                                        this.valign(ElementBuilder.VAlign.Bottom);
                                         this.width("100%");
                                         this.height("85%");
 
@@ -294,19 +306,6 @@ public class GuiStartMenu {
                                                 this.height("75%");
                                                 this.valignCenter();
                                                 this.alignCenter();
-                                                /*
-                                                this.image(new ImageBuilder("imageDeFond") {
-                                                    {
-                                                        filename("Interface/photo2.jpg");
-                                                        this.alignLeft();
-                                                        this.valignTop();
-                                                    }
-
-                                                    @Override
-                                                    public void panel(PanelBuilder panelBuilder) {
-                                                        super.panel(panelBuilder); //To change body of generated methods, choose Tools | Templates.
-                                                    }
-                                                });*/
                                             }
                                         });
 
@@ -317,19 +316,6 @@ public class GuiStartMenu {
                                                 this.height("75%");
                                                 this.valignCenter();
                                                 this.alignCenter();
-                                                /*
-                                                this.image(new ImageBuilder("imageDeFond") {
-                                                    {
-                                                        filename("Interface/photo2.jpg");
-                                                        this.alignLeft();
-                                                        this.valignTop();
-                                                    }
-
-                                                    @Override
-                                                    public void panel(PanelBuilder panelBuilder) {
-                                                        super.panel(panelBuilder); //To change body of generated methods, choose Tools | Templates.
-                                                    }
-                                                });*/
                                             }
                                         });
 
@@ -340,7 +326,6 @@ public class GuiStartMenu {
                                                 this.height("75%");
                                                 this.valignCenter();
                                                 this.alignCenter();
-
                                             }
                                         });
 
@@ -351,15 +336,9 @@ public class GuiStartMenu {
                                                 this.height("75%");
                                                 this.valignCenter();
                                                 this.alignCenter();
-
-                                               
                                             }
                                         });
 
-
-
-
-                                        //</control>
                                     }
                                 });
 

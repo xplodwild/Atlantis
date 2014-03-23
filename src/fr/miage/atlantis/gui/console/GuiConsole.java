@@ -44,6 +44,7 @@ import fr.miage.atlantis.gui.console.commands.HelpCommand;
 import fr.miage.atlantis.gui.console.commands.LoggingCommand;
 import fr.miage.atlantis.gui.console.commands.QuitCommand;
 import fr.miage.atlantis.gui.controllers.ConsoleController;
+import fr.miage.atlantis.gui.controllers.StartScreenController;
 import fr.miage.atlantis.logic.GameTurn;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -254,10 +255,27 @@ public final class GuiConsole{
         //Bind la touche d'activation des stats
         this.getInputManager().addMapping("fps", new KeyTrigger(KeyInput.KEY_F10));
         this.getInputManager().addListener(this.toggleFps(), "fps");
+        
+        //Bind la touche d'activation des stats
+        this.getInputManager().addMapping("menu", new KeyTrigger(KeyInput.KEY_F1));
+        this.getInputManager().addListener(this.toggleMenu(), "menu");
     }
 
     
-    
+    private ActionListener toggleMenu(){
+        return new ActionListener() {
+
+            public void onAction(String name, boolean isPressed, float tpf) {                
+                if(isPressed){
+                    
+                    GuiConsole.this.mNifty.fromXmlWithoutStartScreen("GUI/startScreen.xml");
+                    ((StartScreenController)mNifty.getScreen("start").getScreenController()).set3DRenderer(mGame3DRenderer);
+                    GuiConsole.this.mNifty.gotoScreen("start");
+                }
+                
+            }
+        };
+    }
     
     
     private ActionListener toggleConsole(){
