@@ -21,7 +21,9 @@ import fr.miage.atlantis.GameDice;
 import fr.miage.atlantis.Player;
 import fr.miage.atlantis.board.GameBoard;
 import fr.miage.atlantis.board.GameTile;
+import fr.miage.atlantis.entities.Boat;
 import fr.miage.atlantis.entities.GameEntity;
+import fr.miage.atlantis.entities.PlayerToken;
 
 /**
  * Classe représentant toute la partie logique du jeu
@@ -73,6 +75,12 @@ public abstract class GameLogic implements GameTurnListener {
          * la restriction s'appliquera au joueur passé ici
          */
         public Player player;
+
+        /**
+         * Permet de sélectionner uniquement les entités étant dans les tiles autour
+         * de la tile indiquée.
+         */
+        public GameTile pickNearTile;
 
         @Override
         public String toString() {
@@ -242,5 +250,10 @@ public abstract class GameLogic implements GameTurnListener {
      * @param tile La tile pickée
      */
     public abstract void onTilePicked(GameTile tile);
+
+    /**
+     * Signale au moteur logique qu'on est descendu d'un bateau
+     */
+    public abstract void onPlayerDismountBoat(PlayerToken player, Boat b);
     //--------------------------------------------------------------------------
 }
