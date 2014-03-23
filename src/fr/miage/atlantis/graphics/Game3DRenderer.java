@@ -153,6 +153,10 @@ public class Game3DRenderer extends SimpleApplication {
         return mFutureUpdater;
     }
 
+    public Node getSceneNode() {
+        return mSceneNode;
+    }
+
     public void rollDiceAnimation(final int finalFace) {
         mSceneNode.attachChild(mDiceModel);
         mDiceModel.setLocalTranslation(cam.getLocation().add(cam.getDirection().mult(150.0f)));

@@ -59,6 +59,7 @@ public class InputActionListener {
 
     private final static String INPUTMAP_MOUSE_HOVER = "mouse_hover";
     private final static String INPUTMAP_MOUSE_CLICK = "mouse_click";
+    private final static String INPUTMAP_MOUSE_RIGHT_CLICK = "mouse_right_click";
 
     private InputManager mInputManager;
     private Game3DRenderer mRenderer;
@@ -122,13 +123,21 @@ public class InputActionListener {
         }
     };
 
+    private ActionListener mMouseRightClickListener = new ActionListener() {
+        public void onAction(String name, boolean isPressed, float tpf) {
+            // Si on clic droit et qu'on est en requête, on demande à annuler les requêtes
+            if (isPressed && mPickingRequest != REQUEST_NONE) {
+                mRenderer.getLogic().resetPickingAction();
+            }
+        }
+    };
+
     private ActionListener mMouseClickListener = new ActionListener() {
         public void onAction(String name, boolean isPressed, float tpf) {
             // Si on clique et qu'on a effectivement une requête de picking
             if (isPressed && mPickingRequest != REQUEST_NONE) {
                 // On effectue le picking
                 PickingResult result = performPicking();
-
 
                 if (result != null) {
                     // On a complété la requête. On laisse la place pour des requêtes de picking
@@ -184,6 +193,17 @@ public class InputActionListener {
         inputManager.addMapping(INPUTMAP_MOUSE_CLICK,
                 new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
         inputManager.addListener(mMouseClickListener, INPUTMAP_MOUSE_CLICK);
+
+        inputManager.addMapping(INPUTMAP_MOUSE_RIGHT_CLICK,
+                new MouseButtonTrigger(MouseInput.BUTTON_RIGHT));
+        inputManager.addListener(mMouseRightClickListener, INPUTMAP_MOUSE_RIGHT_CLICK);
+    }
+
+    /**
+     * Force la désactivation de la requête de picking en cours d'exécution
+     */
+    public void forceResetRequest() {
+        mPickingRequest = REQUEST_NONE;
     }
 
     public void requestPicking(GameLogic.EntityPickRequest entRq, GameLogic.TilePickRequest tileRq) {
@@ -301,6 +321,19 @@ public class InputActionListener {
      * @return true si l'entité respecte au moins une condition, false sinon
      */
     private boolean checkPickingConstraints(GameLogic.EntityPickRequest request, GameEntity ent) {
+        // On vérifie tout d'abord la contrainte de tile alentour, s'il y en a une.
+        if (request.pickNearTile != null) {
+            GameTile tile = ent.getTile();
+            if (tile.getLeftBottomTile() != request.pickNearTile &&
+                    tile.getLeftTile() != request.pickNearTile &&
+                    tile.getLeftUpperTile() != request.pickNearTile &&
+                    tile.getRightBottomTile() != request.pickNearTile &&
+                    tile.getRightTile() != request.pickNearTile &&
+                    tile.getRightUpperTile() != request.pickNearTile) {
+                return false;
+            }
+        }
+
         if ((request.pickingRestriction & GameLogic.EntityPickRequest.FLAG_PICK_PLAYER_ENTITIES) != 0) {
             // On veut picker un pion du joueur. On vérifie que l'entité est bien cela.
 

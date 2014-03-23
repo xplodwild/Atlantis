@@ -168,9 +168,7 @@ public class BoardRenderer extends Node {
 
         // Si c'est une tile au dessus de l'eau, on utilise un mesh avec la
         // texture qui va bien. Sinon, on fait un contour seulement.
-        if (tile.getHeight() < 0) {
-            return;
-        } else if (tile.getHeight() > 0) {
+        if (tile.getHeight() > 0) {
             output = new TileModel(tile.getName(), tile.getHeight(), mAssetManager);
         } else {
             // On détermine la couleur en fonction du type de tile
@@ -200,7 +198,14 @@ public class BoardRenderer extends Node {
         output.setUserData(DATA_TILE_OFFSET, mTileOffset);
         mNodeToGameTiles.put(output, tile);
         mGameTileToModel.put(tile, (AbstractTileModel) output);
-        attachChild(output);
+
+        // Les tiles border ont une hauteur inférieure à 0. On en a besoin pour situer les escape,
+        // mais on ne veut pas les afficher, donc on ne les attache pas au graphe de scène.
+        if (tile.getHeight() >= 0) {
+            attachChild(output);
+        } else {
+            output.move(0, 10, 0);
+        }
 
         System.out.println("Tile " + mTiles.size() + ": " + tile.getName() + " (height=" + tile.getHeight() + ")");
         mTiles.add(output);

@@ -27,6 +27,7 @@ import com.jme3.math.Quaternion;
 import com.jme3.math.Spline;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
+import fr.miage.atlantis.board.BorderTile;
 import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.board.TileAction;
 import fr.miage.atlantis.board.WaterTile;
@@ -40,9 +41,11 @@ import fr.miage.atlantis.graphics.AnimationBrain;
 import fr.miage.atlantis.graphics.FutureCallback;
 import fr.miage.atlantis.graphics.Game3DRenderer;
 import fr.miage.atlantis.graphics.ParticlesFactory;
+import fr.miage.atlantis.graphics.Utils;
 import fr.miage.atlantis.graphics.hud.TileActionDisplay;
 import fr.miage.atlantis.graphics.models.AbstractTileModel;
 import fr.miage.atlantis.graphics.models.AnimatedModel;
+import fr.miage.atlantis.graphics.models.BoatModel;
 import fr.miage.atlantis.graphics.models.PlayerModel;
 import fr.miage.atlantis.graphics.models.SeaSerpentModel;
 import fr.miage.atlantis.graphics.models.SharkModel;
@@ -75,12 +78,18 @@ public class Game3DLogic extends GameLogic {
     
 
     private int mBypassCallbackCount;
+    private List<EntityPickRequest> mEntRequestHistory;
+    private List<TilePickRequest> mTileRequestHistory;
+    private boolean mCanCancelPickingAction;
 
 
     public Game3DLogic() {
         super();
         mRenderer = new Game3DRenderer(this);
         mBypassCallbackCount = 0;
+        mEntRequestHistory = new ArrayList<EntityPickRequest>();
+        mTileRequestHistory = new ArrayList<TilePickRequest>();
+        mCanCancelPickingAction = false;
     }
 
     @Override
@@ -111,6 +120,31 @@ public class Game3DLogic extends GameLogic {
         mRenderer.getEntitiesRenderer().addEntity(boat1);
 
         super.startGame();
+    }
+
+    /**
+     * Remet à zéro les éléments pickée et relance le dernier picking
+     */
+    public boolean resetPickingAction() {
+        assert mEntRequestHistory.size() == mTileRequestHistory.size();
+
+        if (mCanCancelPickingAction && mEntRequestHistory.size() > 1
+                && mTileRequestHistory.size() > 1) {
+            // On relance la requête avant la dernière requête
+            int reqId = mTileRequestHistory.size() - 2;
+            TilePickRequest tileRq = mTileRequestHistory.get(reqId);
+            EntityPickRequest entRq = mEntRequestHistory.get(reqId);
+            mRenderer.getInputListener().forceResetRequest();
+            requestPick(entRq, tileRq);
+
+            // Une seule action peut être annulée.
+            mCanCancelPickingAction = false;
+
+            return true;
+        } else {
+            // Rien à relancer ou pas possible
+            return false;
+        }
     }
 
     public void onTurnStart(Player p) {
@@ -171,6 +205,43 @@ public class Game3DLogic extends GameLogic {
 
                     // Remise à zéro de l'orientation
                     entNode.setLocalRotation(Quaternion.IDENTITY);
+
+                    // Gestion de la montée sur un bateaux
+                    if (entNode instanceof PlayerModel) {
+                        PlayerToken pt = (PlayerToken) ent;
+                        if (pt.getState() == PlayerToken.STATE_ON_BOAT) {
+                            Boat b = pt.getBoat();
+                            BoatModel bm = (BoatModel) mRenderer.getEntitiesRenderer().getNodeFromEntity(b);
+                            entNode.getParent().detachChild(entNode);
+                            bm.attachChild(entNode);
+                            entNode.setLocalTranslation(Vector3f.ZERO);
+                            entNode.rotate(0, Utils.degreesToRad(90), 0);
+
+                            switch (b.getPlayerSlot(pt)) {
+                                case 1:
+                                    entNode.setLocalTranslation(10, 0, 0);
+                                    break;
+
+                                case 2:
+                                    entNode.setLocalTranslation(-10, 0, 0);
+                                    break;
+                            }
+                        }
+                    }
+
+                    // On vérifie si la tile est une tile d'escape, et on lance l'animation
+                    // d'escape si c'est le cas
+                    if (dest instanceof WaterTile && ent instanceof PlayerToken) {
+                        WaterTile wt = (WaterTile) dest;
+                        PlayerToken pt = (PlayerToken) ent;
+
+                        if (wt.isLandingTile()) {
+                            mBypassCallbackCount++;
+                            onUnitMove(ent, wt.findEscapeBorder());
+                            pt.setState(PlayerToken.STATE_SAFE);
+                        }
+                    }
+
 
                     // On notifie le jeu, toutes les actions nécessaires sont faites (si on
                     // ne saute pas la notification, si c'est appelé d'un autre événement).
@@ -418,6 +489,10 @@ public class Game3DLogic extends GameLogic {
         // On a besoin de picker une entité
         
         logger.log(Level.FINE, "Game3DLogic: requestPick ", new Object[]{});
+
+        mEntRequestHistory.add(entRq);
+        mTileRequestHistory.add(tileRq);
+
         mRenderer.getInputListener().requestPicking(entRq, tileRq);
     }
 
@@ -442,9 +517,10 @@ public class Game3DLogic extends GameLogic {
 
                 // On notifie le tour du mouvement
                 currentTurn.moveEntity(mPickedEntity, b);
-                
+
                 // Remise à zéro
                 mPickedEntity = null;
+                mCanCancelPickingAction = false;
             } else {
                 // On assume ici que lorsqu'on picke une entité, on veut picker une tile ou un bateau
                 // après, puisqu'on a des mouvements restant (et qu'un tour est forcément séquentiel)
@@ -468,10 +544,12 @@ public class Game3DLogic extends GameLogic {
                     entPick = new EntityPickRequest();
                     entPick.pickingRestriction = EntityPickRequest.FLAG_PICK_BOAT_WITH_ROOM;
                     entPick.player = null;
+                    entPick.pickNearTile = ent.getTile();
                 }
 
                 // On lance la requête
                 requestPick(entPick, tilePick);
+                mCanCancelPickingAction = true;
             }
         } else if (currentTurn.hasRolledDice() && currentTurn.getRemainingDiceMoves() > 0) {
             // Le dé a été lancé, et on a des mouvements de dé restant. La seule chose possible, c'est
@@ -484,6 +562,7 @@ public class Game3DLogic extends GameLogic {
             tilePick.requiredHeight = 0;
 
             requestPick(null, tilePick);
+            mCanCancelPickingAction = true;
         }
     }
 
@@ -504,5 +583,18 @@ public class Game3DLogic extends GameLogic {
         }
 
         mPickedEntity = null;
+        mCanCancelPickingAction = false;
+    }
+
+    @Override
+    public void onPlayerDismountBoat(PlayerToken player, Boat b) {
+        // On détache le player du bateau, puis on le remet dans le board
+        PlayerModel pm = (PlayerModel) mRenderer.getEntitiesRenderer().getNodeFromEntity(player);
+        Vector3f existingPos = pm.getWorldTranslation();
+        pm.getParent().detachChild(pm);
+
+        Node node = mRenderer.getSceneNode();
+        node.attachChild(pm);
+        pm.setLocalTranslation(existingPos);
     }
 }
