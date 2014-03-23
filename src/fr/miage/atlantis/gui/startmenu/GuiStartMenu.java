@@ -87,93 +87,127 @@ public class GuiStartMenu {
 
 
 
+
+        /*
+         * Créé l'instance de l'ecran d'acceuil du jeu 
+         */
         mNifty.addScreen("start", new ScreenBuilder("start") {
             {
-
-
-
                 /**
-                 * Ajoute un controlleur perso a cet ecran
+                 * Ajoute un controlleur a cet ecran
                  */
                 controller(new StartScreenController());
 
                 /**
-                 * Création du Layer sur cet ecran.
+                 * Création du Layer de cet ecran.
                  */
                 layer(new LayerBuilder("background") {
                     {
 
-                        /*
-                         * Propriétés d'agencement des elements
-                         */
+                        //Agencement des element sur un pattern horizontal
                         this.childLayoutHorizontal();
+
+                        //Aucune couleur de fond afin d'avoir une transparence totale, la couleur sera géré via les element fils
                         this.backgroundColor(Color.NONE);
 
-                        /**
-                         * Ajoute mon controlleur personnalisé sur ce panel
-                         */
-                        controller(new StartScreenController());
 
                         /*
-                         * Création d'un panel dans le layer
+                         * Création d'un panel de gauche de l'ecran qui contiendras nos boutons (Nouvelle partie,etc.)
                          */
                         panel(new PanelBuilder("panelGauche") {
                             {
-                                childLayoutCenter(); // panel properties, add more...               
-
-                                this.backgroundColor(Color.WHITE);
+                                //Agencement des Boutons en partant du centre
+                                childLayoutCenter();
+                                //Couleur du panel (Gris foncé faiblement transparent)
+                                this.backgroundColor(new Color(0.2f, 0.2f, 0.2f, 0.3f));
+                                //Proprieté de taille et d'alignement du panel
                                 this.alignLeft();
-                                this.valign(VAlign.Top);
+                                this.valignTop();
                                 this.width("20%");
-                                this.height("100%");
-
-
-
-                                //</control>
+                                this.height("80%");
                             }
                         });
-                        // </panel>
 
-
-
+                        /*
+                         * Création d'un panel droit de l'ecran qui contiendras les zone de création des players
+                         */
                         panel(new PanelBuilder("panelDroit") {
                             {
-                                childLayoutCenter(); // panel properties, add more...               
-
+                                //Agencement des element en partant du centre
+                                childLayoutCenter();
+                                //On laisse la gestion des couleurs aux elements fils
                                 this.backgroundColor(Color.NONE);
+                                //Proprieté de taille et d'alignement du panel
                                 this.alignRight();
-                                this.valign(VAlign.Top);
+                                this.valignTop();
                                 this.width("80%");
-                                this.height("100%");
+                                this.height("80%");
 
-                                
-
-
-
+                                /**
+                                 * Création de la partie haute de ce panel de
+                                 * droite
+                                 */
                                 panel(new PanelBuilder("haut") {
                                     {
-                                        childLayoutHorizontal(); // panel properties, add more...               
-
-                                        this.backgroundColor(Color.randomColor());
+                                        //Agencement des elements de manière horizontale
+                                        childLayoutHorizontal();
+                                        //Couleur du panel (Gris foncé faiblement transparent)
+                                        this.backgroundColor(new Color(0f, 0f, 0f, 0.5f));
+                                        //Proprieté de taille et d'alignement du panel
                                         this.alignRight();
                                         this.valign(VAlign.Top);
                                         this.width("100%");
                                         this.height("15%");
 
+                                        /*
+                                         * Création du quart joueur 1 de la partie haute
+                                         */
                                         panel(new PanelBuilder("haut_1") {
+                                            {
+                                                //Agencement des elements de manière verticale
+                                                childLayoutVertical();
+                                                //Proprieté de taille et d'alignement du panel
+                                                this.width("25%");
+                                                this.height("75%");
+                                                this.valignCenter();
+                                                this.alignCenter();
+
+                                                //Crée le texte Joueur 1
+                                                this.text(new TextBuilder("pseudo_1") {
+                                                    {
+                                                        this.font("Fonts/sansitc.fnt");
+                                                        this.text("Joueur 1");
+                                                        this.color(Color.WHITE);this.backgroundColor(Color.WHITE);
+                                                        
+                                                    }
+                                                });
+
+                                                //Créé la zone de texte ou taper le pseudo du joueur 1
+                                                this.control(new TextFieldBuilder("input", "hello textfield") {
+                                                    {
+                                                        this.width("80%");
+                                                        this.backgroundColor(Color.NONE);
+                                                    }
+                                                });
+                                            }
+                                        });
+
+                                        panel(new PanelBuilder("haut_2") {
                                             {
                                                 childLayoutVertical();
                                                 this.width("25%");
                                                 this.height("75%");
                                                 this.valignCenter();
                                                 this.alignCenter();
-                                                
-                                                this.text(new TextBuilder("pseudo_1"){{
-                                                    this.font("Fonts/sansitc.fnt");
-                                                    this.text("Joueur 1");
-                                                    }});
-                                                
-                                                
+
+                                                this.text(new TextBuilder("pseudo_1") {
+                                                    {
+                                                        this.font("Fonts/sansitc.fnt");
+                                                        this.text("Joueur 1");
+                                                    }
+                                                });
+
+
                                                 control(new TextFieldBuilder("input", "hello textfield") {
                                                     {
                                                         width("80%");
@@ -182,44 +216,23 @@ public class GuiStartMenu {
                                                 });
                                             }
                                         });
-                                        
-                                        panel(new PanelBuilder("haut_2") {
-                                            {
-                                               childLayoutVertical();
-                                                this.width("25%");
-                                                this.height("75%");
-                                                this.valignCenter();
-                                                this.alignCenter();
-                                                
-                                                this.text(new TextBuilder("pseudo_1"){{
-                                                    this.font("Fonts/sansitc.fnt");
-                                                    this.text("Joueur 1");
-                                                    }});
-                                                
-                                                
-                                                control(new TextFieldBuilder("input", "hello textfield") {
-                                                    {
-                                                        width("80%");
 
-                                                    }
-                                                });
-                                            }
-                                        });
-                                        
                                         panel(new PanelBuilder("haut_3") {
                                             {
-                                                 childLayoutVertical();
+                                                childLayoutVertical();
                                                 this.width("25%");
                                                 this.height("75%");
                                                 this.valignCenter();
                                                 this.alignCenter();
-                                                
-                                                this.text(new TextBuilder("pseudo_1"){{
-                                                    this.font("Fonts/sansitc.fnt");
-                                                    this.text("Joueur 1");
-                                                    }});
-                                                
-                                                
+
+                                                this.text(new TextBuilder("pseudo_1") {
+                                                    {
+                                                        this.font("Fonts/sansitc.fnt");
+                                                        this.text("Joueur 1");
+                                                    }
+                                                });
+
+
                                                 control(new TextFieldBuilder("input", "hello textfield") {
                                                     {
                                                         width("80%");
@@ -228,21 +241,23 @@ public class GuiStartMenu {
                                                 });
                                             }
                                         });
-                                        
+
                                         panel(new PanelBuilder("haut_4") {
                                             {
-                                                 childLayoutVertical();
+                                                childLayoutVertical();
                                                 this.width("25%");
                                                 this.height("75%");
                                                 this.valignCenter();
                                                 this.alignCenter();
-                                                
-                                                this.text(new TextBuilder("pseudo_1"){{
-                                                    this.font("Fonts/sansitc.fnt");
-                                                    this.text("Joueur 1");
-                                                    }});
-                                                
-                                                
+
+                                                this.text(new TextBuilder("pseudo_1") {
+                                                    {
+                                                        this.font("Fonts/sansitc.fnt");
+                                                        this.text("Joueur 1");
+                                                    }
+                                                });
+
+
                                                 control(new TextFieldBuilder("input", "hello textfield") {
                                                     {
                                                         width("80%");
@@ -258,11 +273,11 @@ public class GuiStartMenu {
                                         //</control>
                                     }
                                 });
-                                
-                                
-                                
-                                
-                                 panel(new PanelBuilder("bas") {
+
+
+
+
+                                panel(new PanelBuilder("bas") {
                                     {
                                         childLayoutHorizontal(); // panel properties, add more...               
 
@@ -279,88 +294,65 @@ public class GuiStartMenu {
                                                 this.height("75%");
                                                 this.valignCenter();
                                                 this.alignCenter();
-                                                
+                                                /*
                                                 this.image(new ImageBuilder("imageDeFond") {
-                                    {
-                                        filename("Interface/photo2.jpg");
-                                        this.alignLeft();
-                                        this.valignTop();
-                                    }
+                                                    {
+                                                        filename("Interface/photo2.jpg");
+                                                        this.alignLeft();
+                                                        this.valignTop();
+                                                    }
 
-                                    @Override
-                                    public void panel(PanelBuilder panelBuilder) {
-                                        super.panel(panelBuilder); //To change body of generated methods, choose Tools | Templates.
-                                    }
-                                });
+                                                    @Override
+                                                    public void panel(PanelBuilder panelBuilder) {
+                                                        super.panel(panelBuilder); //To change body of generated methods, choose Tools | Templates.
+                                                    }
+                                                });*/
                                             }
                                         });
-                                        
+
                                         panel(new PanelBuilder("bas_2") {
                                             {
-                                               childLayoutVertical();
+                                                childLayoutVertical();
                                                 this.width("25%");
                                                 this.height("75%");
                                                 this.valignCenter();
                                                 this.alignCenter();
-                                                
-                                               this.image(new ImageBuilder("imageDeFond") {
-                                    {
-                                        filename("Interface/photo2.jpg");
-                                        this.alignLeft();
-                                        this.valignTop();
-                                    }
+                                                /*
+                                                this.image(new ImageBuilder("imageDeFond") {
+                                                    {
+                                                        filename("Interface/photo2.jpg");
+                                                        this.alignLeft();
+                                                        this.valignTop();
+                                                    }
 
-                                    @Override
-                                    public void panel(PanelBuilder panelBuilder) {
-                                        super.panel(panelBuilder); //To change body of generated methods, choose Tools | Templates.
-                                    }
-                                });
+                                                    @Override
+                                                    public void panel(PanelBuilder panelBuilder) {
+                                                        super.panel(panelBuilder); //To change body of generated methods, choose Tools | Templates.
+                                                    }
+                                                });*/
                                             }
                                         });
-                                        
+
                                         panel(new PanelBuilder("bas_3") {
                                             {
-                                                 childLayoutVertical();
+                                                childLayoutVertical();
                                                 this.width("25%");
                                                 this.height("75%");
                                                 this.valignCenter();
                                                 this.alignCenter();
-                                                
-                                                this.image(new ImageBuilder("imageDeFond") {
-                                    {
-                                        filename("Interface/photo2.jpg");
-                                        this.alignLeft();
-                                        this.valignTop();
-                                    }
 
-                                    @Override
-                                    public void panel(PanelBuilder panelBuilder) {
-                                        super.panel(panelBuilder); //To change body of generated methods, choose Tools | Templates.
-                                    }
-                                });
                                             }
                                         });
-                                        
+
                                         panel(new PanelBuilder("bas_4") {
                                             {
-                                                 childLayoutVertical();
+                                                childLayoutVertical();
                                                 this.width("25%");
                                                 this.height("75%");
                                                 this.valignCenter();
                                                 this.alignCenter();
-                                                
-                                                this.image(new ImageBuilder("imageDeFond") {
-                                    {
-                                        filename("Interface/photo2.jpg");
-                                        this.alignLeft();
-                                        this.valignTop();
-                                    }
 
-                                    @Override
-                                    public void panel(PanelBuilder panelBuilder) {
-                                        super.panel(panelBuilder); //To change body of generated methods, choose Tools | Templates.
-                                    }
-                                });
+                                               
                                             }
                                         });
 
