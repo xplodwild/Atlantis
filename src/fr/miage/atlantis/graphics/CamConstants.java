@@ -33,6 +33,10 @@ import com.jme3.scene.Spatial;
 public class CamConstants {
 
     public static void moveMenu(Spatial camNode, Camera cam) {
+        if (camNode.getNumControls() > 1) {
+            camNode.removeControl(camNode.getControl(1));
+        }
+
         final Vector3f finalPos = new Vector3f(-242.6336f, 49.71627f, 591.2137f);
 
         MotionPath path = new MotionPath();
@@ -55,6 +59,10 @@ public class CamConstants {
     }
 
     public static void moveAboveBoard(Spatial camNode, Camera cam) {
+        if (camNode.getNumControls() > 1) {
+            camNode.removeControl(camNode.getControl(1));
+        }
+
         final Vector3f finalPos = new Vector3f(-398.292f, 572.2102f, 176.78018f);
 
         MotionPath path = new MotionPath();
