@@ -77,7 +77,7 @@ public class Game3DLogic extends GameLogic {
      /**
      * Instance du logger Java
      */
-    private static final Logger logger = Logger.getLogger(Game3DLogic.class.getName());
+    private static final Logger logger = Logger.getGlobal();
 
     public Game3DLogic() {
         super();

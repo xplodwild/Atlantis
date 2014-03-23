@@ -20,6 +20,7 @@ package fr.miage.atlantis.gui.console.commands;
 
 import de.lessvoid.nifty.controls.Console;
 import de.lessvoid.nifty.controls.ConsoleCommands;
+import fr.miage.atlantis.gui.console.GuiConsole;
 
 
 /**
@@ -38,13 +39,19 @@ public class BindListCommand implements ConsoleCommands.ConsoleCommand {
      */
     @Override
     public void execute(final String[] args) { 
-        System.out.print("");
-        System.out.print("____________________________________________________");
-        System.out.print("|                                                   |");  
-        System.out.print("| F1          :   Toggle console                    |");
-        System.out.print("|                                                   |");  
-        System.out.print("| add more @console.commands BindListCommand.java   |");
-        System.out.print("|___________________________________________________|");
-        System.out.print("");
+        
+         //On liste ici toutes les commandes executable dans la console 
+        Console csl=GuiConsole.getConsole();
+        
+        csl.output("");
+        csl.output("____________________________________________________");
+        csl.output("| Keyboard bind list                                |"); 
+        csl.output("____________________________________________________");
+        csl.output("|                                                   |");  
+        csl.output("| F10           :   Toggle FPS & Graphics info      |");  
+        csl.output("| F11           :   Toggle QuickTest mod            |");  
+        csl.output("| F12           :   Toggle console                  |"); 
+        csl.output("|___________________________________________________|");
+        csl.output("");
     }
 }

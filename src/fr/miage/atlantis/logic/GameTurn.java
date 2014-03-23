@@ -44,7 +44,7 @@ import java.util.logging.Logger;
 public class GameTurn implements GameRenderListener {
 
     
-    public final static boolean DBG_QUICKTEST = false;
+    public static boolean DBG_QUICKTEST = false;
 
     private TileAction mTileAction;
     private List<TileAction> mRemoteTiles;
@@ -61,7 +61,7 @@ public class GameTurn implements GameRenderListener {
     /**
      * Instance du logger Java
      */
-    private static final Logger logger = Logger.getLogger(GameTurn.class.getName());
+    private static final Logger logger = Logger.getGlobal();
 
     
     
