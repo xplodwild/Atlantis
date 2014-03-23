@@ -45,14 +45,14 @@ public class GuiStartMenu {
      * @param Ar AudioRenderer
      * @param Im InputManager
      */
-    public GuiStartMenu(AssetManager Am, ViewPort Vp, AudioRenderer Ar, InputManager Im, Game3DRenderer g3dr) {
-        this.mAm = Am;
-        this.maudioRenderer = Ar;
-        this.minputManager = Im;
-        this.mViewPort = Vp;
+    public GuiStartMenu(Game3DRenderer g3dr,NiftyJmeDisplay jmdsp) {
+        this.mAm = g3dr.getAssetManager();
+        this.maudioRenderer = g3dr.getAudioRenderer();
+        this.minputManager = g3dr.getInputManager();
+        this.mViewPort = g3dr.getGuiViewPort();
         this.mGame3DRenderer = g3dr;
 
-        this.mNiftyDisplay = new NiftyJmeDisplay(mAm, minputManager, maudioRenderer, mViewPort);
+        this.mNiftyDisplay = jmdsp;
 
 
         //Récupère l'obj nifty de l'ecran courant

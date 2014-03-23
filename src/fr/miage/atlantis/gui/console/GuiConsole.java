@@ -74,6 +74,7 @@ public final class GuiConsole{
     private AudioRenderer maudioRenderer;
     private InputManager minputManager;
     private Game3DRenderer mGame3DRenderer;
+    
 
 
 
@@ -94,14 +95,14 @@ public final class GuiConsole{
      * @param Ar AudioRenderer
      * @param Im InputManager
      */
-    public GuiConsole(AssetManager Am,ViewPort Vp,AudioRenderer Ar,InputManager Im,Game3DRenderer g3dr) {
-        this.mAm=Am;
-        this.maudioRenderer=Ar;
-        this.minputManager=Im;
-        this.mViewPort=Vp;
-        this.mGame3DRenderer=g3dr;
+    public GuiConsole(Game3DRenderer g3dr,NiftyJmeDisplay jmdsp) {
+       this.mAm = g3dr.getAssetManager();
+        this.maudioRenderer = g3dr.getAudioRenderer();
+        this.minputManager = g3dr.getInputManager();
+        this.mViewPort = g3dr.getGuiViewPort();
+        this.mGame3DRenderer = g3dr;
 
-        this.mNiftyDisplay = new NiftyJmeDisplay(mAm, minputManager, maudioRenderer, mViewPort);
+        this.mNiftyDisplay = jmdsp;
 
 
         //Récupère l'obj nifty de l'ecran courant

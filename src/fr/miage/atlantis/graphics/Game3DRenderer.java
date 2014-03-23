@@ -29,6 +29,7 @@ import com.jme3.input.controls.KeyTrigger;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Spline;
 import com.jme3.math.Vector3f;
+import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.CameraNode;
@@ -131,9 +132,11 @@ public class Game3DRenderer extends SimpleApplication {
         // Configuration du dé
         mDiceModel = new DiceModel(assetManager);
 
-        mConsole = new GuiConsole(assetManager,guiViewPort,audioRenderer,inputManager,this);
+        NiftyJmeDisplay jmdsp=new NiftyJmeDisplay(assetManager, inputManager, audioRenderer, viewPort);
+        
+        mConsole = new GuiConsole(this,jmdsp);
 
-        mStartMenu=new GuiStartMenu(assetManager,guiViewPort,audioRenderer,inputManager,this);
+        mStartMenu=new GuiStartMenu(this,jmdsp);
 
     }
 
