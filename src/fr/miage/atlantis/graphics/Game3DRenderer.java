@@ -19,9 +19,13 @@
 package fr.miage.atlantis.graphics;
 
 import com.jme3.app.SimpleApplication;
+import static com.jme3.app.SimpleApplication.INPUT_MAPPING_EXIT;
+import static com.jme3.app.SimpleApplication.INPUT_MAPPING_HIDE_STATS;
 import com.jme3.cinematic.MotionPath;
 import com.jme3.cinematic.MotionPathListener;
 import com.jme3.cinematic.events.MotionEvent;
+import com.jme3.input.KeyInput;
+import com.jme3.input.controls.KeyTrigger;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Spline;
 import com.jme3.math.Vector3f;
@@ -71,7 +75,13 @@ public class Game3DRenderer extends SimpleApplication {
     public void simpleInitApp() {
         // Pré-configuration
         assetManager.registerLoader(BlenderModelLoader.class, "blend");
+        inputManager.deleteMapping(INPUT_MAPPING_EXIT);
+        inputManager.deleteMapping(INPUT_MAPPING_HIDE_STATS);
+        inputManager.deleteMapping(INPUT_MAPPING_EXIT);
+        inputManager.deleteMapping(INPUT_MAPPING_MEMORY);
+        inputManager.deleteMapping(INPUT_MAPPING_CAMERA_POS);       
         
+                
         setDisplayFps(false);            
         setDisplayStatView(false);        
 

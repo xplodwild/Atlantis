@@ -7,38 +7,18 @@ package fr.miage.atlantis.gui.startmenu;
 import com.jme3.asset.AssetManager;
 import com.jme3.audio.AudioRenderer;
 import com.jme3.input.InputManager;
-import com.jme3.input.KeyInput;
-import com.jme3.input.controls.ActionListener;
-import com.jme3.input.controls.KeyTrigger;
 import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.ViewPort;
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.builder.EffectBuilder;
 import de.lessvoid.nifty.builder.ElementBuilder;
-import de.lessvoid.nifty.builder.ImageBuilder;
 import de.lessvoid.nifty.builder.LayerBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
 import de.lessvoid.nifty.builder.ScreenBuilder;
 import de.lessvoid.nifty.builder.TextBuilder;
-import de.lessvoid.nifty.controls.Console;
-import de.lessvoid.nifty.controls.ConsoleCommands;
-import de.lessvoid.nifty.controls.console.builder.ConsoleBuilder;
 import de.lessvoid.nifty.controls.textfield.builder.TextFieldBuilder;
 import de.lessvoid.nifty.tools.Color;
 import fr.miage.atlantis.graphics.Game3DRenderer;
-import fr.miage.atlantis.gui.console.GuiConsole;
-import fr.miage.atlantis.gui.console.commands.BindListCommand;
-import fr.miage.atlantis.gui.console.commands.ClearConsoleCommand;
-import fr.miage.atlantis.gui.console.commands.HelpCommand;
-import fr.miage.atlantis.gui.console.commands.LoggingCommand;
-import fr.miage.atlantis.gui.console.commands.QuitCommand;
-import fr.miage.atlantis.gui.controllers.ConsoleController;
 import fr.miage.atlantis.gui.controllers.StartScreenController;
-import fr.miage.atlantis.logic.GameTurn;
-import java.util.logging.Handler;
-import java.util.logging.Level;
-import java.util.logging.LogRecord;
-import java.util.logging.Logger;
 
 /**
  *
