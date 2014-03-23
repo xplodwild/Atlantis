@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty xmlns="http://nifty-gui.sourceforge.net/nifty-1.3.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://nifty-gui.sourceforge.net/nifty-1.3.xsd http://nifty-gui.sourceforge.net/nifty-1.3.xsd">
+    <!-- +++++++++++++++++++++++++++++++++++++++ -->
+    <!-- start screen -->
+    <!-- +++++++++++++++++++++++++++++++++++++++ -->
+    <screen id="start" controller="fr.miage.atlantis.gui.controllers.StartScreenController">
+        <layer id="background" childLayout="horizontal">
+            <panel id="panelGauche" height="80%" width="20%" align="left" valign="top" backgroundColor="#3333334d" childLayout="center" visibleToMouse="true">                
+                <control name="button" label="Nouvelle partie">
+                        <interact onClick="startGame()" />
+                </control>
+                
+                <control name="button" label="Redemarrer">
+                        <interact onClick="reStartGame()" />
+                </control>
+       
+            </panel>
+      
+            <panel id="panelDroit" height="80%" width="80%" align="right" valign="top" childLayout="center" visibleToMouse="true">
+                <panel id="haut" height="15%" width="100%" align="right" valign="top" backgroundColor="#00000080" childLayout="horizontal" visibleToMouse="true">
+                    <panel id="haut_1" paddingleft="3%" height="75%" width="25%" align="right" valign="top" childLayout="vertical" visibleToMouse="true">
+                        <text text="Joueur 1" font="Fonts/sansitc.fnt"  color="#0060abff" /> 
+                        <control id="inputJ1" name="textfield" width="80%" text="hello textfield"/>
+                        
+                    </panel>  
+        
+       
+                </panel>  
+            </panel>
+        </layer>
+    </screen>
+</nifty>
