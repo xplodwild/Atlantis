@@ -96,24 +96,25 @@ public class Game3DLogic extends GameLogic {
 
     @Override
     public void startGame() {
-        // TEST: On place des tokens
-        Player[] plays = getPlayers();
-        for (int i = 0; i < plays.length; i++) {
-            Player p = plays[i];
-            List<PlayerToken> tokens = p.getTokens();
+        if (DBG_AUTOPREPARE) {
+            // TEST: On place des tokens
+             Player[] plays = getPlayers();
+             for (int i = 0; i < plays.length; i++) {
+                 Player p = plays[i];
+                 List<PlayerToken> tokens = p.getTokens();
 
-            for (PlayerToken token : tokens) {
-                int rand=new Random().nextInt(15)+1;
-                    token.moveToTile(this, getBoard().getTileSet().get("Beach #"+rand));
+                 for (PlayerToken token : tokens) {
+                     int rand=new Random().nextInt(15)+1;
+                         token.moveToTile(this, getBoard().getTileSet().get("Beach #"+rand));
 
-                mRenderer.getEntitiesRenderer().addEntity(token);
-            }
+                     mRenderer.getEntitiesRenderer().addEntity(token);
+                 }
+             }
+            // TEST: On place des bateaux
+            Boat boat1 = new Boat();
+            boat1.moveToTile(this, getBoard().getTileSet().get("Water #37"));
+            mRenderer.getEntitiesRenderer().addEntity(boat1);
         }
-
-        // TEST: On place des bateaux
-        Boat boat1 = new Boat();
-        boat1.moveToTile(this, getBoard().getTileSet().get("Water #37"));
-        mRenderer.getEntitiesRenderer().addEntity(boat1);
 
         super.startGame();
     }
@@ -148,6 +149,18 @@ public class Game3DLogic extends GameLogic {
         logger.log(Level.FINE, "Game3DLogic: onTurnStart()", new Object[]{});
 
         getCurrentTurn().onTurnStarted();
+    }
+
+    public void onInitialTokenPut(PlayerToken pt) {
+        mRenderer.getEntitiesRenderer().addEntity(pt);
+        getCurrentTurn().onInitialTokenPutDone();
+    }
+
+    @Override
+    public void onInitialBoatPut(Boat b) {
+        super.onInitialBoatPut(b);
+        mRenderer.getEntitiesRenderer().addEntity(b);
+        getCurrentTurn().onInitialBoatPutDone();
     }
 
     public void onPlayTileAction(GameTile tile, TileAction action) {
@@ -591,7 +604,13 @@ public class Game3DLogic extends GameLogic {
         logger.log(Level.FINE, "Game3DLogic: Tile picked ", new Object[]{tile.getName()});
 
         GameTurn currentTurn = mRenderer.getLogic().getCurrentTurn();
-        if (currentTurn.getRemainingMoves() > 0) {
+        if (currentTurn.getTokenToPlace() != null) {
+            // On a un token a placer, on a donc pas encore commencé la partie.
+            currentTurn.putInitialToken(currentTurn.getTokenToPlace(), tile);
+        } else if (getRemainingInitialBoats() > 0) {
+            // Il nous reste des bateaux initiaux à placer, on a donc pas encore commencé la partie.
+            currentTurn.putInitialBoat(tile);
+        } else if (currentTurn.getRemainingMoves() > 0) {
             // On assume que ce picking de tile était pour le déplacement d'unités.
             currentTurn.moveEntity(mPickedEntity, tile);
         } else if (!currentTurn.hasSunkLandTile()) {
