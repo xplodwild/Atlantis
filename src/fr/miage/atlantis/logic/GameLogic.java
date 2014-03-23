@@ -34,6 +34,8 @@ import fr.miage.atlantis.entities.PlayerToken;
  */
 public abstract class GameLogic implements GameTurnListener {
 
+    protected static final boolean DBG_AUTOPREPARE = true;
+
     /**
      * Plateau du jeu
      */
@@ -156,8 +158,13 @@ public abstract class GameLogic implements GameTurnListener {
             mPlayers[i] = new Player(players[i], i + 1);
         }
 
-        // Aucun bateau initialement placé
-        mBoatsPlaced = 0;
+        if (DBG_AUTOPREPARE) {
+            // Préparation automatique du board
+            mBoatsPlaced = players.length * 2;
+        } else {
+            // Aucun bateau initialement placé
+            mBoatsPlaced = 0;
+        }
     }
 
     /**

@@ -96,10 +96,25 @@ public class Game3DLogic extends GameLogic {
 
     @Override
     public void startGame() {
-        // TEST: On place des bateaux
-        Boat boat1 = new Boat();
-        boat1.moveToTile(this, getBoard().getTileSet().get("Water #37"));
-        mRenderer.getEntitiesRenderer().addEntity(boat1);
+        if (DBG_AUTOPREPARE) {
+            // TEST: On place des tokens
+             Player[] plays = getPlayers();
+             for (int i = 0; i < plays.length; i++) {
+                 Player p = plays[i];
+                 List<PlayerToken> tokens = p.getTokens();
+
+                 for (PlayerToken token : tokens) {
+                     int rand=new Random().nextInt(15)+1;
+                         token.moveToTile(this, getBoard().getTileSet().get("Beach #"+rand));
+
+                     mRenderer.getEntitiesRenderer().addEntity(token);
+                 }
+             }
+            // TEST: On place des bateaux
+            Boat boat1 = new Boat();
+            boat1.moveToTile(this, getBoard().getTileSet().get("Water #37"));
+            mRenderer.getEntitiesRenderer().addEntity(boat1);
+        }
 
         super.startGame();
     }
