@@ -55,8 +55,11 @@ public class Shark extends Animal {
     public boolean onEntityCross(GameLogic logic, GameEntity ent) {
         if (ent instanceof PlayerToken) {
             PlayerToken pt = (PlayerToken) ent;
-            // Les sharks mangent les petits humains
-            logic.onEntityAction(this, ent, GameEntity.ACTION_SHARK_EAT);
+
+            if (pt.getState() != PlayerToken.STATE_ON_BOAT) {
+                // Les sharks mangent les petits humains n'étant pas sur un bateau
+                logic.onEntityAction(this, ent, GameEntity.ACTION_SHARK_EAT);
+            }
         }
 
         //TODO : Finir d'implementer pour les autres entité, fix le retour

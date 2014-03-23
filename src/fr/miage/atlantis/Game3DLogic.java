@@ -365,13 +365,11 @@ public class Game3DLogic extends GameLogic {
 
             case GameEntity.ACTION_SEASERPENT_CRUSH: {
                 final SeaSerpent ss = (SeaSerpent) source;
-                final PlayerToken token = (PlayerToken) target;
-
                 final SeaSerpentModel ssModel = (SeaSerpentModel) mRenderer.getEntitiesRenderer().getNodeFromEntity(ss);
-                final PlayerModel playerModel = (PlayerModel) mRenderer.getEntitiesRenderer().getNodeFromEntity(token);
-                ssModel.lookAt(playerModel.getLocalTranslation(), Vector3f.UNIT_Y);
-                ssModel.rotate(0, -90, 0);
 
+                // Un kraken peut soit manger un bateau, soit des joueurs (un bateau contenant des
+                // joueurs étant traité séparément). Dans tous les cas, on va lancer l'animation
+                // pour lui.
                 ssModel.playAnimation(SeaSerpentModel.ANIMATION_ATTACK_CELL, false, true, new AnimEventListener() {
                     public void onAnimCycleDone(AnimControl control, AnimChannel channel, String animName) {
                         ssModel.playAnimation(AnimationBrain.getIdleAnimation(ss));
@@ -381,15 +379,40 @@ public class Game3DLogic extends GameLogic {
                     public void onAnimChange(AnimControl control, AnimChannel channel, String animName) {
                     }
                 });
-                playerModel.playAnimation(PlayerModel.ANIMATION_EATEN_BY_SHARK, false, true, new AnimEventListener() {
-                    public void onAnimCycleDone(AnimControl control, AnimChannel channel, String animName) {
-                        token.die(Game3DLogic.this);
-                        control.removeListener(this);
-                    }
 
-                    public void onAnimChange(AnimControl control, AnimChannel channel, String animName) {
-                    }
-                });
+                if (target instanceof PlayerToken) {
+                    final PlayerToken token = (PlayerToken) target;
+                    final PlayerModel playerModel = (PlayerModel) mRenderer.getEntitiesRenderer().getNodeFromEntity(token);
+                    ssModel.lookAt(playerModel.getLocalTranslation(), Vector3f.UNIT_Y);
+                    ssModel.rotate(0, -90, 0);
+
+                    playerModel.playAnimation(PlayerModel.ANIMATION_EATEN_BY_SHARK, false, true, new AnimEventListener() {
+                        public void onAnimCycleDone(AnimControl control, AnimChannel channel, String animName) {
+                            token.die(Game3DLogic.this);
+                            control.removeListener(this);
+                        }
+
+                        public void onAnimChange(AnimControl control, AnimChannel channel, String animName) {
+                        }
+                    });
+                } else if (target instanceof Boat) {
+                    final Boat boat = (Boat) target;
+                    final BoatModel boatModel = (BoatModel) mRenderer.getEntitiesRenderer().getNodeFromEntity(boat);
+                    ssModel.lookAt(boatModel.getLocalTranslation(), Vector3f.UNIT_Y);
+                    ssModel.rotate(0, -90, 0);
+
+                    boatModel.playAnimation(BoatModel.ANIMATION_BOAT_SINK, false, true, new AnimEventListener() {
+                        public void onAnimCycleDone(AnimControl control, AnimChannel channel, String animName) {
+                            boat.die(Game3DLogic.this);
+                            control.removeListener(this);
+                        }
+
+                        public void onAnimChange(AnimControl control, AnimChannel channel, String animName) {
+                        }
+                    });
+                } else {
+                    throw new IllegalArgumentException("A Sea Serpent cannot crush anything else than a boat or a player!");
+                }
             }
             break;
 
