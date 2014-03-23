@@ -39,6 +39,11 @@ public interface GameTurnListener {
      */
     public void onTurnStart(Player p);
 
+    /**
+     * Action à effectuer lorsqu'un pion a été initialement placé
+     */
+    public void onInitialTokenPut(PlayerToken pt);
+
 
     /**
      * Action a effectuer lors du jeu d'un playtile

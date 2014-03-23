@@ -106,6 +106,17 @@ public abstract class GameLogic implements GameTurnListener {
         public boolean waterEdgeOnly;
 
         /**
+         * Si landTilesOnly vaut true, seulement les tiles de terre seront sélectionnables
+         */
+        public boolean landTilesOnly;
+
+        /**
+         * Si noEntitiesOnTile vaut true, seulement les tiles n'ayant pas d'entités dessus seront
+         * sélectionnables
+         */
+        public boolean noEntitiesOnTile;
+
+        /**
          * Si requiredHeight est supérieur ou égal à zéro, seules les tiles au niveau spécifiées
          * pourront être pickées
          */

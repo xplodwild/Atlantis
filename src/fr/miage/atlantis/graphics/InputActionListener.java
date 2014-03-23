@@ -446,6 +446,14 @@ public class InputActionListener {
             return false;
         }
 
+        if (request.landTilesOnly && tile.getHeight() <= 0) {
+            return false;
+        }
+
+        if (request.noEntitiesOnTile && tile.getEntities().size() > 0) {
+            return false;
+        }
+
         if (request.waterEdgeOnly) {
             boolean isAtEdge = false;
 
