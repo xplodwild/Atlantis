@@ -80,11 +80,7 @@ public class Game3DRenderer extends SimpleApplication {
         // Pré-configuration
         assetManager.registerLoader(BlenderModelLoader.class, "blend");
 
-        inputManager.deleteMapping(INPUT_MAPPING_EXIT);
-        inputManager.deleteMapping(INPUT_MAPPING_HIDE_STATS);
-        inputManager.deleteMapping(INPUT_MAPPING_EXIT);
-        inputManager.deleteMapping(INPUT_MAPPING_MEMORY);
-        inputManager.deleteMapping(INPUT_MAPPING_CAMERA_POS);
+        inputManager.clearMappings();
 
         setDisplayFps(false);
         setDisplayStatView(false);
@@ -137,7 +133,6 @@ public class Game3DRenderer extends SimpleApplication {
         mConsole = new GuiConsole(this,jmdsp);
 
         mStartMenu=new GuiStartMenu(this,jmdsp);
-
     }
 
     public void toggleGraphicsStats(){
