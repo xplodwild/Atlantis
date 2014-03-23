@@ -442,9 +442,11 @@ public class Game3DLogic extends GameLogic {
                 // le bateau reste intact.
                 if (boat.getOnboardTokens().size() > 0) {
                     // Et il y a des gens: Ils tombent à l'eau, et le bateau disparait
-                    List<PlayerToken> onboard = boat.getOnboardTokens();
+                    List<PlayerToken> onboard = new ArrayList<PlayerToken>(boat.getOnboardTokens());
 
                     for (PlayerToken pt : onboard) {
+                        boat.removePlayer(pt);
+                        onPlayerDismountBoat(pt, boat);
                         pt.setState(PlayerToken.STATE_SWIMMING);
                     }
 

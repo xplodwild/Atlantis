@@ -20,6 +20,8 @@ package fr.miage.atlantis.entities;
 
 import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.logic.GameLogic;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -41,7 +43,7 @@ public class GameEntity {
     public final static int ACTION_PLAYER_ESCAPE = 3;
 
     private static final Logger logger = Logger.getGlobal();
-    
+
     /**
      * Nom de l'entité
      */
@@ -81,11 +83,13 @@ public class GameEntity {
         mTile = tile;
 
         logger.log(Level.FINE, "MOVE " + mName + " TO " + tile.getName(),new Object[]{this,tile});
-       
+
         boolean somethingHappened = false;
         if (logic != null) {
-            // On trigger les événements des autres entités présentes sur la tile
-            for (GameEntity ent : tile.getEntities()) {
+            // On trigger les événements des autres entités présentes sur la tile. On fait une copie,
+            // les entities pouvant être supprimées pendant certains événements.
+            List<GameEntity> entities = new ArrayList<GameEntity>(tile.getEntities());
+            for (GameEntity ent : entities) {
                 if (ent != this) {
                     somethingHappened |= this.onEntityCross(logic, ent);
                     somethingHappened |= ent.onEntityCross(logic, this);
