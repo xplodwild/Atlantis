@@ -334,6 +334,11 @@ public class InputActionListener {
             }
         }
 
+        // On vérfie ensuite la contrainte de non-sélection d'une entité en particulier
+        if (request.avoidEntity != null && request.avoidEntity == ent) {
+            return false;
+        }
+
         if ((request.pickingRestriction & GameLogic.EntityPickRequest.FLAG_PICK_PLAYER_ENTITIES) != 0) {
             // On veut picker un pion du joueur. On vérifie que l'entité est bien cela.
 

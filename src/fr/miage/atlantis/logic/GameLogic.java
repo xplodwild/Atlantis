@@ -82,6 +82,11 @@ public abstract class GameLogic implements GameTurnListener {
          */
         public GameTile pickNearTile;
 
+        /**
+         * Si avoidEntity n'est pas null, le picking ne sélectionnera pas l'entité pointée
+         */
+        public GameEntity avoidEntity;
+
         @Override
         public String toString() {
             return "EntityPickRequest: restriction flags=" + pickingRestriction + "; player=" + player;
