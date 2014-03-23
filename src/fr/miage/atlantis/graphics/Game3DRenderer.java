@@ -38,6 +38,7 @@ import fr.miage.atlantis.graphics.hud.HudAnimator;
 import fr.miage.atlantis.graphics.hud.TileActionDisplay;
 import fr.miage.atlantis.graphics.models.DiceModel;
 import fr.miage.atlantis.gui.console.GuiConsole;
+import fr.miage.atlantis.gui.startmenu.GuiStartMenu;
 import java.util.Map;
 import java.util.Random;
 
@@ -58,6 +59,7 @@ public class Game3DRenderer extends SimpleApplication {
     private FutureUpdater mFutureUpdater;
     private HudAnimator mHudAnimator;
     private GuiConsole mConsole;
+    private GuiStartMenu mStartMenu;
 
     public Game3DRenderer(Game3DLogic parent) {
         mParent = parent;
@@ -114,6 +116,7 @@ public class Game3DRenderer extends SimpleApplication {
 
         mConsole = new GuiConsole(assetManager,guiViewPort,audioRenderer,inputManager,this);
        
+        mStartMenu=new GuiStartMenu(assetManager,guiViewPort,audioRenderer,inputManager,this);
         
     }
 
