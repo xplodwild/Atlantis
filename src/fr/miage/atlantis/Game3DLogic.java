@@ -37,6 +37,7 @@ import fr.miage.atlantis.entities.SeaSerpent;
 import fr.miage.atlantis.entities.Shark;
 import fr.miage.atlantis.entities.Whale;
 import fr.miage.atlantis.graphics.AnimationBrain;
+import fr.miage.atlantis.graphics.CamConstants;
 import fr.miage.atlantis.graphics.FutureCallback;
 import fr.miage.atlantis.graphics.Game3DRenderer;
 import fr.miage.atlantis.graphics.ParticlesFactory;
@@ -69,12 +70,12 @@ public class Game3DLogic extends GameLogic {
     private Game3DRenderer mRenderer;
     private GameEntity mPickedEntity;
 
-    
+
      /**
      * Instance du logger Java
      */
     private static final Logger logger = Logger.getGlobal();
-    
+
 
     private int mBypassCallbackCount;
     private List<EntityPickRequest> mEntRequestHistory;
@@ -93,7 +94,7 @@ public class Game3DLogic extends GameLogic {
 
     @Override
     public void boot() {
-    mRenderer.start();        
+    mRenderer.start();
     }
 
     @Override
@@ -107,7 +108,7 @@ public class Game3DLogic extends GameLogic {
             for (PlayerToken token : tokens) {
                 int rand=new Random().nextInt(15)+1;
                     token.moveToTile(this, getBoard().getTileSet().get("Beach #"+rand));
-                
+
                 mRenderer.getEntitiesRenderer().addEntity(token);
             }
         }
@@ -116,6 +117,8 @@ public class Game3DLogic extends GameLogic {
         Boat boat1 = new Boat();
         boat1.moveToTile(this, getBoard().getTileSet().get("Water #37"));
         mRenderer.getEntitiesRenderer().addEntity(boat1);
+
+        CamConstants.moveAboveBoard(mRenderer.getCameraNode(), mRenderer.getCamera());
 
         super.startGame();
     }
@@ -147,8 +150,8 @@ public class Game3DLogic extends GameLogic {
 
     public void onTurnStart(Player p) {
         // TODO: Animations
-        logger.log(Level.FINE, "Game3DLogic: onTurnStart()", new Object[]{});  
-        
+        logger.log(Level.FINE, "Game3DLogic: onTurnStart()", new Object[]{});
+
         getCurrentTurn().onTurnStarted();
     }
 
@@ -316,7 +319,7 @@ public class Game3DLogic extends GameLogic {
                             if (action.isImmediate()) {
                                 onPlayTileAction(newTile, action);
                             } else {
-                                
+
                                 logger.log(Level.WARNING, "TODO: Tile is not immediate: " + action.toString(), new Object[]{});
                                 // TODO: Stocker la tile dans les tiles du joueur
                             }
@@ -420,7 +423,7 @@ public class Game3DLogic extends GameLogic {
 
     public void onEntitySpawn(final GameEntity spawned) {
         logger.log(Level.FINE, "Game3DLogic: onEntitySpawn ", new Object[]{});
-        
+
         final AnimatedModel model = mRenderer.getEntitiesRenderer().addEntity(spawned);
         model.playAnimation(AnimationBrain.getSpawnAnimation(spawned), new AnimEventListener() {
             public void onAnimCycleDone(AnimControl control, AnimChannel channel, String animName) {
@@ -485,7 +488,7 @@ public class Game3DLogic extends GameLogic {
     @Override
     public void requestPick(EntityPickRequest entRq, TilePickRequest tileRq) {
         // On a besoin de picker une entité
-        
+
         logger.log(Level.FINE, "Game3DLogic: requestPick ", new Object[]{});
 
         mEntRequestHistory.add(entRq);
@@ -497,7 +500,7 @@ public class Game3DLogic extends GameLogic {
     @Override
     public void onEntityPicked(GameEntity ent) {
         logger.log(Level.FINE, "Game3DLogic: Entity picked ", new Object[]{ent});
-       
+
         GameTurn currentTurn = mRenderer.getLogic().getCurrentTurn();
 
         if (currentTurn.getRemainingMoves() > 0) {

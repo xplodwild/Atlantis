@@ -34,6 +34,11 @@ public class ModelCache {
     private ModelCache() {
         mModels = new HashMap<String, Spatial>();
         mMaterials = new HashMap<String, Material>();
+
+        // Preload des modèles
+        getModel("Models/Avatar_A.mesh.xml");
+        getModel("Models/boat.mesh.xml");
+        getModel("Models/serpentA.mesh.xml");
     }
 
     private final static ModelCache INSTANCE = new ModelCache();
@@ -42,7 +47,7 @@ public class ModelCache {
         return INSTANCE;
     }
 
-    public Spatial getModel(final String path) {
+    public final Spatial getModel(final String path) {
         return mModels.get(path);
     }
 

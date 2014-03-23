@@ -31,7 +31,9 @@ import com.jme3.math.Spline;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
+import com.jme3.scene.CameraNode;
 import com.jme3.scene.Node;
+import com.jme3.scene.control.CameraControl.ControlDirection;
 import com.jme3.scene.plugins.blender.BlenderModelLoader;
 import fr.miage.atlantis.Game3DLogic;
 import fr.miage.atlantis.GameDice;
@@ -51,9 +53,10 @@ import java.util.Random;
  */
 public class Game3DRenderer extends SimpleApplication {
 
-    
+
     private boolean mDisplayGraphicalStats = false;
     private Node mSceneNode;
+    private CameraNode mCameraNode;
     private Environment mEnvironment;
     private Game3DLogic mParent;
     private BoardRenderer mBoardRenderer;
@@ -68,31 +71,35 @@ public class Game3DRenderer extends SimpleApplication {
     public Game3DRenderer(Game3DLogic parent) {
         mParent = parent;
         mHudAnimator = new HudAnimator();
-        mFutureUpdater = new FutureUpdater();        
+        mFutureUpdater = new FutureUpdater();
     }
 
     @Override
     public void simpleInitApp() {
         // Pré-configuration
         assetManager.registerLoader(BlenderModelLoader.class, "blend");
+
         inputManager.deleteMapping(INPUT_MAPPING_EXIT);
         inputManager.deleteMapping(INPUT_MAPPING_HIDE_STATS);
         inputManager.deleteMapping(INPUT_MAPPING_EXIT);
         inputManager.deleteMapping(INPUT_MAPPING_MEMORY);
-        inputManager.deleteMapping(INPUT_MAPPING_CAMERA_POS);       
-        
-                
-        setDisplayFps(false);            
-        setDisplayStatView(false);        
+        inputManager.deleteMapping(INPUT_MAPPING_CAMERA_POS);
+
+        setDisplayFps(false);
+        setDisplayStatView(false);
 
         // Configuration camera
+        mCameraNode = new CameraNode("Main Camera", cam);
+        mCameraNode.setControlDir(ControlDirection.SpatialToCamera);
+        flyCam.setDragToRotate(true);
+        flyCam.setEnabled(false);
         flyCam.setMoveSpeed(200.0f);
         cam.setFrustumFar(4000.0f);
-        cam.setLocation(new Vector3f(-398.292f, 572.2102f, 176.78018f));
-        cam.setRotation(new Quaternion(0.43458012f, 0.5573096f, -0.4326719f, 0.5597688f));
+        CamConstants.moveMenu(mCameraNode, cam);
+        rootNode.attachChild(mCameraNode);
 
         inputManager.setCursorVisible(true);
-        flyCam.setDragToRotate(true);
+
 
         // Configuration des ombres
         rootNode.setShadowMode(ShadowMode.Off);
@@ -125,23 +132,27 @@ public class Game3DRenderer extends SimpleApplication {
         mDiceModel = new DiceModel(assetManager);
 
         mConsole = new GuiConsole(assetManager,guiViewPort,audioRenderer,inputManager,this);
-       
+
         mStartMenu=new GuiStartMenu(assetManager,guiViewPort,audioRenderer,inputManager,this);
-        
+
     }
 
     public void toggleGraphicsStats(){
         if (!mDisplayGraphicalStats) {
             mDisplayGraphicalStats=true;
-            setDisplayFps(true);            
+            setDisplayFps(true);
             setDisplayStatView(true);
         }else{
             mDisplayGraphicalStats=false;
-            setDisplayFps(false);            
-            setDisplayStatView(false); 
+            setDisplayFps(false);
+            setDisplayStatView(false);
         }
-    }    
-    
+    }
+
+    public CameraNode getCameraNode() {
+        return mCameraNode;
+    }
+
     public BoardRenderer getBoardRenderer() {
         return mBoardRenderer;
     }
