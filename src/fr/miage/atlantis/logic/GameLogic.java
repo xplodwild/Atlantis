@@ -34,7 +34,7 @@ import fr.miage.atlantis.entities.PlayerToken;
  */
 public abstract class GameLogic implements GameTurnListener {
 
-    protected static final boolean DBG_AUTOPREPARE = false;
+    protected static final boolean DBG_AUTOPREPARE = true;
 
     /**
      * Plateau du jeu

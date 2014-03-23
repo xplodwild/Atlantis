@@ -27,7 +27,7 @@ import fr.miage.atlantis.board.TileAction;
 public class TileActionDisplay extends AbstractDisplay {
 
     public TileActionDisplay(final AssetManager assetManager) {
-        super("HUD TileAction Display", assetManager);
+        super(256, 223, "HUD TileAction Display", assetManager);
     }
 
     public static TileActionDisplay getTileForAction(TileAction action, AssetManager assetManager) {
@@ -65,6 +65,8 @@ public class TileActionDisplay extends AbstractDisplay {
             default:
                 throw new IllegalArgumentException("Invalid TileAction action value");
         }
+
+        tad.setAlpha(0.0f);
 
         return tad;
     }

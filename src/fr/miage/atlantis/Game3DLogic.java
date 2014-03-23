@@ -136,6 +136,7 @@ public class Game3DLogic extends GameLogic {
 
             // Une seule action peut être annulée.
             mCanCancelPickingAction = false;
+            mRenderer.getHud().getGameHud().hideRightClickHint();
 
             return true;
         } else {
@@ -314,14 +315,14 @@ public class Game3DLogic extends GameLogic {
                     final TileAction action = tile.getAction();
                     final TileActionDisplay tad = TileActionDisplay.getTileForAction(action,
                             mRenderer.getAssetManager());
-                    mRenderer.displayHudCenter(tad);
-                    mRenderer.getHudAnimator().animateFadeIn(tad);
+                    mRenderer.getHud().displayCenter(tad);
+                    mRenderer.getHud().getAnimator().animateFade(tad, 1.0f);
 
                     // Ensuite, après l'affichage, on traite l'action
                     mRenderer.getFuture().addFutureTimeCallback(new FutureCallback(2.0f) {
                         @Override
                         public void onFutureHappened() {
-                            mRenderer.getHudAnimator().animateFadeOut(tad);
+                            mRenderer.getHud().getAnimator().animateFade(tad, 0.0f);
 
                             // On lance l'action sous la tile, si c'est immédiat
                             if (action.isImmediate()) {
@@ -552,6 +553,7 @@ public class Game3DLogic extends GameLogic {
                 // Remise à zéro
                 mPickedEntity = null;
                 mCanCancelPickingAction = false;
+                mRenderer.getHud().getGameHud().hideRightClickHint();
             } else {
                 // On assume ici que lorsqu'on picke une entité, on veut picker une tile ou un bateau
                 // après, puisqu'on a des mouvements restant (et qu'un tour est forcément séquentiel)
@@ -584,6 +586,7 @@ public class Game3DLogic extends GameLogic {
                 // On lance la requête
                 requestPick(entPick, tilePick);
                 mCanCancelPickingAction = true;
+                mRenderer.getHud().getGameHud().showRightClickHint();
             }
         } else if (currentTurn.hasRolledDice() && currentTurn.getRemainingDiceMoves() > 0) {
             // Le dé a été lancé, et on a des mouvements de dé restant. La seule chose possible, c'est
@@ -597,6 +600,7 @@ public class Game3DLogic extends GameLogic {
 
             requestPick(null, tilePick);
             mCanCancelPickingAction = true;
+            mRenderer.getHud().getGameHud().showRightClickHint();
         }
     }
 
@@ -624,6 +628,7 @@ public class Game3DLogic extends GameLogic {
 
         mPickedEntity = null;
         mCanCancelPickingAction = false;
+        mRenderer.getHud().getGameHud().hideRightClickHint();
     }
 
     @Override
