@@ -229,6 +229,12 @@ public class GameTurn implements GameRenderListener {
         mController.onInitialTokenPut(pt);
     }
 
+    public void putInitialBoat(GameTile tile) {
+        Boat b = new Boat();
+        b.moveToTile(null, tile);
+        mController.onInitialBoatPut(b);
+    }
+
     private void fetchTokenToPlace() {
         List<PlayerToken> tokens = mPlayer.getTokens();
         mTokenToPlace = null;
@@ -261,16 +267,33 @@ public class GameTurn implements GameRenderListener {
         fetchTokenToPlace();
 
         if (mTokenToPlace == null) {
-            // Le tour commence : on peut utiliser une tile de notre stock local
-            // TODO
+            // On vérifie qu'il ne nous reste pas de bateau à placer
+            if (mController.getRemainingInitialBoats() > 0) {
+                // On a un bateau à placer, on pick une tile d'eau
+                GameLogic.TilePickRequest request = new GameLogic.TilePickRequest();
+                request.landTilesOnly = false;
+                request.noEntitiesOnTile = true;
+                request.requiredHeight = 0;
 
-            // Sinon, on bouge nos entités. On laisse le joueur choisir que ses entités à lui.
-            requestPlayerMovePicking();
+                mController.requestPick(null, request);
+            } else {
+                // Le tour commence : on peut utiliser une tile de notre stock local
+                // TODO
+
+                // Sinon, on bouge nos entités. On laisse le joueur choisir que ses entités à lui.
+                requestPlayerMovePicking();
+            }
         }
     }
 
-    public void onInitalTokenPutDone() {
+    public void onInitialTokenPutDone() {
         // Un pion joueur a été placé. On finit le tour, c'est au suivant même si on a tout placé.
+        finishTurn();
+    }
+
+    @Override
+    public void onInitialBoatPutDone() {
+        // Un pion bateau a été placé. On finit le tour, c'est au suivant même si on a tout placé.
         finishTurn();
     }
 

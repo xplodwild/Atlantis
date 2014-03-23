@@ -23,7 +23,8 @@ package fr.miage.atlantis.logic;
 public interface GameRenderListener {
 
     public void onTurnStarted();
-    public void onInitalTokenPutDone();
+    public void onInitialTokenPutDone();
+    public void onInitialBoatPutDone();
     public void onPlayedTileAction();
     public void onUnitMoveFinished();
     public void onDiceRollFinished();

@@ -54,6 +54,10 @@ public abstract class GameLogic implements GameTurnListener {
      * Tableau des joueurs
      */
     private Player[] mPlayers;
+    /**
+     * Nombre de bateaux placés lors du début d'une partie
+     */
+    private int mBoatsPlaced;
 
 
     public static class EntityPickRequest {
@@ -137,6 +141,7 @@ public abstract class GameLogic implements GameTurnListener {
         mBoard = new GameBoard();
         mDice = GameDice.createDefault();
         mLog = new GameLog();
+        mBoatsPlaced = 0;
     }
 
     /**
@@ -150,6 +155,9 @@ public abstract class GameLogic implements GameTurnListener {
         for (int i = 0; i < mPlayers.length; i++) {
             mPlayers[i] = new Player(players[i], i + 1);
         }
+
+        // Aucun bateau initialement placé
+        mBoatsPlaced = 0;
     }
 
     /**
@@ -205,6 +213,19 @@ public abstract class GameLogic implements GameTurnListener {
         //Fini si le tile Volcan est sorti , ou si tout les mToken sont sauvés.
 
         return false;
+    }
+
+    /**
+     * Retourne le nombre de bateaux initiaux RESTANT à placer
+     */
+    public int getRemainingInitialBoats() {
+        // Chaque joueur a deux bateaux à placer
+        return mPlayers.length * 2 - mBoatsPlaced;
+    }
+
+    @Override
+    public void onInitialBoatPut(Boat b) {
+        mBoatsPlaced++;
     }
 
     /**
