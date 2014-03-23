@@ -104,8 +104,9 @@ public class Game3DLogic extends GameLogic {
                  List<PlayerToken> tokens = p.getTokens();
 
                  for (PlayerToken token : tokens) {
-                     int rand=new Random().nextInt(15)+1;
-                         token.moveToTile(this, getBoard().getTileSet().get("Beach #"+rand));
+                     int rand = new Random().nextInt(15) + 1;
+                     token.moveToTile(this, getBoard().getTileSet().get("Beach #" + rand));
+                     token.setState(PlayerToken.STATE_ON_LAND);
 
                      mRenderer.getEntitiesRenderer().addEntity(token);
                  }
@@ -148,6 +149,8 @@ public class Game3DLogic extends GameLogic {
     public void onTurnStart(Player p) {
         // TODO: Animations
         logger.log(Level.FINE, "Game3DLogic: onTurnStart()", new Object[]{});
+
+        mRenderer.getHud().getGameHud().displayPlayerTiles(getCurrentTurn().getPlayer().getActionTiles());
 
         getCurrentTurn().onTurnStarted();
     }
@@ -442,7 +445,7 @@ public class Game3DLogic extends GameLogic {
                     List<PlayerToken> onboard = boat.getOnboardTokens();
 
                     for (PlayerToken pt : onboard) {
-                        pt.setState(pt.getState() & ~PlayerToken.STATE_ON_BOAT);
+                        pt.setState(PlayerToken.STATE_SWIMMING);
                     }
 
                     boat.die(this);
@@ -533,6 +536,7 @@ public class Game3DLogic extends GameLogic {
         logger.log(Level.FINE, "Game3DLogic: Entity picked ", new Object[]{ent});
 
         GameTurn currentTurn = mRenderer.getLogic().getCurrentTurn();
+        mRenderer.getHud().getGameHud().hidePlayerTiles();
 
         if (currentTurn.getRemainingMoves() > 0) {
             // Si on a déjà une entité et si on a pické un bateau, c'est qu'on veut déplacer ce

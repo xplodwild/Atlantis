@@ -22,6 +22,7 @@ import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState;
 import com.jme3.math.ColorRGBA;
+import com.jme3.scene.Spatial;
 import com.jme3.ui.Picture;
 
 /**
@@ -39,6 +40,13 @@ public class AbstractDisplay extends Picture {
         mWidth = width;
         mHeight = height;
         mAssetManager = assetManager;
+    }
+
+    @Override
+    public Spatial scale(float s) {
+        mWidth *= s;
+        mHeight *= s;
+        return super.scale(s);
     }
 
     public int getWidth() {

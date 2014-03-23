@@ -18,6 +18,10 @@
 
 package fr.miage.atlantis.graphics.hud;
 
+import fr.miage.atlantis.board.TileAction;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  */
@@ -25,9 +29,11 @@ public class GameHud {
 
     private HudManager mHudManager;
     private AbstractDisplay mRightClickToCancel;
+    private List<TileActionDisplay> mPlayerTiles;
 
     public GameHud(HudManager man) {
         mHudManager = man;
+        mPlayerTiles = new ArrayList<TileActionDisplay>();
         setup();
     }
 
@@ -39,11 +45,52 @@ public class GameHud {
         mHudManager.displayBottomRight(mRightClickToCancel);
     }
 
+    /**
+     * Met en opacité complète le hint indiquant qu'on peut faire un clic droit pour annuler
+     */
     public void showRightClickHint() {
         mHudManager.getAnimator().animateFade(mRightClickToCancel, 1.0f);
     }
 
+    /**
+     * "Cache" (rend plus transparent) le hint indiquant qu'on peut faire un clic droit pour annuler
+     */
     public void hideRightClickHint() {
         mHudManager.getAnimator().animateFade(mRightClickToCancel, 0.5f);
+    }
+
+    /**
+     * Affiche les tiles d'action du joueur
+     * @param actions Liste des tiles d'action
+     */
+    public void displayPlayerTiles(List<TileAction> actions) {
+        int x = 0;
+        final float scale = 0.5f;
+
+        // On enlève les tiles précédentes
+        for (TileActionDisplay tad : mPlayerTiles) {
+            mHudManager.removeFromDisplay(tad);
+        }
+        mPlayerTiles.clear();
+
+        // On affiche les nouvelles tiles
+        for (TileAction action : actions) {
+            TileActionDisplay tad = TileActionDisplay.getTileForAction(action, mHudManager.getAssetManager());
+            tad.scale(scale);
+            mHudManager.displayAt(tad, x, 0);
+            tad.setAlpha(1.0f);
+            x += tad.getWidth();
+
+            mPlayerTiles.add(tad);
+        }
+    }
+
+    /**
+     * Cache les tiles d'action du joueur précédemment affichées
+     */
+    public void hidePlayerTiles() {
+        for (TileActionDisplay tad : mPlayerTiles) {
+            mHudManager.getAnimator().animateFade(tad, 0.0f);
+        }
     }
 }
