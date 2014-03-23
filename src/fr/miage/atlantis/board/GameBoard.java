@@ -98,6 +98,7 @@ public final class GameBoard {
             randomiser.add(tmp);
         }
 
+        
        //-----------------------------------------------------------------------
        //Ligne 1                                                               |
        //-----------------------------------------------------------------------
@@ -705,8 +706,7 @@ public final class GameBoard {
 
        temp=(WaterTile)this.mTileSet.get("Water #47");
        ss = new SeaSerpent();
-       ss.moveToTile(null, temp);
-
+       ss.moveToTile(null, temp);       
        //-----------------------------------------------------------------------
     }
 

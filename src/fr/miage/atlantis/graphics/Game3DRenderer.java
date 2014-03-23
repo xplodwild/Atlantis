@@ -32,12 +32,12 @@ import com.jme3.scene.plugins.blender.BlenderModelLoader;
 import fr.miage.atlantis.Game3DLogic;
 import fr.miage.atlantis.GameDice;
 import fr.miage.atlantis.board.GameTile;
-import fr.miage.atlantis.board.TileAction;
 import fr.miage.atlantis.entities.GameEntity;
 import fr.miage.atlantis.graphics.hud.AbstractDisplay;
 import fr.miage.atlantis.graphics.hud.HudAnimator;
 import fr.miage.atlantis.graphics.hud.TileActionDisplay;
 import fr.miage.atlantis.graphics.models.DiceModel;
+import fr.miage.atlantis.gui.console.GuiConsole;
 import java.util.Map;
 import java.util.Random;
 
@@ -57,11 +57,12 @@ public class Game3DRenderer extends SimpleApplication {
     private DiceModel mDiceModel;
     private FutureUpdater mFutureUpdater;
     private HudAnimator mHudAnimator;
+    private GuiConsole mConsole;
 
     public Game3DRenderer(Game3DLogic parent) {
         mParent = parent;
         mHudAnimator = new HudAnimator();
-        mFutureUpdater = new FutureUpdater();
+        mFutureUpdater = new FutureUpdater();        
     }
 
     @Override
@@ -113,7 +114,9 @@ public class Game3DRenderer extends SimpleApplication {
         // Configuration du dé
         mDiceModel = new DiceModel(assetManager);
 
-
+        mConsole = new GuiConsole(assetManager,guiViewPort,audioRenderer,inputManager);
+       
+        
     }
 
     public BoardRenderer getBoardRenderer() {
