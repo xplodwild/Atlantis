@@ -38,15 +38,13 @@ public class TileActionTest {
     }
 
     /**
-     * Test of generateRandomTileActionBeach method, of class TileAction.
-     * On teste si sous les 16 tiles, il y a bien une action random associée et non pas un null
-     */
+     * On teste si sous les 16 tiles, il y a bien une action random associé
+     **/
     @Test
     public void testGenerateRandomTileActionBeach() {
         System.out.println("generateRandomTileActionBeach");
-        GameBoard board = new GameBoard();
-        
-        /**Pour toutes les tiles Beach, on vérifie qu'il y a une action associée et qu'elle n'est pas nulle **/
+          
+        /*Pour toutes les tiles Beach, on vérifie qu'il y a une action associée et qu'elle n'est pas nulle */
         for(int i=0; i< 16 ; i++){
             TileAction result = TileAction.generateRandomTileActionBeach();
             assertNotNull(result);
@@ -54,44 +52,34 @@ public class TileActionTest {
     }
 
     /**
-     * Test of generateRandomTileActionMountain method, of class TileAction.
+     *  On teste si les 8 tiles Montagne, il y a bien une action random associée
      */
     @Test
     public void testGenerateRandomTileActionMountain() {
         System.out.println("generateRandomTileActionMountain");
-        TileAction expResult = null;
-        TileAction result = TileAction.generateRandomTileActionMountain();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        
+         /*Pour les 8 tiles montagne, on vérifie qu'il y a une action associée */
+        for(int i=0; i< 8 ; i++){
+            TileAction result = TileAction.generateRandomTileActionMountain();
+            assertNotNull(result);
+        }    
     }
 
     /**
-     * Test of generateRandomTileActionForest method, of class TileAction.
+     * On teste si les 8 tiles Forêt, il y a bien une action random associée
      */
     @Test
     public void testGenerateRandomTileActionForest() {
         System.out.println("generateRandomTileActionForest");
-        TileAction expResult = null;
-        TileAction result = TileAction.generateRandomTileActionForest();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        
+        /*Pour les 16 tiles forêt, on vérifie qu'il y a une action associée */
+        for(int i=0; i< 16 ; i++){
+            TileAction result = TileAction.generateRandomTileActionMountain();
+            assertNotNull(result);
+        }    
     }
 
-    /**
-     * Test of use method, of class TileAction.
-     */
-    @Test
-    public void testUse() {
-        System.out.println("use");
-        GameTile tile = null;
-        GameLogic logic = null;
-        TileAction instance = null;
-        instance.use(tile, logic);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
+   
 
     /**
      * Test of isImmediate method, of class TileAction.
