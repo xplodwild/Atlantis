@@ -81,7 +81,7 @@ public class Gui {
         
         
         this.instanciateStartScreen();
-        this.instanciateConsoleHUD();
+        this.instanciateInGameHUD();
         
        // this.mNifty.gotoScreen(STYLE_FILE);
 
@@ -93,10 +93,9 @@ public class Gui {
         ((GuiController) this.mNifty.getScreen("start").getScreenController()).set3DRenderer(this.mGame3DRenderer);
     }
     
-    private void instanciateConsoleHUD(){
-         this.mNifty.addScreen("consolehud", new ScreenBuilder("consolehud"){{            
-            
-            
+    private void instanciateInGameHUD(){
+         this.mNifty.addScreen("inGameHud", new ScreenBuilder("inGameHud"){{            
+                        
             /**
              * Ajoute un controlleur perso a cet ecran
              */
@@ -105,9 +104,7 @@ public class Gui {
             /**
              * Création du Layer sur cet ecran.
              */
-            layer(new LayerBuilder("layer1"){{
-                
-                this.name("layer10");
+            layer(new LayerBuilder("HUDLayer"){{
                 
                 /*
                  * Propriétés d'agencement des elements
@@ -122,7 +119,7 @@ public class Gui {
                 /*
                  * Création d'un panel dans le layer
                  */
-                panel(new PanelBuilder("panel1") {{
+                panel(new PanelBuilder("HUDPanel") {{
                     childLayoutCenter(); // panel properties, add more...               
  
                           
@@ -157,16 +154,27 @@ public class Gui {
                     //</control>
                 }});
                 // </panel>
+                
+                
+                 panel(new PanelBuilder("consolePanel") {{
+                    childLayoutCenter(); // panel properties, add more...
+                    
+                    
+                    
+                 }});
+                
+                
+                
             }});
             // </layer>
         }}.build(this.mNifty));   
         // </screen>         
-         this.mNifty.gotoScreen("consolehud");
+         this.mNifty.gotoScreen("inGameHud");
 
 
 
         // get the console control (this assumes that there is a console in the current screen with the id="console"
-        mConsole = this.mNifty.getScreen("consolehud").findElementByName("console").getNiftyControl(Console.class);
+        mConsole = this.mNifty.getScreen("inGameHud").findElementByName("console").getNiftyControl(Console.class);
 
 
         // output hello to the console

@@ -5,6 +5,7 @@
 package fr.miage.atlantis.gui.controllers;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import fr.miage.atlantis.graphics.Game3DRenderer;
@@ -17,6 +18,13 @@ public class GuiController implements ScreenController {
     private Game3DRenderer g3rdr;
     private Nifty nifty;
     private Screen screen;
+    private ArrayList<String> nameRandomizer;
+    
+    public GuiController(){
+        super();
+        this.nameRandomizer=new ArrayList();
+        this.fillNameRandomizer();
+    }
     
     @Override
     public void bind(Nifty nifty, Screen screen) {
@@ -40,40 +48,41 @@ public class GuiController implements ScreenController {
     
     public void startGame(){
         
-       
-        //TEST SI AU MOINS DEUX DES TEXT FIELDS SONT REMPLIS, SINON Genère deux joueurs avec des noms random.
-        ArrayList<String> noms=new ArrayList();
         
-        noms.add("Fee-Lycia");
-        noms.add("Marie-Mercredi");
-        noms.add("Love-Ly");
-        noms.add("Chris-Tough");
-        noms.add("G-Rémi");
-        noms.add("Gabry-Aile");
-        noms.add("Sid-Rick");
-        noms.add("The-Eau");
-        noms.add("Parla Jessica");
-        noms.add("Prod-yge");
-        noms.add("Alpa-Tchino");        
+        TextField fieldJ1=this.nifty.getScreen("start").findElementByName("inputJ1").getNiftyControl(TextField.class);
+
+        TextField fieldJ2=this.nifty.getScreen("start").findElementByName("inputJ2").getNiftyControl(TextField.class);        
+        
+        TextField fieldJ3=this.nifty.getScreen("start").findElementByName("inputJ3").getNiftyControl(TextField.class);
+        
+        TextField fieldJ4=this.nifty.getScreen("start").findElementByName("inputJ4").getNiftyControl(TextField.class);
+        
+        System.out.println(fieldJ1.getRealText()+" "+fieldJ2.getRealText()+" "+fieldJ3.getRealText()+" "+fieldJ4.getRealText()+" ");
+        
+        
+        
         
        
+      
         
         String[] players=new String[4];
         
-        players[0]= noms.get(new Random().nextInt(noms.size()));
-        noms.remove(players[0]);
-        players[1]= noms.get(new Random().nextInt(noms.size()));
-        noms.remove(players[1]);
-        players[2]= noms.get(new Random().nextInt(noms.size()));
-        noms.remove(players[2]);
-        players[3]= noms.get(new Random().nextInt(noms.size()));
-        noms.remove(players[3]);
+       
+        players[0]= this.nameRandomizer.get(new Random().nextInt(this.nameRandomizer.size()));
+        this.nameRandomizer.remove(players[0]);
+        players[1]= this.nameRandomizer.get(new Random().nextInt(this.nameRandomizer.size()));
+        this.nameRandomizer.remove(players[1]);
+        players[2]= this.nameRandomizer.get(new Random().nextInt(this.nameRandomizer.size()));
+        this.nameRandomizer.remove(players[2]);
+        players[3]= this.nameRandomizer.get(new Random().nextInt(this.nameRandomizer.size()));
+        this.nameRandomizer.remove(players[3]);
+        
         
         this.g3rdr.getLogic().prepareGame(players);
         
         this.g3rdr.getLogic().startGame();
                        
-        this.nifty.gotoScreen("consolehud");
+        this.nifty.gotoScreen("inGameHud");
         
         
     }
@@ -85,40 +94,57 @@ public class GuiController implements ScreenController {
         
        
         //TEST SI AU MOINS DEUX DES TEXT FIELDS SONT REMPLIS, SINON Genère deux joueurs avec des noms random.
-        ArrayList<String> noms=new ArrayList();
         
-        noms.add("Fee-Lycia");
-        noms.add("Marie-Mercredi");
-        noms.add("Love-Ly");
-        noms.add("Chris-Tough");
-        noms.add("G-Rémi");
-        noms.add("Gabry-Aile");
-        noms.add("Sid-Rick");
-        noms.add("The-Eau");
-        noms.add("Parla Jessica");
-        noms.add("Prod-yge");
-        noms.add("Alpa-Tchino");        
+        
+        TextField fieldJ1=this.nifty.getScreen("start").findElementByName("inputJ1").getNiftyControl(TextField.class);
+
+        TextField fieldJ2=this.nifty.getScreen("start").findElementByName("inputJ2").getNiftyControl(TextField.class);        
+        
+        TextField fieldJ3=this.nifty.getScreen("start").findElementByName("inputJ3").getNiftyControl(TextField.class);
+        
+        TextField fieldJ4=this.nifty.getScreen("start").findElementByName("inputJ4").getNiftyControl(TextField.class);
+        
+        System.out.println(fieldJ1.getRealText()+" "+fieldJ2.getRealText()+" "+fieldJ3.getRealText()+" "+fieldJ4.getRealText()+" ");
+        
+         
+        
         
        
         
         String[] players=new String[4];
         
-        players[0]= noms.get(new Random().nextInt(noms.size()));
-        noms.remove(players[0]);
-        players[1]= noms.get(new Random().nextInt(noms.size()));
-        noms.remove(players[1]);
-        players[2]= noms.get(new Random().nextInt(noms.size()));
-        noms.remove(players[2]);
-        players[3]= noms.get(new Random().nextInt(noms.size()));
-        noms.remove(players[3]);
+        players[0]= this.nameRandomizer.get(new Random().nextInt(this.nameRandomizer.size()));
+        this.nameRandomizer.remove(players[0]);
+        players[1]= this.nameRandomizer.get(new Random().nextInt(this.nameRandomizer.size()));
+        this.nameRandomizer.remove(players[1]);
+        players[2]= this.nameRandomizer.get(new Random().nextInt(this.nameRandomizer.size()));
+        this.nameRandomizer.remove(players[2]);
+        players[3]= this.nameRandomizer.get(new Random().nextInt(this.nameRandomizer.size()));
+        this.nameRandomizer.remove(players[3]);
         
         this.g3rdr.getLogic().prepareGame(players);
         
         this.g3rdr.getLogic().startGame(); 
         
         
-        this.nifty.gotoScreen("consolehud");
+        this.nifty.gotoScreen("inGameHud");
         
         
+    }
+
+    private void fillNameRandomizer() {
+ this.nameRandomizer.add("Fee-Lycia");
+        this.nameRandomizer.add("Marie-Mercredi");
+        this.nameRandomizer.add("Love-Ly");
+        this.nameRandomizer.add("Chris-Tough");
+        this.nameRandomizer.add("G-Rémi");
+        this.nameRandomizer.add("Gabry-Aile");
+        this.nameRandomizer.add("Sid-Rick");
+        this.nameRandomizer.add("The-Eau");
+        this.nameRandomizer.add("Parla Jessica");
+        this.nameRandomizer.add("Prod-yge");
+        this.nameRandomizer.add("Alpa-Tchino");       
+    
+    
     }
 }  
