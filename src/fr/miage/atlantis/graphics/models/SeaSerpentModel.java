@@ -19,6 +19,8 @@
 package fr.miage.atlantis.graphics.models;
 
 import com.jme3.asset.AssetManager;
+import com.jme3.scene.shape.Box;
+import fr.miage.atlantis.graphics.Utils;
 
 /**
  *
@@ -32,11 +34,18 @@ public class SeaSerpentModel extends AnimatedModel {
     public final static String ANIMATION_SWIM_CYCLE = "swim cycle";
     public final static String ANIMATION_DIVE = "Dive";
 
+    private final static String COLLISION_BONE_ATTACH = "root";
+
     public SeaSerpentModel(AssetManager am) {
         super(am, "Models/serpentA.mesh.xml", "Textures/seaserpent.png",
                 "Textures/seaserpent_normal.png");
 
         getModel().setLocalTranslation(-2, -3, 24);
+
+        // On définit la forme spéciale de collision, car sinon le picking est décalé lorsque
+        // le personnage joue l'animation de nage
+        Box box = new Box(6, 13, 6);
+        setupCustomCollisionShape(Utils.generateInvisibleBox(am, box), COLLISION_BONE_ATTACH);
     }
 
 

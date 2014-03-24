@@ -28,6 +28,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -66,6 +68,9 @@ public final class GameBoard {
     private ArrayList<GameTile> randomiser;
 
 
+    private static final Logger logger = Logger.getGlobal();
+    
+    
     /**
      * Constructeur de GameBoard
      *
@@ -98,6 +103,7 @@ public final class GameBoard {
             randomiser.add(tmp);
         }
 
+        
        //-----------------------------------------------------------------------
        //Ligne 1                                                               |
        //-----------------------------------------------------------------------
@@ -705,13 +711,8 @@ public final class GameBoard {
 
        temp=(WaterTile)this.mTileSet.get("Water #47");
        ss = new SeaSerpent();
-       ss.moveToTile(null, temp);
-
+       ss.moveToTile(null, temp);       
        //-----------------------------------------------------------------------
-
-       //Affiche chaques tiles et son detail
-
-       this.printAllTiles();
     }
 
 
@@ -836,7 +837,8 @@ public final class GameBoard {
         List<GameEntity> entities = new ArrayList<GameEntity>(tile.getEntities());
         for (GameEntity ent : entities) {
             ent.moveToTile(logic, newTile);
-            System.out.println("Entity is now in sunken tile " + newTile.getName());
+            logger.log(Level.FINE, "GameBoard: Entity is now in sunken tile ", new Object[]{newTile.getName()});
+            
         }
 
         //On update cette tile dans la hashmap
@@ -1001,7 +1003,7 @@ public final class GameBoard {
         Set<String> s=this.mTileSet.keySet();
 
         for(String key : s){
-            System.out.println(this.mTileSet.get(key));
+            logger.log(Level.FINE, key ,new Object[]{this.mTileSet.get(key)});
         }
     }
 

@@ -57,6 +57,10 @@ public class SeaSerpent extends Animal {
             // Les krakens mangent les petits bonhommes
             logic.onEntityAction(this, ent, GameEntity.ACTION_SEASERPENT_CRUSH);
             return true;
+        } else if (ent instanceof Boat) {
+            // Les krakens nukent les bateaux aussi
+            logic.onEntityAction(this, ent, GameEntity.ACTION_SEASERPENT_CRUSH);
+            return true;
         }
 
         return false;

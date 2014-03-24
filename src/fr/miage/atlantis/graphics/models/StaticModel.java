@@ -50,11 +50,9 @@ public class StaticModel extends Node {
         // On charge le mesh du cache
         Spatial model = ModelCache.getInstance().getModel(meshName);
         if (model == null) {
-            System.out.println("LOADING MODEL: " + meshName);
             mModel = am.loadModel(meshName);
             ModelCache.getInstance().putModel(meshName, mModel);
         } else {
-            System.out.println("USING MODEL FROM CACHE");
             mModel = model.clone(false);
         }
 
@@ -68,10 +66,8 @@ public class StaticModel extends Node {
             Material cachedMat = ModelCache.getInstance().getMaterial(cacheKey);
 
             if (cachedMat != null) {
-                System.out.println("USING CACHED MATERIAL");
                 mMaterial = cachedMat.clone();
             } else {
-                System.out.println("GENERATING NEW MATERIAL");
                 mMaterial = new Material(am, "Common/MatDefs/Light/Lighting.j3md");
                 Texture diffuseTex = am.loadTexture(diffusePath);
                 diffuseTex.setMinFilter(Texture.MinFilter.Trilinear);

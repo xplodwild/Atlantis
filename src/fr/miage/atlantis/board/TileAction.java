@@ -24,6 +24,8 @@ import fr.miage.atlantis.entities.Whale;
 import fr.miage.atlantis.logic.GameLogic;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Classe représentant les faces arrières des tiles du plateau de jeu
@@ -77,25 +79,25 @@ public class TileAction {
     //--------------------------------------------------------------------------
 
     /** Nombre de tile action de type Spawn Animal Shark     */
-    public final static int TILE_COUNT_ANIMAL_SHARK_UNDERBEACHTILE = 6;
+    public final static int TILE_COUNT_ANIMAL_SHARK_UNDERBEACHTILE = 3;
     /** Nombre de tile action de type Spawn Animal Whale     */
-    public final static int TILE_COUNT_ANIMAL_WHALE_UNDERBEACHTILE = 5;
+    public final static int TILE_COUNT_ANIMAL_WHALE_UNDERBEACHTILE = 3;
     /** Nombre de tile action de type Move Animal Shark     */
-    private final static int TILE_COUNT_MOVE_SHARK_UNDERBEACHTILE = 2;
+    private final static int TILE_COUNT_MOVE_SHARK_UNDERBEACHTILE = 1;
     /** Nombre de tile action de type Move Animal Whale     */
-    private final static int TILE_COUNT_MOVE_WHALE_UNDERBEACHTILE = 2;
+    private final static int TILE_COUNT_MOVE_WHALE_UNDERBEACHTILE = 1;
     /** Nombre de tile action de type Move Animal Seaserpent     */
-    private final static int TILE_COUNT_MOVE_SEASERPENT_UNDERBEACHTILE = 2;
+    private final static int TILE_COUNT_MOVE_SEASERPENT_UNDERBEACHTILE = 1;
     /** Nombre de tile action de type Cancel Animal Shark     */
-    private final static int TILE_COUNT_CANCEL_SHARK_UNDERBEACHTILE = 3;
+    private final static int TILE_COUNT_CANCEL_SHARK_UNDERBEACHTILE = 1;
     /** Nombre de tile action de type Cancel Animal Whale     */
-    private final static int TILE_COUNT_CANCEL_WHALE_UNDERBEACHTILE = 3;
+    private final static int TILE_COUNT_CANCEL_WHALE_UNDERBEACHTILE = 0;
     /** Nombre de tile action de type Spawn Boat     */
-    private final static int TILE_COUNT_SPAWN_BOAT_UNDERBEACHTILE = 3;
+    private final static int TILE_COUNT_SPAWN_BOAT_UNDERBEACHTILE = 1;
     /** Nombre de tile action de type BonusSwim     */
-    private final static int TILE_COUNT_BONUS_SWIM_UNDERBEACHTILE = 4;
+    private final static int TILE_COUNT_BONUS_SWIM_UNDERBEACHTILE = 3;
     /** Nombre de tile action de type BonusBoat     */
-    private final static int TILE_COUNT_BONUS_BOAT_UNDERBEACHTILE = 4;
+    private final static int TILE_COUNT_BONUS_BOAT_UNDERBEACHTILE = 2;
     /** Nombre de tile action de type tourbillon     */
     private final static int TILE_COUNT_WHIRL_UNDERBEACHTILE = 0;
     /** Nombre de tile action de type volcan     */
@@ -106,27 +108,27 @@ public class TileAction {
     //--------------------------------------------------------------------------
 
     /** Nombre de tile de type Spawn Requin*/
-    public final static int TILE_COUNT_ANIMAL_SHARK_UNDERFORESTTILE = 6;
+    public final static int TILE_COUNT_ANIMAL_SHARK_UNDERFORESTTILE = 2;
     /** Nombre de tile action de type Spawn Animal Whale */
-    public final static int TILE_COUNT_ANIMAL_WHALE_UNDERFORESTTILE = 5;
+    public final static int TILE_COUNT_ANIMAL_WHALE_UNDERFORESTTILE = 2;
     /** Nombre de tile action de type Move Animal Shark  */
-    private final static int TILE_COUNT_MOVE_SHARK_UNDERFORESTTILE = 2;
+    private final static int TILE_COUNT_MOVE_SHARK_UNDERFORESTTILE = 1;
     /** Nombre de tile action de type Move Animal Whale  */
-    private final static int TILE_COUNT_MOVE_WHALE_UNDERFORESTTILE = 2;
+    private final static int TILE_COUNT_MOVE_WHALE_UNDERFORESTTILE = 1;
     /** Nombre de tile action de type Move Animal Seaserpent    */
-    private final static int TILE_COUNT_MOVE_SEASERPENT_UNDERFORESTTILE = 2;
+    private final static int TILE_COUNT_MOVE_SEASERPENT_UNDERFORESTTILE = 1;
     /** Nombre de tile action de type Cancel Animal Shark    */
-    private final static int TILE_COUNT_CANCEL_SHARK_UNDERFORESTTILE = 3;
+    private final static int TILE_COUNT_CANCEL_SHARK_UNDERFORESTTILE = 1;
     /** Nombre de tile action de type Cancel Animal Whale     */
-    private final static int TILE_COUNT_CANCEL_WHALE_UNDERFORESTTILE = 3;
+    private final static int TILE_COUNT_CANCEL_WHALE_UNDERFORESTTILE = 2;
     /** Nombre de tile action de type Spawn Boat     */
     private final static int TILE_COUNT_SPAWN_BOAT_UNDERFORESTTILE = 3;
     /** Nombre de tile action de type BonusSwim     */
-    private final static int TILE_COUNT_BONUS_SWIM_UNDERFORESTTILE = 4;
+    private final static int TILE_COUNT_BONUS_SWIM_UNDERFORESTTILE = 1;
     /** Nombre de tile action de type BonusBoat     */
-    private final static int TILE_COUNT_BONUS_BOAT_UNDERFORESTTILE = 4;
+    private final static int TILE_COUNT_BONUS_BOAT_UNDERFORESTTILE = 0;
     /** Nombre de tile action de type tourbillon     */
-    private final static int TILE_COUNT_WHIRL_UNDERFORESTTILE = 0;
+    private final static int TILE_COUNT_WHIRL_UNDERFORESTTILE = 2;
     /** Nombre de tile action de type volcan     */
     private final static int TILE_COUNT_VOLCANO_UNDERFORESTTILE = 0;
     //--------------------------------------------------------------------------
@@ -137,27 +139,27 @@ public class TileAction {
     //--------------------------------------------------------------------------
 
     /** Nombre de tile action de type Spawn Animal Shark     */
-    public final static int TILE_COUNT_ANIMAL_SHARK_UNDERMOUNTAINTILE = 6;
+    public final static int TILE_COUNT_ANIMAL_SHARK_UNDERMOUNTAINTILE = 1;
     /** Nombre de tile action de type Spawn Animal Whale     */
-    public final static int TILE_COUNT_ANIMAL_WHALE_UNDERMOUNTAINTILE = 5;
+    public final static int TILE_COUNT_ANIMAL_WHALE_UNDERMOUNTAINTILE = 0;
     /** Nombre de tile action de type Move Animal Shark     */
-    private final static int TILE_COUNT_MOVE_SHARK_UNDERMOUNTAINTILE = 2;
+    private final static int TILE_COUNT_MOVE_SHARK_UNDERMOUNTAINTILE = 0;
     /** Nombre de tile action de type Move Animal Whale     */
-    private final static int TILE_COUNT_MOVE_WHALE_UNDERMOUNTAINTILE = 2;
+    private final static int TILE_COUNT_MOVE_WHALE_UNDERMOUNTAINTILE = 0;
     /** Nombre de tile action de type Move Animal Seaserpent     */
-    private final static int TILE_COUNT_MOVE_SEASERPENT_UNDERMOUNTAINTILE = 2;
+    private final static int TILE_COUNT_MOVE_SEASERPENT_UNDERMOUNTAINTILE = 0;
     /** Nombre de tile action de type Cancel Animal Shark     */
-    private final static int TILE_COUNT_CANCEL_SHARK_UNDERMOUNTAINTILE = 3;
+    private final static int TILE_COUNT_CANCEL_SHARK_UNDERMOUNTAINTILE = 1;
     /** Nombre de tile action de type Cancel Animal Whale     */
-    private final static int TILE_COUNT_CANCEL_WHALE_UNDERMOUNTAINTILE = 3;
+    private final static int TILE_COUNT_CANCEL_WHALE_UNDERMOUNTAINTILE = 1;
     /** Nombre de tile action de type Spawn Boat     */
-    private final static int TILE_COUNT_SPAWN_BOAT_UNDERMOUNTAINTILE = 3;
+    private final static int TILE_COUNT_SPAWN_BOAT_UNDERMOUNTAINTILE = 0;
     /** Nombre de tile action de type BonusSwim     */
-    private final static int TILE_COUNT_BONUS_SWIM_UNDERMOUNTAINTILE = 4;
+    private final static int TILE_COUNT_BONUS_SWIM_UNDERMOUNTAINTILE = 0;
     /** Nombre de tile action de type BonusBoat     */
-    private final static int TILE_COUNT_BONUS_BOAT_UNDERMOUNTAINTILE = 4;
+    private final static int TILE_COUNT_BONUS_BOAT_UNDERMOUNTAINTILE = 0;
     /** Nombre de tile action de type tourbillon     */
-    private final static int TILE_COUNT_WHIRL_UNDERMOUNTAINTILE = 6;
+    private final static int TILE_COUNT_WHIRL_UNDERMOUNTAINTILE = 4;
     /** Nombre de tile action de type volcan     */
     private final static int TILE_COUNT_VOLCANO_UNDERMOUNTAINTILE = 1;
 
@@ -179,6 +181,11 @@ public class TileAction {
     private static ArrayList<TileAction> sRandomizerForest;
     private static ArrayList<TileAction> sRandomizerMountain;
 
+    
+    private static final Logger logger = Logger.getLogger(GameBoard.class.getName());
+    
+    
+    
     private TileAction(int action, int entity, boolean isImmediate,
             boolean isTriggerable, boolean isVolcano) {
         mAction = action;
@@ -257,7 +264,7 @@ public class TileAction {
             }
 
             for (int i = 0; i < TileAction.TILE_COUNT_SPAWN_BOAT_UNDERBEACHTILE; i++) {
-                sRandomizerMountain.add(TileAction.Factory.createBonusBoat());
+                sRandomizerBeach.add(TileAction.Factory.createSpawnEntity(TileAction.ENTITY_BOAT));
             }
 
             for (int i = 0; i < TileAction.TILE_COUNT_BONUS_SWIM_UNDERBEACHTILE; i++) {
@@ -268,10 +275,10 @@ public class TileAction {
                 sRandomizerBeach.add(TileAction.Factory.createBonusBoat());
             }
             for (int i = 0; i < TileAction.TILE_COUNT_WHIRL_UNDERBEACHTILE; i++) {
-                sRandomizerForest.add(TileAction.Factory.createWhirl());
+                sRandomizerBeach.add(TileAction.Factory.createWhirl());
             }
             for (int i = 0; i < TileAction.TILE_COUNT_VOLCANO_UNDERBEACHTILE; i++) {
-                sRandomizerForest.add(TileAction.Factory.createWhirl());
+                sRandomizerBeach.add(TileAction.Factory.createVolcano());
             }
 
 
@@ -319,7 +326,7 @@ public class TileAction {
             }
 
             for (int i = 0; i < TileAction.TILE_COUNT_SPAWN_BOAT_UNDERMOUNTAINTILE; i++) {
-                sRandomizerMountain.add(TileAction.Factory.createBonusBoat());
+                sRandomizerMountain.add(TileAction.Factory.createSpawnEntity(TileAction.ENTITY_BOAT));
             }
 
             for (int i = 0; i < TileAction.TILE_COUNT_BONUS_SWIM_UNDERMOUNTAINTILE; i++) {
@@ -335,10 +342,8 @@ public class TileAction {
             }
 
             for (int i = 0; i < TileAction.TILE_COUNT_VOLCANO_UNDERMOUNTAINTILE; i++) {
-                sRandomizerMountain.add(TileAction.Factory.createWhirl());
+                sRandomizerMountain.add(TileAction.Factory.createVolcano());
             }
-
-            sRandomizerMountain.add(TileAction.Factory.createVolcano());
         }
 
         int random = new Random().nextInt(TileAction.sRandomizerMountain.size());
@@ -383,7 +388,7 @@ public class TileAction {
             }
 
             for (int i = 0; i < TileAction.TILE_COUNT_SPAWN_BOAT_UNDERFORESTTILE; i++) {
-                sRandomizerForest.add(TileAction.Factory.createBonusBoat());
+                sRandomizerForest.add(TileAction.Factory.createSpawnEntity(TileAction.ENTITY_BOAT));
             }
 
             for (int i = 0; i < TileAction.TILE_COUNT_BONUS_SWIM_UNDERFORESTTILE; i++) {
@@ -398,7 +403,7 @@ public class TileAction {
                 sRandomizerForest.add(TileAction.Factory.createWhirl());
             }
             for (int i = 0; i < TileAction.TILE_COUNT_VOLCANO_UNDERFORESTTILE; i++) {
-                sRandomizerForest.add(TileAction.Factory.createWhirl());
+                sRandomizerForest.add(TileAction.Factory.createVolcano());
             }
         }
 
@@ -456,10 +461,10 @@ public class TileAction {
         // endroit sur le rendu. Ensuite, on relance moveToTile avec la logic pour effectivement
         // lancer les événements. Cela permet d'être sûr que la nouvelle entité est bien affichée
         // avant que d'autres animations se lancent.
-        System.out.println("Spawned entity: Moving to tile");
+        logger.log(Level.FINE, "Spawned entity: Moving to tile", new Object[]{});
         spawnedEntity.moveToTile(null, tile);
         logic.onEntitySpawn(spawnedEntity);
-        System.out.println("Spawned entity: Triggering events");
+        logger.log(Level.FINE, "Spawned entity: Triggering events", new Object[]{});
         spawnedEntity.moveToTile(logic, tile);
     }
 

@@ -27,6 +27,7 @@ import com.jme3.math.Quaternion;
 import com.jme3.math.Spline;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
+import fr.miage.atlantis.board.BorderTile;
 import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.board.TileAction;
 import fr.miage.atlantis.board.WaterTile;
@@ -40,9 +41,11 @@ import fr.miage.atlantis.graphics.AnimationBrain;
 import fr.miage.atlantis.graphics.FutureCallback;
 import fr.miage.atlantis.graphics.Game3DRenderer;
 import fr.miage.atlantis.graphics.ParticlesFactory;
+import fr.miage.atlantis.graphics.Utils;
 import fr.miage.atlantis.graphics.hud.TileActionDisplay;
 import fr.miage.atlantis.graphics.models.AbstractTileModel;
 import fr.miage.atlantis.graphics.models.AnimatedModel;
+import fr.miage.atlantis.graphics.models.BoatModel;
 import fr.miage.atlantis.graphics.models.PlayerModel;
 import fr.miage.atlantis.graphics.models.SeaSerpentModel;
 import fr.miage.atlantis.graphics.models.SharkModel;
@@ -51,6 +54,9 @@ import fr.miage.atlantis.logic.GameLogic;
 import fr.miage.atlantis.logic.GameTurn;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Main Game Engine loop class
@@ -63,10 +69,23 @@ public class Game3DLogic extends GameLogic {
 
     private Game3DRenderer mRenderer;
     private GameEntity mPickedEntity;
+    private int mBypassCallbackCount;
+    private List<EntityPickRequest> mEntRequestHistory;
+    private List<TilePickRequest> mTileRequestHistory;
+    private boolean mCanCancelPickingAction;
+
+     /**
+     * Instance du logger Java
+     */
+    private static final Logger logger = Logger.getGlobal();
 
     public Game3DLogic() {
         super();
         mRenderer = new Game3DRenderer(this);
+        mBypassCallbackCount = 0;
+        mEntRequestHistory = new ArrayList<EntityPickRequest>();
+        mTileRequestHistory = new ArrayList<TilePickRequest>();
+        mCanCancelPickingAction = false;
     }
 
     @Override
@@ -77,30 +96,71 @@ public class Game3DLogic extends GameLogic {
 
     @Override
     public void startGame() {
-        // TEST: On place des tokens
-        Player[] plays = getPlayers();
-        for (int i = 0; i < plays.length; i++) {
-            Player p = plays[i];
-            List<PlayerToken> tokens = p.getTokens();
+        if (DBG_AUTOPREPARE) {
+            // TEST: On place des tokens
+             Player[] plays = getPlayers();
+             for (int i = 0; i < plays.length; i++) {
+                 Player p = plays[i];
+                 List<PlayerToken> tokens = p.getTokens();
 
-            for (PlayerToken token : tokens) {
-                token.moveToTile(this, getBoard().getTileSet().get("Beach #3"));
-                mRenderer.getEntitiesRenderer().addEntity(token);
-            }
+                 for (PlayerToken token : tokens) {
+                     int rand=new Random().nextInt(15)+1;
+                         token.moveToTile(this, getBoard().getTileSet().get("Beach #"+rand));
+
+                     mRenderer.getEntitiesRenderer().addEntity(token);
+                 }
+             }
+            // TEST: On place des bateaux
+            Boat boat1 = new Boat();
+            boat1.moveToTile(this, getBoard().getTileSet().get("Water #37"));
+            mRenderer.getEntitiesRenderer().addEntity(boat1);
         }
-
-        // TEST: On place des bateaux
-        Boat boat1 = new Boat();
-        boat1.moveToTile(this, getBoard().getTileSet().get("Water #37"));
-        mRenderer.getEntitiesRenderer().addEntity(boat1);
 
         super.startGame();
     }
 
+    /**
+     * Remet à zéro les éléments pickée et relance le dernier picking
+     */
+    public boolean resetPickingAction() {
+        assert mEntRequestHistory.size() == mTileRequestHistory.size();
+
+        if (mCanCancelPickingAction && mEntRequestHistory.size() > 1
+                && mTileRequestHistory.size() > 1) {
+            // On relance la requête avant la dernière requête
+            int reqId = mTileRequestHistory.size() - 2;
+            TilePickRequest tileRq = mTileRequestHistory.get(reqId);
+            EntityPickRequest entRq = mEntRequestHistory.get(reqId);
+            mRenderer.getInputListener().forceResetRequest();
+            requestPick(entRq, tileRq);
+
+            // Une seule action peut être annulée.
+            mCanCancelPickingAction = false;
+
+            return true;
+        } else {
+            // Rien à relancer ou pas possible
+            return false;
+        }
+    }
+
     public void onTurnStart(Player p) {
         // TODO: Animations
-        System.out.println("Game3DLogic: onTurnStart");
+        logger.log(Level.FINE, "Game3DLogic: onTurnStart()", new Object[]{});
+
         getCurrentTurn().onTurnStarted();
+    }
+
+    public void onInitialTokenPut(PlayerToken pt) {
+        mRenderer.getEntitiesRenderer().addEntity(pt);
+        getCurrentTurn().onInitialTokenPutDone();
+    }
+
+    @Override
+    public void onInitialBoatPut(Boat b) {
+        super.onInitialBoatPut(b);
+        mRenderer.getEntitiesRenderer().addEntity(b);
+        getCurrentTurn().onInitialBoatPutDone();
     }
 
     public void onPlayTileAction(GameTile tile, TileAction action) {
@@ -141,7 +201,7 @@ public class Game3DLogic extends GameLogic {
         motionEvent.getPath().addListener(new MotionPathListener() {
             public void onWayPointReach(MotionEvent control, int wayPointIndex) {
                 if (control.getPath().getNbWayPoints() == wayPointIndex + 1) {
-                    System.out.println("Game3DLogic: Waypoint reached, processing events");
+                    logger.log(Level.FINE, "Game3DLogic: Waypoint reached, processing events", new Object[]{});
                     // On bouge effectivement le joueur de tile. Note: On fait cette action à la
                     // fin de l'animation pour pouvoir proprement enchainer les actions (exemple:
                     // on marche sur un requin ou un bateau). Ainsi, le GameTurn attend avant de
@@ -155,9 +215,49 @@ public class Game3DLogic extends GameLogic {
                     // Remise à zéro de l'orientation
                     entNode.setLocalRotation(Quaternion.IDENTITY);
 
-                    // On notifie le jeu, toutes les actions nécessaires sont faites.
-                    if (getCurrentTurn() != null) {
+                    // Gestion de la montée sur un bateaux
+                    if (entNode instanceof PlayerModel) {
+                        PlayerToken pt = (PlayerToken) ent;
+                        if (pt.getState() == PlayerToken.STATE_ON_BOAT) {
+                            Boat b = pt.getBoat();
+                            BoatModel bm = (BoatModel) mRenderer.getEntitiesRenderer().getNodeFromEntity(b);
+                            entNode.getParent().detachChild(entNode);
+                            bm.attachChild(entNode);
+                            entNode.setLocalTranslation(Vector3f.ZERO);
+                            entNode.rotate(0, Utils.degreesToRad(90), 0);
+
+                            switch (b.getPlayerSlot(pt)) {
+                                case 1:
+                                    entNode.setLocalTranslation(10, 0, 0);
+                                    break;
+
+                                case 2:
+                                    entNode.setLocalTranslation(-10, 0, 0);
+                                    break;
+                            }
+                        }
+                    }
+
+                    // On vérifie si la tile est une tile d'escape, et on lance l'animation
+                    // d'escape si c'est le cas
+                    if (dest instanceof WaterTile && ent instanceof PlayerToken) {
+                        WaterTile wt = (WaterTile) dest;
+                        PlayerToken pt = (PlayerToken) ent;
+
+                        if (wt.isLandingTile()) {
+                            mBypassCallbackCount++;
+                            onUnitMove(ent, wt.findEscapeBorder());
+                            pt.setState(PlayerToken.STATE_SAFE);
+                        }
+                    }
+
+
+                    // On notifie le jeu, toutes les actions nécessaires sont faites (si on
+                    // ne saute pas la notification, si c'est appelé d'un autre événement).
+                    if (getCurrentTurn() != null && mBypassCallbackCount <= 0) {
                         getCurrentTurn().onUnitMoveFinished();
+                    } else if (mBypassCallbackCount > 0) {
+                        mBypassCallbackCount--;
                     }
                 }
             }
@@ -172,13 +272,14 @@ public class Game3DLogic extends GameLogic {
 
     public void onDiceRoll(int face) {
         // On a besoin de lancer le dé
-        System.out.println("Game3DLogic: onDiceRoll");
+        logger.log(Level.FINE, "Game3DLogic: onDiceRoll", new Object[]{});
         mRenderer.rollDiceAnimation(face);
     }
 
     public void onSinkTile(final GameTile tile) {
         AbstractTileModel tileNode = mRenderer.getBoardRenderer().findTileModel(tile);
         if (tileNode == null) {
+            logger.log(Level.SEVERE, "Aucune node 3D trouvée pour la tile de destination!", new Object[]{});
             throw new IllegalStateException("Aucune node 3D trouvée pour la tile de destination!");
         }
 
@@ -204,6 +305,7 @@ public class Game3DLogic extends GameLogic {
                     List<GameEntity> newTileEntities = new ArrayList<GameEntity>(newTile.getEntities());
                     for (GameEntity ent : newTileEntities) {
                         if (ent instanceof PlayerToken) {
+                            mBypassCallbackCount++;
                             onUnitMove(ent, newTile);
                         }
                     }
@@ -225,8 +327,10 @@ public class Game3DLogic extends GameLogic {
                             if (action.isImmediate()) {
                                 onPlayTileAction(newTile, action);
                             } else {
-                                System.out.println("TODO: Tile is not immediate: " + action.toString());
-                                // TODO: Stocker la tile dans les tiles du joueur
+                                // L'action est pas immédiate, on stock la tile dans la pile du
+                                // joueur.
+                                Player player = getCurrentTurn().getPlayer();
+                                player.addActionTile(action);
                             }
 
                             // Fin de l'action, étape suivante
@@ -275,13 +379,11 @@ public class Game3DLogic extends GameLogic {
 
             case GameEntity.ACTION_SEASERPENT_CRUSH: {
                 final SeaSerpent ss = (SeaSerpent) source;
-                final PlayerToken token = (PlayerToken) target;
-
                 final SeaSerpentModel ssModel = (SeaSerpentModel) mRenderer.getEntitiesRenderer().getNodeFromEntity(ss);
-                final PlayerModel playerModel = (PlayerModel) mRenderer.getEntitiesRenderer().getNodeFromEntity(token);
-                ssModel.lookAt(playerModel.getLocalTranslation(), Vector3f.UNIT_Y);
-                ssModel.rotate(0, -90, 0);
 
+                // Un kraken peut soit manger un bateau, soit des joueurs (un bateau contenant des
+                // joueurs étant traité séparément). Dans tous les cas, on va lancer l'animation
+                // pour lui.
                 ssModel.playAnimation(SeaSerpentModel.ANIMATION_ATTACK_CELL, false, true, new AnimEventListener() {
                     public void onAnimCycleDone(AnimControl control, AnimChannel channel, String animName) {
                         ssModel.playAnimation(AnimationBrain.getIdleAnimation(ss));
@@ -291,15 +393,40 @@ public class Game3DLogic extends GameLogic {
                     public void onAnimChange(AnimControl control, AnimChannel channel, String animName) {
                     }
                 });
-                playerModel.playAnimation(PlayerModel.ANIMATION_EATEN_BY_SHARK, false, true, new AnimEventListener() {
-                    public void onAnimCycleDone(AnimControl control, AnimChannel channel, String animName) {
-                        token.die(Game3DLogic.this);
-                        control.removeListener(this);
-                    }
 
-                    public void onAnimChange(AnimControl control, AnimChannel channel, String animName) {
-                    }
-                });
+                if (target instanceof PlayerToken) {
+                    final PlayerToken token = (PlayerToken) target;
+                    final PlayerModel playerModel = (PlayerModel) mRenderer.getEntitiesRenderer().getNodeFromEntity(token);
+                    ssModel.lookAt(playerModel.getLocalTranslation(), Vector3f.UNIT_Y);
+                    ssModel.rotate(0, -90, 0);
+
+                    playerModel.playAnimation(PlayerModel.ANIMATION_EATEN_BY_SHARK, false, true, new AnimEventListener() {
+                        public void onAnimCycleDone(AnimControl control, AnimChannel channel, String animName) {
+                            token.die(Game3DLogic.this);
+                            control.removeListener(this);
+                        }
+
+                        public void onAnimChange(AnimControl control, AnimChannel channel, String animName) {
+                        }
+                    });
+                } else if (target instanceof Boat) {
+                    final Boat boat = (Boat) target;
+                    final BoatModel boatModel = (BoatModel) mRenderer.getEntitiesRenderer().getNodeFromEntity(boat);
+                    ssModel.lookAt(boatModel.getLocalTranslation(), Vector3f.UNIT_Y);
+                    ssModel.rotate(0, -90, 0);
+
+                    boatModel.playAnimation(BoatModel.ANIMATION_BOAT_SINK, false, true, new AnimEventListener() {
+                        public void onAnimCycleDone(AnimControl control, AnimChannel channel, String animName) {
+                            boat.die(Game3DLogic.this);
+                            control.removeListener(this);
+                        }
+
+                        public void onAnimChange(AnimControl control, AnimChannel channel, String animName) {
+                        }
+                    });
+                } else {
+                    throw new IllegalArgumentException("A Sea Serpent cannot crush anything else than a boat or a player!");
+                }
             }
             break;
 
@@ -327,7 +454,8 @@ public class Game3DLogic extends GameLogic {
     }
 
     public void onEntitySpawn(final GameEntity spawned) {
-        System.out.println("Game3DLogic: onEntitySpawn " + spawned);
+        logger.log(Level.FINE, "Game3DLogic: onEntitySpawn ", new Object[]{});
+
         final AnimatedModel model = mRenderer.getEntitiesRenderer().addEntity(spawned);
         model.playAnimation(AnimationBrain.getSpawnAnimation(spawned), new AnimEventListener() {
             public void onAnimCycleDone(AnimControl control, AnimChannel channel, String animName) {
@@ -392,13 +520,16 @@ public class Game3DLogic extends GameLogic {
     @Override
     public void requestPick(EntityPickRequest entRq, TilePickRequest tileRq) {
         // On a besoin de picker une entité
-        System.out.println("Game3DLogic: requestPick");
+        logger.log(Level.FINE, "Game3DLogic: requestPick ", new Object[]{});
+        mEntRequestHistory.add(entRq);
+        mTileRequestHistory.add(tileRq);
+
         mRenderer.getInputListener().requestPicking(entRq, tileRq);
     }
 
     @Override
     public void onEntityPicked(GameEntity ent) {
-        System.out.println("Entity picked: " + ent);
+        logger.log(Level.FINE, "Game3DLogic: Entity picked ", new Object[]{ent});
 
         GameTurn currentTurn = mRenderer.getLogic().getCurrentTurn();
 
@@ -417,9 +548,10 @@ public class Game3DLogic extends GameLogic {
 
                 // On notifie le tour du mouvement
                 currentTurn.moveEntity(mPickedEntity, b);
-                
+
                 // Remise à zéro
                 mPickedEntity = null;
+                mCanCancelPickingAction = false;
             } else {
                 // On assume ici que lorsqu'on picke une entité, on veut picker une tile ou un bateau
                 // après, puisqu'on a des mouvements restant (et qu'un tour est forcément séquentiel)
@@ -440,13 +572,18 @@ public class Game3DLogic extends GameLogic {
                 // bateau)
                 EntityPickRequest entPick = null;
                 if (!(mPickedEntity instanceof Boat)) {
+                    PlayerToken pt = (PlayerToken) mPickedEntity;
+
                     entPick = new EntityPickRequest();
                     entPick.pickingRestriction = EntityPickRequest.FLAG_PICK_BOAT_WITH_ROOM;
                     entPick.player = null;
+                    entPick.pickNearTile = ent.getTile();
+                    entPick.avoidEntity = pt.getBoat();
                 }
 
                 // On lance la requête
                 requestPick(entPick, tilePick);
+                mCanCancelPickingAction = true;
             }
         } else if (currentTurn.hasRolledDice() && currentTurn.getRemainingDiceMoves() > 0) {
             // Le dé a été lancé, et on a des mouvements de dé restant. La seule chose possible, c'est
@@ -459,15 +596,22 @@ public class Game3DLogic extends GameLogic {
             tilePick.requiredHeight = 0;
 
             requestPick(null, tilePick);
+            mCanCancelPickingAction = true;
         }
     }
 
     @Override
     public void onTilePicked(GameTile tile) {
-        System.out.println("Tile " + tile.getName() + " picked!");
+        logger.log(Level.FINE, "Game3DLogic: Tile picked ", new Object[]{tile.getName()});
 
         GameTurn currentTurn = mRenderer.getLogic().getCurrentTurn();
-        if (currentTurn.getRemainingMoves() > 0) {
+        if (currentTurn.getTokenToPlace() != null) {
+            // On a un token a placer, on a donc pas encore commencé la partie.
+            currentTurn.putInitialToken(currentTurn.getTokenToPlace(), tile);
+        } else if (getRemainingInitialBoats() > 0) {
+            // Il nous reste des bateaux initiaux à placer, on a donc pas encore commencé la partie.
+            currentTurn.putInitialBoat(tile);
+        } else if (currentTurn.getRemainingMoves() > 0) {
             // On assume que ce picking de tile était pour le déplacement d'unités.
             currentTurn.moveEntity(mPickedEntity, tile);
         } else if (!currentTurn.hasSunkLandTile()) {
@@ -479,5 +623,18 @@ public class Game3DLogic extends GameLogic {
         }
 
         mPickedEntity = null;
+        mCanCancelPickingAction = false;
+    }
+
+    @Override
+    public void onPlayerDismountBoat(PlayerToken player, Boat b) {
+        // On détache le player du bateau, puis on le remet dans le board
+        PlayerModel pm = (PlayerModel) mRenderer.getEntitiesRenderer().getNodeFromEntity(player);
+        Vector3f existingPos = pm.getWorldTranslation();
+        pm.getParent().detachChild(pm);
+
+        Node node = mRenderer.getSceneNode();
+        node.attachChild(pm);
+        pm.setLocalTranslation(existingPos);
     }
 }

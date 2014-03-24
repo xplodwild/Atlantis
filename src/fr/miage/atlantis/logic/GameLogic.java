@@ -21,7 +21,9 @@ import fr.miage.atlantis.GameDice;
 import fr.miage.atlantis.Player;
 import fr.miage.atlantis.board.GameBoard;
 import fr.miage.atlantis.board.GameTile;
+import fr.miage.atlantis.entities.Boat;
 import fr.miage.atlantis.entities.GameEntity;
+import fr.miage.atlantis.entities.PlayerToken;
 
 /**
  * Classe représentant toute la partie logique du jeu
@@ -31,6 +33,8 @@ import fr.miage.atlantis.entities.GameEntity;
  * @date 03/03/2014
  */
 public abstract class GameLogic implements GameTurnListener {
+
+    protected static final boolean DBG_AUTOPREPARE = false;
 
     /**
      * Plateau du jeu
@@ -52,6 +56,10 @@ public abstract class GameLogic implements GameTurnListener {
      * Tableau des joueurs
      */
     private Player[] mPlayers;
+    /**
+     * Nombre de bateaux placés lors du début d'une partie
+     */
+    private int mBoatsPlaced;
 
 
     public static class EntityPickRequest {
@@ -73,6 +81,22 @@ public abstract class GameLogic implements GameTurnListener {
          * la restriction s'appliquera au joueur passé ici
          */
         public Player player;
+
+        /**
+         * Permet de sélectionner uniquement les entités étant dans les tiles autour
+         * de la tile indiquée.
+         */
+        public GameTile pickNearTile;
+
+        /**
+         * Si avoidEntity n'est pas null, le picking ne sélectionnera pas l'entité pointée
+         */
+        public GameEntity avoidEntity;
+
+        @Override
+        public String toString() {
+            return "EntityPickRequest: restriction flags=" + pickingRestriction + "; player=" + player;
+        }
     }
 
     public static class TilePickRequest {
@@ -88,10 +112,27 @@ public abstract class GameLogic implements GameTurnListener {
         public boolean waterEdgeOnly;
 
         /**
+         * Si landTilesOnly vaut true, seulement les tiles de terre seront sélectionnables
+         */
+        public boolean landTilesOnly;
+
+        /**
+         * Si noEntitiesOnTile vaut true, seulement les tiles n'ayant pas d'entités dessus seront
+         * sélectionnables
+         */
+        public boolean noEntitiesOnTile;
+
+        /**
          * Si requiredHeight est supérieur ou égal à zéro, seules les tiles au niveau spécifiées
          * pourront être pickées
          */
         public int requiredHeight = -1;
+
+        @Override
+        public String toString() {
+            return "TilePickRequest: pickNearTile=" + pickNearTile + "; waterEdgeOnly=" + waterEdgeOnly
+                    + "; requiredHeight=" + requiredHeight;
+        }
     }
 
     /**
@@ -102,6 +143,7 @@ public abstract class GameLogic implements GameTurnListener {
         mBoard = new GameBoard();
         mDice = GameDice.createDefault();
         mLog = new GameLog();
+        mBoatsPlaced = 0;
     }
 
     /**
@@ -114,6 +156,14 @@ public abstract class GameLogic implements GameTurnListener {
         mPlayers = new Player[players.length];
         for (int i = 0; i < mPlayers.length; i++) {
             mPlayers[i] = new Player(players[i], i + 1);
+        }
+
+        if (DBG_AUTOPREPARE) {
+            // Préparation automatique du board
+            mBoatsPlaced = players.length * 2;
+        } else {
+            // Aucun bateau initialement placé
+            mBoatsPlaced = 0;
         }
     }
 
@@ -170,6 +220,19 @@ public abstract class GameLogic implements GameTurnListener {
         //Fini si le tile Volcan est sorti , ou si tout les mToken sont sauvés.
 
         return false;
+    }
+
+    /**
+     * Retourne le nombre de bateaux initiaux RESTANT à placer
+     */
+    public int getRemainingInitialBoats() {
+        // Chaque joueur a deux bateaux à placer
+        return mPlayers.length * 2 - mBoatsPlaced;
+    }
+
+    @Override
+    public void onInitialBoatPut(Boat b) {
+        mBoatsPlaced++;
     }
 
     /**
@@ -231,5 +294,10 @@ public abstract class GameLogic implements GameTurnListener {
      * @param tile La tile pickée
      */
     public abstract void onTilePicked(GameTile tile);
+
+    /**
+     * Signale au moteur logique qu'on est descendu d'un bateau
+     */
+    public abstract void onPlayerDismountBoat(PlayerToken player, Boat b);
     //--------------------------------------------------------------------------
 }

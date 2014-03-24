@@ -59,6 +59,7 @@ public class InputActionListener {
 
     private final static String INPUTMAP_MOUSE_HOVER = "mouse_hover";
     private final static String INPUTMAP_MOUSE_CLICK = "mouse_click";
+    private final static String INPUTMAP_MOUSE_RIGHT_CLICK = "mouse_right_click";
 
     private InputManager mInputManager;
     private Game3DRenderer mRenderer;
@@ -122,13 +123,21 @@ public class InputActionListener {
         }
     };
 
+    private ActionListener mMouseRightClickListener = new ActionListener() {
+        public void onAction(String name, boolean isPressed, float tpf) {
+            // Si on clic droit et qu'on est en requête, on demande à annuler les requêtes
+            if (isPressed && mPickingRequest != REQUEST_NONE) {
+                mRenderer.getLogic().resetPickingAction();
+            }
+        }
+    };
+
     private ActionListener mMouseClickListener = new ActionListener() {
         public void onAction(String name, boolean isPressed, float tpf) {
             // Si on clique et qu'on a effectivement une requête de picking
             if (isPressed && mPickingRequest != REQUEST_NONE) {
                 // On effectue le picking
                 PickingResult result = performPicking();
-
 
                 if (result != null) {
                     // On a complété la requête. On laisse la place pour des requêtes de picking
@@ -184,6 +193,17 @@ public class InputActionListener {
         inputManager.addMapping(INPUTMAP_MOUSE_CLICK,
                 new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
         inputManager.addListener(mMouseClickListener, INPUTMAP_MOUSE_CLICK);
+
+        inputManager.addMapping(INPUTMAP_MOUSE_RIGHT_CLICK,
+                new MouseButtonTrigger(MouseInput.BUTTON_RIGHT));
+        inputManager.addListener(mMouseRightClickListener, INPUTMAP_MOUSE_RIGHT_CLICK);
+    }
+
+    /**
+     * Force la désactivation de la requête de picking en cours d'exécution
+     */
+    public void forceResetRequest() {
+        mPickingRequest = REQUEST_NONE;
     }
 
     public void requestPicking(GameLogic.EntityPickRequest entRq, GameLogic.TilePickRequest tileRq) {
@@ -195,7 +215,11 @@ public class InputActionListener {
             flag |= REQUEST_TILE_PICK;
         }
 
-        requestPicking(flag);
+        if (requestPicking(flag)) {
+            System.out.println(tileRq);
+            System.out.println(entRq);
+            System.out.println("============================================");
+        }
         mEntityRequest = entRq;
         mTileRequest = tileRq;
     }
@@ -205,15 +229,25 @@ public class InputActionListener {
      * au GameLogic correspondant.
      * @param request Un ou des flags REQUEST_** de cette classe
      */
-    private void requestPicking(int request) {
+    private boolean requestPicking(int request) {
+        boolean pleaseLog = false;
+
         // En théorie quand on request un picking, on est en état "NONE", c'est-à-dire qu'aucune
         // autre requête n'est en cours. Si on passe d'une requête à une autre, on a peut être
         // un événement d'attente manquant.
         if (mPickingRequest != REQUEST_NONE) {
             System.out.println("WARN: Previous picking request wasn't complete! An event might be missing!");
+            System.out.println("============================================");
+            System.out.println("Previous picking request: " + mPickingRequest);
+            System.out.println("Incoming request: " + request);
+            System.out.println(mTileRequest);
+            System.out.println(mEntityRequest);
+            System.out.println("============================================");
+            pleaseLog = true;
         }
 
         mPickingRequest = request;
+        return pleaseLog;
     }
 
     private PickingResult performPicking() {
@@ -287,6 +321,24 @@ public class InputActionListener {
      * @return true si l'entité respecte au moins une condition, false sinon
      */
     private boolean checkPickingConstraints(GameLogic.EntityPickRequest request, GameEntity ent) {
+        // On vérifie tout d'abord la contrainte de tile alentour, s'il y en a une.
+        if (request.pickNearTile != null) {
+            GameTile tile = ent.getTile();
+            if (tile.getLeftBottomTile() != request.pickNearTile &&
+                    tile.getLeftTile() != request.pickNearTile &&
+                    tile.getLeftUpperTile() != request.pickNearTile &&
+                    tile.getRightBottomTile() != request.pickNearTile &&
+                    tile.getRightTile() != request.pickNearTile &&
+                    tile.getRightUpperTile() != request.pickNearTile) {
+                return false;
+            }
+        }
+
+        // On vérfie ensuite la contrainte de non-sélection d'une entité en particulier
+        if (request.avoidEntity != null && request.avoidEntity == ent) {
+            return false;
+        }
+
         if ((request.pickingRestriction & GameLogic.EntityPickRequest.FLAG_PICK_PLAYER_ENTITIES) != 0) {
             // On veut picker un pion du joueur. On vérifie que l'entité est bien cela.
 
@@ -364,22 +416,24 @@ public class InputActionListener {
             }
         }
 
-        if ((request.pickingRestriction & GameLogic.EntityPickRequest.FLAG_PICK_BOAT_WITHOUT_ROOM) != 0) {
-            // On veut picker un bateau n'ayant plus de place
-            if (ent instanceof Boat) {
-                Boat b = (Boat) ent;
-                if (!b.hasRoom()) {
-                    return true;
+        if (request.player == null) {
+            if ((request.pickingRestriction & GameLogic.EntityPickRequest.FLAG_PICK_BOAT_WITHOUT_ROOM) != 0) {
+                // On veut picker un bateau n'ayant plus de place
+                if (ent instanceof Boat) {
+                    Boat b = (Boat) ent;
+                    if (!b.hasRoom()) {
+                        return true;
+                    }
                 }
             }
-        }
 
-        if ((request.pickingRestriction & GameLogic.EntityPickRequest.FLAG_PICK_BOAT_WITH_ROOM) != 0) {
-            // On veut picker un bateau ayant de la place
-            if (ent instanceof Boat) {
-                Boat b = (Boat) ent;
-                if (b.hasRoom()) {
-                    return true;
+            if ((request.pickingRestriction & GameLogic.EntityPickRequest.FLAG_PICK_BOAT_WITH_ROOM) != 0) {
+                // On veut picker un bateau ayant de la place
+                if (ent instanceof Boat) {
+                    Boat b = (Boat) ent;
+                    if (b.hasRoom()) {
+                        return true;
+                    }
                 }
             }
         }
@@ -389,6 +443,14 @@ public class InputActionListener {
 
     private boolean checkPickingConstraints(GameLogic.TilePickRequest request, GameTile tile) {
         if (request.requiredHeight >= 0 && tile.getHeight() != request.requiredHeight) {
+            return false;
+        }
+
+        if (request.landTilesOnly && tile.getHeight() <= 0) {
+            return false;
+        }
+
+        if (request.noEntitiesOnTile && tile.getEntities().size() > 0) {
             return false;
         }
 

@@ -39,6 +39,17 @@ public interface GameTurnListener {
      */
     public void onTurnStart(Player p);
 
+    /**
+     * Action à effectuer lorsqu'un pion a été initialement placé
+     */
+    public void onInitialTokenPut(PlayerToken pt);
+
+    /**
+     * Action à effectuer quant un bateau a été initialement placé (début du jeu)
+     * @param b Le bateau placé
+     */
+    public void onInitialBoatPut(Boat b);
+
 
     /**
      * Action a effectuer lors du jeu d'un playtile
