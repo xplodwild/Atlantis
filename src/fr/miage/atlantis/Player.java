@@ -97,6 +97,10 @@ public class Player {
         mActionTiles.add(action);
     }
 
+    public void removeActionTile(TileAction action) {
+        mActionTiles.remove(action);
+    }
+
     public int getScore() {
         Iterator it = mTokens.iterator();
         int score = 0;

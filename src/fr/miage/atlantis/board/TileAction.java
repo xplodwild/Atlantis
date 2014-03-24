@@ -178,6 +178,8 @@ public class TileAction {
     private int mAction;
     private int mEntity;
     private boolean mHasBeenUsed;
+    private int mMovesRemaining;
+    private GameEntity mInitialEntity;
     private static ArrayList<TileAction> sRandomizerBeach;
     private static ArrayList<TileAction> sRandomizerForest;
     private static ArrayList<TileAction> sRandomizerMountain;
@@ -195,6 +197,22 @@ public class TileAction {
         mIsTriggerable = isTriggerable;
         mIsVolcano = isVolcano;
         mHasBeenUsed = false;
+    }
+
+    public void decreaseMovesRemaining() {
+        mMovesRemaining--;
+    }
+
+    public int getMovesRemaining() {
+        return mMovesRemaining;
+    }
+
+    public GameEntity getInitialEntity() {
+        return mInitialEntity;
+    }
+
+    public void setInitialEntity(GameEntity ent) {
+        mInitialEntity = ent;
     }
 
     /**
@@ -452,9 +470,54 @@ public class TileAction {
                 performActionMoveAnimal(logic);
                 break;
 
+            case ACTION_BONUS_BOAT:
+                performActionBonusBoat(logic);
+                break;
+
+            case ACTION_BONUS_SWIM:
+                performActionBonusSwim(logic);
+                break;
+
             default:
                 throw new UnsupportedOperationException("Not implemented yet: Action " + mAction);
         }
+    }
+
+    private void performActionBonusBoat(GameLogic logic) {
+        // Bonus 3 déplacements de bateau
+        // Les TileAction étant sélectionnées au début d'un tour, on a déjà une requête de picking
+        // en cours (pour les joueurs ou un bateau du joueur). On l'annule donc.
+        logic.cancelPick();
+
+        // On lance ensuite une requête de picking
+        GameLogic.EntityPickRequest request = new GameLogic.EntityPickRequest();
+        request.avoidEntity = null;
+        request.pickNearTile = null;
+        request.pickingRestriction = GameLogic.EntityPickRequest.FLAG_PICK_BOAT_WITHOUT_ROOM |
+                GameLogic.EntityPickRequest.FLAG_PICK_BOAT_WITH_ROOM;
+        request.player = logic.getCurrentTurn().getPlayer();
+
+        mMovesRemaining = 3;
+
+        logic.requestPick(request, null);
+    }
+
+    private void performActionBonusSwim(GameLogic logic) {
+        // Bonus 3 déplacements d'un nageur.
+        // Les TileAction étant sélectionnées au début d'un tour, on a déjà une requête de picking
+        // en cours (pour les joueurs ou un bateau du joueur). On l'annule donc.
+        logic.cancelPick();
+
+        // On lance ensuite une requête de picking
+        GameLogic.EntityPickRequest request = new GameLogic.EntityPickRequest();
+        request.avoidEntity = null;
+        request.pickNearTile = null;
+        request.pickingRestriction = GameLogic.EntityPickRequest.FLAG_PICK_SWIMMER;
+        request.player = logic.getCurrentTurn().getPlayer();
+
+        mMovesRemaining = 3;
+
+        logic.requestPick(request, null);
     }
 
     private void performActionMoveAnimal(GameLogic logic) {

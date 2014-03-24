@@ -560,6 +560,21 @@ public class Game3DLogic extends GameLogic {
                 tileRq.requiredHeight = 0;
                 tileRq.noEntitiesOnTile = true;
                 tileRq.waterEdgeOnly = false;
+                ta.setInitialEntity(mPickedEntity);
+                requestPick(null, tileRq);
+            } else if (ta.getAction() == TileAction.ACTION_BONUS_BOAT
+                    || ta.getAction() == TileAction.ACTION_BONUS_SWIM) {
+                // Bonus 3 mouvements de bateau ou nageur. On a pické le bateau ou le nageur, on
+                // pick donc ensuite une tile voisine
+                mPickedEntity = ent;
+
+                TilePickRequest tileRq = new TilePickRequest();
+                tileRq.landTilesOnly = false;
+                tileRq.requiredHeight = 0;
+                tileRq.noEntitiesOnTile = false;
+                tileRq.waterEdgeOnly = false;
+                tileRq.pickNearTile = mPickedEntity.getTile();
+                ta.setInitialEntity(mPickedEntity);
                 requestPick(null, tileRq);
             }
         } else if (currentTurn.getRemainingMoves() > 0) {
@@ -636,6 +651,8 @@ public class Game3DLogic extends GameLogic {
     public void onTilePicked(GameTile tile) {
         logger.log(Level.FINE, "Game3DLogic: Tile picked ", new Object[]{tile.getName()});
 
+        boolean dontClearEntity = false;
+
         GameTurn currentTurn = mRenderer.getLogic().getCurrentTurn();
         if (currentTurn.getTokenToPlace() != null) {
             // On a un token a placer, on a donc pas encore commencé la partie.
@@ -646,9 +663,19 @@ public class Game3DLogic extends GameLogic {
         } else if (currentTurn.getTileAction() != null && !currentTurn.getTileAction().hasBeenUsed()) {
             // On a une tile d'action qui n'a pas finie d'être utilisée
             TileAction ta = currentTurn.getTileAction();
-            if (ta.getAction() == TileAction.ACTION_MOVE_ANIMAL) {
-                // On déplace l'unité là bas
-                currentTurn.tileActionTeleport(mPickedEntity, tile);
+            switch (ta.getAction()) {
+                case TileAction.ACTION_MOVE_ANIMAL:
+                    // On déplace l'unité là bas
+                    currentTurn.tileActionTeleport(mPickedEntity, tile);
+                    break;
+
+                case TileAction.ACTION_BONUS_BOAT:
+                case TileAction.ACTION_BONUS_SWIM:
+                    currentTurn.tileActionBonusBoatOrSwim(mPickedEntity, tile);
+                    if (ta.getMovesRemaining() > 0) {
+                        dontClearEntity = true;
+                    }
+                    break;
             }
         } else if (currentTurn.getRemainingMoves() > 0) {
             // On assume que ce picking de tile était pour le déplacement d'unités.
@@ -661,7 +688,9 @@ public class Game3DLogic extends GameLogic {
             currentTurn.moveDiceEntity(mPickedEntity, tile);
         }
 
-        mPickedEntity = null;
+        if (!dontClearEntity) {
+            mPickedEntity = null;
+        }
         mCanCancelPickingAction = false;
         mRenderer.getHud().getGameHud().hideRightClickHint();
     }

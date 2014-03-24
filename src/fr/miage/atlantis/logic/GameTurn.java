@@ -17,6 +17,7 @@
  */
 package fr.miage.atlantis.logic;
 
+import fr.miage.atlantis.Game3DLogic;
 import fr.miage.atlantis.GameDice;
 import fr.miage.atlantis.Player;
 import fr.miage.atlantis.board.GameTile;
@@ -166,6 +167,15 @@ public class GameTurn implements GameRenderListener {
         mController.onUnitMove(ent, dest);
     }
 
+    public void tileActionBonusBoatOrSwim(GameEntity ent, GameTile dest) {
+        logger.log(Level.FINE, "GameTile: tileActionBonusBoatOrSwim");
+        mTileAction.decreaseMovesRemaining();
+        if (mTileAction.getMovesRemaining() <= 0) {
+            mTileAction.setUsed();
+        }
+        mController.onUnitMove(ent, dest);
+    }
+
     public int rollDice() {
         logger.log(Level.FINE, "GameTurn: rollDice ", new Object[]{});
 
@@ -253,6 +263,9 @@ public class GameTurn implements GameRenderListener {
 
         mTileAction = action;
 
+        // On enlève la tile du joueur
+        mPlayer.removeActionTile(action);
+
         // La requête est déléguée à la tile elle-même
         action.use(null, mController);
     }
@@ -301,10 +314,31 @@ public class GameTurn implements GameRenderListener {
 
         if (mTileAction != null && !mTileAction.hasBeenUsed()) {
             // On a une tile action pas utilisée, et on a fait un mouvement.
-            if (mTileAction.getAction() == TileAction.ACTION_MOVE_ANIMAL) {
-                // Téléportation d'animale faite, on est good, on continue le tour
-                mTileAction.setUsed();
-                requestPlayerMovePicking();
+            switch (mTileAction.getAction()) {
+                case TileAction.ACTION_MOVE_ANIMAL:
+                    // Téléportation d'animale faite, on est good, on continue le tour
+                    mTileAction.setUsed();
+                    requestPlayerMovePicking();
+                    break;
+
+                case TileAction.ACTION_BONUS_BOAT:
+                case TileAction.ACTION_BONUS_SWIM:
+                    // On a bougé le bateau d'une case, on continue si on a encore des mouvements
+                    if (mTileAction.getMovesRemaining() > 0) {
+                        // On redemande une tile, l'entité reste sauvée par Game3DLogic
+                        GameLogic.TilePickRequest request = new GameLogic.TilePickRequest();
+                        request.landTilesOnly = false;
+                        request.noEntitiesOnTile = false;
+                        request.requiredHeight = 0;
+                        request.waterEdgeOnly = false;
+                        request.pickNearTile = mTileAction.getInitialEntity().getTile();
+                        mController.requestPick(null, request);
+                        logger.log(Level.FINE, "GameTurn: picking for BONUS_BOAT or BONUS_SWIM");
+                    } else {
+                        // On a fini, on reprend le cours normal du tour
+                        requestPlayerMovePicking();
+                    }
+                    break;
             }
         } else if (mRemainingMoves > 0) {
             // On a encore des mouvements de ses unités possibles, alors on le fait.
@@ -380,6 +414,8 @@ public class GameTurn implements GameRenderListener {
      * bateau ayant un pion du joueur en cours dessus).
      */
     private void requestPlayerMovePicking() {
+        logger.log(Level.FINE, "GameTurn: picking for player move");
+
         GameLogic.EntityPickRequest request = new GameLogic.EntityPickRequest();
         request.pickingRestriction =
                 (GameLogic.EntityPickRequest.FLAG_PICK_PLAYER_ENTITIES |

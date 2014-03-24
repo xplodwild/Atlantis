@@ -69,6 +69,7 @@ public abstract class GameLogic implements GameTurnListener {
         public static final int FLAG_PICK_SEASERPENT        = (1 << 3);
         public static final int FLAG_PICK_BOAT_WITH_ROOM    = (1 << 4);
         public static final int FLAG_PICK_BOAT_WITHOUT_ROOM = (1 << 5);
+        public static final int FLAG_PICK_SWIMMER           = (1 << 6);
 
         /**
          * Restriction des entités pouvant être pickées
