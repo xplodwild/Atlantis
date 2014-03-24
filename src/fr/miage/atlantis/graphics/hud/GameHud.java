@@ -18,6 +18,7 @@
 
 package fr.miage.atlantis.graphics.hud;
 
+import com.jme3.math.Vector3f;
 import fr.miage.atlantis.board.TileAction;
 import java.util.ArrayList;
 import java.util.List;
@@ -92,5 +93,28 @@ public class GameHud {
         for (TileActionDisplay tad : mPlayerTiles) {
             mHudManager.getAnimator().animateFade(tad, 0.0f);
         }
+    }
+
+    /**
+     * Retourne la tile pickée aux ooordonnées souris indiquées, ou null si il n'y en a pas
+     * @param x Coordonnée X de la souris (de gauche)
+     * @param y Coordonnée Y de la souris (du haut)
+     * @return Une tileactiondisplay, ou null
+     */
+    public TileActionDisplay getTileUnderMouse(float x, float y) {
+        for (TileActionDisplay tad : mPlayerTiles) {
+            // Si la tile est visible
+            if (tad.getAlpha() > 0.5f) {
+                Vector3f pos = tad.getLocalTranslation();
+
+                // Si la souris est dans la tile
+                if (x >= pos.x && x <= pos.x + tad.getWidth()
+                        && y >= pos.y && y <= pos.y + tad.getHeight()) {
+                    return tad;
+                }
+            }
+        }
+
+        return null;
     }
 }

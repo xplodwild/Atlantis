@@ -81,6 +81,10 @@ public class GameTurn implements GameRenderListener {
         mMoves = new ArrayList<EntityMove>();
     }
 
+    public TileAction getTileAction() {
+        return mTileAction;
+    }
+
 
     /**
      * Demarre le début du tour de jeu du joueur courant
@@ -154,6 +158,11 @@ public class GameTurn implements GameRenderListener {
 
         // TODO: Faut-il logger ces mouvements aussi?
         mRemainingDiceMoves--;
+        mController.onUnitMove(ent, dest);
+    }
+
+    public void tileActionTeleport(GameEntity ent, GameTile dest) {
+        logger.log(Level.FINE, "GameTile: tileActionTeleport");
         mController.onUnitMove(ent, dest);
     }
 
@@ -237,7 +246,15 @@ public class GameTurn implements GameRenderListener {
     }
 
     public void useLocalTile(TileAction action) {
-        throw new UnsupportedOperationException("Not implemented");
+        // On ne peut utiliser qu'une seule tile d'action non immédiate par tour.
+        if (mTileAction != null) {
+            throw new IllegalStateException("GameTurn: useLocalTile called but we already played a tile action!");
+        }
+
+        mTileAction = action;
+
+        // La requête est déléguée à la tile elle-même
+        action.use(null, mController);
     }
 
     public void onTurnStarted() {
@@ -282,7 +299,14 @@ public class GameTurn implements GameRenderListener {
     public void onUnitMoveFinished() {
         logger.log(Level.FINE, "GameTurn: onUnitMoveFinished() ", new Object[]{});
 
-        if (mRemainingMoves > 0) {
+        if (mTileAction != null && !mTileAction.hasBeenUsed()) {
+            // On a une tile action pas utilisée, et on a fait un mouvement.
+            if (mTileAction.getAction() == TileAction.ACTION_MOVE_ANIMAL) {
+                // Téléportation d'animale faite, on est good, on continue le tour
+                mTileAction.setUsed();
+                requestPlayerMovePicking();
+            }
+        } else if (mRemainingMoves > 0) {
             // On a encore des mouvements de ses unités possibles, alors on le fait.
             logger.log(Level.FINE, "GameTurn: ==> Remaining moves: " + mRemainingMoves, new Object[]{});
             requestPlayerMovePicking();

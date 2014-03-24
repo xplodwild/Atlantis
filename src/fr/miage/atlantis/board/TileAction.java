@@ -177,15 +177,16 @@ public class TileAction {
     private boolean mIsVolcano;
     private int mAction;
     private int mEntity;
+    private boolean mHasBeenUsed;
     private static ArrayList<TileAction> sRandomizerBeach;
     private static ArrayList<TileAction> sRandomizerForest;
     private static ArrayList<TileAction> sRandomizerMountain;
 
-    
+
     private static final Logger logger = Logger.getLogger(GameBoard.class.getName());
-    
-    
-    
+
+
+
     private TileAction(int action, int entity, boolean isImmediate,
             boolean isTriggerable, boolean isVolcano) {
         mAction = action;
@@ -193,6 +194,22 @@ public class TileAction {
         mIsImmediate = isImmediate;
         mIsTriggerable = isTriggerable;
         mIsVolcano = isVolcano;
+        mHasBeenUsed = false;
+    }
+
+    /**
+     * Indique si oui ou non la tile a fini d'être utilisée
+     * @return true si la tile est finie d'être utilisée
+     */
+    public boolean hasBeenUsed() {
+        return mHasBeenUsed;
+    }
+
+    /**
+     * Notifie la tile qu'elle a été complètement utilisée (l'action a terminé)
+     */
+    public void setUsed() {
+        mHasBeenUsed = true;
     }
 
     public final static class Factory {
@@ -422,7 +439,7 @@ public class TileAction {
      *
      * Defini la logique de jeu à lancer lors de l'utilisation de l'action d'un tile
      *
-     * @param tile Tile d'action
+     * @param tile Tile d'action, si l'action est immédiate
      * @param logic Logique a executer à l'utilisation
      */
     public void use(GameTile tile, GameLogic logic) {
@@ -431,9 +448,44 @@ public class TileAction {
                 performActionSpawnEntity(tile, logic);
                 break;
 
+            case ACTION_MOVE_ANIMAL:
+                performActionMoveAnimal(logic);
+                break;
+
             default:
                 throw new UnsupportedOperationException("Not implemented yet: Action " + mAction);
         }
+    }
+
+    private void performActionMoveAnimal(GameLogic logic) {
+        // Téléportation! BZZZIIIOOOUUUUU
+        // Les TileAction étant sélectionnées au début d'un tour, on a déjà une requête de picking
+        // en cours (pour les joueurs ou un bateau du joueur). On l'annule donc.
+        logic.cancelPick();
+
+        // On lance ensuite une requête de picking en fonction de l'animal à bouger
+        GameLogic.EntityPickRequest request = new GameLogic.EntityPickRequest();
+        request.avoidEntity = null;
+        request.pickNearTile = null;
+
+        switch (mEntity) {
+            case ENTITY_SEASERPENT:
+                request.pickingRestriction = GameLogic.EntityPickRequest.FLAG_PICK_SEASERPENT;
+                break;
+
+            case ENTITY_SHARK:
+                request.pickingRestriction = GameLogic.EntityPickRequest.FLAG_PICK_SHARK;
+                break;
+
+            case ENTITY_WHALE:
+                request.pickingRestriction = GameLogic.EntityPickRequest.FLAG_PICK_WHALE;
+                break;
+
+            default:
+                throw new IllegalArgumentException("Unknown MoveAnimal entity: " + mEntity);
+        }
+
+        logic.requestPick(request, null);
     }
 
     private void performActionSpawnEntity(GameTile tile, GameLogic logic) {

@@ -41,11 +41,13 @@ import fr.miage.atlantis.entities.PlayerToken;
 import fr.miage.atlantis.entities.SeaSerpent;
 import fr.miage.atlantis.entities.Shark;
 import fr.miage.atlantis.entities.Whale;
+import fr.miage.atlantis.graphics.hud.TileActionDisplay;
 import fr.miage.atlantis.graphics.models.AnimatedModel;
 import fr.miage.atlantis.graphics.models.EmptyTileModel;
 import fr.miage.atlantis.graphics.models.TileModel;
 import fr.miage.atlantis.logic.GameLogic;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  *
@@ -170,6 +172,17 @@ public class InputActionListener {
                         }
                     }
 
+                }
+            }
+
+            if (isPressed) {
+                // On a cliqué en dehors d'un cadre d'une requête de picking: On teste si on a
+                // cliqué sur un élément du HUD
+                Vector2f c = mInputManager.getCursorPosition();
+                TileActionDisplay tad = mRenderer.getHud().getGameHud().getTileUnderMouse(c.x, c.y);
+                if (tad != null) {
+                    Logger.getGlobal().fine("Input: Picked a HUD tile");
+                    mRenderer.getLogic().getCurrentTurn().useLocalTile(tad.getAction());
                 }
             }
         }

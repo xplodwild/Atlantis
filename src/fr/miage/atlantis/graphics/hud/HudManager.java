@@ -47,6 +47,10 @@ public class HudManager {
         return mHudAnimator;
     }
 
+    public Game3DRenderer getRenderer() {
+        return mRenderer;
+    }
+
     public GameHud getGameHud() {
         return mGameHud;
     }

@@ -282,6 +282,11 @@ public abstract class GameLogic implements GameTurnListener {
     public abstract void requestPick(EntityPickRequest entRq, TilePickRequest tileRq);
 
     /**
+     * Annule la requête de picking en cours
+     */
+    public abstract void cancelPick();
+
+    /**
      * Signale au moteur de logique qu'on a pické une entité
      *
      * @param ent L'entité pickée

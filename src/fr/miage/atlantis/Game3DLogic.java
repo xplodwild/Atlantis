@@ -169,6 +169,7 @@ public class Game3DLogic extends GameLogic {
 
     public void onPlayTileAction(GameTile tile, TileAction action) {
         action.use(tile, this);
+        mCanCancelPickingAction = false;
     }
 
     @Override
@@ -534,13 +535,34 @@ public class Game3DLogic extends GameLogic {
     }
 
     @Override
+    public void cancelPick() {
+        mRenderer.getInputListener().forceResetRequest();
+    }
+
+    @Override
     public void onEntityPicked(GameEntity ent) {
         logger.log(Level.FINE, "Game3DLogic: Entity picked ", new Object[]{ent});
 
         GameTurn currentTurn = mRenderer.getLogic().getCurrentTurn();
         mRenderer.getHud().getGameHud().hidePlayerTiles();
 
-        if (currentTurn.getRemainingMoves() > 0) {
+        if (currentTurn.getTileAction() != null && !currentTurn.getTileAction().hasBeenUsed()) {
+            // La tile d'action n'a pas fini d'être utilisée
+            TileAction ta = currentTurn.getTileAction();
+
+            if (ta.getAction() == TileAction.ACTION_MOVE_ANIMAL) {
+                // Téléportation d'animal: On a pické l'animal, il faut maintenant picker la tile
+                // d'eau qui va bien (tile water, sans personne dessus)
+                mPickedEntity = ent;
+
+                TilePickRequest tileRq = new TilePickRequest();
+                tileRq.landTilesOnly = false;
+                tileRq.requiredHeight = 0;
+                tileRq.noEntitiesOnTile = true;
+                tileRq.waterEdgeOnly = false;
+                requestPick(null, tileRq);
+            }
+        } else if (currentTurn.getRemainingMoves() > 0) {
             // Si on a déjà une entité et si on a pické un bateau, c'est qu'on veut déplacer ce
             // bonhomme sur le bateau.
             if (mPickedEntity != null && (mPickedEntity instanceof PlayerToken)
@@ -621,6 +643,13 @@ public class Game3DLogic extends GameLogic {
         } else if (getRemainingInitialBoats() > 0) {
             // Il nous reste des bateaux initiaux à placer, on a donc pas encore commencé la partie.
             currentTurn.putInitialBoat(tile);
+        } else if (currentTurn.getTileAction() != null && !currentTurn.getTileAction().hasBeenUsed()) {
+            // On a une tile d'action qui n'a pas finie d'être utilisée
+            TileAction ta = currentTurn.getTileAction();
+            if (ta.getAction() == TileAction.ACTION_MOVE_ANIMAL) {
+                // On déplace l'unité là bas
+                currentTurn.tileActionTeleport(mPickedEntity, tile);
+            }
         } else if (currentTurn.getRemainingMoves() > 0) {
             // On assume que ce picking de tile était pour le déplacement d'unités.
             currentTurn.moveEntity(mPickedEntity, tile);
