@@ -4,6 +4,7 @@
  */
 package fr.miage.atlantis.board;
 
+import fr.miage.atlantis.Game3DLogic;
 import fr.miage.atlantis.logic.GameLogic;
 import java.util.Map;
 import java.util.Set;
@@ -119,6 +120,7 @@ public class GameBoardTest {
         
         String result = instance.getFirstTile().getName();
         assertEquals("Border #1", result);
+        // La première tile du plateau est toujours la tile Boreder #1
     }
 
     /**
@@ -137,33 +139,66 @@ public class GameBoardTest {
 
     /**
      * Test of hasTileAtLevel method, of class GameBoard.
-     *
+     */
     @Test
     public void testHasTileAtLevel() {
         System.out.println("hasTileAtLevel");
-        int h = 0;
+        
         GameBoard instance = new GameBoard();
-        boolean expResult = false;
-        boolean result = instance.hasTileAtLevel(h);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        
+        // Il doit rester des tuiles sable
+        assertTrue(instance.hasTileAtLevel(1));
+        
+        // Il ne doit plus rester de tuiles sable
+        for(int i=0;i<16;i++){
+            instance.sinkTile(new NullGameLogic() { }, instance.getTileSet().get("Beach #"+i));
+        }
+        assertFalse(instance.hasTileAtLevel(1));
+        
+        // Il doit rester des tuiles forêt
+        assertTrue(instance.hasTileAtLevel(2));
+        
+        // Il ne doit plus rester de tuiles foret
+        for(int i=0;i<16;i++){
+            instance.sinkTile(new NullGameLogic() { }, instance.getTileSet().get("Forest #"+i));
+        }
+        assertFalse(instance.hasTileAtLevel(2));
+        
+        // Il doit rester des tuiles montagne
+        assertTrue(instance.hasTileAtLevel(3));
+        
+        // Il ne doit plus rester de tuiles foret
+        for(int i=0;i<8;i++){
+            instance.sinkTile(new NullGameLogic() { }, instance.getTileSet().get("Mountain #"+i));
+        }
+        assertFalse(instance.hasTileAtLevel(3));
     }
 
     /**
      * Test of sinkTile method, of class GameBoard.
-     *
+     */
     @Test
     public void testSinkTile() {
         System.out.println("sinkTile");
-        GameLogic logic = null;
-        GameTile tile = null;
         GameBoard instance = new GameBoard();
-        WaterTile expResult = null;
-        WaterTile result = instance.sinkTile(logic, tile);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        GameTile tile = instance.getTileSet().get("Water #42");
+        tile = tile.getRightTile().getRightTile();
+        GameTile r = tile.getRightTile();
+        GameTile ru = tile.getRightUpperTile();
+        GameTile rb = tile.getRightBottomTile();
+        GameTile l = tile.getLeftTile();
+        GameTile lu = tile.getLeftUpperTile();
+        GameTile lb = tile.getLeftBottomTile();
+        
+        GameTile wat = instance.sinkTile(new NullGameLogic(), tile);
+        
+        assertEquals(r.getLeftTile(),wat);
+        assertEquals(ru.getLeftBottomTile(),wat);
+        assertEquals(rb.getLeftUpperTile(),wat);
+        assertEquals(l.getRightTile(),wat);
+        assertEquals(lu.getRightBottomTile(),wat);
+        assertEquals(lb.getRightUpperTile(),wat);
+        
     }
 
     /**
