@@ -66,5 +66,14 @@ public class NullGameLogic extends GameLogic {
     public void onUnitDie(GameEntity zombie) {
         
     }
+
+    @Override
+    public void onPlayerDismountBoat(PlayerToken player, Boat b) {
+        
+    }
+
+    public void onInitialTokenPut(PlayerToken pt) {
+   
+    }
     
 }

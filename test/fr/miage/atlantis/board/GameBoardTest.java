@@ -149,6 +149,7 @@ public class GameBoardTest {
          * Le randomizer est déjà vidé lorsque je fais new Gameboard
          * Du coup dans ma boucle for ca exceptionne parce que le randomizer est vide.
          * Faudrait le mettre dans une classe à part.
+         * 
          */
     }
 
