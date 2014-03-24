@@ -63,8 +63,12 @@ public class GameTileTest {
         GameBoard board = new GameBoard();
         GameEntity entity = new Shark();
         GameTile tile = board.getTileSet().get("Water #37");
+        
+        /** Ajoute l'entité sur la tile  et on vérifie qu'elle est présente**/
         tile.addEntity(entity);
         assertEquals(entity, tile.getEntities().get(0));
+        
+        /** Suppression de l'entité, et vérification de sa suppression**/
         tile.removeEntity(entity);
         assertTrue(tile.getEntities().isEmpty());
     }
