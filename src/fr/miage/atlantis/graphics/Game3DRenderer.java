@@ -42,7 +42,6 @@ import fr.miage.atlantis.graphics.hud.HudAnimator;
 import fr.miage.atlantis.graphics.hud.TileActionDisplay;
 import fr.miage.atlantis.graphics.models.DiceModel;
 import fr.miage.atlantis.gui.Gui;
-import fr.miage.atlantis.gui.startmenu.GuiStartMenu;
 import java.util.Map;
 import java.util.Random;
 
@@ -64,7 +63,6 @@ public class Game3DRenderer extends SimpleApplication {
     private FutureUpdater mFutureUpdater;
     private HudAnimator mHudAnimator;
     
-    private GuiStartMenu mStartMenu;
     private Gui mGui;
 
     public Game3DRenderer(Game3DLogic parent) {
@@ -134,8 +132,7 @@ public class Game3DRenderer extends SimpleApplication {
         
         
                 
-        mGui = new Gui(this,n);
-        // mStartMenu = new GuiStartMenu(this,n);
+        mGui = new Gui(this,n);       
         n.gotoScreen("start");
         
     }

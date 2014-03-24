@@ -3,7 +3,7 @@
     <!-- +++++++++++++++++++++++++++++++++++++++ -->
     <!-- start screen -->
     <!-- +++++++++++++++++++++++++++++++++++++++ -->
-    <screen id="start" controller="fr.miage.atlantis.gui.controllers.StartScreenController">
+    <screen id="start" controller="fr.miage.atlantis.gui.controllers.GuiController">
         <!-- +++++++++++++++++++++++++++++++++++++++ -->
         <!-- Layer principal -->
         <!-- +++++++++++++++++++++++++++++++++++++++ -->

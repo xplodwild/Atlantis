@@ -40,8 +40,7 @@ import fr.miage.atlantis.gui.console.commands.ClearConsoleCommand;
 import fr.miage.atlantis.gui.console.commands.HelpCommand;
 import fr.miage.atlantis.gui.console.commands.LoggingCommand;
 import fr.miage.atlantis.gui.console.commands.QuitCommand;
-import fr.miage.atlantis.gui.controllers.ConsoleController;
-import fr.miage.atlantis.gui.controllers.StartScreenController;
+import fr.miage.atlantis.gui.controllers.GuiController;
 import fr.miage.atlantis.logic.GameTurn;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -91,7 +90,7 @@ public class Gui {
     
     private void instanciateStartScreen(){
         this.mNifty.fromXmlWithoutStartScreen("GUI/startScreen.xml");
-        ((StartScreenController) this.mNifty.getScreen("start").getScreenController()).set3DRenderer(this.mGame3DRenderer);
+        ((GuiController) this.mNifty.getScreen("start").getScreenController()).set3DRenderer(this.mGame3DRenderer);
     }
     
     private void instanciateConsoleHUD(){
@@ -101,7 +100,7 @@ public class Gui {
             /**
              * Ajoute un controlleur perso a cet ecran
              */
-            controller(new ConsoleController()); 
+            controller(new GuiController()); 
              
             /**
              * Création du Layer sur cet ecran.
@@ -118,7 +117,7 @@ public class Gui {
                 /**
                  * Ajoute mon controlleur personnalisé sur ce panel
                  */
-                controller(new ConsoleController());
+                controller(new GuiController());
                 
                 /*
                  * Création d'un panel dans le layer
@@ -243,8 +242,6 @@ public class Gui {
             public void onAction(String name, boolean isPressed, float tpf) {
                 if(isPressed){
 
-                    Gui.this.mNifty.fromXmlWithoutStartScreen("GUI/startScreen.xml");
-                    ((StartScreenController)mNifty.getScreen("start").getScreenController()).set3DRenderer(mGame3DRenderer);
                     Gui.this.mNifty.gotoScreen("start");
 
                     Camera cam = mGame3DRenderer.getCamera();

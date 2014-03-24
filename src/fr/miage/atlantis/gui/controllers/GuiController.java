@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 
-public class StartScreenController implements ScreenController {
+public class GuiController implements ScreenController {
            
     private Game3DRenderer g3rdr;
     private Nifty nifty;
@@ -115,6 +115,8 @@ public class StartScreenController implements ScreenController {
         this.g3rdr.getLogic().prepareGame(players);
         
         this.g3rdr.getLogic().startGame(); 
+        
+        
         this.nifty.gotoScreen("consolehud");
         
         
