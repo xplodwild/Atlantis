@@ -125,16 +125,31 @@ public class GameBoardTest {
 
     /**
      * Test of generateRandomTile method, of class GameBoard.
-     *
+     */
     @Test
     public void testGenerateRandomTile() {
         System.out.println("generateRandomTile");
         GameBoard instance = new GameBoard();
-        GameTile expResult = null;
-        GameTile result = instance.generateRandomTile();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        
+        // On génère 40 tiles et on vérifie qu'il y a le compte.
+        int b = 0;
+        int f = 0;
+        int m = 0;
+        for(int i=0;i<40;i++){
+            GameTile result = instance.generateRandomTile();
+            if(result instanceof BeachTile) b++;
+            if(result instanceof ForestTile) f++;
+            if(result instanceof MountainTile) m++;
+        }
+        assertEquals(b,16);
+        assertEquals(f,16);
+        assertEquals(m,8);
+        
+        /* BUG à FIX ici
+         * Le randomizer est déjà vidé lorsque je fais new Gameboard
+         * Du coup dans ma boucle for ca exceptionne parce que le randomizer est vide.
+         * Faudrait le mettre dans une classe à part.
+         */
     }
 
     /**
@@ -198,7 +213,6 @@ public class GameBoardTest {
         assertEquals(l.getRightTile(),wat);
         assertEquals(lu.getRightBottomTile(),wat);
         assertEquals(lb.getRightUpperTile(),wat);
-        
     }
 
     /**
