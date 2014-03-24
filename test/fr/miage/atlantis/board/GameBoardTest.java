@@ -135,7 +135,7 @@ public class GameBoardTest {
         int b = 0;
         int f = 0;
         int m = 0;
-        for(int i=0;i<40;i++){
+        for(int i=0;i<3;i++){
             GameTile result = instance.generateRandomTile();
             if(result instanceof BeachTile) b++;
             if(result instanceof ForestTile) f++;
