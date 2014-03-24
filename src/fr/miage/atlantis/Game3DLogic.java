@@ -146,6 +146,10 @@ public class Game3DLogic extends GameLogic {
         }
     }
 
+    public GameEntity getLastPickedEntity() {
+        return mPickedEntity;
+    }
+
     public void onTurnStart(Player p) {
         // TODO: Animations
         logger.log(Level.FINE, "Game3DLogic: onTurnStart()", new Object[]{});
@@ -686,6 +690,11 @@ public class Game3DLogic extends GameLogic {
         } else if (currentTurn.hasRolledDice() && currentTurn.getRemainingDiceMoves() > 0) {
             // On bouge une entité suite au lancé de dé
             currentTurn.moveDiceEntity(mPickedEntity, tile);
+
+            if (currentTurn.getRemainingDiceMoves() > 0) {
+                // On bouge forcément la même entité
+                dontClearEntity = true;
+            }
         }
 
         if (!dontClearEntity) {

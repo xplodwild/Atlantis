@@ -275,6 +275,8 @@ public abstract class GameLogic implements GameTurnListener {
      */
     public abstract void boot();
 
+    public abstract GameEntity getLastPickedEntity();
+
     /**
      * Indique à la logique du jeu qu'on a besoin de sélectionner une entité ou une tile
      * @param entRq Si non null, la requête permettant de filtrer les entités à picker

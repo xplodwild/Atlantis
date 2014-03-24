@@ -364,7 +364,7 @@ public class GameTurn implements GameRenderListener {
         } else if (mRemainingDiceMoves > 0) {
             // On a encore des mouvements de l'unité du dé possible
             logger.log(Level.FINE, "GameTurn: ==> Remaining dice moves: " + mRemainingDiceMoves, new Object[]{});
-            requestDiceEntityPicking();
+            requestDiceEntityPicking(mController.getLastPickedEntity().getTile());
         } else {
             // On a plus de mouvements d'unités, on a coulé la tile, et on a bougé les unités
             // avec le dé, on a donc fini le tour.
@@ -391,7 +391,7 @@ public class GameTurn implements GameRenderListener {
         }
 
         if (mController.getBoard().hasEntityOfType(entityType)) {
-            requestDiceEntityPicking();
+            requestDiceEntityPicking(null);
         } else {
             // Pas d'entité du type du dé a bouger. Le dé étant la dernière étape d'un tour,
             // on a terminé.
@@ -429,27 +429,40 @@ public class GameTurn implements GameRenderListener {
     /**
      * Demande à la logique de jeu de picker l'entité qui a été obtenue via le dé
      */
-    private void requestDiceEntityPicking() {
-        GameLogic.EntityPickRequest request = new GameLogic.EntityPickRequest();
+    private void requestDiceEntityPicking(GameTile tile) {
+        if (mRemainingDiceMoves == 3) {
+            // La première requête est pour choisir l'entité.
+            GameLogic.EntityPickRequest request = new GameLogic.EntityPickRequest();
 
-        switch (mDiceAction) {
-            case GameDice.FACE_SEASERPENT:
-                request.pickingRestriction = GameLogic.EntityPickRequest.FLAG_PICK_SEASERPENT;
-                break;
+            switch (mDiceAction) {
+                case GameDice.FACE_SEASERPENT:
+                    request.pickingRestriction = GameLogic.EntityPickRequest.FLAG_PICK_SEASERPENT;
+                    break;
 
-            case GameDice.FACE_SHARK:
-                request.pickingRestriction = GameLogic.EntityPickRequest.FLAG_PICK_SHARK;
-                break;
+                case GameDice.FACE_SHARK:
+                    request.pickingRestriction = GameLogic.EntityPickRequest.FLAG_PICK_SHARK;
+                    break;
 
-            case GameDice.FACE_WHALE:
-                request.pickingRestriction = GameLogic.EntityPickRequest.FLAG_PICK_WHALE;
-                break;
+                case GameDice.FACE_WHALE:
+                    request.pickingRestriction = GameLogic.EntityPickRequest.FLAG_PICK_WHALE;
+                    break;
 
-            default:
-                throw new UnsupportedOperationException("Processing of face " + mDiceAction + " isn't supported yet");
+                default:
+                    throw new UnsupportedOperationException("Processing of face " + mDiceAction + " isn't supported yet");
+            }
+
+            mController.requestPick(request, null);
+        } else {
+            // Les requêtes subséquentes choisissent juste la tile puisqu'on est forcé de garder
+            // la même entité
+            GameLogic.TilePickRequest tilePick = new GameLogic.TilePickRequest();
+            tilePick.pickNearTile = tile;
+            tilePick.waterEdgeOnly = false;
+            // Toutes les entités du dé ne sont que dans l'eau
+            tilePick.requiredHeight = 0;
+
+            mController.requestPick(null, tilePick);
         }
-
-        mController.requestPick(request, null);
     }
 
     //--------------------------------------------------------------------------
