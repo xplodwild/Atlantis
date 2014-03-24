@@ -39,15 +39,18 @@ public class TileActionTest {
 
     /**
      * Test of generateRandomTileActionBeach method, of class TileAction.
+     * On teste si sous les 16 tiles, il y a bien une action random associée et non pas un null
      */
     @Test
     public void testGenerateRandomTileActionBeach() {
         System.out.println("generateRandomTileActionBeach");
-        TileAction expResult = null;
-        TileAction result = TileAction.generateRandomTileActionBeach();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        GameBoard board = new GameBoard();
+        
+        /**Pour toutes les tiles Beach, on vérifie qu'il y a une action associée et qu'elle n'est pas nulle **/
+        for(int i=0; i< 16 ; i++){
+            TileAction result = TileAction.generateRandomTileActionBeach();
+            assertNotNull(result);
+        }    
     }
 
     /**
