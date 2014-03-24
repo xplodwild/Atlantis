@@ -15,8 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-package fr.miage.atlantis.gui.console;
+package fr.miage.atlantis.gui;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.audio.AudioRenderer;
@@ -24,8 +23,6 @@ import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
-
-import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.ViewPort;
 import de.lessvoid.nifty.Nifty;
@@ -36,7 +33,6 @@ import de.lessvoid.nifty.builder.ScreenBuilder;
 import de.lessvoid.nifty.controls.Console;
 import de.lessvoid.nifty.controls.ConsoleCommands;
 import de.lessvoid.nifty.controls.console.builder.ConsoleBuilder;
-import de.lessvoid.nifty.tools.Color;
 import fr.miage.atlantis.graphics.CamConstants;
 import fr.miage.atlantis.graphics.Game3DRenderer;
 import fr.miage.atlantis.gui.console.commands.BindListCommand;
@@ -52,57 +48,54 @@ import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
-
 /**
- * Implementation Java de la console de l'interface graphique grâce a Nifty GUI
+ * Instancie tout les éléments du GUI
  *
- * @author AtlantisTeam
- * @version 1.0
- * @date 03/03/2014
+ * @author Krys
  */
-public final class GuiConsole{
+public class Gui {
 
-
-    public static final String STYLE_FILE="nifty-default-styles.xml";
-    public static final String CONTROL_FILE="nifty-default-controls.xml";
-
+    private static final String STYLE_FILE = "nifty-default-styles.xml";
+    private static final String CONTROL_FILE = "nifty-default-controls.xml";
     private AssetManager mAm;
     private ViewPort mViewPort;
     private AudioRenderer maudioRenderer;
     private InputManager minputManager;
     private Game3DRenderer mGame3DRenderer;
-    
-
-
-
+    private Nifty mNifty;
     private Console mConsole;
 
+    public Gui(Game3DRenderer g3d, Nifty n) {
+        this.mAm = g3d.getAssetManager();
+        this.maudioRenderer = g3d.getAudioRenderer();
+        this.minputManager = g3d.getInputManager();
+        this.mViewPort = g3d.getGuiViewPort();
+        this.mGame3DRenderer = g3d;
 
-    private Nifty mNifty;
-    
-    private static final  String INPUT_TOGGLE_CONSOLE="toggle_console";
-
-
-    /**
-     * Constructeur de GuiConsole
-     *
-     * @param Am AssestManager
-     * @param Vp GuiViewport : Attention a ne pas passer le viewPort mais bien guiViewport
-     * @param Ar AudioRenderer
-     * @param Im InputManager
-     */
-    public GuiConsole(Game3DRenderer g3dr,Nifty n) {
-       this.mAm = g3dr.getAssetManager();
-        this.maudioRenderer = g3dr.getAudioRenderer();
-        this.minputManager = g3dr.getInputManager();
-        this.mViewPort = g3dr.getGuiViewPort();
-        this.mGame3DRenderer = g3dr;
-
-        
         //Récupère l'obj nifty de l'ecran courant
         this.mNifty = n;
+        
+        
+        //Charge le thème
+        n.loadStyleFile(Gui.STYLE_FILE);
+        n.loadControlFile(Gui.CONTROL_FILE);
+        
+        
+        this.instanciateStartScreen();
+        this.instanciateConsoleHUD();
+        
+       // this.mNifty.gotoScreen(STYLE_FILE);
 
-        this.mNifty.addScreen("consolehud", new ScreenBuilder("consolehud"){{            
+    }
+    
+    
+    private void instanciateStartScreen(){
+        this.mNifty.fromXmlWithoutStartScreen("GUI/startScreen.xml");
+        ((StartScreenController) this.mNifty.getScreen("start").getScreenController()).set3DRenderer(this.mGame3DRenderer);
+    }
+    
+    private void instanciateConsoleHUD(){
+         this.mNifty.addScreen("consolehud", new ScreenBuilder("consolehud"){{            
             
             
             /**
@@ -168,10 +161,8 @@ public final class GuiConsole{
             }});
             // </layer>
         }}.build(this.mNifty));   
-        // </screen> 
-
-               
-        this.mNifty.gotoScreen("consolehud");
+        // </screen>         
+         this.mNifty.gotoScreen("consolehud");
 
 
 
@@ -224,14 +215,13 @@ public final class GuiConsole{
         //Genere les keybinding
         this.generateConsoleKeyMap();
     }
-
     
-
-
+    
+    
     private void generateConsoleKeyMap(){
         //Bind la touche de la console
-        this.getInputManager().addMapping(INPUT_TOGGLE_CONSOLE, new KeyTrigger(KeyInput.KEY_F12));
-        this.getInputManager().addListener(this.toggleConsole(), INPUT_TOGGLE_CONSOLE);
+        this.getInputManager().addMapping("console", new KeyTrigger(KeyInput.KEY_F12));
+        this.getInputManager().addListener(this.toggleConsole(), "console");
 
         //Bind la touche d'activation du quicktest
         this.getInputManager().addMapping("quicktest", new KeyTrigger(KeyInput.KEY_F11));
@@ -253,9 +243,9 @@ public final class GuiConsole{
             public void onAction(String name, boolean isPressed, float tpf) {
                 if(isPressed){
 
-                    GuiConsole.this.mNifty.fromXmlWithoutStartScreen("GUI/startScreen.xml");
+                    Gui.this.mNifty.fromXmlWithoutStartScreen("GUI/startScreen.xml");
                     ((StartScreenController)mNifty.getScreen("start").getScreenController()).set3DRenderer(mGame3DRenderer);
-                    GuiConsole.this.mNifty.gotoScreen("start");
+                    Gui.this.mNifty.gotoScreen("start");
 
                     Camera cam = mGame3DRenderer.getCamera();
                     CamConstants.moveMenu(mGame3DRenderer.getCameraNode(), cam);
@@ -271,13 +261,13 @@ public final class GuiConsole{
 
             public void onAction(String name, boolean isPressed, float tpf) {
                 if(isPressed){
-                    if(GuiConsole.this.mConsole.isEnabled()){
+                    if(Gui.this.mConsole.isEnabled()){
                         
-                        GuiConsole.this.mConsole.setEnabled(false);
-                        GuiConsole.this.mConsole.getElement().setVisible(false);
+                        Gui.this.mConsole.setEnabled(false);
+                        Gui.this.mConsole.getElement().setVisible(false);
                     }else{
-                        GuiConsole.this.mConsole.setEnabled(true);
-                        GuiConsole.this.mConsole.getElement().setVisible(true);
+                        Gui.this.mConsole.setEnabled(true);
+                        Gui.this.mConsole.getElement().setVisible(true);
                     }
                 }
 
@@ -308,7 +298,7 @@ public final class GuiConsole{
 
             public void onAction(String name, boolean isPressed, float tpf) {
                  if(isPressed){
-                    GuiConsole.this.getGame3DRenderer().toggleGraphicsStats();                    
+                    Gui.this.getGame3DRenderer().toggleGraphicsStats();                    
                  }
             }
         };
@@ -336,15 +326,16 @@ public final class GuiConsole{
             public void publish(LogRecord record) {
                 String text=record.getMessage();
                 System.out.println(text);
-                GuiConsole.this.mConsole.output(text);
+                Gui.this.mConsole.output(text);
             }
         };
 
         customHandler.setLevel(Level.FINEST);
         Logger.getGlobal().addHandler(customHandler);
     }
-
-
+    
+    
+    
 
     //--------------------------------------------------------------------------
     //GETTERS

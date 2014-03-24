@@ -8,7 +8,6 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import fr.miage.atlantis.graphics.Game3DRenderer;
-import fr.miage.atlantis.gui.console.GuiConsole;
 import java.util.ArrayList;
 import java.util.Random;
 

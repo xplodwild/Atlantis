@@ -19,13 +19,9 @@
 package fr.miage.atlantis.graphics;
 
 import com.jme3.app.SimpleApplication;
-import static com.jme3.app.SimpleApplication.INPUT_MAPPING_EXIT;
-import static com.jme3.app.SimpleApplication.INPUT_MAPPING_HIDE_STATS;
 import com.jme3.cinematic.MotionPath;
 import com.jme3.cinematic.MotionPathListener;
 import com.jme3.cinematic.events.MotionEvent;
-import com.jme3.input.KeyInput;
-import com.jme3.input.controls.KeyTrigger;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Spline;
 import com.jme3.math.Vector3f;
@@ -45,7 +41,7 @@ import fr.miage.atlantis.graphics.hud.AbstractDisplay;
 import fr.miage.atlantis.graphics.hud.HudAnimator;
 import fr.miage.atlantis.graphics.hud.TileActionDisplay;
 import fr.miage.atlantis.graphics.models.DiceModel;
-import fr.miage.atlantis.gui.console.GuiConsole;
+import fr.miage.atlantis.gui.Gui;
 import fr.miage.atlantis.gui.startmenu.GuiStartMenu;
 import java.util.Map;
 import java.util.Random;
@@ -69,6 +65,7 @@ public class Game3DRenderer extends SimpleApplication {
     private HudAnimator mHudAnimator;
     
     private GuiStartMenu mStartMenu;
+    private Gui mGui;
 
     public Game3DRenderer(Game3DLogic parent) {
         mParent = parent;
@@ -136,12 +133,10 @@ public class Game3DRenderer extends SimpleApplication {
         this.guiViewPort.addProcessor(jmdsp);
         
         
-        //Charge le thème
-        n.loadStyleFile(GuiConsole.STYLE_FILE);
-        n.loadControlFile(GuiConsole.CONTROL_FILE);
-        
-        
-        mStartMenu = new GuiStartMenu(this,n);
+                
+        mGui = new Gui(this,n);
+        // mStartMenu = new GuiStartMenu(this,n);
+        n.gotoScreen("start");
         
     }
 

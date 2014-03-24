@@ -7,11 +7,9 @@ package fr.miage.atlantis.gui.startmenu;
 import com.jme3.asset.AssetManager;
 import com.jme3.audio.AudioRenderer;
 import com.jme3.input.InputManager;
-import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.ViewPort;
 import de.lessvoid.nifty.Nifty;
 import fr.miage.atlantis.graphics.Game3DRenderer;
-import fr.miage.atlantis.gui.console.GuiConsole;
 import fr.miage.atlantis.gui.controllers.StartScreenController;
 
 /**
@@ -48,8 +46,6 @@ public class GuiStartMenu {
         
         //Récupère l'obj nifty de l'ecran courant
         this.mNifty = n;
-
-        new GuiConsole(g3dr,mNifty);
 
         this.mNifty.fromXmlWithoutStartScreen("GUI/startScreen.xml");
 

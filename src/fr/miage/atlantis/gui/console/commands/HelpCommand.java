@@ -20,7 +20,6 @@ package fr.miage.atlantis.gui.console.commands;
 
 import de.lessvoid.nifty.controls.Console;
 import de.lessvoid.nifty.controls.ConsoleCommands;
-import fr.miage.atlantis.gui.console.GuiConsole;
 
 
 /**
