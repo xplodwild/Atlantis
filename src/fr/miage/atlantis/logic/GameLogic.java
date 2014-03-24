@@ -34,7 +34,7 @@ import fr.miage.atlantis.entities.PlayerToken;
  */
 public abstract class GameLogic implements GameTurnListener {
 
-    protected static final boolean DBG_AUTOPREPARE = false;
+    protected static final boolean DBG_AUTOPREPARE = true;
 
     /**
      * Plateau du jeu
@@ -280,6 +280,11 @@ public abstract class GameLogic implements GameTurnListener {
      * @param tileRq Si non null, la requête permettant de filtrer les tiles à picker
      */
     public abstract void requestPick(EntityPickRequest entRq, TilePickRequest tileRq);
+
+    /**
+     * Annule la requête de picking en cours
+     */
+    public abstract void cancelPick();
 
     /**
      * Signale au moteur de logique qu'on a pické une entité

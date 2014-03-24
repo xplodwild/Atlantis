@@ -108,8 +108,9 @@ public class Game3DLogic extends GameLogic {
                  List<PlayerToken> tokens = p.getTokens();
 
                  for (PlayerToken token : tokens) {
-                     int rand=new Random().nextInt(15)+1;
-                         token.moveToTile(this, getBoard().getTileSet().get("Beach #"+rand));
+                     int rand = new Random().nextInt(15) + 1;
+                     token.moveToTile(this, getBoard().getTileSet().get("Beach #" + rand));
+                     token.setState(PlayerToken.STATE_ON_LAND);
 
                      mRenderer.getEntitiesRenderer().addEntity(token);
                  }
@@ -140,6 +141,7 @@ public class Game3DLogic extends GameLogic {
 
             // Une seule action peut être annulée.
             mCanCancelPickingAction = false;
+            mRenderer.getHud().getGameHud().hideRightClickHint();
 
             return true;
         } else {
@@ -151,6 +153,8 @@ public class Game3DLogic extends GameLogic {
     public void onTurnStart(Player p) {
         // TODO: Animations
         logger.log(Level.FINE, "Game3DLogic: onTurnStart()", new Object[]{});
+
+        mRenderer.getHud().getGameHud().displayPlayerTiles(getCurrentTurn().getPlayer().getActionTiles());
 
         getCurrentTurn().onTurnStarted();
     }
@@ -169,6 +173,7 @@ public class Game3DLogic extends GameLogic {
 
     public void onPlayTileAction(GameTile tile, TileAction action) {
         action.use(tile, this);
+        mCanCancelPickingAction = false;
     }
 
     @Override
@@ -318,14 +323,14 @@ public class Game3DLogic extends GameLogic {
                     final TileAction action = tile.getAction();
                     final TileActionDisplay tad = TileActionDisplay.getTileForAction(action,
                             mRenderer.getAssetManager());
-                    mRenderer.displayHudCenter(tad);
-                    mRenderer.getHudAnimator().animateFadeIn(tad);
+                    mRenderer.getHud().displayCenter(tad);
+                    mRenderer.getHud().getAnimator().animateFade(tad, 1.0f);
 
                     // Ensuite, après l'affichage, on traite l'action
                     mRenderer.getFuture().addFutureTimeCallback(new FutureCallback(2.0f) {
                         @Override
                         public void onFutureHappened() {
-                            mRenderer.getHudAnimator().animateFadeOut(tad);
+                            mRenderer.getHud().getAnimator().animateFade(tad, 0.0f);
 
                             // On lance l'action sous la tile, si c'est immédiat
                             if (action.isImmediate()) {
@@ -448,10 +453,12 @@ public class Game3DLogic extends GameLogic {
                 // le bateau reste intact.
                 if (boat.getOnboardTokens().size() > 0) {
                     // Et il y a des gens: Ils tombent à l'eau, et le bateau disparait
-                    List<PlayerToken> onboard = boat.getOnboardTokens();
+                    List<PlayerToken> onboard = new ArrayList<PlayerToken>(boat.getOnboardTokens());
 
                     for (PlayerToken pt : onboard) {
-                        pt.setState(pt.getState() & ~PlayerToken.STATE_ON_BOAT);
+                        boat.removePlayer(pt);
+                        onPlayerDismountBoat(pt, boat);
+                        pt.setState(PlayerToken.STATE_SWIMMING);
                     }
 
                     boat.die(this);
@@ -540,12 +547,34 @@ public class Game3DLogic extends GameLogic {
     }
 
     @Override
+    public void cancelPick() {
+        mRenderer.getInputListener().forceResetRequest();
+    }
+
+    @Override
     public void onEntityPicked(GameEntity ent) {
         logger.log(Level.FINE, "Game3DLogic: Entity picked ", new Object[]{ent});
 
         GameTurn currentTurn = mRenderer.getLogic().getCurrentTurn();
+        mRenderer.getHud().getGameHud().hidePlayerTiles();
 
-        if (currentTurn.getRemainingMoves() > 0) {
+        if (currentTurn.getTileAction() != null && !currentTurn.getTileAction().hasBeenUsed()) {
+            // La tile d'action n'a pas fini d'être utilisée
+            TileAction ta = currentTurn.getTileAction();
+
+            if (ta.getAction() == TileAction.ACTION_MOVE_ANIMAL) {
+                // Téléportation d'animal: On a pické l'animal, il faut maintenant picker la tile
+                // d'eau qui va bien (tile water, sans personne dessus)
+                mPickedEntity = ent;
+
+                TilePickRequest tileRq = new TilePickRequest();
+                tileRq.landTilesOnly = false;
+                tileRq.requiredHeight = 0;
+                tileRq.noEntitiesOnTile = true;
+                tileRq.waterEdgeOnly = false;
+                requestPick(null, tileRq);
+            }
+        } else if (currentTurn.getRemainingMoves() > 0) {
             // Si on a déjà une entité et si on a pické un bateau, c'est qu'on veut déplacer ce
             // bonhomme sur le bateau.
             if (mPickedEntity != null && (mPickedEntity instanceof PlayerToken)
@@ -564,6 +593,7 @@ public class Game3DLogic extends GameLogic {
                 // Remise à zéro
                 mPickedEntity = null;
                 mCanCancelPickingAction = false;
+                mRenderer.getHud().getGameHud().hideRightClickHint();
             } else {
                 // On assume ici que lorsqu'on picke une entité, on veut picker une tile ou un bateau
                 // après, puisqu'on a des mouvements restant (et qu'un tour est forcément séquentiel)
@@ -596,6 +626,7 @@ public class Game3DLogic extends GameLogic {
                 // On lance la requête
                 requestPick(entPick, tilePick);
                 mCanCancelPickingAction = true;
+                mRenderer.getHud().getGameHud().showRightClickHint();
             }
         } else if (currentTurn.hasRolledDice() && currentTurn.getRemainingDiceMoves() > 0) {
             // Le dé a été lancé, et on a des mouvements de dé restant. La seule chose possible, c'est
@@ -609,6 +640,7 @@ public class Game3DLogic extends GameLogic {
 
             requestPick(null, tilePick);
             mCanCancelPickingAction = true;
+            mRenderer.getHud().getGameHud().showRightClickHint();
         }
     }
 
@@ -623,6 +655,13 @@ public class Game3DLogic extends GameLogic {
         } else if (getRemainingInitialBoats() > 0) {
             // Il nous reste des bateaux initiaux à placer, on a donc pas encore commencé la partie.
             currentTurn.putInitialBoat(tile);
+        } else if (currentTurn.getTileAction() != null && !currentTurn.getTileAction().hasBeenUsed()) {
+            // On a une tile d'action qui n'a pas finie d'être utilisée
+            TileAction ta = currentTurn.getTileAction();
+            if (ta.getAction() == TileAction.ACTION_MOVE_ANIMAL) {
+                // On déplace l'unité là bas
+                currentTurn.tileActionTeleport(mPickedEntity, tile);
+            }
         } else if (currentTurn.getRemainingMoves() > 0) {
             // On assume que ce picking de tile était pour le déplacement d'unités.
             currentTurn.moveEntity(mPickedEntity, tile);
@@ -636,6 +675,7 @@ public class Game3DLogic extends GameLogic {
 
         mPickedEntity = null;
         mCanCancelPickingAction = false;
+        mRenderer.getHud().getGameHud().hideRightClickHint();
     }
 
     @Override

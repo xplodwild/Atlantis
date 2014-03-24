@@ -26,12 +26,23 @@ import fr.miage.atlantis.board.TileAction;
  */
 public class TileActionDisplay extends AbstractDisplay {
 
-    public TileActionDisplay(final AssetManager assetManager) {
-        super("HUD TileAction Display", assetManager);
+    private TileAction mAction;
+
+    public TileActionDisplay(final AssetManager assetManager, final TileAction action) {
+        super(256, 223, "HUD TileAction Display", assetManager);
+        mAction = action;
+    }
+
+    /**
+     * Retourne l'action originale représentée par ce display
+     * @return L'action originale (TileAction)
+     */
+    public TileAction getAction() {
+        return mAction;
     }
 
     public static TileActionDisplay getTileForAction(TileAction action, AssetManager assetManager) {
-        TileActionDisplay tad = new TileActionDisplay(assetManager);
+        TileActionDisplay tad = new TileActionDisplay(assetManager, action);
 
         switch (action.getAction()) {
             case TileAction.ACTION_CANCEL_ANIMAL:
@@ -65,6 +76,8 @@ public class TileActionDisplay extends AbstractDisplay {
             default:
                 throw new IllegalArgumentException("Invalid TileAction action value");
         }
+
+        tad.setAlpha(0.0f);
 
         return tad;
     }

@@ -33,6 +33,8 @@ public class SharkModel extends AnimatedModel {
 
     public SharkModel(AssetManager am) {
         super(am, "Models/sharkA.mesh.xml", "Textures/shark.png", null);
+        getModel().scale(0.9f);
+        getModel().setLocalTranslation(0, -3.0f, 0);
     }
 
 }
