@@ -70,6 +70,7 @@ public class Game3DLogic extends GameLogic {
     private Game3DRenderer mRenderer;
     private GameEntity mPickedEntity;
 
+
   /**
      * Instance du logger Java
      */
@@ -80,7 +81,6 @@ public class Game3DLogic extends GameLogic {
     private List<EntityPickRequest> mEntRequestHistory;
     private List<TilePickRequest> mTileRequestHistory;
     private boolean mCanCancelPickingAction;
-
 
     public Game3DLogic() {
         super();
@@ -98,6 +98,7 @@ public class Game3DLogic extends GameLogic {
 
     @Override
     public void startGame() {
+
 
         if (DBG_AUTOPREPARE) {
             // TEST: On place des tokens
@@ -330,6 +331,7 @@ public class Game3DLogic extends GameLogic {
                             if (action.isImmediate()) {
                                 onPlayTileAction(newTile, action);
                             } else {
+
 
                                 logger.log(Level.WARNING, "TODO: Tile is not immediate: " + action.toString(), new Object[]{});
                                 // TODO: Stocker la tile dans les tiles du joueur
