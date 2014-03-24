@@ -132,18 +132,19 @@ public class GameBoardTest {
         GameBoard instance = new GameBoard();
         
         // On génère 40 tiles et on vérifie qu'il y a le compte.
+        instance.fillInRandomizerWithTiles();
         int b = 0;
         int f = 0;
         int m = 0;
-        for(int i=0;i<3;i++){
+        for(int i=0;i<40;i++){
             GameTile result = instance.generateRandomTile();
             if(result instanceof BeachTile) b++;
             if(result instanceof ForestTile) f++;
             if(result instanceof MountainTile) m++;
         }
-        assertEquals(b,16);
-        assertEquals(f,16);
-        assertEquals(m,8);
+        assertEquals(16,b);
+        assertEquals(16,f);
+        assertEquals(8,m);
         
         /* BUG à FIX ici
          * Le randomizer est déjà vidé lorsque je fais new Gameboard

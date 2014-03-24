@@ -123,7 +123,7 @@ public final class GameBoard {
         //-----------------------------------------------------------------------
     }
 
-    private void fillInRandomizerWithTiles() {
+    public void fillInRandomizerWithTiles() {
         for (int i = 0; i < this.forestTilesRemaining; i++) {
             ForestTile tmp = new ForestTile(this, "Forest #" + i);
             tmp.setAction(TileAction.generateRandomTileActionForest());
