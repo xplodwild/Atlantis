@@ -37,7 +37,10 @@ import fr.miage.atlantis.Game3DLogic;
 import fr.miage.atlantis.GameDice;
 import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.entities.GameEntity;
+import fr.miage.atlantis.graphics.hud.AbstractDisplay;
+import fr.miage.atlantis.graphics.hud.HudAnimator;
 import fr.miage.atlantis.graphics.hud.HudManager;
+import fr.miage.atlantis.graphics.hud.TileActionDisplay;
 import fr.miage.atlantis.graphics.models.DiceModel;
 import fr.miage.atlantis.gui.Gui;
 import java.util.Map;
@@ -62,12 +65,12 @@ public class Game3DRenderer extends SimpleApplication {
    
     private Gui mGui;
 
-
+    private HudAnimator mHudAnimator;
     private HudManager mHudManager;
     
     public Game3DRenderer(Game3DLogic parent) {
         mParent = parent;
-
+        mHudAnimator = new HudAnimator();
         mFutureUpdater = new FutureUpdater();
     }
 
@@ -169,6 +172,17 @@ public class Game3DRenderer extends SimpleApplication {
         return mParent;
     }
 
+        public HudAnimator getHudAnimator() {
+        return mHudAnimator;
+        }
+    
+         public void displayHudCenter(AbstractDisplay disp) {
+        disp.setPosition(cam.getWidth() / 2 - TileActionDisplay.IMAGE_WIDTH / 2,
+                    cam.getHeight() / 2 - TileActionDisplay.IMAGE_HEIGHT / 2);
+        guiNode.attachChild(disp);
+    }
+   
+        
     public HudManager getHud() {
         return mHudManager;
     }
@@ -236,10 +250,12 @@ public class Game3DRenderer extends SimpleApplication {
     }
 
 
+    
+    
     @Override
     public void simpleUpdate(float tpf) {
 
-
+        mHudAnimator.update(tpf);
 
         // Mise à jour des animations du HUD
         mHudManager.update(tpf);

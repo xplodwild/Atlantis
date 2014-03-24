@@ -4,10 +4,12 @@
  */
 package fr.miage.atlantis.gui.controllers;
 
+import com.jme3.renderer.Camera;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
+import fr.miage.atlantis.graphics.CamConstants;
 import fr.miage.atlantis.graphics.Game3DRenderer;
 import java.util.ArrayList;
 import java.util.Random;
@@ -83,6 +85,8 @@ public class GuiController implements ScreenController {
         this.g3rdr.getLogic().startGame();
                        
         this.nifty.gotoScreen("inGameHud");
+        Camera cam = g3rdr.getCamera();
+        CamConstants.moveAboveBoard(g3rdr.getCameraNode(), cam);
         
         
     }
@@ -128,7 +132,8 @@ public class GuiController implements ScreenController {
         
         
         this.nifty.gotoScreen("inGameHud");
-        
+        Camera cam = g3rdr.getCamera();
+        CamConstants.moveAboveBoard(g3rdr.getCameraNode(), cam);
         
     }
 

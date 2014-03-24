@@ -39,8 +39,7 @@ public class GameHud {
     }
 
     private void setup() {
-        mRightClickToCancel = new AbstractDisplay(52, 75, "RightClick Cancel Hint",
-                mHudManager.getAssetManager());
+        mRightClickToCancel = new AbstractDisplay(52, 75, "RightClick Cancel Hint",mHudManager.getAssetManager());
         mRightClickToCancel.showImage("Interface/HintRightClickCancel.png");
         mRightClickToCancel.setAlpha(0.0f);
         mHudManager.displayBottomRight(mRightClickToCancel);
