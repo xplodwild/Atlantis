@@ -11,8 +11,13 @@ import de.lessvoid.nifty.screen.ScreenController;
 
 public class ConsoleController implements ScreenController {
             
+    private Nifty nifty;
+    private Screen screen;
+    
     @Override
     public void bind(Nifty nifty, Screen screen) {
+        this.nifty=nifty;
+        this.screen=screen;
     }
     
     @Override

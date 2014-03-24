@@ -33,6 +33,15 @@ import fr.miage.atlantis.gui.console.GuiConsole;
 public class BindListCommand implements ConsoleCommands.ConsoleCommand {
 
     
+    
+    private Console console;
+    
+    
+    public BindListCommand(Console mConsole) {
+        this.console=mConsole;
+    }
+
+    
     /**
      * Methode executée lors de l'appel de la commande
      * @param args arguments passés à la commande
@@ -41,7 +50,7 @@ public class BindListCommand implements ConsoleCommands.ConsoleCommand {
     public void execute(final String[] args) { 
         
          //On liste ici toutes les commandes executable dans la console 
-        Console csl=GuiConsole.getConsole();
+        Console csl=console;
         
         csl.output("");
         csl.output("____________________________________________________");

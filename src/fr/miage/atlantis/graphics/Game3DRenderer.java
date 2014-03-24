@@ -36,6 +36,7 @@ import com.jme3.scene.CameraNode;
 import com.jme3.scene.Node;
 import com.jme3.scene.control.CameraControl.ControlDirection;
 import com.jme3.scene.plugins.blender.BlenderModelLoader;
+import de.lessvoid.nifty.Nifty;
 import fr.miage.atlantis.Game3DLogic;
 import fr.miage.atlantis.GameDice;
 import fr.miage.atlantis.board.GameTile;
@@ -66,7 +67,7 @@ public class Game3DRenderer extends SimpleApplication {
     private DiceModel mDiceModel;
     private FutureUpdater mFutureUpdater;
     private HudAnimator mHudAnimator;
-    private GuiConsole mConsole;
+    
     private GuiStartMenu mStartMenu;
 
     public Game3DRenderer(Game3DLogic parent) {
@@ -128,11 +129,20 @@ public class Game3DRenderer extends SimpleApplication {
         // Configuration du dé
         mDiceModel = new DiceModel(assetManager);
 
-        NiftyJmeDisplay jmdsp=new NiftyJmeDisplay(assetManager, inputManager, audioRenderer, viewPort);
         
-        mConsole = new GuiConsole(this,jmdsp);
-
-        mStartMenu=new GuiStartMenu(this,jmdsp);
+        
+        NiftyJmeDisplay jmdsp=new NiftyJmeDisplay(assetManager, inputManager, audioRenderer, viewPort);
+        Nifty n=jmdsp.getNifty();
+        this.guiViewPort.addProcessor(jmdsp);
+        
+        
+        //Charge le thème
+        n.loadStyleFile(GuiConsole.STYLE_FILE);
+        n.loadControlFile(GuiConsole.CONTROL_FILE);
+        
+        
+        mStartMenu = new GuiStartMenu(this,n);
+        
     }
 
     public void toggleGraphicsStats(){

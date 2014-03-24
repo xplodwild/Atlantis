@@ -35,6 +35,13 @@ import java.util.logging.Logger;
  */
 public class LoggingCommand implements ConsoleCommands.ConsoleCommand {
 
+    
+    private Console console;
+    
+    public LoggingCommand(Console mConsole) {
+        this.console=mConsole;
+    }
+
     /**
      * Methode executée lors de l'appel de la commande
      *
@@ -48,7 +55,7 @@ public class LoggingCommand implements ConsoleCommands.ConsoleCommand {
         }
         int nb1 = -99;
 
-        Console csl=GuiConsole.getConsole();
+        Console csl=console;
         
         if ("-all".equals(s1)) {
             nb1 = 1;

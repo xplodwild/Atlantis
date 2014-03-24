@@ -8,6 +8,7 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import fr.miage.atlantis.graphics.Game3DRenderer;
+import fr.miage.atlantis.gui.console.GuiConsole;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -72,8 +73,8 @@ public class StartScreenController implements ScreenController {
         this.g3rdr.getLogic().prepareGame(players);
         
         this.g3rdr.getLogic().startGame();
-        
-        this.nifty.gotoScreen("console");
+                       
+        this.nifty.gotoScreen("consolehud");
         
         
     }
@@ -114,9 +115,8 @@ public class StartScreenController implements ScreenController {
         
         this.g3rdr.getLogic().prepareGame(players);
         
-        this.g3rdr.getLogic().startGame();
-        
-        this.nifty.gotoScreen("console");
+        this.g3rdr.getLogic().startGame(); 
+        this.nifty.gotoScreen("consolehud");
         
         
     }
