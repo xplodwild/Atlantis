@@ -79,8 +79,8 @@ public final class GameBoard {
         this.randomiser = new ArrayList();
 
         this.fillInRandomizerWithTiles();
-        this.setDefaultBoardTileAttributes();
         this.generateDefaultBoard();
+        this.setDefaultBoardTileAttributes();        
         this.placeDefaultEntitiesOnBoard();
 
 
