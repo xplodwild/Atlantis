@@ -119,7 +119,7 @@ public class AnimationBrain {
         } else if (ent instanceof SeaSerpent) {
             return new State(SeaSerpentModel.ANIMATION_SWIM_CYCLE, 0.0f, false);
         } else if (ent instanceof Shark) {
-            return new State(SharkModel.ANIMATION_SWIM_CYCLE, 120.0f);
+            return new State(SharkModel.ANIMATION_SWIM_CYCLE, 90.0f);
         } else if (ent instanceof Whale) {
             return new State(WhaleModel.ANIMATION_SWIM);
         } else if (ent instanceof Boat) {
