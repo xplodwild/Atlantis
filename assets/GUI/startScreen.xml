@@ -4,29 +4,94 @@
     <!-- start screen -->
     <!-- +++++++++++++++++++++++++++++++++++++++ -->
     <screen id="start" controller="fr.miage.atlantis.gui.controllers.StartScreenController">
+        <!-- +++++++++++++++++++++++++++++++++++++++ -->
+        <!-- Layer principal -->
+        <!-- +++++++++++++++++++++++++++++++++++++++ -->
         <layer id="background" childLayout="horizontal">
-            <panel id="panelGauche" height="80%" width="20%" align="left" valign="top" backgroundColor="#3333334d" childLayout="center" visibleToMouse="true">                
-                <control name="button" label="Nouvelle partie">
-                        <interact onClick="startGame()" />
-                </control>
+            <!-- +++++++++++++++++++++++++++++++++++++++ -->
+            <!-- Panel de gauche de l'ecran ou l'on place les boutons   -->
+            <!-- +++++++++++++++++++++++++++++++++++++++ -->
+            <panel id="panelGauche" height="100%" width="20%" align="left" valign="top" backgroundColor="#00000080" childLayout="vertical" visibleToMouse="true">                
                 
-                <control name="button" label="Redemarrer">
+                <panel id="startgamezone" paddingTop="20%" align="center" height="8%" width="60%" backgroundColor="#00000080" childLayout="vertical" visibleToMouse="true">                
+                    <control  id="btnNouvPartie"   height="100%" width="100%" name="button" label="Nouvelle partie">
+                        <interact onClick="startGame()" />
+                    </control>
+                </panel>
+                
+                <panel id="restartgamezone" paddingTop="20%" align="center" height="8%" width="60%" backgroundColor="#00000080" childLayout="vertical" visibleToMouse="true">                
+                    <control paddingTop="10%" id="btnRRPartie"   height="100%" width="100%" name="button" label="Redemarrer">
                         <interact onClick="reStartGame()" />
-                </control>
-       
+                    </control>
+                </panel>
+                
+                <panel id="optiongamezone" paddingTop="20%" align="center" height="8%" width="60%" backgroundColor="#00000080" childLayout="vertical" visibleToMouse="true">                
+                    <control paddingTop="10%" id="btnOptions"   height="100%" width="100%" name="button" label="Options">
+                        <interact onClick="optionsGame()" />
+                    </control>
+                </panel>
             </panel>
       
-            <panel id="panelDroit" height="80%" width="80%" align="right" valign="top" childLayout="center" visibleToMouse="true">
-                <panel id="haut" height="15%" width="100%" align="right" valign="top" backgroundColor="#00000080" childLayout="horizontal" visibleToMouse="true">
-                    <panel id="haut_1" paddingleft="3%" height="75%" width="25%" align="right" valign="top" childLayout="vertical" visibleToMouse="true">
-                        <text text="Joueur 1" font="Fonts/sansitc.fnt"  color="#0060abff" /> 
-                        <control id="inputJ1" name="textfield" width="80%" text="hello textfield"/>
+            <panel id="panelDroit" height="100%" width="80%" align="right" valign="top" childLayout="center" visibleToMouse="true">
+                
+                <panel id="haut" height="3%" width="100%" align="right" valign="top" backgroundColor="#00000080" childLayout="horizontal" visibleToMouse="true">
+                    
+                </panel> 
                         
-                    </panel>  
-        
-       
+                
+                <panel id="bas" height="80%" width="100%" align="left" valign="top" paddingTop="3.7%"  childLayout="horizontal" visibleToMouse="true"> 
+                   
+                    <panel id="bas_1" height="100%" width="24%" backgroundColor="#0060ab4d" align="right" valign="top" childLayout="vertical" visibleToMouse="true">
+                        <panel id="haut_1"  height="25%" width="80%" align="right" valign="top" childLayout="vertical" visibleToMouse="true">
+                            <text align="center" text="Joueur 1" font="Fonts/sansitc.fnt"  color="#0060abff" /> 
+                            <control id="inputJ1" name="textfield" width="80%" text=""/>
+                            <!-- Ajouter une checkbox qui valide si un pseudo a été entré. -->
+                        </panel> 
+                    
+                    </panel>                    
+                    
+                    <panel id="spacer_1" height="100%" width="1%"  backgroundColor="#00000080" align="right" valign="top" childLayout="vertical" visibleToMouse="true">
+                    </panel> 
+                    
+                    <panel id="bas_2" height="100%" width="24%"  backgroundColor="#349b144d" align="right" valign="top" childLayout="vertical" visibleToMouse="true">
+                        <panel id="haut_2"  height="25%" width="80%" align="right" valign="top" childLayout="vertical" visibleToMouse="true">
+                            <text align="center"  text="Joueur 2" font="Fonts/sansitc.fnt"  color="#349b14ff" /> 
+                            <control id="inputJ2" name="textfield" width="80%" text=""/>
+                            <!-- Ajouter une checkbox qui valide si un pseudo a été entré. -->
+                        </panel> 
+                    </panel> 
+                    
+                    <panel id="spacer_2" height="100%" width="1%"  backgroundColor="#00000080" align="right" valign="top" childLayout="vertical" visibleToMouse="true">
+                    </panel> 
+                    
+                    <panel id="bas_3" height="100%" width="24%"  backgroundColor="#eda0004d" align="right" valign="top" childLayout="vertical" visibleToMouse="true">
+                        <panel id="haut_3" height="25%" width="80%" align="right" valign="top" childLayout="vertical" visibleToMouse="true">
+                            <text  align="center" text="Joueur 3" font="Fonts/sansitc.fnt"  color="#eda000ff" /> 
+                            <control id="inputJ3" name="textfield" width="80%" text=""/>
+                            <!-- Ajouter une checkbox qui valide si un pseudo a été entré. -->
+                        </panel> 
+                    </panel> 
+                                        
+                    <panel id="spacer_3" height="100%" width="1%"  backgroundColor="#00000080" align="right" valign="top" childLayout="vertical" visibleToMouse="true">
+                    </panel> 
+                    
+                    <panel id="bas_4" height="100%" width="24%" align="right" backgroundColor="#c6000b4d" valign="top" childLayout="vertical" visibleToMouse="true">
+                        <panel id="haut_4" height="25%" width="80%" align="right" valign="top" childLayout="vertical" visibleToMouse="true">
+                            <text  align="center" text="Joueur 4" font="Fonts/sansitc.fnt"  color="#c6000bff" /> 
+                            <control id="inputJ4" name="textfield" width="80%" text=""/>
+                            <!-- Ajouter une checkbox qui valide si un pseudo a été entré. -->
+                        </panel> 
+                    </panel> 
+                    
+                    <panel id="spacer_4" height="100%" width="2%"  backgroundColor="#00000080" align="right" valign="top" childLayout="vertical" visibleToMouse="true">
+                    </panel> 
+                </panel>   
+                <panel id="barreDuBas" height="20%" width="100%" align="left" valign="bottom" backgroundColor="#00000080" childLayout="vertical" visibleToMouse="true">                
+                    <text align="left" valign="bottom" text="Parfois quand je m'ennuie je vais dans le jardin, " font="Fonts/sansitc.fnt"  color="#ffffffff" /> 
+                    <text align="left" valign="bottom" text="me couvre de terre et je me prends pour une carotte." font="Fonts/sansitc.fnt"  color="#ffffffff" />                 
                 </panel>  
-            </panel>
+            </panel>            
+             
         </layer>
     </screen>
 </nifty>

@@ -132,8 +132,7 @@ public final class GuiConsole{
              */
             layer(new LayerBuilder("layer1"){{
 
-                this.name("layer10");
-
+                
                 /*
                  * Propriétés d'agencement des elements
                  */
@@ -237,9 +236,6 @@ public final class GuiConsole{
 
 
 
-
-
-
         mConsole.disable();
 
         //Genere les keybinding
@@ -262,7 +258,7 @@ public final class GuiConsole{
         this.getInputManager().addListener(this.toggleFps(), "fps");
 
         //Bind la touche d'activation des stats
-        this.getInputManager().addMapping("menu", new KeyTrigger(KeyInput.KEY_F1));
+        this.getInputManager().addMapping("menu", new KeyTrigger(KeyInput.KEY_ESCAPE));
         this.getInputManager().addListener(this.toggleMenu(), "menu");
     }
 
@@ -327,8 +323,7 @@ public final class GuiConsole{
 
             public void onAction(String name, boolean isPressed, float tpf) {
                  if(isPressed){
-                    Game3DRenderer g3rdr=GuiConsole.this.getGame3DRenderer();
-                    g3rdr.toggleGraphicsStats();
+                    GuiConsole.this.getGame3DRenderer().toggleGraphicsStats();                    
                  }
             }
         };
