@@ -271,17 +271,7 @@ public class GameBoardTest {
         fail("The test case is a prototype.");
     }
 
-    /**
-     * Test of printAllTiles method, of class GameBoard.
-     *
-    @Test
-    public void testPrintAllTiles() {
-        System.out.println("printAllTiles");
-        GameBoard instance = new GameBoard();
-        instance.printAllTiles();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
+   
 
     /**
      * Test of hasEntityOfType method, of class GameBoard.
@@ -297,7 +287,7 @@ public class GameBoardTest {
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
-
+*/
     /**
      * Test of hasTileAtWaterEdge method, of class GameBoard.
      *
@@ -305,12 +295,18 @@ public class GameBoardTest {
     public void testHasTileAtWaterEdge() {
         System.out.println("hasTileAtWaterEdge");
         int level = 0;
-        GameBoard instance = new GameBoard();
-        boolean expResult = false;
-        boolean result = instance.hasTileAtWaterEdge(level);
+        GameBoard board = new GameBoard();
+        
+        for(int i =0; i<16;i++){
+             boolean result = board.hasTileAtWaterEdge(1);
+             
+        }
+       
+        
+        
+        boolean result = board.hasTileAtWaterEdge(1);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        
     }
     */
 }
