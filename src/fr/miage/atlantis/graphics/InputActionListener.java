@@ -334,6 +334,11 @@ public class InputActionListener {
             }
         }
 
+        // On vérfie ensuite la contrainte de non-sélection d'une entité en particulier
+        if (request.avoidEntity != null && request.avoidEntity == ent) {
+            return false;
+        }
+
         if ((request.pickingRestriction & GameLogic.EntityPickRequest.FLAG_PICK_PLAYER_ENTITIES) != 0) {
             // On veut picker un pion du joueur. On vérifie que l'entité est bien cela.
 
@@ -438,6 +443,14 @@ public class InputActionListener {
 
     private boolean checkPickingConstraints(GameLogic.TilePickRequest request, GameTile tile) {
         if (request.requiredHeight >= 0 && tile.getHeight() != request.requiredHeight) {
+            return false;
+        }
+
+        if (request.landTilesOnly && tile.getHeight() <= 0) {
+            return false;
+        }
+
+        if (request.noEntitiesOnTile && tile.getEntities().size() > 0) {
             return false;
         }
 

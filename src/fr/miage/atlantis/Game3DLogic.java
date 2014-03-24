@@ -70,8 +70,7 @@ public class Game3DLogic extends GameLogic {
     private Game3DRenderer mRenderer;
     private GameEntity mPickedEntity;
 
-
-     /**
+  /**
      * Instance du logger Java
      */
     private static final Logger logger = Logger.getGlobal();
@@ -99,26 +98,26 @@ public class Game3DLogic extends GameLogic {
 
     @Override
     public void startGame() {
-        // TEST: On place des tokens
-        Player[] plays = getPlayers();
-        for (int i = 0; i < plays.length; i++) {
-            Player p = plays[i];
-            List<PlayerToken> tokens = p.getTokens();
 
-            for (PlayerToken token : tokens) {
-                int rand=new Random().nextInt(15)+1;
-                    token.moveToTile(this, getBoard().getTileSet().get("Beach #"+rand));
+        if (DBG_AUTOPREPARE) {
+            // TEST: On place des tokens
+             Player[] plays = getPlayers();
+             for (int i = 0; i < plays.length; i++) {
+                 Player p = plays[i];
+                 List<PlayerToken> tokens = p.getTokens();
 
-                mRenderer.getEntitiesRenderer().addEntity(token);
-            }
+                 for (PlayerToken token : tokens) {
+                     int rand=new Random().nextInt(15)+1;
+                         token.moveToTile(this, getBoard().getTileSet().get("Beach #"+rand));
+
+                     mRenderer.getEntitiesRenderer().addEntity(token);
+                 }
+             }
+            // TEST: On place des bateaux
+            Boat boat1 = new Boat();
+            boat1.moveToTile(this, getBoard().getTileSet().get("Water #37"));
+            mRenderer.getEntitiesRenderer().addEntity(boat1);
         }
-
-        // TEST: On place des bateaux
-        Boat boat1 = new Boat();
-        boat1.moveToTile(this, getBoard().getTileSet().get("Water #37"));
-        mRenderer.getEntitiesRenderer().addEntity(boat1);
-
-        CamConstants.moveAboveBoard(mRenderer.getCameraNode(), mRenderer.getCamera());
 
         super.startGame();
     }
@@ -153,6 +152,18 @@ public class Game3DLogic extends GameLogic {
         logger.log(Level.FINE, "Game3DLogic: onTurnStart()", new Object[]{});
 
         getCurrentTurn().onTurnStarted();
+    }
+
+    public void onInitialTokenPut(PlayerToken pt) {
+        mRenderer.getEntitiesRenderer().addEntity(pt);
+        getCurrentTurn().onInitialTokenPutDone();
+    }
+
+    @Override
+    public void onInitialBoatPut(Boat b) {
+        super.onInitialBoatPut(b);
+        mRenderer.getEntitiesRenderer().addEntity(b);
+        getCurrentTurn().onInitialBoatPutDone();
     }
 
     public void onPlayTileAction(GameTile tile, TileAction action) {
@@ -322,6 +333,12 @@ public class Game3DLogic extends GameLogic {
 
                                 logger.log(Level.WARNING, "TODO: Tile is not immediate: " + action.toString(), new Object[]{});
                                 // TODO: Stocker la tile dans les tiles du joueur
+
+                                // L'action est pas immédiate, on stock la tile dans la pile du
+                                // joueur.
+                                Player player = getCurrentTurn().getPlayer();
+                                player.addActionTile(action);
+
                             }
 
                             // Fin de l'action, étape suivante
@@ -370,13 +387,11 @@ public class Game3DLogic extends GameLogic {
 
             case GameEntity.ACTION_SEASERPENT_CRUSH: {
                 final SeaSerpent ss = (SeaSerpent) source;
-                final PlayerToken token = (PlayerToken) target;
-
                 final SeaSerpentModel ssModel = (SeaSerpentModel) mRenderer.getEntitiesRenderer().getNodeFromEntity(ss);
-                final PlayerModel playerModel = (PlayerModel) mRenderer.getEntitiesRenderer().getNodeFromEntity(token);
-                ssModel.lookAt(playerModel.getLocalTranslation(), Vector3f.UNIT_Y);
-                ssModel.rotate(0, -90, 0);
 
+                // Un kraken peut soit manger un bateau, soit des joueurs (un bateau contenant des
+                // joueurs étant traité séparément). Dans tous les cas, on va lancer l'animation
+                // pour lui.
                 ssModel.playAnimation(SeaSerpentModel.ANIMATION_ATTACK_CELL, false, true, new AnimEventListener() {
                     public void onAnimCycleDone(AnimControl control, AnimChannel channel, String animName) {
                         ssModel.playAnimation(AnimationBrain.getIdleAnimation(ss));
@@ -386,15 +401,40 @@ public class Game3DLogic extends GameLogic {
                     public void onAnimChange(AnimControl control, AnimChannel channel, String animName) {
                     }
                 });
-                playerModel.playAnimation(PlayerModel.ANIMATION_EATEN_BY_SHARK, false, true, new AnimEventListener() {
-                    public void onAnimCycleDone(AnimControl control, AnimChannel channel, String animName) {
-                        token.die(Game3DLogic.this);
-                        control.removeListener(this);
-                    }
 
-                    public void onAnimChange(AnimControl control, AnimChannel channel, String animName) {
-                    }
-                });
+                if (target instanceof PlayerToken) {
+                    final PlayerToken token = (PlayerToken) target;
+                    final PlayerModel playerModel = (PlayerModel) mRenderer.getEntitiesRenderer().getNodeFromEntity(token);
+                    ssModel.lookAt(playerModel.getLocalTranslation(), Vector3f.UNIT_Y);
+                    ssModel.rotate(0, -90, 0);
+
+                    playerModel.playAnimation(PlayerModel.ANIMATION_EATEN_BY_SHARK, false, true, new AnimEventListener() {
+                        public void onAnimCycleDone(AnimControl control, AnimChannel channel, String animName) {
+                            token.die(Game3DLogic.this);
+                            control.removeListener(this);
+                        }
+
+                        public void onAnimChange(AnimControl control, AnimChannel channel, String animName) {
+                        }
+                    });
+                } else if (target instanceof Boat) {
+                    final Boat boat = (Boat) target;
+                    final BoatModel boatModel = (BoatModel) mRenderer.getEntitiesRenderer().getNodeFromEntity(boat);
+                    ssModel.lookAt(boatModel.getLocalTranslation(), Vector3f.UNIT_Y);
+                    ssModel.rotate(0, -90, 0);
+
+                    boatModel.playAnimation(BoatModel.ANIMATION_BOAT_SINK, false, true, new AnimEventListener() {
+                        public void onAnimCycleDone(AnimControl control, AnimChannel channel, String animName) {
+                            boat.die(Game3DLogic.this);
+                            control.removeListener(this);
+                        }
+
+                        public void onAnimChange(AnimControl control, AnimChannel channel, String animName) {
+                        }
+                    });
+                } else {
+                    throw new IllegalArgumentException("A Sea Serpent cannot crush anything else than a boat or a player!");
+                }
             }
             break;
 
@@ -542,10 +582,13 @@ public class Game3DLogic extends GameLogic {
                 // bateau)
                 EntityPickRequest entPick = null;
                 if (!(mPickedEntity instanceof Boat)) {
+                    PlayerToken pt = (PlayerToken) mPickedEntity;
+
                     entPick = new EntityPickRequest();
                     entPick.pickingRestriction = EntityPickRequest.FLAG_PICK_BOAT_WITH_ROOM;
                     entPick.player = null;
                     entPick.pickNearTile = ent.getTile();
+                    entPick.avoidEntity = pt.getBoat();
                 }
 
                 // On lance la requête
@@ -572,7 +615,13 @@ public class Game3DLogic extends GameLogic {
         logger.log(Level.FINE, "Game3DLogic: Tile picked ", new Object[]{tile.getName()});
 
         GameTurn currentTurn = mRenderer.getLogic().getCurrentTurn();
-        if (currentTurn.getRemainingMoves() > 0) {
+        if (currentTurn.getTokenToPlace() != null) {
+            // On a un token a placer, on a donc pas encore commencé la partie.
+            currentTurn.putInitialToken(currentTurn.getTokenToPlace(), tile);
+        } else if (getRemainingInitialBoats() > 0) {
+            // Il nous reste des bateaux initiaux à placer, on a donc pas encore commencé la partie.
+            currentTurn.putInitialBoat(tile);
+        } else if (currentTurn.getRemainingMoves() > 0) {
             // On assume que ce picking de tile était pour le déplacement d'unités.
             currentTurn.moveEntity(mPickedEntity, tile);
         } else if (!currentTurn.hasSunkLandTile()) {

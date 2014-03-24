@@ -21,7 +21,6 @@ package fr.miage.atlantis.graphics;
 import com.jme3.asset.AssetManager;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
-import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Node;
 import fr.miage.atlantis.board.GameBoard;
 import fr.miage.atlantis.board.GameTile;
@@ -34,7 +33,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import jme3tools.optimize.GeometryBatchFactory;
 
 /**
  *
@@ -46,8 +44,7 @@ public class BoardRenderer extends Node {
     public final static String DATA_TILE_Y = "tile_y";
     public final static String DATA_TILE_OFFSET = "tile_offset";
 
-    private final static boolean DEBUG_ITERATION = true;
-    private final static boolean DEBUG_BORDER = false;
+    private final static boolean DEBUG_ITERATION = false;
     private final static float TILE_WIDTH = 35.0f;
     private final static float TILE_HEIGHT = 39.9f;
     private final static float GRID_HEIGHT = 1.0f;
@@ -207,7 +204,6 @@ public class BoardRenderer extends Node {
             output.move(0, 10, 0);
         }
 
-        System.out.println("Tile " + mTiles.size() + ": " + tile.getName() + " (height=" + tile.getHeight() + ")");
         mTiles.add(output);
     }
 

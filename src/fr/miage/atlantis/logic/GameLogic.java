@@ -34,6 +34,8 @@ import fr.miage.atlantis.entities.PlayerToken;
  */
 public abstract class GameLogic implements GameTurnListener {
 
+    protected static final boolean DBG_AUTOPREPARE = false;
+
     /**
      * Plateau du jeu
      */
@@ -54,6 +56,10 @@ public abstract class GameLogic implements GameTurnListener {
      * Tableau des joueurs
      */
     private Player[] mPlayers;
+    /**
+     * Nombre de bateaux placés lors du début d'une partie
+     */
+    private int mBoatsPlaced;
 
 
     public static class EntityPickRequest {
@@ -82,6 +88,11 @@ public abstract class GameLogic implements GameTurnListener {
          */
         public GameTile pickNearTile;
 
+        /**
+         * Si avoidEntity n'est pas null, le picking ne sélectionnera pas l'entité pointée
+         */
+        public GameEntity avoidEntity;
+
         @Override
         public String toString() {
             return "EntityPickRequest: restriction flags=" + pickingRestriction + "; player=" + player;
@@ -99,6 +110,17 @@ public abstract class GameLogic implements GameTurnListener {
          * Si waterEdgeOnly vaut true, seulement les tiles au bord de l'eau seront sélectionnables
          */
         public boolean waterEdgeOnly;
+
+        /**
+         * Si landTilesOnly vaut true, seulement les tiles de terre seront sélectionnables
+         */
+        public boolean landTilesOnly;
+
+        /**
+         * Si noEntitiesOnTile vaut true, seulement les tiles n'ayant pas d'entités dessus seront
+         * sélectionnables
+         */
+        public boolean noEntitiesOnTile;
 
         /**
          * Si requiredHeight est supérieur ou égal à zéro, seules les tiles au niveau spécifiées
@@ -121,6 +143,7 @@ public abstract class GameLogic implements GameTurnListener {
         mBoard = new GameBoard();
         mDice = GameDice.createDefault();
         mLog = new GameLog();
+        mBoatsPlaced = 0;
     }
 
     /**
@@ -133,6 +156,14 @@ public abstract class GameLogic implements GameTurnListener {
         mPlayers = new Player[players.length];
         for (int i = 0; i < mPlayers.length; i++) {
             mPlayers[i] = new Player(players[i], i + 1);
+        }
+
+        if (DBG_AUTOPREPARE) {
+            // Préparation automatique du board
+            mBoatsPlaced = players.length * 2;
+        } else {
+            // Aucun bateau initialement placé
+            mBoatsPlaced = 0;
         }
     }
 
@@ -189,6 +220,19 @@ public abstract class GameLogic implements GameTurnListener {
         //Fini si le tile Volcan est sorti , ou si tout les mToken sont sauvés.
 
         return false;
+    }
+
+    /**
+     * Retourne le nombre de bateaux initiaux RESTANT à placer
+     */
+    public int getRemainingInitialBoats() {
+        // Chaque joueur a deux bateaux à placer
+        return mPlayers.length * 2 - mBoatsPlaced;
+    }
+
+    @Override
+    public void onInitialBoatPut(Boat b) {
+        mBoatsPlaced++;
     }
 
     /**
