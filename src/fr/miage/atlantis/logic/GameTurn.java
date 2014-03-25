@@ -57,6 +57,7 @@ public class GameTurn implements GameRenderListener {
     private boolean mTurnIsOver;
     private int mRemainingMoves;
     private int mRemainingDiceMoves;
+    private boolean mDiceEntityPicked;
     private PlayerToken mTokenToPlace;
 
     /**
@@ -78,6 +79,7 @@ public class GameTurn implements GameRenderListener {
         mController = controller;
         mRemainingMoves = DBG_QUICKTEST ? 1 : 3;
         mDiceRolled = false;
+        mDiceEntityPicked = false;
         mSunkenTile = null;
         mMoves = new ArrayList<EntityMove>();
     }
@@ -430,7 +432,9 @@ public class GameTurn implements GameRenderListener {
      * Demande à la logique de jeu de picker l'entité qui a été obtenue via le dé
      */
     private void requestDiceEntityPicking(GameTile tile) {
-        if (mRemainingDiceMoves == 3) {
+        if (!mDiceEntityPicked) {
+            mDiceEntityPicked = true;
+
             // La première requête est pour choisir l'entité.
             GameLogic.EntityPickRequest request = new GameLogic.EntityPickRequest();
 

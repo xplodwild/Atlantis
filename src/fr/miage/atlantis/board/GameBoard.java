@@ -18,7 +18,9 @@
 
 package fr.miage.atlantis.board;
 
+import fr.miage.atlantis.Player;
 import fr.miage.atlantis.entities.GameEntity;
+import fr.miage.atlantis.entities.PlayerToken;
 import fr.miage.atlantis.entities.SeaSerpent;
 import fr.miage.atlantis.logic.GameLogic;
 import java.util.ArrayList;
@@ -69,8 +71,8 @@ public final class GameBoard {
 
 
     private static final Logger logger = Logger.getGlobal();
-    
-    
+
+
     /**
      * Constructeur de GameBoard
      *
@@ -87,13 +89,13 @@ public final class GameBoard {
 
         for(int i=0;i<this.forestTilesRemaining;i++){
             ForestTile tmp=new ForestTile(this,"Forest #"+i);
-            tmp.setAction(TileAction.generateRandomTileActionForest()); 
+            tmp.setAction(TileAction.generateRandomTileActionForest());
             randomiser.add(tmp);
         }
 
         for(int i=0;i<this.mountainTilesRemaining;i++){
             MountainTile tmp=new MountainTile(this,"Mountain #"+i);
-            tmp.setAction(TileAction.generateRandomTileActionMountain());            
+            tmp.setAction(TileAction.generateRandomTileActionMountain());
             randomiser.add(tmp);
         }
 
@@ -103,7 +105,7 @@ public final class GameBoard {
             randomiser.add(tmp);
         }
 
-        
+
        //-----------------------------------------------------------------------
        //Ligne 1                                                               |
        //-----------------------------------------------------------------------
@@ -241,7 +243,7 @@ public final class GameBoard {
        GameTile nextTile3=nextTile2;
        for(int i=1;i<5;i++){
            tmp2=this.generateRandomTile();
-           String tmpname=tmp2.getName();           
+           String tmpname=tmp2.getName();
            this.placeTileAtTheRightOf(nextTile3,tmp2);
            nextTile3=this.mTileSet.get(tmpname);
        }
@@ -286,7 +288,7 @@ public final class GameBoard {
        nextTile3=nextTile2;
        for(int i=5;i<10;i++){
            tmp2=this.generateRandomTile();
-           String tmpname=tmp2.getName();           
+           String tmpname=tmp2.getName();
            this.placeTileAtTheRightOf(nextTile3,tmp2);
            nextTile3=this.mTileSet.get(tmpname);
        }
@@ -711,7 +713,7 @@ public final class GameBoard {
 
        temp=(WaterTile)this.mTileSet.get("Water #47");
        ss = new SeaSerpent();
-       ss.moveToTile(null, temp);       
+       ss.moveToTile(null, temp);
        //-----------------------------------------------------------------------
     }
 
@@ -806,7 +808,7 @@ public final class GameBoard {
             //On update le tile dans la hashmap
             mTileSet.put(tmp.getName(), tmp);
         }
-        if (tile.getRightTile() != null) {            
+        if (tile.getRightTile() != null) {
             GameTile tmp=tile.getRightTile();
             tmp.setLeftTile(newTile);
             mTileSet.put(tmp.getName(), tmp);
@@ -838,7 +840,7 @@ public final class GameBoard {
         for (GameEntity ent : entities) {
             ent.moveToTile(logic, newTile);
             logger.log(Level.FINE, "GameBoard: Entity is now in sunken tile ", new Object[]{newTile.getName()});
-            
+
         }
 
         //On update cette tile dans la hashmap
@@ -1013,6 +1015,11 @@ public final class GameBoard {
         }
     }
 
+    /**
+     * Renvoie si oui ou non il existe une entité de la classe indiquée sur le plateau
+     * @param type La classe (exemple: Whale.class)
+     * @return true si il y a au moins une entité de la classe sur le plateau
+     */
     public boolean hasEntityOfType(Class type) {
         Set<String> s = mTileSet.keySet();
 

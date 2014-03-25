@@ -182,8 +182,14 @@ public class InputActionListener {
                 TileActionDisplay tad = mRenderer.getHud().getGameHud().getTileUnderMouse(c.x, c.y);
                 if (tad != null) {
                     Logger.getGlobal().fine("Input: Picked a HUD tile");
-                    mRenderer.getLogic().getCurrentTurn().useLocalTile(tad.getAction());
-                    mRenderer.getHud().getGameHud().hidePlayerTiles();
+                    if (tad.getAction().canBeUsed(mRenderer.getLogic())) {
+                        mRenderer.getLogic().getCurrentTurn().useLocalTile(tad.getAction());
+                        mRenderer.getHud().getGameHud().hidePlayerTiles();
+                    } else {
+                        Logger.getGlobal().severe("Input: Can't use this tile");
+                        // TODO: Play a sound/animation to say "NOPE"
+                    }
+
                 }
             }
         }
