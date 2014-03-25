@@ -35,8 +35,8 @@ public class WhaleModel extends AnimatedModel {
 
     public WhaleModel(AssetManager am) {
         super(am, "Models/whaleA.mesh.xml", "Textures/whale.png", null);
-        getModel().scale(0.7f);
-        getModel().setLocalTranslation(0, -6.0f, 0);
+        getModel().scale(0.6f);
+        getModel().setLocalTranslation(0, -8.5f, 0);
     }
 
 

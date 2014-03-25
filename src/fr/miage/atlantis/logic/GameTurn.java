@@ -17,6 +17,7 @@
  */
 package fr.miage.atlantis.logic;
 
+import fr.miage.atlantis.Game3DLogic;
 import fr.miage.atlantis.GameDice;
 import fr.miage.atlantis.Player;
 import fr.miage.atlantis.board.GameTile;
@@ -56,6 +57,7 @@ public class GameTurn implements GameRenderListener {
     private boolean mTurnIsOver;
     private int mRemainingMoves;
     private int mRemainingDiceMoves;
+    private boolean mDiceEntityPicked;
     private PlayerToken mTokenToPlace;
 
     /**
@@ -77,8 +79,13 @@ public class GameTurn implements GameRenderListener {
         mController = controller;
         mRemainingMoves = DBG_QUICKTEST ? 1 : 3;
         mDiceRolled = false;
+        mDiceEntityPicked = false;
         mSunkenTile = null;
         mMoves = new ArrayList<EntityMove>();
+    }
+
+    public TileAction getTileAction() {
+        return mTileAction;
     }
 
 
@@ -154,6 +161,20 @@ public class GameTurn implements GameRenderListener {
 
         // TODO: Faut-il logger ces mouvements aussi?
         mRemainingDiceMoves--;
+        mController.onUnitMove(ent, dest);
+    }
+
+    public void tileActionTeleport(GameEntity ent, GameTile dest) {
+        logger.log(Level.FINE, "GameTile: tileActionTeleport");
+        mController.onUnitMove(ent, dest);
+    }
+
+    public void tileActionBonusBoatOrSwim(GameEntity ent, GameTile dest) {
+        logger.log(Level.FINE, "GameTile: tileActionBonusBoatOrSwim");
+        mTileAction.decreaseMovesRemaining();
+        if (mTileAction.getMovesRemaining() <= 0) {
+            mTileAction.setUsed();
+        }
         mController.onUnitMove(ent, dest);
     }
 
@@ -237,7 +258,18 @@ public class GameTurn implements GameRenderListener {
     }
 
     public void useLocalTile(TileAction action) {
-        throw new UnsupportedOperationException("Not implemented");
+        // On ne peut utiliser qu'une seule tile d'action non immédiate par tour.
+        if (mTileAction != null) {
+            throw new IllegalStateException("GameTurn: useLocalTile called but we already played a tile action!");
+        }
+
+        mTileAction = action;
+
+        // On enlève la tile du joueur
+        mPlayer.removeActionTile(action);
+
+        // La requête est déléguée à la tile elle-même
+        action.use(null, mController);
     }
 
     public void onTurnStarted() {
@@ -282,7 +314,35 @@ public class GameTurn implements GameRenderListener {
     public void onUnitMoveFinished() {
         logger.log(Level.FINE, "GameTurn: onUnitMoveFinished() ", new Object[]{});
 
-        if (mRemainingMoves > 0) {
+        if (mTileAction != null && !mTileAction.hasBeenUsed()) {
+            // On a une tile action pas utilisée, et on a fait un mouvement.
+            switch (mTileAction.getAction()) {
+                case TileAction.ACTION_MOVE_ANIMAL:
+                    // Téléportation d'animale faite, on est good, on continue le tour
+                    mTileAction.setUsed();
+                    requestPlayerMovePicking();
+                    break;
+
+                case TileAction.ACTION_BONUS_BOAT:
+                case TileAction.ACTION_BONUS_SWIM:
+                    // On a bougé le bateau d'une case, on continue si on a encore des mouvements
+                    if (mTileAction.getMovesRemaining() > 0) {
+                        // On redemande une tile, l'entité reste sauvée par Game3DLogic
+                        GameLogic.TilePickRequest request = new GameLogic.TilePickRequest();
+                        request.landTilesOnly = false;
+                        request.noEntitiesOnTile = false;
+                        request.requiredHeight = 0;
+                        request.waterEdgeOnly = false;
+                        request.pickNearTile = mTileAction.getInitialEntity().getTile();
+                        mController.requestPick(null, request);
+                        logger.log(Level.FINE, "GameTurn: picking for BONUS_BOAT or BONUS_SWIM");
+                    } else {
+                        // On a fini, on reprend le cours normal du tour
+                        requestPlayerMovePicking();
+                    }
+                    break;
+            }
+        } else if (mRemainingMoves > 0) {
             // On a encore des mouvements de ses unités possibles, alors on le fait.
             logger.log(Level.FINE, "GameTurn: ==> Remaining moves: " + mRemainingMoves, new Object[]{});
             requestPlayerMovePicking();
@@ -306,7 +366,7 @@ public class GameTurn implements GameRenderListener {
         } else if (mRemainingDiceMoves > 0) {
             // On a encore des mouvements de l'unité du dé possible
             logger.log(Level.FINE, "GameTurn: ==> Remaining dice moves: " + mRemainingDiceMoves, new Object[]{});
-            requestDiceEntityPicking();
+            requestDiceEntityPicking(mController.getLastPickedEntity().getTile());
         } else {
             // On a plus de mouvements d'unités, on a coulé la tile, et on a bougé les unités
             // avec le dé, on a donc fini le tour.
@@ -333,7 +393,7 @@ public class GameTurn implements GameRenderListener {
         }
 
         if (mController.getBoard().hasEntityOfType(entityType)) {
-            requestDiceEntityPicking();
+            requestDiceEntityPicking(null);
         } else {
             // Pas d'entité du type du dé a bouger. Le dé étant la dernière étape d'un tour,
             // on a terminé.
@@ -356,6 +416,8 @@ public class GameTurn implements GameRenderListener {
      * bateau ayant un pion du joueur en cours dessus).
      */
     private void requestPlayerMovePicking() {
+        logger.log(Level.FINE, "GameTurn: picking for player move");
+
         GameLogic.EntityPickRequest request = new GameLogic.EntityPickRequest();
         request.pickingRestriction =
                 (GameLogic.EntityPickRequest.FLAG_PICK_PLAYER_ENTITIES |
@@ -369,27 +431,42 @@ public class GameTurn implements GameRenderListener {
     /**
      * Demande à la logique de jeu de picker l'entité qui a été obtenue via le dé
      */
-    private void requestDiceEntityPicking() {
-        GameLogic.EntityPickRequest request = new GameLogic.EntityPickRequest();
+    private void requestDiceEntityPicking(GameTile tile) {
+        if (!mDiceEntityPicked) {
+            mDiceEntityPicked = true;
 
-        switch (mDiceAction) {
-            case GameDice.FACE_SEASERPENT:
-                request.pickingRestriction = GameLogic.EntityPickRequest.FLAG_PICK_SEASERPENT;
-                break;
+            // La première requête est pour choisir l'entité.
+            GameLogic.EntityPickRequest request = new GameLogic.EntityPickRequest();
 
-            case GameDice.FACE_SHARK:
-                request.pickingRestriction = GameLogic.EntityPickRequest.FLAG_PICK_SHARK;
-                break;
+            switch (mDiceAction) {
+                case GameDice.FACE_SEASERPENT:
+                    request.pickingRestriction = GameLogic.EntityPickRequest.FLAG_PICK_SEASERPENT;
+                    break;
 
-            case GameDice.FACE_WHALE:
-                request.pickingRestriction = GameLogic.EntityPickRequest.FLAG_PICK_WHALE;
-                break;
+                case GameDice.FACE_SHARK:
+                    request.pickingRestriction = GameLogic.EntityPickRequest.FLAG_PICK_SHARK;
+                    break;
 
-            default:
-                throw new UnsupportedOperationException("Processing of face " + mDiceAction + " isn't supported yet");
+                case GameDice.FACE_WHALE:
+                    request.pickingRestriction = GameLogic.EntityPickRequest.FLAG_PICK_WHALE;
+                    break;
+
+                default:
+                    throw new UnsupportedOperationException("Processing of face " + mDiceAction + " isn't supported yet");
+            }
+
+            mController.requestPick(request, null);
+        } else {
+            // Les requêtes subséquentes choisissent juste la tile puisqu'on est forcé de garder
+            // la même entité
+            GameLogic.TilePickRequest tilePick = new GameLogic.TilePickRequest();
+            tilePick.pickNearTile = tile;
+            tilePick.waterEdgeOnly = false;
+            // Toutes les entités du dé ne sont que dans l'eau
+            tilePick.requiredHeight = 0;
+
+            mController.requestPick(null, tilePick);
         }
-
-        mController.requestPick(request, null);
     }
 
     //--------------------------------------------------------------------------

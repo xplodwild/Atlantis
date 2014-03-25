@@ -17,6 +17,7 @@
  */
 package fr.miage.atlantis.entities;
 
+import fr.miage.atlantis.Player;
 import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.logic.GameLogic;
 import java.util.ArrayList;
@@ -64,7 +65,7 @@ public class Boat extends GameEntity {
         for (PlayerToken passenger : mOnboard) {
             passenger.moveToTile(null, tile);
         }
-        
+
         return super.moveToTile(logic, tile);
     }
 
@@ -113,6 +114,59 @@ public class Boat extends GameEntity {
             retour = true;
         }
         return retour;
+    }
+
+    /**
+     * Renvoie si oui ou non le bateau appartient (= est contrôlé par) au joueur p
+     * @param p Le joueur
+     * @return  true si le joueur passé contrôle ce bateau
+     */
+    public boolean belongsToPlayer(Player p) {
+        // Un bateau "appartient" au joueur si :
+        // - Soit le joueur actuel a la majorité de pions sur le bateau
+        // - Soit il y a un nombre égal de pions de chaque joueur sur le bateau
+        List<PlayerToken> pions = mOnboard;
+        if (pions.size() > 0) {
+            int tokensBelongToMe = 0;
+            for (PlayerToken pt : pions) {
+                if (pt.getPlayer() == p) {
+                    tokensBelongToMe++;
+                }
+            }
+
+            // Déjà, si on a aucun pion à nous, on continue pas
+            if (tokensBelongToMe > 0) {
+                // Un bateau n'ayant que 3 places, si on a plus qu'un pion sur le bateau, il
+                // est à nous
+                if (tokensBelongToMe > 1) {
+                    return true;
+                }
+
+                // Sinon on vérifie qu'on a un pion de chacun
+                if (pions.size() == 1) {
+                    return true;
+                } else if (pions.size() == 2) {
+                    // Sachant qu'on a exactement un pion et qu'il y a 2 pions en tout,
+                    // on a forcément le même nombre, donc c'est bon.
+                    return true;
+                } else if (pions.size() == 3) {
+                    if (pions.get(0).getPlayer() != pions.get(1).getPlayer()
+                            && pions.get(0).getPlayer() != pions.get(2).getPlayer()
+                            && pions.get(1).getPlayer() != pions.get(2).getPlayer()) {
+                        return true;
+                    }
+                } else {
+                    throw new IllegalStateException("More than 3 tokens on a boat");
+                }
+            } else {
+                return false;
+            }
+        } else {
+            // N'importe qui peut contrôler un bateau vide
+            return true;
+        }
+
+        return false;
     }
 
     @Override

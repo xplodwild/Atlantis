@@ -119,11 +119,27 @@ public class AnimationBrain {
         } else if (ent instanceof SeaSerpent) {
             return new State(SeaSerpentModel.ANIMATION_SWIM_CYCLE, 0.0f, false);
         } else if (ent instanceof Shark) {
-            return new State(SharkModel.ANIMATION_SWIM_CYCLE, 120.0f);
+            return new State(SharkModel.ANIMATION_SWIM_CYCLE, 90.0f);
         } else if (ent instanceof Whale) {
             return new State(WhaleModel.ANIMATION_SWIM);
         } else if (ent instanceof Boat) {
             return new State(BoatModel.ANIMATION_BOAT_ROW, 90.0f);
+        }
+
+        return null;
+    }
+
+    public static State getDrownAnimation(GameEntity ent) {
+        if (ent instanceof PlayerToken) {
+            return new State(PlayerModel.ANIMATION_DROWN);
+        } else if (ent instanceof Shark) {
+            return new State(SharkModel.ANIMATION_SUCKED_DOWN_WHIRPOOL);
+        } else if (ent instanceof Whale) {
+            return new State(WhaleModel.ANIMATION_SUCKED_DOWN);
+        } else if (ent instanceof SeaSerpent) {
+            return new State(SeaSerpentModel.ANIMATION_SUCKED_DOWN);
+        } else if (ent instanceof Boat) {
+            return new State(BoatModel.ANIMATION_BOAT_SINK);
         }
 
         return null;

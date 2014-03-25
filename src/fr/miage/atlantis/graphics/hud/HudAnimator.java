@@ -26,9 +26,12 @@ import java.util.List;
  */
 public class HudAnimator {
 
+    private static final float SPEED_MULT = 3.0f;
+
     private class State {
         public AbstractDisplay display;
         public int direction;
+        public float targetAlpha;
     }
 
     private List<State> mActiveStates;
@@ -46,12 +49,10 @@ public class HudAnimator {
     public void update(float timeDelta) {
         for (State state : mActiveStates) {
             boolean stop = false;
-            float alpha = state.display.getAlpha() + timeDelta * (float) state.direction;
-            if (alpha >= 1.0f) {
-                alpha = 1.0f;
-                stop = true;
-            } else if (alpha <= 0.0f) {
-                alpha = 0.0f;
+            float alpha = state.display.getAlpha() + timeDelta * SPEED_MULT * (float) state.direction;
+            if (state.direction < 0 && alpha <= state.targetAlpha ||
+                    state.direction > 0 && alpha >= state.targetAlpha) {
+                alpha = state.targetAlpha;
                 stop = true;
             }
 
@@ -72,29 +73,19 @@ public class HudAnimator {
     }
 
     /**
-     * Anime l'élément du hud en fade-in, sur une seconde
+     * Anime l'élément du hud en fade-in ou out, jusqu'à l'alpha target
      * @param disp L'élément à animer
+     * @param targetAlpha La transparence finale, entre 0 et 1
      */
-    public void animateFadeIn(AbstractDisplay disp) {
-        disp.setAlpha(0.0f);
-
+    public void animateFade(AbstractDisplay disp, float targetAlpha) {
         State state = new State();
         state.display = disp;
-        state.direction = 1;
-
-        mActiveStates.add(state);
-    }
-
-    /**
-     * Anime l'élément du hud en fade-out, sur une seconde
-     * @param disp L'élément à animer
-     */
-    public void animateFadeOut(AbstractDisplay disp) {
-        disp.setAlpha(1.0f);
-
-        State state = new State();
-        state.display = disp;
-        state.direction = -1;
+        if (disp.getAlpha() < targetAlpha) {
+            state.direction = 1;
+        } else {
+            state.direction = -1;
+        }
+        state.targetAlpha = targetAlpha;
 
         mActiveStates.add(state);
     }
