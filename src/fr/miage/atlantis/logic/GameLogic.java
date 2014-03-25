@@ -303,9 +303,6 @@ public abstract class GameLogic implements GameTurnListener {
      */
     public abstract void onTilePicked(GameTile tile);
 
-    /**
-     * Signale au moteur logique qu'on est descendu d'un bateau
-     */
-    public abstract void onPlayerDismountBoat(PlayerToken player, Boat b);
+    public abstract void onTileWhirl(final GameTile tile);
     //--------------------------------------------------------------------------
 }

@@ -286,25 +286,9 @@ public class Game3DLogic extends GameLogic {
     }
 
     public void onSinkTile(final GameTile tile) {
-        AbstractTileModel tileNode = mRenderer.getBoardRenderer().findTileModel(tile);
-        if (tileNode == null) {
-            logger.log(Level.SEVERE, "Aucune node 3D trouvée pour la tile de destination!", new Object[]{});
-            throw new IllegalStateException("Aucune node 3D trouvée pour la tile de destination!");
-        }
-
-        // Effet visuel de splash d'eau
-        Node splashEffect = ParticlesFactory.makeWaterSplash(mRenderer.getAssetManager());
-        splashEffect.setLocalTranslation(tileNode.getTileTopCenter());
-        mRenderer.getRootNode().attachChild(splashEffect);
-        ParticlesFactory.emitAllParticles(splashEffect);
-
-        // Génération du mouvement de la tile
-        final MotionEvent motionEvent = generateTileSinkMotion((Node) tileNode);
-
-        // Callback lorsque l'animation est terminée
-        motionEvent.getPath().addListener(new MotionPathListener() {
+        doTileSinkAnimation(tile, new MotionPathListener() {
             public void onWayPointReach(MotionEvent control, int wayPointIndex) {
-                if (motionEvent.getPath().getNbWayPoints() == wayPointIndex + 1) {
+                if (control.getPath().getNbWayPoints() == wayPointIndex + 1) {
                     // On est à la fin de l'animation. On remplace la tile
                     // coulée par une WaterTile
                     final WaterTile newTile = getBoard().sinkTile(Game3DLogic.this, tile);
@@ -346,12 +330,9 @@ public class Game3DLogic extends GameLogic {
                             getCurrentTurn().onSinkTileFinished();
                         }
                     });
-
                 }
             }
         });
-
-        motionEvent.play();
     }
 
     public void onEntityAction(GameEntity source, GameEntity target, int action) {
@@ -715,4 +696,75 @@ public class Game3DLogic extends GameLogic {
         node.attachChild(pm);
         pm.setLocalTranslation(existingPos);
     }
+
+    @Override
+    public void onTileWhirl(final GameTile tile) {
+        // On coule toutes les tiles alentours
+        List<GameTile> tilesToSink = new ArrayList<GameTile>();
+        tilesToSink.add(tile);
+        if (tile.getLeftBottomTile() != null) tilesToSink.add(tile.getLeftBottomTile());
+        if (tile.getLeftTile() != null) tilesToSink.add(tile.getLeftTile());
+        if (tile.getLeftUpperTile() != null) tilesToSink.add(tile.getLeftUpperTile());
+        if (tile.getRightBottomTile() != null) tilesToSink.add(tile.getRightBottomTile());
+        if (tile.getRightTile() != null) tilesToSink.add(tile.getRightTile());
+        if (tile.getRightUpperTile() != null) tilesToSink.add(tile.getRightUpperTile());
+
+        for (final GameTile sinking : tilesToSink) {
+            if (sinking instanceof WaterTile) continue;
+
+            // On coule la tile
+            doTileSinkAnimation(sinking, new MotionPathListener() {
+                public void onWayPointReach(MotionEvent motionControl, int wayPointIndex) {
+                    if (motionControl.getPath().getNbWayPoints() == wayPointIndex + 1) {
+                        // On est à la fin de l'animation. On remplace la tile
+                        // coulée par une WaterTile
+                        final WaterTile newTile = getBoard().sinkTile(Game3DLogic.this, sinking);
+                        mRenderer.getBoardRenderer().replaceTile(sinking, newTile);
+                    }
+                }
+            });
+
+            // On joue l'animation de coulage sur les entités dessus aussi
+            List<GameEntity> entities = sinking.getEntities();
+            for (final GameEntity ent : entities) {
+                AnimatedModel am = (AnimatedModel) mRenderer.getEntitiesRenderer().getNodeFromEntity(ent);
+                AnimationBrain.State animation = AnimationBrain.getDrownAnimation(ent);
+                am.playAnimation(animation, new AnimEventListener() {
+                    public void onAnimCycleDone(AnimControl control, AnimChannel channel, String animName) {
+                        ent.die(Game3DLogic.this);
+                        control.removeListener(this);
+                    }
+
+                    public void onAnimChange(AnimControl control, AnimChannel channel, String animName) {
+                    }
+                });
+            }
+        }
+
+
+    }
+
+    private void doTileSinkAnimation(GameTile tile, MotionPathListener listener) {
+        AbstractTileModel tileNode = mRenderer.getBoardRenderer().findTileModel(tile);
+        if (tileNode == null) {
+            logger.log(Level.SEVERE, "Aucune node 3D trouvée pour la tile de destination!", new Object[]{});
+            throw new IllegalStateException("Aucune node 3D trouvée pour la tile de destination!");
+        }
+
+        // Effet visuel de splash d'eau
+        Node splashEffect = ParticlesFactory.makeWaterSplash(mRenderer.getAssetManager());
+        splashEffect.setLocalTranslation(tileNode.getTileTopCenter());
+        mRenderer.getRootNode().attachChild(splashEffect);
+        ParticlesFactory.emitAllParticles(splashEffect);
+
+        // Génération du mouvement de la tile
+        final MotionEvent motionEvent = generateTileSinkMotion((Node) tileNode);
+
+        // Callback lorsque l'animation est terminée
+        motionEvent.getPath().addListener(listener);
+
+        motionEvent.play();
+    }
+
+
 }

@@ -109,5 +109,20 @@ public interface GameTurnListener {
      */
     public void onBoardBoat(PlayerToken player, Boat b);
 
+    /**
+     * Action à réaliser lorsqu'une unité meurt
+     *
+     * @param zombie Unité qui meurt
+     */
     public void onUnitDie(GameEntity zombie);
+
+    /**
+     * Signale au moteur logique qu'on est descendu d'un bateau
+     */
+    public void onPlayerDismountBoat(PlayerToken player, Boat b);
+
+    /**
+     * Action à réaliser losrqu'une tile se fait aspirer dans un tourbillon
+     */
+    public void onTileWhirl(final GameTile tile);
 }

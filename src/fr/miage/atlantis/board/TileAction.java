@@ -463,7 +463,8 @@ public class TileAction {
     public void use(GameTile tile, GameLogic logic) {
         switch (mAction) {
             case ACTION_SPAWN_ENTITY:
-                performActionSpawnEntity(tile, logic);
+                //performActionSpawnEntity(tile, logic);
+                performActionWhirl(tile, logic);
                 break;
 
             case ACTION_MOVE_ANIMAL:
@@ -478,9 +479,19 @@ public class TileAction {
                 performActionBonusSwim(logic);
                 break;
 
+            case ACTION_WHIRL:
+                performActionWhirl(tile, logic);
+                break;
+
             default:
                 throw new UnsupportedOperationException("Not implemented yet: Action " + mAction);
         }
+    }
+
+    private void performActionWhirl(GameTile tile, GameLogic logic) {
+        // Tourbillon: Tout ce qui est sur la tile et les tiles adjacentes meurent (absolument tout)
+        // et c'est GameLogic qui s'en charge pour gérer les animations
+        logic.onTileWhirl(tile);
     }
 
     private void performActionBonusBoat(GameLogic logic) {
