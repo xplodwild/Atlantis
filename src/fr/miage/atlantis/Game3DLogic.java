@@ -699,7 +699,7 @@ public class Game3DLogic extends GameLogic {
 
     @Override
     public void onTileWhirl(final GameTile tile) {
-        // On coule toutes les tiles alentours
+        // On coule les unités dans les tiles water alentours
         List<GameTile> tilesToSink = new ArrayList<GameTile>();
         tilesToSink.add(tile);
         if (tile.getLeftBottomTile() != null) tilesToSink.add(tile.getLeftBottomTile());
@@ -710,38 +710,24 @@ public class Game3DLogic extends GameLogic {
         if (tile.getRightUpperTile() != null) tilesToSink.add(tile.getRightUpperTile());
 
         for (final GameTile sinking : tilesToSink) {
-            if (sinking instanceof WaterTile) continue;
+            if (sinking instanceof WaterTile) {
+                // On joue l'animation de coulage sur les entités dessus aussi
+                List<GameEntity> entities = sinking.getEntities();
+                for (final GameEntity ent : entities) {
+                    AnimatedModel am = (AnimatedModel) mRenderer.getEntitiesRenderer().getNodeFromEntity(ent);
+                    AnimationBrain.State animation = AnimationBrain.getDrownAnimation(ent);
+                    am.playAnimation(animation, new AnimEventListener() {
+                        public void onAnimCycleDone(AnimControl control, AnimChannel channel, String animName) {
+                            ent.die(Game3DLogic.this);
+                            control.removeListener(this);
+                        }
 
-            // On coule la tile
-            doTileSinkAnimation(sinking, new MotionPathListener() {
-                public void onWayPointReach(MotionEvent motionControl, int wayPointIndex) {
-                    if (motionControl.getPath().getNbWayPoints() == wayPointIndex + 1) {
-                        // On est à la fin de l'animation. On remplace la tile
-                        // coulée par une WaterTile
-                        final WaterTile newTile = getBoard().sinkTile(Game3DLogic.this, sinking);
-                        mRenderer.getBoardRenderer().replaceTile(sinking, newTile);
-                    }
+                        public void onAnimChange(AnimControl control, AnimChannel channel, String animName) {
+                        }
+                    });
                 }
-            });
-
-            // On joue l'animation de coulage sur les entités dessus aussi
-            List<GameEntity> entities = sinking.getEntities();
-            for (final GameEntity ent : entities) {
-                AnimatedModel am = (AnimatedModel) mRenderer.getEntitiesRenderer().getNodeFromEntity(ent);
-                AnimationBrain.State animation = AnimationBrain.getDrownAnimation(ent);
-                am.playAnimation(animation, new AnimEventListener() {
-                    public void onAnimCycleDone(AnimControl control, AnimChannel channel, String animName) {
-                        ent.die(Game3DLogic.this);
-                        control.removeListener(this);
-                    }
-
-                    public void onAnimChange(AnimControl control, AnimChannel channel, String animName) {
-                    }
-                });
             }
         }
-
-
     }
 
     private void doTileSinkAnimation(GameTile tile, MotionPathListener listener) {
