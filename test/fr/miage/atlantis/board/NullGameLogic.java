@@ -75,5 +75,20 @@ public class NullGameLogic extends GameLogic {
     public void onInitialTokenPut(PlayerToken pt) {
    
     }
+
+    @Override
+    public GameEntity getLastPickedEntity() {
+        return null;
+    }
+
+    @Override
+    public void cancelPick() {
+        
+    }
+
+    @Override
+    public void onTileWhirl(GameTile tile) {
+        
+    }
     
 }

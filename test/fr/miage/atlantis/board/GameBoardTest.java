@@ -219,16 +219,38 @@ public class GameBoardTest {
 
     /**
      * Test of placeTileAtTheRightOf method, of class GameBoard.
-     *
+     */
     @Test
     public void testPlaceTileAtTheRightOf() {
         System.out.println("placeTileAtTheRightOf");
-        GameTile base = null;
-        GameTile newTile = null;
+        
         GameBoard instance = new GameBoard();
-        instance.placeTileAtTheRightOf(base, newTile);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        GameTile tile = instance.getTileSet().get("Water #37").getRightTile();
+        GameTile newtile = new WaterTile(instance, "Water #yolo");
+        instance.placeTileAtTheRightOf(tile, newtile);
+        
+        assertEquals(tile.getRightTile(), newtile);
+        assertEquals(newtile.getLeftTile(),tile);
+        
+        tile = tile.getRightUpperTile();
+        assertEquals(tile.getRightBottomTile(), newtile);
+        assertEquals(newtile.getLeftUpperTile(),tile);
+        
+        tile = tile.getRightTile();
+        assertEquals(tile.getLeftBottomTile(), newtile);
+        assertEquals(newtile.getRightUpperTile(),tile);
+        
+        tile = tile.getRightBottomTile();
+        assertEquals(tile.getLeftTile(), newtile);
+        assertEquals(newtile.getRightTile(),tile);
+        
+        tile = tile.getLeftBottomTile();
+        assertEquals(tile.getLeftUpperTile(), newtile);
+        assertEquals(newtile.getRightBottomTile(),tile);
+        
+        tile = tile.getLeftTile();
+        assertEquals(tile.getRightUpperTile(), newtile);
+        assertEquals(newtile.getLeftBottomTile(),tile);
     }
 
     /**
