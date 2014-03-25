@@ -751,5 +751,13 @@ public class Game3DLogic extends GameLogic {
         motionEvent.play();
     }
 
+    @Override
+    public void onTileVolcano() {
+        super.onTileVolcano();
+        // TODO: Game Over
+
+
+    }
+
 
 }

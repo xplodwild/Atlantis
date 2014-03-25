@@ -125,4 +125,9 @@ public interface GameTurnListener {
      * Action à réaliser losrqu'une tile se fait aspirer dans un tourbillon
      */
     public void onTileWhirl(final GameTile tile);
+
+    /**
+     * Action à réaliser lorsqu'on pick une tile volcan
+     */
+    public void onTileVolcano();
 }

@@ -483,8 +483,12 @@ public class TileAction {
                 performActionWhirl(tile, logic);
                 break;
 
+            case ACTION_VOLCANO:
+                performActionVolcano(logic);
+                break;
+
             default:
-                throw new UnsupportedOperationException("Not implemented yet: Action " + mAction);
+                throw new IllegalStateException("Unknown haxion: Action " + mAction);
         }
     }
 
@@ -542,12 +546,30 @@ public class TileAction {
         return false;
     }
 
+    /**
+     * Lance l'action d'une tile volcan
+     * @param logic Logique du jeu
+     */
+    private void performActionVolcano(GameLogic logic) {
+        // TOUT QUI EXPLOSE OMG
+        logic.onTileVolcano();
+    }
+
+    /**
+     * Lance l'action d'une tile tourbillon
+     * @param tile La tile tourbillon
+     * @param logic  Logique du jeu
+     */
     private void performActionWhirl(GameTile tile, GameLogic logic) {
         // Tourbillon: Tout ce qui est sur la tile et les tiles adjacentes meurent (absolument tout)
         // et c'est GameLogic qui s'en charge pour gérer les animations
         logic.onTileWhirl(tile);
     }
 
+    /**
+     * Lance l'action de bonus de déplacement de bateau
+     * @param logic Logique du jeu
+     */
     private void performActionBonusBoat(GameLogic logic) {
         // Bonus 3 déplacements de bateau
         // Les TileAction étant sélectionnées au début d'un tour, on a déjà une requête de picking
@@ -567,6 +589,10 @@ public class TileAction {
         logic.requestPick(request, null);
     }
 
+    /**
+     * Lance l'action de bonus de nage des bateaux
+     * @param logic Logique du jeu
+     */
     private void performActionBonusSwim(GameLogic logic) {
         // Bonus 3 déplacements d'un nageur.
         // Les TileAction étant sélectionnées au début d'un tour, on a déjà une requête de picking
@@ -585,6 +611,10 @@ public class TileAction {
         logic.requestPick(request, null);
     }
 
+    /**
+     * Lance l'action de téléportation d'un animal
+     * @param logic Logique du jeu
+     */
     private void performActionMoveAnimal(GameLogic logic) {
         // Téléportation! BZZZIIIOOOUUUUU
         // Les TileAction étant sélectionnées au début d'un tour, on a déjà une requête de picking
@@ -616,6 +646,11 @@ public class TileAction {
         logic.requestPick(request, null);
     }
 
+    /**
+     * Lance l'action de spawning d'une entité
+     * @param tile La tile où l'entité va spawn
+     * @param logic Logique du jeu
+     */
     private void performActionSpawnEntity(GameTile tile, GameLogic logic) {
         // On spawne l'entité
         GameEntity spawnedEntity = null;
