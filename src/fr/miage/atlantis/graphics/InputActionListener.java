@@ -41,11 +41,13 @@ import fr.miage.atlantis.entities.PlayerToken;
 import fr.miage.atlantis.entities.SeaSerpent;
 import fr.miage.atlantis.entities.Shark;
 import fr.miage.atlantis.entities.Whale;
+import fr.miage.atlantis.graphics.hud.TileActionDisplay;
 import fr.miage.atlantis.graphics.models.AnimatedModel;
 import fr.miage.atlantis.graphics.models.EmptyTileModel;
 import fr.miage.atlantis.graphics.models.TileModel;
 import fr.miage.atlantis.logic.GameLogic;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  *
@@ -168,6 +170,24 @@ public class InputActionListener {
                             // On relance la requête
                             mPickingRequest = request;
                         }
+                    }
+
+                }
+            }
+
+            if (isPressed) {
+                // On a cliqué en dehors d'un cadre d'une requête de picking: On teste si on a
+                // cliqué sur un élément du HUD
+                Vector2f c = mInputManager.getCursorPosition();
+                TileActionDisplay tad = mRenderer.getHud().getGameHud().getTileUnderMouse(c.x, c.y);
+                if (tad != null) {
+                    Logger.getGlobal().fine("Input: Picked a HUD tile");
+                    if (tad.getAction().canBeUsed(mRenderer.getLogic())) {
+                        mRenderer.getLogic().getCurrentTurn().useLocalTile(tad.getAction());
+                        mRenderer.getHud().getGameHud().hidePlayerTiles();
+                    } else {
+                        Logger.getGlobal().severe("Input: Can't use this tile");
+                        // TODO: Play a sound/animation to say "NOPE"
                     }
 
                 }
@@ -339,8 +359,10 @@ public class InputActionListener {
             return false;
         }
 
-        if ((request.pickingRestriction & GameLogic.EntityPickRequest.FLAG_PICK_PLAYER_ENTITIES) != 0) {
+        if ((request.pickingRestriction & GameLogic.EntityPickRequest.FLAG_PICK_PLAYER_ENTITIES) != 0
+                || (request.pickingRestriction & GameLogic.EntityPickRequest.FLAG_PICK_SWIMMER) != 0) {
             // On veut picker un pion du joueur. On vérifie que l'entité est bien cela.
+            boolean isSwimmer = ((request.pickingRestriction & GameLogic.EntityPickRequest.FLAG_PICK_SWIMMER) != 0);
 
             // On vérifie que c'est bien un pion
             if ((ent instanceof PlayerToken)) {
@@ -348,47 +370,13 @@ public class InputActionListener {
 
                 // On vérifie que le pion appartient au joueur
                 if (pt.getPlayer() == request.player) {
-                    return true;
+                    if ((isSwimmer && pt.getState() == PlayerToken.STATE_SWIMMING) || !isSwimmer) {
+                        return true;
+                    }
                 }
-            } else if ((ent instanceof Boat)) {
-                // Si c'est un bateau, il "appartient" au joueur si :
-                // - Soit le joueur actuel a la majorité de pions sur le bateau
-                // - Soit il y a un nombre égal de pions de chaque joueur sur le bateau
+            } else if (!isSwimmer && (ent instanceof Boat)) {
                 Boat b = (Boat) ent;
-                List<PlayerToken> pions = b.getOnboardTokens();
-                if (pions.size() > 0) {
-                    int tokensBelongToMe = 0;
-                    for (PlayerToken pt : pions) {
-                        if (pt.getPlayer() == request.player) {
-                            tokensBelongToMe++;
-                        }
-                    }
-
-                    // Déjà, si on a aucun pion à nous, on continue pas
-                    if (tokensBelongToMe > 0) {
-                        // Un bateau n'ayant que 3 places, si on a plus qu'un pion sur le bateau, il
-                        // est à nous
-                        if (tokensBelongToMe > 1) {
-                            return true;
-                        }
-
-                        // Sinon on vérifie qu'on a un pion de chacun
-                        if (pions.size() == 1) {
-                            return true;
-                        } else if (pions.size() == 2) {
-                            // Sachant qu'on a exactement un pion et qu'il y a 2 pions en tout,
-                            // on a forcément le même nombre, donc c'est bon.
-                            return true;
-                        } else if (pions.size() == 3) {
-                            if (pions.get(0).getPlayer() != pions.get(1).getPlayer() &&
-                                    pions.get(0).getPlayer() != pions.get(2).getPlayer() &&
-                                    pions.get(1).getPlayer() != pions.get(2).getPlayer()) {
-                                return true;
-                            }
-                        }
-                    }
-                } else {
-                    // N'importe qui peut contrôler un bateau vide
+                if (b.belongsToPlayer(request.player)) {
                     return true;
                 }
             }
@@ -432,6 +420,26 @@ public class InputActionListener {
                 if (ent instanceof Boat) {
                     Boat b = (Boat) ent;
                     if (b.hasRoom()) {
+                        return true;
+                    }
+                }
+            }
+        } else {
+            if ((request.pickingRestriction & GameLogic.EntityPickRequest.FLAG_PICK_BOAT_WITHOUT_ROOM) != 0) {
+                // On veut picker un bateau n'ayant plus de place
+                if (ent instanceof Boat) {
+                    Boat b = (Boat) ent;
+                    if (!b.hasRoom() && b.belongsToPlayer(request.player)) {
+                        return true;
+                    }
+                }
+            }
+
+            if ((request.pickingRestriction & GameLogic.EntityPickRequest.FLAG_PICK_BOAT_WITH_ROOM) != 0) {
+                // On veut picker un bateau ayant de la place
+                if (ent instanceof Boat) {
+                    Boat b = (Boat) ent;
+                    if (b.hasRoom() && b.belongsToPlayer(request.player)) {
                         return true;
                     }
                 }

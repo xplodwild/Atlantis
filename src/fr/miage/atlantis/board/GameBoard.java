@@ -17,7 +17,9 @@
  */
 package fr.miage.atlantis.board;
 
+import fr.miage.atlantis.Player;
 import fr.miage.atlantis.entities.GameEntity;
+import fr.miage.atlantis.entities.PlayerToken;
 import fr.miage.atlantis.entities.SeaSerpent;
 import fr.miage.atlantis.logic.GameLogic;
 import java.util.ArrayList;
@@ -80,7 +82,7 @@ public final class GameBoard {
 
         this.fillInRandomizerWithTiles();
         this.generateDefaultBoard();
-        this.setDefaultBoardTileAttributes();        
+        this.setDefaultBoardTileAttributes();
         this.placeDefaultEntitiesOnBoard();
 
 
@@ -263,7 +265,6 @@ public final class GameBoard {
         //-----------------------------------------------------------------------
 
 
-
         //-----------------------------------------------------------------------
         //Ligne 4                                                               |
         //-----------------------------------------------------------------------
@@ -295,7 +296,6 @@ public final class GameBoard {
         //-----------------------------------------------------------------------
         //Ligne 5                                                               |
         //-----------------------------------------------------------------------
-
 
         GameTile n44 = this.mTileSet.get("Border #43");
         nextTile = new BorderTile(this, "Border #42");
@@ -1015,6 +1015,11 @@ public final class GameBoard {
         }
     }
 
+    /**
+     * Renvoie si oui ou non il existe une entité de la classe indiquée sur le plateau
+     * @param type La classe (exemple: Whale.class)
+     * @return true si il y a au moins une entité de la classe sur le plateau
+     */
     public boolean hasEntityOfType(Class type) {
         Set<String> s = mTileSet.keySet();
 

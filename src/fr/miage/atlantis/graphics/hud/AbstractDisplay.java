@@ -22,6 +22,7 @@ import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState;
 import com.jme3.math.ColorRGBA;
+import com.jme3.scene.Spatial;
 import com.jme3.ui.Picture;
 
 /**
@@ -30,13 +31,30 @@ import com.jme3.ui.Picture;
 public class AbstractDisplay extends Picture {
     private Material mMaterial;
     private AssetManager mAssetManager;
+    private int mWidth;
+    private int mHeight;
 
-    public final static int IMAGE_WIDTH = 256;
-    public final static int IMAGE_HEIGHT = 223;
-
-    public AbstractDisplay(final String name, final AssetManager assetManager) {
+    public AbstractDisplay(final int width, final int height, final String name,
+            final AssetManager assetManager) {
         super(name);
+        mWidth = width;
+        mHeight = height;
         mAssetManager = assetManager;
+    }
+
+    @Override
+    public Spatial scale(float s) {
+        mWidth *= s;
+        mHeight *= s;
+        return super.scale(s);
+    }
+
+    public int getWidth() {
+        return mWidth;
+    }
+
+    public int getHeight() {
+        return mHeight;
     }
 
     /**
@@ -45,8 +63,8 @@ public class AbstractDisplay extends Picture {
      */
     protected void showImage(final String image) {
         this.setImage(mAssetManager, image, true);
-        this.setWidth(IMAGE_WIDTH);
-        this.setHeight(IMAGE_HEIGHT);
+        this.setWidth(mWidth);
+        this.setHeight(mHeight);
 
         setupMaterialIfNeeded();
     }
@@ -74,6 +92,9 @@ public class AbstractDisplay extends Picture {
         mMaterial.setColor("Color", new ColorRGBA(1,1,1,alpha));
     }
 
+    /**
+     * @return La valeur alpha actuelle de l'image (0 = transparent, 1 = opaque)
+     */
     public float getAlpha() {
         setupMaterialIfNeeded();
         return ((ColorRGBA) mMaterial.getParam("Color").getValue()).getAlpha();

@@ -74,6 +74,21 @@ public class Player {
         mTokens.add(new PlayerToken(this, 1));
     }
 
+
+    /**
+     * Renvoie si oui ou non il existe un nageur appartenant à ce joueur
+     * @return true si il y a au moins un nageur
+     */
+    public boolean hasSwimmer() {
+        for (PlayerToken t : mTokens) {
+            if (t.getState() == PlayerToken.STATE_SWIMMING) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     //--------------------------------------------------------------------------
     //GETTERS                                                                  |
     //--------------------------------------------------------------------------
@@ -95,6 +110,10 @@ public class Player {
 
     public void addActionTile(TileAction action) {
         mActionTiles.add(action);
+    }
+
+    public void removeActionTile(TileAction action) {
+        mActionTiles.remove(action);
     }
 
     public int getScore() {
