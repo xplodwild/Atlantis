@@ -187,13 +187,16 @@
         <!-- +++++++++++++++++++++++++++++++++++++++ -->
         <!-- Layer principal -->
         <!-- +++++++++++++++++++++++++++++++++++++++ -->
-        <layer id="background1" childLayout="horizontal">
+        <layer id="HudLayer" childLayout="vertical">
             <!-- +++++++++++++++++++++++++++++++++++++++ -->
             <!-- Panel de gauche de l'ecran ou l'on place les boutons   -->
             <!-- +++++++++++++++++++++++++++++++++++++++ -->
-            <panel id="panelGauche1" height="100%" width="10%" align="left" valign="top" backgroundColor="#00000080" childLayout="vertical" visibleToMouse="true">                
-                 
+           
+            <panel id="HudPanel" height="100%" width="100%" align="left" valign="top" childLayout="vertical">                
+                <control id="console" name="nifty-console" width="50%" align="left" valign="top" visible="false" lines="15">
+                </control>               
             </panel>
+            
         </layer>
     </screen>
     

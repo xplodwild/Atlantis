@@ -81,7 +81,7 @@ public class Gui {
         
         
         this.instanciateScreens();
-        this.instanciateInGameHUD();
+        //this.instanciateInGameHUD();
         
       
     }
@@ -89,96 +89,19 @@ public class Gui {
     
     private void instanciateScreens(){
         
-        this.mNifty.fromXmlWithoutStartScreen("GUI/Screen.xml");
+        this.mNifty.fromXmlWithoutStartScreen("GUI/Screens.xml");
         //this.mNifty.fromXml("GUI/startScreen.xml", "start");
         //this.mNifty.fromXml("GUI/startScreen.xml","start",new GuiController(this.mGame3DRenderer));
         ((GuiController) this.mNifty.getScreen("start").getScreenController()).set3DRenderer(this.mGame3DRenderer);
-    }
     
-    private void instanciateInGameHUD(){
-         this.mNifty.addScreen("inGameHud", new ScreenBuilder("inGameHud"){{            
-                        
-            /**
-             * Ajoute un controlleur perso a cet ecran
-             */
-            controller(new GuiController()); 
-             
-            /**
-             * Création du Layer sur cet ecran.
-             */
-            layer(new LayerBuilder("HUDLayer"){{
-                
-                /*
-                 * Propriétés d'agencement des elements
-                 */
-                childLayoutVertical(); 
- 
-                /**
-                 * Ajoute mon controlleur personnalisé sur ce panel
-                 */
-                controller(new GuiController());
-                
-                /*
-                 * Création d'un panel dans le layer
-                 */
-                panel(new PanelBuilder("HUDPanel") {{
-                    childLayoutCenter(); // panel properties, add more...               
- 
-                          
-                    /**
-                     * Ajoute une console
-                     */
-                    control(new ConsoleBuilder("console") {{
-                         width("50%");
-                         lines(15);
-
-                         this.valignTop();
-                         this.alignLeft();
-                         
-                         this.visible(false);
-
-                        
-                         this.onShowEffect(new EffectBuilder("move") {{
-                           length(150);
-                           inherit();
-                           neverStopRendering(true);
-                           effectParameter("mode", "in");
-                           effectParameter("direction", "top");
-                         }});
-                                                  
-                         this.onHideEffect(new EffectBuilder("move") {{
-                           length(150);                           
-                           inherit();                          
-                           effectParameter("mode", "out");
-                           effectParameter("direction", "top");
-                         }});
-                     }}); 
-                    //</control>
-                }});
-                // </panel>
-                
-                
-                 panel(new PanelBuilder("consolePanel") {{
-                    childLayoutCenter(); // panel properties, add more...
-                    
-                    
-                    
-                 }});
-                
-                
-                
-            }});
-            // </layer>
-        }}.build(this.mNifty));   
-        // </screen>         
-         this.mNifty.gotoScreen("inGameHud");
+        this.mNifty.gotoScreen("inGameHud");
 
 
 
         // get the console control (this assumes that there is a console in the current screen with the id="console"
+        
         mConsole = this.mNifty.getScreen("inGameHud").findElementByName("console").getNiftyControl(Console.class);
-
-
+       
         // output hello to the console
         mConsole.output("Demarrage de la console");
         mConsole.output("");
