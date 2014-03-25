@@ -23,6 +23,15 @@ public class GuiController implements ScreenController {
 
     private String[] players;
     
+    
+    public GuiController(Game3DRenderer g3d) {
+        super();
+        this.g3rdr=g3d;
+        this.nameRandomizer = new ArrayList();
+        this.fillNameRandomizer();
+        this.players=new String[4];
+    }
+    
     public GuiController() {
         super();
         this.nameRandomizer = new ArrayList();

@@ -80,15 +80,18 @@ public class Gui {
         n.loadControlFile(Gui.CONTROL_FILE);
         
         
-        this.instanciateStartScreen();
+        this.instanciateScreens();
         this.instanciateInGameHUD();
         
       
     }
     
     
-    private void instanciateStartScreen(){
-        this.mNifty.fromXmlWithoutStartScreen("GUI/startScreen.xml");
+    private void instanciateScreens(){
+        
+        this.mNifty.fromXmlWithoutStartScreen("GUI/Screen.xml");
+        //this.mNifty.fromXml("GUI/startScreen.xml", "start");
+        //this.mNifty.fromXml("GUI/startScreen.xml","start",new GuiController(this.mGame3DRenderer));
         ((GuiController) this.mNifty.getScreen("start").getScreenController()).set3DRenderer(this.mGame3DRenderer);
     }
     
