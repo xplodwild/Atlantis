@@ -463,8 +463,7 @@ public class TileAction {
     public void use(GameTile tile, GameLogic logic) {
         switch (mAction) {
             case ACTION_SPAWN_ENTITY:
-                //performActionSpawnEntity(tile, logic);
-                performActionWhirl(tile, logic);
+                performActionSpawnEntity(tile, logic);
                 break;
 
             case ACTION_MOVE_ANIMAL:
