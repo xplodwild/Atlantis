@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package fr.miage.atlantis.graphics;
 
 import com.jme3.app.SimpleApplication;
@@ -51,7 +50,6 @@ import java.util.Random;
  */
 public class Game3DRenderer extends SimpleApplication {
 
-
     private boolean mDisplayGraphicalStats = false;
     private Node mSceneNode;
     private CameraNode mCameraNode;
@@ -62,12 +60,10 @@ public class Game3DRenderer extends SimpleApplication {
     private InputActionListener mInputListener;
     private DiceModel mDiceModel;
     private FutureUpdater mFutureUpdater;
-   
     private Gui mGui;
-
     private HudAnimator mHudAnimator;
     private HudManager mHudManager;
-    
+
     public Game3DRenderer(Game3DLogic parent) {
         mParent = parent;
         mHudAnimator = new HudAnimator();
@@ -130,23 +126,21 @@ public class Game3DRenderer extends SimpleApplication {
 
         mHudManager = new HudManager(this);
 
-         NiftyJmeDisplay jmdsp=new NiftyJmeDisplay(assetManager, inputManager, audioRenderer, viewPort);
-        Nifty n=jmdsp.getNifty();
+        NiftyJmeDisplay jmdsp = new NiftyJmeDisplay(assetManager, inputManager, audioRenderer, viewPort);
+        Nifty n = jmdsp.getNifty();
         this.guiViewPort.addProcessor(jmdsp);
-        
-        
-                
-        mGui = new Gui(this,n);       
+
+        mGui = new Gui(this, n);
         n.gotoScreen("start");
     }
 
-    public void toggleGraphicsStats(){
+    public void toggleGraphicsStats() {
         if (!mDisplayGraphicalStats) {
-            mDisplayGraphicalStats=true;
+            mDisplayGraphicalStats = true;
             setDisplayFps(true);
             setDisplayStatView(true);
-        }else{
-            mDisplayGraphicalStats=false;
+        } else {
+            mDisplayGraphicalStats = false;
             setDisplayFps(false);
             setDisplayStatView(false);
         }
@@ -172,17 +166,16 @@ public class Game3DRenderer extends SimpleApplication {
         return mParent;
     }
 
-        public HudAnimator getHudAnimator() {
+    public HudAnimator getHudAnimator() {
         return mHudAnimator;
-        }
-    
-         public void displayHudCenter(AbstractDisplay disp) {
+    }
+
+    public void displayHudCenter(AbstractDisplay disp) {
         disp.setPosition(cam.getWidth() / 2 - TileActionDisplay.IMAGE_WIDTH / 2,
-                    cam.getHeight() / 2 - TileActionDisplay.IMAGE_HEIGHT / 2);
+                cam.getHeight() / 2 - TileActionDisplay.IMAGE_HEIGHT / 2);
         guiNode.attachChild(disp);
     }
-   
-        
+
     public HudManager getHud() {
         return mHudManager;
     }
@@ -205,7 +198,7 @@ public class Game3DRenderer extends SimpleApplication {
         final MotionPath path = new MotionPath();
         path.addWayPoint(mDiceModel.getLocalTranslation());
 
-        for (int i = 0; i < 2*3; i++) {
+        for (int i = 0; i < 2 * 3; i++) {
             path.addWayPoint(mDiceModel.getLocalTranslation()
                     .add(-5.0f + rand.nextFloat() * 10.0f,
                     -5.0f + rand.nextFloat() * 10.0f,
@@ -249,9 +242,6 @@ public class Game3DRenderer extends SimpleApplication {
         motionControl.play();
     }
 
-
-    
-    
     @Override
     public void simpleUpdate(float tpf) {
 
@@ -266,6 +256,5 @@ public class Game3DRenderer extends SimpleApplication {
 
     @Override
     public void simpleRender(RenderManager rm) {
-
     }
 }

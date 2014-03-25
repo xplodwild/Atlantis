@@ -83,8 +83,7 @@ public class Gui {
         this.instanciateStartScreen();
         this.instanciateInGameHUD();
         
-       // this.mNifty.gotoScreen(STYLE_FILE);
-
+      
     }
     
     
@@ -221,6 +220,7 @@ public class Gui {
 
         //Genere les keybinding
         this.generateConsoleKeyMap();
+        ((GuiController) this.mNifty.getScreen("start").getScreenController()).set3DRenderer(this.mGame3DRenderer);
     }
     
     
@@ -251,7 +251,7 @@ public class Gui {
                 if(isPressed){
 
                     Gui.this.mNifty.gotoScreen("start");
-
+                    ((GuiController) mNifty.getScreen("start").getScreenController()).set3DRenderer(mGame3DRenderer);
                     Camera cam = mGame3DRenderer.getCamera();
                     CamConstants.moveMenu(mGame3DRenderer.getCameraNode(), cam);
                 }
