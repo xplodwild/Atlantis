@@ -37,7 +37,6 @@ import fr.miage.atlantis.entities.SeaSerpent;
 import fr.miage.atlantis.entities.Shark;
 import fr.miage.atlantis.entities.Whale;
 import fr.miage.atlantis.graphics.AnimationBrain;
-import fr.miage.atlantis.graphics.CamConstants;
 import fr.miage.atlantis.graphics.FutureCallback;
 import fr.miage.atlantis.graphics.Game3DRenderer;
 import fr.miage.atlantis.graphics.ParticlesFactory;

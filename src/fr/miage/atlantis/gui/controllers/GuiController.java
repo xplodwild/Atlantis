@@ -21,10 +21,13 @@ public class GuiController implements ScreenController {
     private Screen screen;
     private ArrayList<String> nameRandomizer;
 
+    private String[] players;
+    
     public GuiController() {
         super();
         this.nameRandomizer = new ArrayList();
         this.fillNameRandomizer();
+        this.players=new String[4];
     }
 
     @Override
@@ -47,7 +50,7 @@ public class GuiController implements ScreenController {
 
     public void startGame() {
 
-        String[] players = new String[4];
+        players = new String[4];
 
         TextField fieldJ1 = this.nifty.getScreen("start").findElementByName("inputJ1").getNiftyControl(TextField.class);
 
@@ -105,7 +108,7 @@ public class GuiController implements ScreenController {
         this.fillNameRandomizer();
 
 
-        String[] players = new String[4];
+        players = new String[4];
 
         //TEST LE NOMBRE DE JOUEURS VOULU 
 
@@ -160,6 +163,11 @@ public class GuiController implements ScreenController {
         Camera cam = g3rdr.getCamera();
         CamConstants.moveAboveBoard(g3rdr.getCameraNode(), cam);
 
+    }
+    
+    public String getPlayerName(int x){        
+        String n=players[x];
+        return n;        
     }
 
     private void fillNameRandomizer() {
