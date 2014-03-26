@@ -252,7 +252,7 @@ public class Game3DLogic extends GameLogic {
                         WaterTile wt = (WaterTile) dest;
                         PlayerToken pt = (PlayerToken) ent;
 
-                        if (wt.isLandingTile()) {
+                        if (!pt.isDead() && wt.isLandingTile()) {
                             mBypassCallbackCount++;
                             onUnitMove(ent, wt.findEscapeBorder());
                             pt.setState(PlayerToken.STATE_SAFE);
