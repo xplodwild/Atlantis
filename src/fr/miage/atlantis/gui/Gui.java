@@ -33,6 +33,8 @@ import de.lessvoid.nifty.builder.ScreenBuilder;
 import de.lessvoid.nifty.controls.Console;
 import de.lessvoid.nifty.controls.ConsoleCommands;
 import de.lessvoid.nifty.controls.console.builder.ConsoleBuilder;
+import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.elements.render.TextRenderer;
 import fr.miage.atlantis.graphics.CamConstants;
 import fr.miage.atlantis.graphics.Game3DRenderer;
 import fr.miage.atlantis.gui.console.commands.BindListCommand;
@@ -90,6 +92,7 @@ public class Gui {
     private void instanciateScreens(){
         
         this.mNifty.fromXmlWithoutStartScreen("GUI/Screens.xml");
+        this.mNifty.registerScreenController(new GuiController(this.mGame3DRenderer));
         //this.mNifty.fromXml("GUI/startScreen.xml", "start");
         //this.mNifty.fromXml("GUI/startScreen.xml","start",new GuiController(this.mGame3DRenderer));
         ((GuiController) this.mNifty.getScreen("start").getScreenController()).set3DRenderer(this.mGame3DRenderer);
@@ -143,6 +146,7 @@ public class Gui {
         this.redirectSystemStreams();
         
         mConsole.disable();
+        
 
         //Genere les keybinding
         this.generateConsoleKeyMap();

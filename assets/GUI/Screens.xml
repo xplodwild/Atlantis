@@ -195,7 +195,7 @@
             <panel id="HudPanelTop"     height="8%"     width="90%"     backgroundColor="#eda0004d" align="center"  valign="top"    childLayout="horizontal">   </panel>            
             <panel id="HudPanelRight"   height="88%"    width="5%"      backgroundColor="#c6000b4d" align="right"   valign="top"    childLayout="vertical">     </panel>
             <panel id="HudPanelBottom"  height="18%"    width="100%"    backgroundColor="#0060ab4d" align="center"  valign="bottom" childLayout="horizontal">
-                <text  align="center" text="${CALL.getPlayerName(0)}" font="Fonts/sansitc.fnt"  color="#0060abff" />                             
+                <text id="nomJ1" align="center" text="${CALL.getPlayerName(0)}" font="Fonts/sansitc.fnt"  color="#0060abff" />                             
             </panel>
             <panel id="HudPanelLeft"    height="82%"    width="5%"      backgroundColor="#349b144d" align="left"    valign="top"    childLayout="vertical">     </panel>
             

@@ -7,6 +7,8 @@ package fr.miage.atlantis.gui.controllers;
 import com.jme3.renderer.Camera;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.TextField;
+import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import fr.miage.atlantis.graphics.CamConstants;
@@ -20,23 +22,21 @@ public class GuiController implements ScreenController {
     private Nifty nifty;
     private Screen screen;
     private ArrayList<String> nameRandomizer;
-
     private String[] players;
-    
-    
+
     public GuiController(Game3DRenderer g3d) {
         super();
-        this.g3rdr=g3d;
+        this.g3rdr = g3d;
         this.nameRandomizer = new ArrayList();
         this.fillNameRandomizer();
-        this.players=new String[4];
+        this.players = new String[4];
     }
-    
+
     public GuiController() {
         super();
         this.nameRandomizer = new ArrayList();
         this.fillNameRandomizer();
-        this.players=new String[4];
+        this.players = new String[4];
     }
 
     @Override
@@ -105,6 +105,10 @@ public class GuiController implements ScreenController {
         this.g3rdr.getLogic().startGame();
 
         this.nifty.gotoScreen("inGameHud");
+        
+        this.updatePlayerName();
+        
+        
         Camera cam = g3rdr.getCamera();
         CamConstants.moveAboveBoard(g3rdr.getCameraNode(), cam);
 
@@ -169,14 +173,25 @@ public class GuiController implements ScreenController {
         this.g3rdr.getLogic().startGame();
 
         this.nifty.gotoScreen("inGameHud");
+        
+        this.updatePlayerName();
+        
         Camera cam = g3rdr.getCamera();
         CamConstants.moveAboveBoard(g3rdr.getCameraNode(), cam);
 
     }
+
     
-    public String getPlayerName(int x){        
-        String n=players[x];
-        return n;        
+    public void updatePlayerName(){
+       
+        Element niftyElement = nifty.getScreen("inGameHud").findElementByName("nomJ1");
+        // swap old with new text
+        niftyElement.getRenderer(TextRenderer.class).setText(players[0]);
+    }
+    
+    public String getPlayerName(int x) {
+        String n = players[x];
+        return n;
     }
 
     private void fillNameRandomizer() {
@@ -191,7 +206,5 @@ public class GuiController implements ScreenController {
         this.nameRandomizer.add("Parla Jessica");
         this.nameRandomizer.add("Prod-yge");
         this.nameRandomizer.add("Alpa-Tchino");
-
-
     }
 }
