@@ -24,6 +24,7 @@ import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.entities.Boat;
 import fr.miage.atlantis.entities.GameEntity;
 import fr.miage.atlantis.entities.PlayerToken;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -95,9 +96,9 @@ public abstract class GameLogic implements GameTurnListener {
         public GameTile pickNearTile;
 
         /**
-         * Si avoidEntity n'est pas null, le picking ne sélectionnera pas l'entité pointée
+         * Liste d'entités qui seront ignorées par le picking
          */
-        public GameEntity avoidEntity;
+        public List<GameEntity> avoidEntity = new ArrayList<GameEntity>();
 
         @Override
         public String toString() {

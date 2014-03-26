@@ -607,7 +607,8 @@ public class Game3DLogic extends GameLogic {
                     entPick.pickingRestriction = EntityPickRequest.FLAG_PICK_BOAT_WITH_ROOM;
                     entPick.player = null;
                     entPick.pickNearTile = ent.getTile();
-                    entPick.avoidEntity = pt.getBoat();
+                    entPick.avoidEntity.add(pt.getBoat());
+                    entPick.avoidEntity.addAll(getCurrentTurn().getSwimmersMoved());
                 }
 
                 // On lance la requête

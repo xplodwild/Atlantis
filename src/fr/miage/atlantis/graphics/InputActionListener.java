@@ -355,7 +355,7 @@ public class InputActionListener {
         }
 
         // On vérfie ensuite la contrainte de non-sélection d'une entité en particulier
-        if (request.avoidEntity != null && request.avoidEntity == ent) {
+        if (request.avoidEntity != null && request.avoidEntity.contains(ent)) {
             return false;
         }
 
