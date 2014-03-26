@@ -96,6 +96,11 @@ public abstract class GameLogic implements GameTurnListener {
         public GameTile pickNearTile;
 
         /**
+         * Permet de sélectionner uniquement les entités étant sur la tile indiquée.
+         */
+        public GameTile pickOnTile;
+
+        /**
          * Liste d'entités qui seront ignorées par le picking
          */
         public List<GameEntity> avoidEntity = new ArrayList<GameEntity>();

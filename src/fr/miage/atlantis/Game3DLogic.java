@@ -598,7 +598,7 @@ public class Game3DLogic extends GameLogic {
 
                 // Request pour les bateaux (on peut bouger un perso sur un bateau ayant de la place)
                 // si on a pas déjà cliqué sur un bateau (on ne bouge pas un bateau sur un autre
-                // bateau)
+                // bateau), et on ne peut picker un bateau, étant nageur, que si on est sur la tile.
                 EntityPickRequest entPick = null;
                 if (!(mPickedEntity instanceof Boat)) {
                     PlayerToken pt = (PlayerToken) mPickedEntity;
@@ -606,7 +606,15 @@ public class Game3DLogic extends GameLogic {
                     entPick = new EntityPickRequest();
                     entPick.pickingRestriction = EntityPickRequest.FLAG_PICK_BOAT_WITH_ROOM;
                     entPick.player = null;
-                    entPick.pickNearTile = ent.getTile();
+                    if (pt.getState() == PlayerToken.STATE_SWIMMING) {
+                        // On nage: on est obligé d'être sur la tile du bateau pour monter dessus
+                        entPick.pickOnTile = ent.getTile();
+                        entPick.pickNearTile = null;
+                    } else {
+                        // On est sur terre: on peut monter sur les bateaux alentours
+                        entPick.pickNearTile = ent.getTile();
+                        entPick.pickOnTile = null;
+                    }
                     entPick.avoidEntity.add(pt.getBoat());
                     entPick.avoidEntity.addAll(getCurrentTurn().getSwimmersMoved());
                 }

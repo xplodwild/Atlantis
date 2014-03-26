@@ -354,6 +354,13 @@ public class InputActionListener {
             }
         }
 
+        if (request.pickOnTile != null) {
+            GameTile tile = ent.getTile();
+            if (request.pickOnTile != tile) {
+                return false;
+            }
+        }
+
         // On vérfie ensuite la contrainte de non-sélection d'une entité en particulier
         if (request.avoidEntity != null && request.avoidEntity.contains(ent)) {
             return false;

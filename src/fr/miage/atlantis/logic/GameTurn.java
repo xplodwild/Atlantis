@@ -146,7 +146,6 @@ public class GameTurn implements GameRenderListener {
             // On ne peut déplacer un nageur que d'une seule tile (sortir ou entrer sur un bateau
             // compte comme un déplacement nageur)
             if (dest instanceof WaterTile) {
-                Logger.getGlobal().severe("WATERTILE: SWIMMERS MOVED!");
                 if (!mSwimmersMoved.contains(pt)) {
                     mSwimmersMoved.add(pt);
                 }
