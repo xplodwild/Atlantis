@@ -90,5 +90,9 @@ public class NullGameLogic extends GameLogic {
     public void onTileWhirl(GameTile tile) {
         
     }
+
+    public NullGameLogic onDiceRollFinished() {
+      return null;
+    }
     
 }

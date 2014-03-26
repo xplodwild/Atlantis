@@ -4,11 +4,15 @@
  */
 package fr.miage.atlantis.logic;
 
+import fr.miage.atlantis.GameDice;
 import fr.miage.atlantis.Player;
+import fr.miage.atlantis.board.GameBoard;
 import fr.miage.atlantis.board.GameTile;
+import fr.miage.atlantis.board.NullGameLogic;
 import fr.miage.atlantis.board.TileAction;
 import fr.miage.atlantis.entities.Boat;
 import fr.miage.atlantis.entities.GameEntity;
+import fr.miage.atlantis.entities.Shark;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -213,15 +217,27 @@ public class GameTurnTest {
     }
 
     /**
-     * Test of onDiceRollFinished method, of class GameTurn.
+     *  //On vérifie que l'entité donné par le dé est présent sur la board
      */
     @Test
     public void testOnDiceRollFinished() {
         System.out.println("onDiceRollFinished");
-        GameTurn instance = null;
-        instance.onDiceRollFinished();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        NullGameLogic instance = new NullGameLogic();
+        GameBoard board = new GameBoard();
+             
+        //On créé l'entité requin sur la tile Water 37
+        GameEntity entity = new Shark();
+        GameTile tile =  board.getTileSet().get("Water #37");
+        tile.addEntity(entity);
+        
+        //On lance le dé et on récupère le résultat
+        //GameDice result1 = instance.onDiceRoll(GameDice.FACE_SHARK);
+       
+        NullGameLogic result = instance.onDiceRollFinished();
+  
+        //on vérifie qu'il existe cette entité sur le plateau
+        assertEquals(entity, result);
+    
     }
 
     /**
