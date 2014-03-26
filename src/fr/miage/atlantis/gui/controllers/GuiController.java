@@ -187,15 +187,20 @@ public class GuiController implements ScreenController {
         Element niftyElement = nifty.getScreen("inGameHud").findElementByName("nomJ1");
         // swap old with new text
         niftyElement.getRenderer(TextRenderer.class).setText(players[0]);
+        
+        niftyElement = nifty.getScreen("inGameHud").findElementByName("nomJ2");
+        niftyElement.getRenderer(TextRenderer.class).setText(players[1]);
+        niftyElement = nifty.getScreen("inGameHud").findElementByName("nomJ3");
+        niftyElement.getRenderer(TextRenderer.class).setText(players[2]);
+        niftyElement = nifty.getScreen("inGameHud").findElementByName("nomJ4");
+        niftyElement.getRenderer(TextRenderer.class).setText(players[3]);
     }
     
-    public String getPlayerName(int x) {
-        String n = players[x];
-        return n;
-    }
+    
 
     private void fillNameRandomizer() {
         this.nameRandomizer.add("Fee-Lycia");
+        this.nameRandomizer.add("Dunnkor-Leone");
         this.nameRandomizer.add("Marie-Mercredi");
         this.nameRandomizer.add("Love-Ly");
         this.nameRandomizer.add("Chris-Tough");

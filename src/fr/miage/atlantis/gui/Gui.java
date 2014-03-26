@@ -33,6 +33,7 @@ import de.lessvoid.nifty.builder.ScreenBuilder;
 import de.lessvoid.nifty.controls.Console;
 import de.lessvoid.nifty.controls.ConsoleCommands;
 import de.lessvoid.nifty.controls.console.builder.ConsoleBuilder;
+import de.lessvoid.nifty.controls.label.builder.LabelBuilder;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import fr.miage.atlantis.graphics.CamConstants;
@@ -146,6 +147,8 @@ public class Gui {
         this.redirectSystemStreams();
         
         mConsole.disable();
+        
+        
         
 
         //Genere les keybinding
