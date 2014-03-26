@@ -136,6 +136,11 @@ public class Game3DLogic extends GameLogic {
 
             // Une seule action peut être annulée.
             mCanCancelPickingAction = false;
+
+            // Les actions annulables sont seulement actives lorsqu'on pick une entité initiale. Il
+            // faut donc reset l'entité pickée.
+            mPickedEntity = null;
+            
             mRenderer.getHud().getGameHud().hideRightClickHint();
 
             return true;
@@ -556,6 +561,9 @@ public class Game3DLogic extends GameLogic {
                 tileRq.landTilesOnly = false;
                 tileRq.requiredHeight = 0;
                 tileRq.noEntitiesOnTile = false;
+                if (ta.getAction() == TileAction.ACTION_BONUS_BOAT) {
+                    tileRq.noBoatOnTile = true;
+                }
                 tileRq.waterEdgeOnly = false;
                 tileRq.pickNearTile = mPickedEntity.getTile();
                 ta.setInitialEntity(mPickedEntity);
@@ -617,6 +625,9 @@ public class Game3DLogic extends GameLogic {
                     }
                     entPick.avoidEntity.add(pt.getBoat());
                     entPick.avoidEntity.addAll(getCurrentTurn().getSwimmersMoved());
+                } else {
+                    // On ne met pas un bateau sur une tile avec un bateau
+                    tilePick.noBoatOnTile = true;
                 }
 
                 // On lance la requête

@@ -469,6 +469,14 @@ public class InputActionListener {
             return false;
         }
 
+        if (request.noBoatOnTile && tile.getEntities().size() > 0) {
+            for (GameEntity ent : tile.getEntities()) {
+                if (ent instanceof Boat) {
+                    return false;
+                }
+            }
+        }
+
         if (request.waterEdgeOnly) {
             boolean isAtEdge = false;
 

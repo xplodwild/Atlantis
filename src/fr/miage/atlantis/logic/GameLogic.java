@@ -135,6 +135,12 @@ public abstract class GameLogic implements GameTurnListener {
         public boolean noEntitiesOnTile;
 
         /**
+         * Si noBoatOnTile vaut true, seulement les tiles n'ayant pas de bateau dessus seront
+         * sélectionnables
+         */
+        public boolean noBoatOnTile;
+
+        /**
          * Si requiredHeight est supérieur ou égal à zéro, seules les tiles au niveau spécifiées
          * pourront être pickées
          */

@@ -352,6 +352,9 @@ public class GameTurn implements GameRenderListener {
                         request.requiredHeight = 0;
                         request.waterEdgeOnly = false;
                         request.pickNearTile = mTileAction.getInitialEntity().getTile();
+                        if (mTileAction.getAction() == TileAction.ACTION_BONUS_BOAT) {
+                            request.noBoatOnTile = true;
+                        }
                         mController.requestPick(null, request);
                         logger.log(Level.FINE, "GameTurn: picking for BONUS_BOAT or BONUS_SWIM");
                     } else {
