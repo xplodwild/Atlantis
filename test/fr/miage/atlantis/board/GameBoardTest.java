@@ -232,7 +232,7 @@ public class GameBoardTest {
         assertEquals(tile.getRightTile(), newtile);
         assertEquals(newtile.getLeftTile(),tile);
         
-   /*     tile = tile.getRightUpperTile();
+        tile = tile.getRightUpperTile();
         assertEquals(tile.getRightBottomTile(), newtile);
         assertEquals(newtile.getLeftUpperTile(),tile);
         
@@ -251,7 +251,7 @@ public class GameBoardTest {
         tile = tile.getLeftTile();
         assertEquals(tile.getRightUpperTile(), newtile);
         assertEquals(newtile.getLeftBottomTile(),tile);
-        */
+        
     }
 
     /**
@@ -269,27 +269,41 @@ public class GameBoardTest {
         assertEquals(tile.getLeftTile(), newtile);
         assertEquals(newtile.getRightTile(),tile);
         
-      
-     /*   tile = tile.getLeftUpperTile();  
+        /*Nouvelle tile : tile en haut à gauche.
+        *Vérification : tile en bas à gauche de la tile = à la newtile
+        *Vérification : tile en haut à droite de la newtile = à la tile*/
+        tile = tile.getLeftUpperTile();  
         assertEquals(tile.getLeftBottomTile(), newtile);
         assertEquals(newtile.getRightUpperTile(),tile);
         
+        /*Nouvelle tile : tile à gauche.
+        *Vérification : tile en bas à droite de la tile = à la newtile
+        *Vérification : tile en haut à gauche de la newtile = à la tile*/
         tile = tile.getLeftTile();
         assertEquals(tile.getRightBottomTile(), newtile);
         assertEquals(newtile.getLeftUpperTile(),tile);
         
+        /*Nouvelle tile : tile en bas à gauche.
+        *Vérification : tile à droite de la tile = à la newtile
+        *Vérification : tile à gauche de la newtile = à la tile*/
         tile = tile.getLeftBottomTile();
         assertEquals(tile.getRightTile(), newtile);
         assertEquals(newtile.getLeftTile(),tile);
         
+        /*Nouvelle tile : tile en bas à droite.
+        *Vérification : tile en haut à droite de la tile = à la newtile
+        *Vérification : tile en bas à gauche de la newtile = à la tile*/
         tile = tile.getRightBottomTile();
         assertEquals(tile.getRightUpperTile(), newtile);
         assertEquals(newtile.getLeftBottomTile(),tile);
         
+        /*Nouvelle tile : tile à droite.
+        *Vérification : tile en haut à gauche de la tile = à la newtile
+        *Vérification : tile en bas à droite de la newtile = à la tile*/
         tile = tile.getRightTile();
         assertEquals(tile.getLeftUpperTile(), newtile);
         assertEquals(newtile.getRightBottomTile(),tile);
-      */
+      
     }
 
     /**
@@ -306,60 +320,108 @@ public class GameBoardTest {
         assertEquals(tile.getRightBottomTile(), newtile);
         assertEquals(newtile.getLeftUpperTile(),tile);
         
-        
+        /*Nouvelle tile : tile à droite.
+        *Vérification : tile en bas à gauche de la tile = à la newtile
+        *Vérification : tile en haut à droite de la newtile = à la tile*/
         tile = tile.getRightTile();
         assertEquals(tile.getLeftBottomTile(), newtile);
         assertEquals(newtile.getRightUpperTile(),tile);
         
+        /*Nouvelle tile : tile en bas à droite.
+        *Vérification : tile à gauche de la tile = à la newtile
+        *Vérification : tile à droite de la newtile = à la tile*/      
         tile = tile.getRightBottomTile();
         assertEquals(tile.getLeftTile(), newtile);
         assertEquals(newtile.getRightTile(),tile);
-                  
+        
+        /*Nouvelle tile : tile en bas à gauche.
+        *Vérification : tile en haut à gauche de la tile = à la newtile
+        *Vérification : tile en bas à droite de la newtile = à la tile*/     
         tile = tile.getLeftBottomTile();
         assertEquals(tile.getLeftUpperTile(), newtile);
         assertEquals(newtile.getRightBottomTile(),tile);
         
+        /*Nouvelle tile : tile à gauche.
+        *Vérification : tile en haut à droite de la tile = à la newtile
+        *Vérification : tile en bas à gauche de la newtile = à la tile*/    
         tile = tile.getLeftTile();
         assertEquals(tile.getRightUpperTile(), newtile);
         assertEquals(newtile.getLeftBottomTile(),tile);
       
+        /*Nouvelle tile : tile en haut à gauche.
+        *Vérification : tile à gauche de la tile = à la newtile
+        *Vérification : tile à droite de la newtile = à la tile*/      
         tile = tile.getLeftUpperTile();
         assertEquals(tile.getLeftTile(), newtile);
-        assertEquals(newtile.getRightTile(), tile);
-        
+        assertEquals(newtile.getRightTile(), tile);       
     }
 
     /**
      * Test of placeTileAtTheBottomLeftOf method, of class GameBoard.
-     *
+     */
     @Test
     public void testPlaceTileAtTheBottomLeftOf() {
         System.out.println("placeTileAtTheBottomLeftOf");
-        GameTile base = null;
-        GameTile newTile = null;
         GameBoard instance = new GameBoard();
-        instance.placeTileAtTheBottomLeftOf(base, newTile);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        GameTile tile = instance.getTileSet().get("Water #30").getLeftBottomTile(); 
+        GameTile newtile = new WaterTile(instance, "Water #yolo");
+        instance.placeTileAtTheBottomLeftOf(tile, newtile);
+      
+        assertEquals(tile.getLeftBottomTile(), newtile);
+        assertEquals(newtile.getRightUpperTile(),tile);
+        
+        /*Nouvelle tile : tile en bas à droite.
+        *Vérification : tile à gauche de la tile = à la newtile
+        *Vérification : tile à droite de la newtile = à la tile*/
+        tile = tile.getRightBottomTile();
+        assertEquals(tile.getLeftTile(), newtile);
+        assertEquals(newtile.getRightTile(),tile);
+        
+        /*Nouvelle tile : tile en bas à gauche.
+        *Vérification : tile en haut à gauche de la tile = à la newtile
+        *Vérification : tile en bas à droite de la newtile = à la tile*/      
+        tile = tile.getLeftBottomTile();
+        assertEquals(tile.getLeftUpperTile(), newtile);
+        assertEquals(newtile.getRightBottomTile(),tile);
+        
+        /*Nouvelle tile : tile à gauche.
+        *Vérification : tile en haut à droite de la tile = à la newtile
+        *Vérification : tile en bas à gauche de la newtile = à la tile*/     
+        tile = tile.getLeftTile();
+        assertEquals(tile.getRightUpperTile(), newtile);
+        assertEquals(newtile.getLeftBottomTile(),tile);
+        
+        /*Nouvelle tile : tile en haut à gauche.
+        *Vérification : tile à droite de la tile = à la newtile
+        *Vérification : tile à gauche de la newtile = à la tile*/    
+        tile = tile.getLeftUpperTile();
+        assertEquals(tile.getRightTile(), newtile);
+        assertEquals(newtile.getLeftTile(),tile);
+      
+        /*Nouvelle tile : tile en haut à droite.
+        *Vérification : tile en bas à droite de la tile = à la newtile
+        *Vérification : tile en haut à gauche de la newtile = à la tile*/      
+        tile = tile.getRightUpperTile();
+        assertEquals(tile.getRightBottomTile(), newtile);
+        assertEquals(newtile.getLeftUpperTile(), tile);    
     }
 
    
-
     /**
      * Test of hasEntityOfType method, of class GameBoard.
-     *
+     */
     @Test
     public void testHasEntityOfType() {
-        System.out.println("hasEntityOfType");
-        Class type = null;
+        System.out.println("hasEntityOfType");       
         GameBoard instance = new GameBoard();
+        Class type = null;
         boolean expResult = false;
         boolean result = instance.hasEntityOfType(type);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
-*/
+
     /**
      * Test of hasTileAtWaterEdge method, of class GameBoard.
      *
