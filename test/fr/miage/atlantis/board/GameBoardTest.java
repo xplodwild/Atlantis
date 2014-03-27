@@ -412,14 +412,16 @@ public class GameBoardTest {
      */
     @Test
     public void testHasEntityOfType() {
-        System.out.println("hasEntityOfType");       
+        System.out.println("hasEntityOfType");   
+        /**tester avec aucune entité dans le jeu **/
+        /**tester avec une entité de chaque **/
+        /** tester avec plusieurs entité de chaque **/
         GameBoard instance = new GameBoard();
         Class type = null;
         boolean expResult = false;
         boolean result = instance.hasEntityOfType(type);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        
     }
 
     /**
