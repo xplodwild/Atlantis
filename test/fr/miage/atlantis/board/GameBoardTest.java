@@ -145,13 +145,7 @@ public class GameBoardTest {
         assertEquals(16,b);
         assertEquals(16,f);
         assertEquals(8,m);
-        
-        /* BUG à FIX ici
-         * Le randomizer est déjà vidé lorsque je fais new Gameboard
-         * Du coup dans ma boucle for ca exceptionne parce que le randomizer est vide.
-         * Faudrait le mettre dans une classe à part.
-         * 
-         */
+       
     }
 
     /**
@@ -193,7 +187,7 @@ public class GameBoardTest {
 
     /**
      * Test of sinkTile method, of class GameBoard.
-     */
+     *
     @Test
     public void testSinkTile() {
         System.out.println("sinkTile");
@@ -219,7 +213,7 @@ public class GameBoardTest {
 
     /**
      * Test of placeTileAtTheRightOf method, of class GameBoard.
-     */
+     *
     @Test
     public void testPlaceTileAtTheRightOf() {
         System.out.println("placeTileAtTheRightOf");
@@ -257,7 +251,7 @@ public class GameBoardTest {
     /**
      * Test of placeTileAtTheLeftOf method, of class GameBoard.
      */
-    @Test
+    //@Test
     public void testPlaceTileAtTheLeftOf() {
         System.out.println("placeTileAtTheLeftOf");
         GameBoard instance = new GameBoard();
@@ -309,7 +303,7 @@ public class GameBoardTest {
     /**
      * Test of placeTileAtTheBottomRightOf method, of class GameBoard.
      */
-    @Test
+    //@Test
     public void testPlaceTileAtTheBottomRightOf() {
         System.out.println("placeTileAtTheBottomRightOf");
         GameBoard instance = new GameBoard();
@@ -359,7 +353,7 @@ public class GameBoardTest {
     /**
      * Test of placeTileAtTheBottomLeftOf method, of class GameBoard.
      */
-    @Test
+    //@Test
     public void testPlaceTileAtTheBottomLeftOf() {
         System.out.println("placeTileAtTheBottomLeftOf");
         GameBoard instance = new GameBoard();
@@ -409,7 +403,7 @@ public class GameBoardTest {
    
     /**
      * Test of hasEntityOfType method, of class GameBoard.
-     */
+     *
     @Test
     public void testHasEntityOfType() {
         System.out.println("hasEntityOfType");   
@@ -426,23 +420,40 @@ public class GameBoardTest {
 
     /**
      * Test of hasTileAtWaterEdge method, of class GameBoard.
-     *
+     */
     @Test
     public void testHasTileAtWaterEdge() {
         System.out.println("hasTileAtWaterEdge");
-        int level = 0;
         GameBoard board = new GameBoard();
         
-        for(int i =0; i<16;i++){
-             boolean result = board.hasTileAtWaterEdge(1);
-             
+        // On laisse une tile de chaque (pour s'assurer du contact avec l'eau)
+        for(int i =0; i<15;i++){
+            GameTile killme = board.getTileSet().get("Beach #"+i);
+            if (killme != null) board.sinkTile(new NullGameLogic(), killme);
         }
-       
+        for(int i =0; i<15;i++){
+            GameTile killme = board.getTileSet().get("Forest #"+i);
+            if (killme != null) board.sinkTile(new NullGameLogic(), killme);
+        }
+        for(int i =0; i<7;i++){
+            GameTile killme = board.getTileSet().get("Mountain #"+i);
+            if (killme != null) board.sinkTile(new NullGameLogic(), killme);
+        }
         
+        // Test plage
+        assertTrue(board.hasTileAtWaterEdge(1));
+        board.sinkTile(new NullGameLogic(), board.getTileSet().get("Beach #15"));
+        assertFalse(board.hasTileAtWaterEdge(1));
         
-        boolean result = board.hasTileAtWaterEdge(1);
-        assertEquals(expResult, result);
+        // Test foret
+        assertTrue(board.hasTileAtWaterEdge(2));
+        board.sinkTile(new NullGameLogic(), board.getTileSet().get("Forest #15"));
+        assertFalse(board.hasTileAtWaterEdge(2));
         
+        // Test montagne
+        assertTrue(board.hasTileAtWaterEdge(3));
+        board.sinkTile(new NullGameLogic(), board.getTileSet().get("Mountain #7"));
+        assertFalse(board.hasTileAtWaterEdge(3));
     }
-    */
+    
 }
