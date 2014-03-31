@@ -303,7 +303,7 @@ public class GameBoardTest {
     /**
      * Test of placeTileAtTheBottomRightOf method, of class GameBoard.
      */
-    //@Test
+    @Test
     public void testPlaceTileAtTheBottomRightOf() {
         System.out.println("placeTileAtTheBottomRightOf");
         GameBoard instance = new GameBoard();
@@ -314,40 +314,20 @@ public class GameBoardTest {
         assertEquals(tile.getRightBottomTile(), newtile);
         assertEquals(newtile.getLeftUpperTile(),tile);
         
-        /*Nouvelle tile : tile à droite.
-        *Vérification : tile en bas à gauche de la tile = à la newtile
-        *Vérification : tile en haut à droite de la newtile = à la tile*/
-        tile = tile.getRightTile();
-        assertEquals(tile.getLeftBottomTile(), newtile);
-        assertEquals(newtile.getRightUpperTile(),tile);
-        
-        /*Nouvelle tile : tile en bas à droite.
-        *Vérification : tile à gauche de la tile = à la newtile
-        *Vérification : tile à droite de la newtile = à la tile*/      
-        tile = tile.getRightBottomTile();
-        assertEquals(tile.getLeftTile(), newtile);
-        assertEquals(newtile.getRightTile(),tile);
-        
         /*Nouvelle tile : tile en bas à gauche.
         *Vérification : tile en haut à gauche de la tile = à la newtile
         *Vérification : tile en bas à droite de la newtile = à la tile*/     
         tile = tile.getLeftBottomTile();
-        assertEquals(tile.getLeftUpperTile(), newtile);
-        assertEquals(newtile.getRightBottomTile(),tile);
+        assertEquals(tile.getRightTile(), newtile);
+        assertEquals(newtile.getLeftTile(),tile);
         
-        /*Nouvelle tile : tile à gauche.
-        *Vérification : tile en haut à droite de la tile = à la newtile
-        *Vérification : tile en bas à gauche de la newtile = à la tile*/    
-        tile = tile.getLeftTile();
-        assertEquals(tile.getRightUpperTile(), newtile);
-        assertEquals(newtile.getLeftBottomTile(),tile);
-      
-        /*Nouvelle tile : tile en haut à gauche.
-        *Vérification : tile à gauche de la tile = à la newtile
-        *Vérification : tile à droite de la newtile = à la tile*/      
-        tile = tile.getLeftUpperTile();
-        assertEquals(tile.getLeftTile(), newtile);
-        assertEquals(newtile.getRightTile(), tile);       
+        tile=tile.getRightUpperTile();
+        tile=tile.getRightTile();
+        assertEquals(tile.getLeftBottomTile(), newtile);
+        assertEquals(newtile.getRightUpperTile(),tile);
+        
+       
+           
     }
 
     /**
