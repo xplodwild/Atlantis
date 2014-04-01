@@ -873,23 +873,18 @@ public final class GameBoard {
         //Puis on recupere les tile adjacent aux deux tile et on les lient a la nouvelle tile fraichement crée.
         if (baseUpperRightTile != null) {
             newTile.setLeftUpperTile(baseUpperRightTile);
+            baseUpperRightTile.setRightBottomTile(newTile);            
+            this.mTileSet.put(baseUpperRightTile.getName(), baseUpperRightTile);
         }
         if (baseBottomRightTile != null) {
-            this.placeTileAtTheBottomLeftOf(newTile, baseBottomRightTile);
-        }
-
-        //Update le HashMap
-        this.mTileSet.put(base.getName(), base);
-        this.mTileSet.put(newTile.getName(), newTile);
-
-        //Puis on update les Tiles ajacent pour prendre en compte le nouveau Til ajouté
-        if (baseBottomRightTile != null) {
+            this.placeTileAtTheBottomLeftOf(newTile, baseBottomRightTile);           
             baseBottomRightTile.setRightUpperTile(newTile);
             this.mTileSet.put(baseBottomRightTile.getName(), baseBottomRightTile);
         }
-        if (baseUpperRightTile != null) {
-            this.placeTileAtTheBottomRightOf(baseUpperRightTile, newTile);
-        }
+        
+        //Update le HashMap
+        this.mTileSet.put(base.getName(), base);
+        this.mTileSet.put(newTile.getName(), newTile);        
     }
 
     /**
@@ -910,24 +905,19 @@ public final class GameBoard {
         //Puis on recupere les tile adjacent aux deux tile et on les lient a la nouvelle tile fraichement crée.
         if (baseUpperLeftTile != null) {
             newTile.setRightUpperTile(baseUpperLeftTile);
+            baseUpperLeftTile.setLeftBottomTile(newTile);
+            this.mTileSet.put(baseUpperLeftTile.getName(), baseUpperLeftTile);
         }
+        
         if (baseBottomLeftTile != null) {
             newTile.setRightBottomTile(baseBottomLeftTile);
+            baseBottomLeftTile.setLeftUpperTile(newTile);
+            this.mTileSet.put(baseBottomLeftTile.getName(), baseBottomLeftTile);
         }
 
         //Update le HashMap
         this.mTileSet.put(base.getName(), base);
-        this.mTileSet.put(newTile.getName(), newTile);
-
-        //Puis on update les Tiles ajacent pour prendre en compte le nouveau Til ajouté
-        if (baseBottomLeftTile != null) {
-            baseBottomLeftTile.setRightUpperTile(newTile);
-            this.mTileSet.put(baseBottomLeftTile.getName(), baseBottomLeftTile);
-        }
-        if (baseUpperLeftTile != null) {
-            baseUpperLeftTile.setRightBottomTile(newTile);
-            this.mTileSet.put(baseUpperLeftTile.getName(), baseUpperLeftTile);
-        }
+        this.mTileSet.put(newTile.getName(), newTile);       
     }
 
     /**
@@ -948,24 +938,18 @@ public final class GameBoard {
         //Puis on recupere les tile adjacent aux deux tile et on les lient a la nouvelle tile fraichement crée.
         if (baseLeftBottomTile != null) {
             newTile.setLeftTile(baseLeftBottomTile);
-        }
-        if (baseRightTile != null) {
-            newTile.setRightUpperTile(baseRightTile);
-        }
-
-        //Update le HashMap
-        this.mTileSet.put(base.getName(), base);
-        this.mTileSet.put(newTile.getName(), newTile);
-
-        //Puis on update les Tiles ajacent pour prendre en compte le nouveau Til ajouté
-        if (baseLeftBottomTile != null) {
             baseLeftBottomTile.setRightTile(newTile);
             this.mTileSet.put(baseLeftBottomTile.getName(), baseLeftBottomTile);
         }
         if (baseRightTile != null) {
+            newTile.setRightUpperTile(baseRightTile);
             baseRightTile.setLeftBottomTile(newTile);
             this.mTileSet.put(baseRightTile.getName(), baseRightTile);
         }
+        
+        //Update le HashMap
+        this.mTileSet.put(base.getName(), base);
+        this.mTileSet.put(newTile.getName(), newTile);
     }
 
     /**
@@ -986,25 +970,18 @@ public final class GameBoard {
         //Puis on recupere les tile adjacent aux deux tile et on les lient a la nouvelle tile fraichement crée.
         if (baseRightBottomTile != null) {
             newTile.setRightTile(baseRightBottomTile);
-        }
-        if (baseLeftTile != null) {
-            newTile.setLeftUpperTile(baseLeftTile);
-        }
-
-
-        //Update le HashMap
-        this.mTileSet.put(base.getName(), base);
-        this.mTileSet.put(newTile.getName(), newTile);
-
-        //Puis on update les Tiles ajacent pour prendre en compte le nouveau Til ajouté
-        if (baseRightBottomTile != null) {
             baseRightBottomTile.setLeftTile(newTile);
             this.mTileSet.put(baseRightBottomTile.getName(), baseRightBottomTile);
         }
         if (baseLeftTile != null) {
+            newTile.setLeftUpperTile(baseLeftTile);
             baseLeftTile.setRightBottomTile(newTile);
             this.mTileSet.put(baseLeftTile.getName(), baseLeftTile);
         }
+
+        //Update le HashMap
+        this.mTileSet.put(base.getName(), base);
+        this.mTileSet.put(newTile.getName(), newTile);
     }
 
     public void printAllTiles() {
