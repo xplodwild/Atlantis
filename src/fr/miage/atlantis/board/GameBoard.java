@@ -532,7 +532,8 @@ public final class GameBoard {
         this.placeTileAtTheRightOf(nextTile2, new WaterTile(this, "Water #56"));
         nextTile2 = (WaterTile) this.mTileSet.get("Water #56");
         this.placeTileAtTheRightOf(nextTile2, new WaterTile(this, "Water #57"));
-
+        nextTile2 = (WaterTile) this.mTileSet.get("Water #57");
+        
         tmp2 = null;
         nextTile3 = nextTile2;
         for (int i = 32; i < 37; i++) {
