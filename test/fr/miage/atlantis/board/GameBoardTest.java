@@ -161,8 +161,8 @@ public class GameBoardTest {
         assertTrue(instance.hasTileAtLevel(1));
         
         // Il ne doit plus rester de tuiles sable
-        for(int i=0;i<16;i++){
-            instance.sinkTile(new NullGameLogic() { }, instance.getTileSet().get("Beach #"+i));
+        for(int i=1;i<17;i++){
+            instance.sinkTile(new NullGameLogic(), instance.getTileSet().get("Beach #"+i));
         }
         assertFalse(instance.hasTileAtLevel(1));
         
@@ -170,8 +170,8 @@ public class GameBoardTest {
         assertTrue(instance.hasTileAtLevel(2));
         
         // Il ne doit plus rester de tuiles foret
-        for(int i=0;i<16;i++){
-            instance.sinkTile(new NullGameLogic() { }, instance.getTileSet().get("Forest #"+i));
+        for(int i=1;i<17;i++){
+            instance.sinkTile(new NullGameLogic(), instance.getTileSet().get("Forest #"+i));
         }
         assertFalse(instance.hasTileAtLevel(2));
         
@@ -179,15 +179,15 @@ public class GameBoardTest {
         assertTrue(instance.hasTileAtLevel(3));
         
         // Il ne doit plus rester de tuiles foret
-        for(int i=0;i<8;i++){
-            instance.sinkTile(new NullGameLogic() { }, instance.getTileSet().get("Mountain #"+i));
+        for(int i=1;i<9;i++){
+            instance.sinkTile(new NullGameLogic(), instance.getTileSet().get("Mountain #"+i));
         }
         assertFalse(instance.hasTileAtLevel(3));
     }
 
     /**
      * Test of sinkTile method, of class GameBoard.
-     *
+     */
     @Test
     public void testSinkTile() {
         System.out.println("sinkTile");
@@ -244,13 +244,15 @@ public class GameBoardTest {
     /**
      * Test of placeTileAtTheLeftOf method, of class GameBoard.
      */
-    //@Test
+    @Test
     public void testPlaceTileAtTheLeftOf() {
         System.out.println("placeTileAtTheLeftOf");
         GameBoard instance = new GameBoard();
         GameTile tile = instance.getTileSet().get("Water #37").getLeftTile();
         GameTile newtile = new WaterTile(instance, "Water #yo");
         instance.placeTileAtTheLeftOf(tile, newtile);
+        
+        System.out.println("La newtile\n"+newtile);
         
         assertEquals(tile.getLeftTile(), newtile);
         assertEquals(newtile.getRightTile(),tile);
@@ -357,32 +359,32 @@ public class GameBoardTest {
         GameBoard board = new GameBoard();
         
         // On laisse une tile de chaque (pour s'assurer du contact avec l'eau)
-        for(int i =0; i<15;i++){
+        for(int i =1; i<16;i++){
             GameTile killme = board.getTileSet().get("Beach #"+i);
             if (killme != null) board.sinkTile(new NullGameLogic(), killme);
         }
-        for(int i =0; i<15;i++){
+        for(int i =1; i<16;i++){
             GameTile killme = board.getTileSet().get("Forest #"+i);
             if (killme != null) board.sinkTile(new NullGameLogic(), killme);
         }
-        for(int i =0; i<7;i++){
+        for(int i =1; i<8;i++){
             GameTile killme = board.getTileSet().get("Mountain #"+i);
             if (killme != null) board.sinkTile(new NullGameLogic(), killme);
         }
         
         // Test plage
         assertTrue(board.hasTileAtWaterEdge(1));
-        board.sinkTile(new NullGameLogic(), board.getTileSet().get("Beach #15"));
+        board.sinkTile(new NullGameLogic(), board.getTileSet().get("Beach #16"));
         assertFalse(board.hasTileAtWaterEdge(1));
         
         // Test foret
         assertTrue(board.hasTileAtWaterEdge(2));
-        board.sinkTile(new NullGameLogic(), board.getTileSet().get("Forest #15"));
+        board.sinkTile(new NullGameLogic(), board.getTileSet().get("Forest #16"));
         assertFalse(board.hasTileAtWaterEdge(2));
         
         // Test montagne
         assertTrue(board.hasTileAtWaterEdge(3));
-        board.sinkTile(new NullGameLogic(), board.getTileSet().get("Mountain #7"));
+        board.sinkTile(new NullGameLogic(), board.getTileSet().get("Mountain #8"));
         assertFalse(board.hasTileAtWaterEdge(3));
     }
     
