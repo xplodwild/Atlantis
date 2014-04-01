@@ -26,16 +26,8 @@ import com.jme3.input.controls.KeyTrigger;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.ViewPort;
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.builder.EffectBuilder;
-import de.lessvoid.nifty.builder.LayerBuilder;
-import de.lessvoid.nifty.builder.PanelBuilder;
-import de.lessvoid.nifty.builder.ScreenBuilder;
 import de.lessvoid.nifty.controls.Console;
 import de.lessvoid.nifty.controls.ConsoleCommands;
-import de.lessvoid.nifty.controls.console.builder.ConsoleBuilder;
-import de.lessvoid.nifty.controls.label.builder.LabelBuilder;
-import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.elements.render.TextRenderer;
 import fr.miage.atlantis.graphics.CamConstants;
 import fr.miage.atlantis.graphics.Game3DRenderer;
 import fr.miage.atlantis.gui.console.commands.BindListCommand;
@@ -76,36 +68,35 @@ public class Gui {
 
         //Récupère l'obj nifty de l'ecran courant
         this.mNifty = n;
-        
-        
+
+
         //Charge le thème
         n.loadStyleFile(Gui.STYLE_FILE);
         n.loadControlFile(Gui.CONTROL_FILE);
-        
-        
+
+
         this.instanciateScreens();
         //this.instanciateInGameHUD();
-        
-      
+
+
     }
-    
-    
-    private void instanciateScreens(){
-        
+
+    private void instanciateScreens() {
+
         this.mNifty.fromXmlWithoutStartScreen("GUI/Screens.xml");
         this.mNifty.registerScreenController(new GuiController(this.mGame3DRenderer));
         //this.mNifty.fromXml("GUI/startScreen.xml", "start");
         //this.mNifty.fromXml("GUI/startScreen.xml","start",new GuiController(this.mGame3DRenderer));
         ((GuiController) this.mNifty.getScreen("start").getScreenController()).set3DRenderer(this.mGame3DRenderer);
-    
+
         this.mNifty.gotoScreen("inGameHud");
 
 
 
         // get the console control (this assumes that there is a console in the current screen with the id="console"
-        
+
         mConsole = this.mNifty.getScreen("inGameHud").findElementByName("console").getNiftyControl(Console.class);
-       
+
         // output hello to the console
         mConsole.output("Demarrage de la console");
         mConsole.output("");
@@ -119,7 +110,7 @@ public class Gui {
         // create a simple command (see below for implementation) this class will be called when the command is detected
         // and register the command as a command with the console
         /*ConsoleCommands.ConsoleCommand simpleCommand = new SimpleCommand();
-        consoleCommands.registerCommand("simple", simpleCommand);*/
+         consoleCommands.registerCommand("simple", simpleCommand);*/
 
 
 
@@ -145,20 +136,18 @@ public class Gui {
 
         //Start redirection console
         this.redirectSystemStreams();
-        
+
         mConsole.disable();
-        
-        
-        
+
+
+
 
         //Genere les keybinding
         this.generateConsoleKeyMap();
         ((GuiController) this.mNifty.getScreen("start").getScreenController()).set3DRenderer(this.mGame3DRenderer);
     }
-    
-    
-    
-    private void generateConsoleKeyMap(){
+
+    private void generateConsoleKeyMap() {
         //Bind la touche de la console
         this.getInputManager().addMapping("console", new KeyTrigger(KeyInput.KEY_F12));
         this.getInputManager().addListener(this.toggleConsole(), "console");
@@ -176,12 +165,10 @@ public class Gui {
         this.getInputManager().addListener(this.toggleMenu(), "menu");
     }
 
-
-    private ActionListener toggleMenu(){
+    private ActionListener toggleMenu() {
         return new ActionListener() {
-
             public void onAction(String name, boolean isPressed, float tpf) {
-                if(isPressed){
+                if (isPressed) {
 
                     Gui.this.mNifty.gotoScreen("start");
                     ((GuiController) mNifty.getScreen("start").getScreenController()).set3DRenderer(mGame3DRenderer);
@@ -193,17 +180,15 @@ public class Gui {
         };
     }
 
-
-    private ActionListener toggleConsole(){
+    private ActionListener toggleConsole() {
         return new ActionListener() {
-
             public void onAction(String name, boolean isPressed, float tpf) {
-                if(isPressed){
-                    if(Gui.this.mConsole.isEnabled()){
-                        
+                if (isPressed) {
+                    if (Gui.this.mConsole.isEnabled()) {
+
                         Gui.this.mConsole.setEnabled(false);
                         Gui.this.mConsole.getElement().setVisible(false);
-                    }else{
+                    } else {
                         Gui.this.mConsole.setEnabled(true);
                         Gui.this.mConsole.getElement().setVisible(true);
                     }
@@ -213,45 +198,40 @@ public class Gui {
         };
     }
 
-    private ActionListener toggleQuicktest(){
+    private ActionListener toggleQuicktest() {
         return new ActionListener() {
-
             public void onAction(String name, boolean isPressed, float tpf) {
-                 if(isPressed){
+                if (isPressed) {
                     mConsole.output("");
-                    if(GameTurn.DBG_QUICKTEST){
+                    if (GameTurn.DBG_QUICKTEST) {
                         mConsole.output("Desactivation du mode QuickTest");
                         GameTurn.DBG_QUICKTEST = false;
-                    }else{
+                    } else {
                         mConsole.output("Activation du mode QuickTest");
                         GameTurn.DBG_QUICKTEST = true;
                     }
-                 }
+                }
             }
         };
     }
 
-    private ActionListener toggleFps(){
+    private ActionListener toggleFps() {
         return new ActionListener() {
-
             public void onAction(String name, boolean isPressed, float tpf) {
-                 if(isPressed){
-                    Gui.this.getGame3DRenderer().toggleGraphicsStats();                    
-                 }
+                if (isPressed) {
+                    Gui.this.getGame3DRenderer().toggleGraphicsStats();
+                }
             }
         };
     }
-
-
 
     /**
-     * Redirection du flux de messages System.out / System.err vers la console     *
+     * Redirection du flux de messages System.out / System.err vers la console *
      *
      */
     private void redirectSystemStreams() {
 
         Handler customHandler = new Handler() {
-
             @Override
             public void close() throws SecurityException {
             }
@@ -262,7 +242,7 @@ public class Gui {
 
             @Override
             public void publish(LogRecord record) {
-                String text=record.getMessage();
+                String text = record.getMessage();
                 System.out.println(text);
                 Gui.this.mConsole.output(text);
             }
@@ -271,21 +251,15 @@ public class Gui {
         customHandler.setLevel(Level.FINEST);
         Logger.getGlobal().addHandler(customHandler);
     }
-    
-    
-    
 
     //--------------------------------------------------------------------------
     //GETTERS
     //--------------------------------------------------------------------------
-
-
-    public Nifty getNifty(){
+    public Nifty getNifty() {
         return this.mNifty;
     }
 
-
-    public Console getConsole(){
+    public Console getConsole() {
         return mConsole;
     }
 
@@ -295,5 +269,5 @@ public class Gui {
 
     public Game3DRenderer getGame3DRenderer() {
         return mGame3DRenderer;
-    }  
+    }
 }

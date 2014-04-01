@@ -131,7 +131,7 @@ public class GuiController implements ScreenController {
 
         TextField fieldJ1 = this.nifty.getScreen("start").findElementByName("inputJ1").getNiftyControl(TextField.class);
 
-        if (!fieldJ1.getRealText().isEmpty() && fieldJ1.getRealText().matches("[a-z]*")) {
+        if (!fieldJ1.getRealText().isEmpty() && fieldJ1.getRealText().matches("[a-zA-Z1-9]*")) {
             players[0] = fieldJ1.getRealText();
         } else {
             players[0] = this.nameRandomizer.get(new Random().nextInt(this.nameRandomizer.size()));
@@ -141,7 +141,7 @@ public class GuiController implements ScreenController {
 
         TextField fieldJ2 = this.nifty.getScreen("start").findElementByName("inputJ2").getNiftyControl(TextField.class);
 
-        if (!fieldJ2.getRealText().isEmpty() && fieldJ2.getRealText().matches("[a-z]*")) {
+        if (!fieldJ2.getRealText().isEmpty() && fieldJ2.getRealText().matches("[a-zA-Z1-9]*")) {
             players[1] = fieldJ2.getRealText();
         } else {
             players[1] = this.nameRandomizer.get(new Random().nextInt(this.nameRandomizer.size()));
@@ -151,7 +151,7 @@ public class GuiController implements ScreenController {
 
         TextField fieldJ3 = this.nifty.getScreen("start").findElementByName("inputJ3").getNiftyControl(TextField.class);
 
-        if (!fieldJ3.getRealText().isEmpty() && fieldJ3.getRealText().matches("[a-z]*")) {
+        if (!fieldJ3.getRealText().isEmpty() && fieldJ3.getRealText().matches("[a-zA-Z1-9]*")) {
             players[2] = fieldJ3.getRealText();
         } else {
             players[2] = this.nameRandomizer.get(new Random().nextInt(this.nameRandomizer.size()));
@@ -161,7 +161,7 @@ public class GuiController implements ScreenController {
 
         TextField fieldJ4 = this.nifty.getScreen("start").findElementByName("inputJ4").getNiftyControl(TextField.class);
 
-        if (!fieldJ4.getRealText().isEmpty() && fieldJ4.getRealText().matches("[a-z]*")) {
+        if (!fieldJ4.getRealText().isEmpty() && fieldJ4.getRealText().matches("[a-zA-Z1-9]*")) {
             players[3] = fieldJ3.getRealText();
         } else {
             players[3] = this.nameRandomizer.get(new Random().nextInt(this.nameRandomizer.size()));
