@@ -19,6 +19,7 @@ package fr.miage.atlantis.board;
 
 import fr.miage.atlantis.entities.Boat;
 import fr.miage.atlantis.entities.GameEntity;
+import fr.miage.atlantis.entities.SeaSerpent;
 import fr.miage.atlantis.entities.Shark;
 import fr.miage.atlantis.entities.Whale;
 import fr.miage.atlantis.logic.GameLogic;
@@ -178,6 +179,8 @@ public class TileAction {
     private int mAction;
     private int mEntity;
     private boolean mHasBeenUsed;
+    private int mMovesRemaining;
+    private GameEntity mInitialEntity;
     private static ArrayList<TileAction> sRandomizerBeach;
     private static ArrayList<TileAction> sRandomizerForest;
     private static ArrayList<TileAction> sRandomizerMountain;
@@ -195,6 +198,22 @@ public class TileAction {
         mIsTriggerable = isTriggerable;
         mIsVolcano = isVolcano;
         mHasBeenUsed = false;
+    }
+
+    public void decreaseMovesRemaining() {
+        mMovesRemaining--;
+    }
+
+    public int getMovesRemaining() {
+        return mMovesRemaining;
+    }
+
+    public GameEntity getInitialEntity() {
+        return mInitialEntity;
+    }
+
+    public void setInitialEntity(GameEntity ent) {
+        mInitialEntity = ent;
     }
 
     /**
@@ -435,12 +454,12 @@ public class TileAction {
 
 
     /**
-     * @TODO : Implementer (le reste de) la methode
-     *
      * Defini la logique de jeu à lancer lors de l'utilisation de l'action d'un tile
      *
      * @param tile Tile d'action, si l'action est immédiate
      * @param logic Logique a executer à l'utilisation
+     * @return true si l'action s'est lancée, false si elle ne s'est pas lancée (par exemple, si
+     * c'est un mouvement de baleine mais qu'il n'y a pas de baleine dans le plateau)
      */
     public void use(GameTile tile, GameLogic logic) {
         switch (mAction) {
@@ -452,11 +471,150 @@ public class TileAction {
                 performActionMoveAnimal(logic);
                 break;
 
+            case ACTION_BONUS_BOAT:
+                performActionBonusBoat(logic);
+                break;
+
+            case ACTION_BONUS_SWIM:
+                performActionBonusSwim(logic);
+                break;
+
+            case ACTION_WHIRL:
+                performActionWhirl(tile, logic);
+                break;
+
+            case ACTION_VOLCANO:
+                performActionVolcano(logic);
+                break;
+
             default:
-                throw new UnsupportedOperationException("Not implemented yet: Action " + mAction);
+                throw new IllegalStateException("Unknown haxion: Action " + mAction);
         }
     }
 
+    /**
+     * Retourne si oui ou non cette action peut être utilisée (c'est-à-dire qu'il existe des entités
+     * sur lesquelles l'action de cette classe est possible)
+     * @return true si l'action a une utilité dans l'état actuel du jeu
+     */
+    public boolean canBeUsed(GameLogic logic) {
+        Class entClass = null;
+        switch (mEntity) {
+            case ENTITY_SEASERPENT:
+                entClass = SeaSerpent.class;
+                break;
+
+            case ENTITY_SHARK:
+                entClass = Shark.class;
+                break;
+
+            case ENTITY_WHALE:
+                entClass = Whale.class;
+                break;
+        }
+
+        switch (mAction) {
+            case ACTION_BONUS_BOAT:
+                // Fonctionne si on a un bateau sur le plateau
+                return logic.getBoard().hasEntityOfType(Boat.class);
+
+            case ACTION_BONUS_SWIM:
+                // Fonctionne si le joueur a un nageur
+                return logic.getCurrentTurn().getPlayer().hasSwimmer();
+
+            case ACTION_CANCEL_ANIMAL:
+                // Déclenché différé
+                return true;
+
+            case ACTION_MOVE_ANIMAL:
+                // Fonctionne si il y a un animal du type indiqué
+                return logic.getBoard().hasEntityOfType(entClass);
+
+            case ACTION_SPAWN_ENTITY:
+                // Les spawn fonctionnent forcément
+                return true;
+
+            case ACTION_VOLCANO:
+                // Le volcan fonctionne forcément
+                return true;
+
+            case ACTION_WHIRL:
+                // Les tourbillons fonctionnnent forcément
+                return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Lance l'action d'une tile volcan
+     * @param logic Logique du jeu
+     */
+    private void performActionVolcano(GameLogic logic) {
+        // TOUT QUI EXPLOSE OMG
+        logic.onTileVolcano();
+    }
+
+    /**
+     * Lance l'action d'une tile tourbillon
+     * @param tile La tile tourbillon
+     * @param logic  Logique du jeu
+     */
+    private void performActionWhirl(GameTile tile, GameLogic logic) {
+        // Tourbillon: Tout ce qui est sur la tile et les tiles adjacentes meurent (absolument tout)
+        // et c'est GameLogic qui s'en charge pour gérer les animations
+        logic.onTileWhirl(tile);
+    }
+
+    /**
+     * Lance l'action de bonus de déplacement de bateau
+     * @param logic Logique du jeu
+     */
+    private void performActionBonusBoat(GameLogic logic) {
+        // Bonus 3 déplacements de bateau
+        // Les TileAction étant sélectionnées au début d'un tour, on a déjà une requête de picking
+        // en cours (pour les joueurs ou un bateau du joueur). On l'annule donc.
+        logic.cancelPick();
+
+        // On lance ensuite une requête de picking
+        GameLogic.EntityPickRequest request = new GameLogic.EntityPickRequest();
+        request.avoidEntity = null;
+        request.pickNearTile = null;
+        request.pickingRestriction = GameLogic.EntityPickRequest.FLAG_PICK_BOAT_WITHOUT_ROOM
+                | GameLogic.EntityPickRequest.FLAG_PICK_BOAT_WITH_ROOM;
+        request.player = logic.getCurrentTurn().getPlayer();
+
+        mMovesRemaining = 3;
+
+        logic.requestPick(request, null);
+    }
+
+    /**
+     * Lance l'action de bonus de nage des bateaux
+     * @param logic Logique du jeu
+     */
+    private void performActionBonusSwim(GameLogic logic) {
+        // Bonus 3 déplacements d'un nageur.
+        // Les TileAction étant sélectionnées au début d'un tour, on a déjà une requête de picking
+        // en cours (pour les joueurs ou un bateau du joueur). On l'annule donc.
+        logic.cancelPick();
+
+        // On lance ensuite une requête de picking
+        GameLogic.EntityPickRequest request = new GameLogic.EntityPickRequest();
+        request.avoidEntity = null;
+        request.pickNearTile = null;
+        request.pickingRestriction = GameLogic.EntityPickRequest.FLAG_PICK_SWIMMER;
+        request.player = logic.getCurrentTurn().getPlayer();
+
+        mMovesRemaining = 3;
+
+        logic.requestPick(request, null);
+    }
+
+    /**
+     * Lance l'action de téléportation d'un animal
+     * @param logic Logique du jeu
+     */
     private void performActionMoveAnimal(GameLogic logic) {
         // Téléportation! BZZZIIIOOOUUUUU
         // Les TileAction étant sélectionnées au début d'un tour, on a déjà une requête de picking
@@ -488,6 +646,11 @@ public class TileAction {
         logic.requestPick(request, null);
     }
 
+    /**
+     * Lance l'action de spawning d'une entité
+     * @param tile La tile où l'entité va spawn
+     * @param logic Logique du jeu
+     */
     private void performActionSpawnEntity(GameTile tile, GameLogic logic) {
         // On spawne l'entité
         GameEntity spawnedEntity = null;

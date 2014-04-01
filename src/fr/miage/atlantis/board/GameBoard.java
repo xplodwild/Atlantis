@@ -80,9 +80,9 @@ public final class GameBoard {
 
         this.fillInRandomizerWithTiles();
         this.generateDefaultBoard();
-        this.setDefaultBoardTileAttributes();        
+        this.setDefaultBoardTileAttributes();
         this.placeDefaultEntitiesOnBoard();
-
+        printrequestTiles();
 
     }
 
@@ -123,20 +123,20 @@ public final class GameBoard {
         //-----------------------------------------------------------------------
     }
 
-    private void fillInRandomizerWithTiles() {
-        for (int i = 0; i < this.forestTilesRemaining; i++) {
+    public void fillInRandomizerWithTiles() {
+        for (int i = 1; i <= this.forestTilesRemaining; i++) {
             ForestTile tmp = new ForestTile(this, "Forest #" + i);
             tmp.setAction(TileAction.generateRandomTileActionForest());
             randomiser.add(tmp);
         }
 
-        for (int i = 0; i < this.mountainTilesRemaining; i++) {
+        for (int i = 1; i <= this.mountainTilesRemaining; i++) {
             MountainTile tmp = new MountainTile(this, "Mountain #" + i);
             tmp.setAction(TileAction.generateRandomTileActionMountain());
             randomiser.add(tmp);
         }
 
-        for (int i = 0; i < this.beachTilesRemaining; i++) {
+        for (int i = 1; i <= this.beachTilesRemaining; i++) {
             BeachTile tmp = new BeachTile(this, "Beach #" + i);
             tmp.setAction(TileAction.generateRandomTileActionBeach());
             randomiser.add(tmp);
@@ -263,7 +263,6 @@ public final class GameBoard {
         //-----------------------------------------------------------------------
 
 
-
         //-----------------------------------------------------------------------
         //Ligne 4                                                               |
         //-----------------------------------------------------------------------
@@ -295,7 +294,6 @@ public final class GameBoard {
         //-----------------------------------------------------------------------
         //Ligne 5                                                               |
         //-----------------------------------------------------------------------
-
 
         GameTile n44 = this.mTileSet.get("Border #43");
         nextTile = new BorderTile(this, "Border #42");
@@ -528,14 +526,14 @@ public final class GameBoard {
 
         nextTile2 = new WaterTile(this, "Water #54");
         this.placeTileAtTheRightOf(nextTile, nextTile2);
-        nextTile2 = (WaterTile) this.mTileSet.get("Water #54");
+        nextTile2 = (WaterTile) this.mTileSet.get("Water #54");       
+        this.placeTileAtTheRightOf(nextTile2, new WaterTile(this, "Water #55"));        
+        nextTile2 = (WaterTile) this.mTileSet.get("Water #55");
+        this.placeTileAtTheRightOf(nextTile2, new WaterTile(this, "Water #56"));
+        nextTile2 = (WaterTile) this.mTileSet.get("Water #56");
+        this.placeTileAtTheRightOf(nextTile2, new WaterTile(this, "Water #57"));
 
-        for (int i = 55; i < 57; i++) {
-            tmp = new WaterTile(this, "Water #" + i);
-            this.placeTileAtTheRightOf(nextTile2, tmp);
-            nextTile2 = (WaterTile) this.mTileSet.get("Water #" + i);
-        }
-
+        tmp2 = null;
         nextTile3 = nextTile2;
         for (int i = 32; i < 37; i++) {
             tmp2 = this.generateRandomTile();
@@ -544,12 +542,12 @@ public final class GameBoard {
             nextTile3 = this.mTileSet.get(tmpname);
         }
 
-        nextTile2 = new WaterTile(this, "Water #55");
+        nextTile2 = new WaterTile(this, "Water #58");
         this.placeTileAtTheRightOf(nextTile3, nextTile2);
-        nextTile2 = (WaterTile) this.mTileSet.get("Water #55");
+        nextTile2 = (WaterTile) this.mTileSet.get("Water #58");
 
         tmp = null;
-        for (int i = 56; i < 58; i++) {
+        for (int i = 59; i < 61; i++) {
             tmp = new WaterTile(this, "Water #" + i);
             this.placeTileAtTheRightOf(nextTile2, tmp);
             nextTile2 = (WaterTile) this.mTileSet.get("Water #" + i);
@@ -572,11 +570,11 @@ public final class GameBoard {
         this.placeTileAtTheBottomRightOf(n37, nextTile);
         nextTile = (BorderTile) this.mTileSet.get("Border #36");
 
-        nextTile2 = new WaterTile(this, "Water #58");
+        nextTile2 = new WaterTile(this, "Water #61");
         this.placeTileAtTheRightOf(nextTile, nextTile2);
-        nextTile2 = (WaterTile) this.mTileSet.get("Water #58");
+        nextTile2 = (WaterTile) this.mTileSet.get("Water #61");
 
-        for (int i = 59; i < 61; i++) {
+        for (int i = 62; i < 64; i++) {
             tmp = new WaterTile(this, "Water #" + i);
             this.placeTileAtTheRightOf(nextTile2, tmp);
             nextTile2 = (WaterTile) this.mTileSet.get("Water #" + i);;
@@ -591,12 +589,12 @@ public final class GameBoard {
             nextTile3 = this.mTileSet.get(tmpname);
         }
 
-        nextTile2 = new WaterTile(this, "Water #61");
+        nextTile2 = new WaterTile(this, "Water #64");
         this.placeTileAtTheRightOf(nextTile3, nextTile2);
-        nextTile2 = (WaterTile) this.mTileSet.get("Water #61");
+        nextTile2 = (WaterTile) this.mTileSet.get("Water #64");
 
         tmp = null;
-        for (int i = 62; i < 64; i++) {
+        for (int i = 65; i < 67; i++) {
             tmp = new WaterTile(this, "Water #" + i);
             this.placeTileAtTheRightOf(nextTile2, tmp);
             nextTile2 = (WaterTile) this.mTileSet.get("Water #" + i);
@@ -619,12 +617,12 @@ public final class GameBoard {
         this.placeTileAtTheBottomLeftOf(n36, nextTile);
         nextTile = (BorderTile) this.mTileSet.get("Border #35");
 
-        nextTile2 = new WaterTile(this, "Water #64");
+        nextTile2 = new WaterTile(this, "Water #67");
         this.placeTileAtTheRightOf(nextTile, nextTile2);
-        nextTile2 = (WaterTile) this.mTileSet.get("Water #64");
+        nextTile2 = (WaterTile) this.mTileSet.get("Water #67");
 
         tmp = null;
-        for (int i = 65; i < 75; i++) {
+        for (int i = 68; i < 78; i++) {
             tmp = new WaterTile(this, "Water #" + i);
             this.placeTileAtTheRightOf(nextTile2, tmp);
             nextTile2 = (WaterTile) this.mTileSet.get("Water #" + i);
@@ -647,12 +645,12 @@ public final class GameBoard {
         this.placeTileAtTheBottomRightOf(n35, nextTile);
         nextTile = (BorderTile) this.mTileSet.get("Border #34");
 
-        nextTile2 = new WaterTile(this, "Water #75");
+        nextTile2 = new WaterTile(this, "Water #78");
         this.placeTileAtTheRightOf(nextTile, nextTile2);
-        nextTile2 = (WaterTile) this.mTileSet.get("Water #75");
+        nextTile2 = (WaterTile) this.mTileSet.get("Water #78");
 
         tmp = null;
-        for (int i = 76; i < 85; i++) {
+        for (int i = 79; i < 88; i++) {
             tmp = new WaterTile(this, "Water #" + i);
             this.placeTileAtTheRightOf(nextTile2, tmp);
             nextTile2 = (WaterTile) this.mTileSet.get("Water #" + i);;
@@ -679,12 +677,12 @@ public final class GameBoard {
         this.placeTileAtTheRightOf(nextTile, nextTile3);
         nextTile3 = (BorderTile) this.mTileSet.get("Border #32");
 
-        nextTile2 = new WaterTile(this, "Water #85");
+        nextTile2 = new WaterTile(this, "Water #88");
         this.placeTileAtTheRightOf(nextTile3, nextTile2);
-        nextTile2 = (WaterTile) this.mTileSet.get("Water #85");
+        nextTile2 = (WaterTile) this.mTileSet.get("Water #88");
 
         tmp = null;
-        for (int i = 86; i < 92; i++) {
+        for (int i = 89; i < 95; i++) {
             tmp = new WaterTile(this, "Water #" + i);
             this.placeTileAtTheRightOf(nextTile2, tmp);
             nextTile2 = (WaterTile) this.mTileSet.get("Water #" + i);
@@ -872,24 +870,22 @@ public final class GameBoard {
 
         //Puis on recupere les tile adjacent aux deux tile et on les lient a la nouvelle tile fraichement crée.
         if (baseUpperRightTile != null) {
+
+
             newTile.setLeftUpperTile(baseUpperRightTile);
+            this.placeTileAtTheBottomRightOf(baseUpperRightTile, newTile);
+            //baseUpperRightTile.setRightBottomTile(newTile);            
+            //this.mTileSet.put(baseUpperRightTile.getName(), baseUpperRightTile);
         }
         if (baseBottomRightTile != null) {
             this.placeTileAtTheBottomLeftOf(newTile, baseBottomRightTile);
+            baseBottomRightTile.setRightUpperTile(newTile);
+            this.mTileSet.put(baseBottomRightTile.getName(), baseBottomRightTile);
         }
 
         //Update le HashMap
         this.mTileSet.put(base.getName(), base);
         this.mTileSet.put(newTile.getName(), newTile);
-
-        //Puis on update les Tiles ajacent pour prendre en compte le nouveau Til ajouté
-        if (baseBottomRightTile != null) {
-            baseBottomRightTile.setRightUpperTile(newTile);
-            this.mTileSet.put(baseBottomRightTile.getName(), baseBottomRightTile);
-        }
-        if (baseUpperRightTile != null) {
-            this.placeTileAtTheBottomRightOf(baseUpperRightTile, newTile);
-        }
     }
 
     /**
@@ -910,24 +906,19 @@ public final class GameBoard {
         //Puis on recupere les tile adjacent aux deux tile et on les lient a la nouvelle tile fraichement crée.
         if (baseUpperLeftTile != null) {
             newTile.setRightUpperTile(baseUpperLeftTile);
+            baseUpperLeftTile.setLeftBottomTile(newTile);
+            this.mTileSet.put(baseUpperLeftTile.getName(), baseUpperLeftTile);
         }
+
         if (baseBottomLeftTile != null) {
             newTile.setRightBottomTile(baseBottomLeftTile);
+            baseBottomLeftTile.setLeftUpperTile(newTile);
+            this.mTileSet.put(baseBottomLeftTile.getName(), baseBottomLeftTile);
         }
 
         //Update le HashMap
         this.mTileSet.put(base.getName(), base);
         this.mTileSet.put(newTile.getName(), newTile);
-
-        //Puis on update les Tiles ajacent pour prendre en compte le nouveau Til ajouté
-        if (baseBottomLeftTile != null) {
-            baseBottomLeftTile.setRightUpperTile(newTile);
-            this.mTileSet.put(baseBottomLeftTile.getName(), baseBottomLeftTile);
-        }
-        if (baseUpperLeftTile != null) {
-            baseUpperLeftTile.setRightBottomTile(newTile);
-            this.mTileSet.put(baseUpperLeftTile.getName(), baseUpperLeftTile);
-        }
     }
 
     /**
@@ -948,24 +939,18 @@ public final class GameBoard {
         //Puis on recupere les tile adjacent aux deux tile et on les lient a la nouvelle tile fraichement crée.
         if (baseLeftBottomTile != null) {
             newTile.setLeftTile(baseLeftBottomTile);
+            baseLeftBottomTile.setRightTile(newTile);
+            this.mTileSet.put(baseLeftBottomTile.getName(), baseLeftBottomTile);
         }
         if (baseRightTile != null) {
             newTile.setRightUpperTile(baseRightTile);
+            baseRightTile.setLeftBottomTile(newTile);
+            this.mTileSet.put(baseRightTile.getName(), baseRightTile);
         }
 
         //Update le HashMap
         this.mTileSet.put(base.getName(), base);
         this.mTileSet.put(newTile.getName(), newTile);
-
-        //Puis on update les Tiles ajacent pour prendre en compte le nouveau Til ajouté
-        if (baseLeftBottomTile != null) {
-            baseLeftBottomTile.setRightTile(newTile);
-            this.mTileSet.put(baseLeftBottomTile.getName(), baseLeftBottomTile);
-        }
-        if (baseRightTile != null) {
-            baseRightTile.setLeftBottomTile(newTile);
-            this.mTileSet.put(baseRightTile.getName(), baseRightTile);
-        }
     }
 
     /**
@@ -986,25 +971,18 @@ public final class GameBoard {
         //Puis on recupere les tile adjacent aux deux tile et on les lient a la nouvelle tile fraichement crée.
         if (baseRightBottomTile != null) {
             newTile.setRightTile(baseRightBottomTile);
-        }
-        if (baseLeftTile != null) {
-            newTile.setLeftUpperTile(baseLeftTile);
-        }
-
-
-        //Update le HashMap
-        this.mTileSet.put(base.getName(), base);
-        this.mTileSet.put(newTile.getName(), newTile);
-
-        //Puis on update les Tiles ajacent pour prendre en compte le nouveau Til ajouté
-        if (baseRightBottomTile != null) {
             baseRightBottomTile.setLeftTile(newTile);
             this.mTileSet.put(baseRightBottomTile.getName(), baseRightBottomTile);
         }
         if (baseLeftTile != null) {
+            newTile.setLeftUpperTile(baseLeftTile);
             baseLeftTile.setRightBottomTile(newTile);
             this.mTileSet.put(baseLeftTile.getName(), baseLeftTile);
         }
+
+        //Update le HashMap
+        this.mTileSet.put(base.getName(), base);
+        this.mTileSet.put(newTile.getName(), newTile);
     }
 
     public void printAllTiles() {
@@ -1015,6 +993,27 @@ public final class GameBoard {
         }
     }
 
+    public void printrequestTiles() {
+
+        System.out.println("______________________________");
+        System.out.println(this.mTileSet.get("Water #54"));
+        System.out.println("______________________________");
+        System.out.println(this.mTileSet.get("Water #55"));
+        System.out.println("______________________________");
+        System.out.println(this.mTileSet.get("Water #56"));
+        System.out.println("______________________________");
+        System.out.println(this.mTileSet.get("Water #57"));
+        System.out.println("______________________________");
+
+    }
+
+    /**
+     * Renvoie si oui ou non il existe une entité de la classe indiquée sur le
+     * plateau
+     *
+     * @param type La classe (exemple: Whale.class)
+     * @return true si il y a au moins une entité de la classe sur le plateau
+     */
     public boolean hasEntityOfType(Class type) {
         Set<String> s = mTileSet.keySet();
 

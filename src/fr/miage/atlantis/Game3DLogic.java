@@ -140,6 +140,11 @@ public class Game3DLogic extends GameLogic {
 
             // Une seule action peut être annulée.
             mCanCancelPickingAction = false;
+
+            // Les actions annulables sont seulement actives lorsqu'on pick une entité initiale. Il
+            // faut donc reset l'entité pickée.
+            mPickedEntity = null;
+            
             mRenderer.getHud().getGameHud().hideRightClickHint();
 
             return true;
@@ -147,6 +152,10 @@ public class Game3DLogic extends GameLogic {
             // Rien à relancer ou pas possible
             return false;
         }
+    }
+
+    public GameEntity getLastPickedEntity() {
+        return mPickedEntity;
     }
 
     public void onTurnStart(Player p) {
@@ -252,7 +261,7 @@ public class Game3DLogic extends GameLogic {
                         WaterTile wt = (WaterTile) dest;
                         PlayerToken pt = (PlayerToken) ent;
 
-                        if (wt.isLandingTile()) {
+                        if (!pt.isDead() && wt.isLandingTile()) {
                             mBypassCallbackCount++;
                             onUnitMove(ent, wt.findEscapeBorder());
                             pt.setState(PlayerToken.STATE_SAFE);
@@ -285,25 +294,9 @@ public class Game3DLogic extends GameLogic {
     }
 
     public void onSinkTile(final GameTile tile) {
-        AbstractTileModel tileNode = mRenderer.getBoardRenderer().findTileModel(tile);
-        if (tileNode == null) {
-            logger.log(Level.SEVERE, "Aucune node 3D trouvée pour la tile de destination!", new Object[]{});
-            throw new IllegalStateException("Aucune node 3D trouvée pour la tile de destination!");
-        }
-
-        // Effet visuel de splash d'eau
-        Node splashEffect = ParticlesFactory.makeWaterSplash(mRenderer.getAssetManager());
-        splashEffect.setLocalTranslation(tileNode.getTileTopCenter());
-        mRenderer.getRootNode().attachChild(splashEffect);
-        ParticlesFactory.emitAllParticles(splashEffect);
-
-        // Génération du mouvement de la tile
-        final MotionEvent motionEvent = generateTileSinkMotion((Node) tileNode);
-
-        // Callback lorsque l'animation est terminée
-        motionEvent.getPath().addListener(new MotionPathListener() {
+        doTileSinkAnimation(tile, new MotionPathListener() {
             public void onWayPointReach(MotionEvent control, int wayPointIndex) {
-                if (motionEvent.getPath().getNbWayPoints() == wayPointIndex + 1) {
+                if (control.getPath().getNbWayPoints() == wayPointIndex + 1) {
                     // On est à la fin de l'animation. On remplace la tile
                     // coulée par une WaterTile
                     final WaterTile newTile = getBoard().sinkTile(Game3DLogic.this, tile);
@@ -351,12 +344,9 @@ public class Game3DLogic extends GameLogic {
                             getCurrentTurn().onSinkTileFinished();
                         }
                     });
-
                 }
             }
         });
-
-        motionEvent.play();
     }
 
     public void onEntityAction(GameEntity source, GameEntity target, int action) {
@@ -571,6 +561,24 @@ public class Game3DLogic extends GameLogic {
                 tileRq.requiredHeight = 0;
                 tileRq.noEntitiesOnTile = true;
                 tileRq.waterEdgeOnly = false;
+                ta.setInitialEntity(mPickedEntity);
+                requestPick(null, tileRq);
+            } else if (ta.getAction() == TileAction.ACTION_BONUS_BOAT
+                    || ta.getAction() == TileAction.ACTION_BONUS_SWIM) {
+                // Bonus 3 mouvements de bateau ou nageur. On a pické le bateau ou le nageur, on
+                // pick donc ensuite une tile voisine
+                mPickedEntity = ent;
+
+                TilePickRequest tileRq = new TilePickRequest();
+                tileRq.landTilesOnly = false;
+                tileRq.requiredHeight = 0;
+                tileRq.noEntitiesOnTile = false;
+                if (ta.getAction() == TileAction.ACTION_BONUS_BOAT) {
+                    tileRq.noBoatOnTile = true;
+                }
+                tileRq.waterEdgeOnly = false;
+                tileRq.pickNearTile = mPickedEntity.getTile();
+                ta.setInitialEntity(mPickedEntity);
                 requestPick(null, tileRq);
             }
         } else if (currentTurn.getRemainingMoves() > 0) {
@@ -610,7 +618,7 @@ public class Game3DLogic extends GameLogic {
 
                 // Request pour les bateaux (on peut bouger un perso sur un bateau ayant de la place)
                 // si on a pas déjà cliqué sur un bateau (on ne bouge pas un bateau sur un autre
-                // bateau)
+                // bateau), et on ne peut picker un bateau, étant nageur, que si on est sur la tile.
                 EntityPickRequest entPick = null;
                 if (!(mPickedEntity instanceof Boat)) {
                     PlayerToken pt = (PlayerToken) mPickedEntity;
@@ -618,8 +626,20 @@ public class Game3DLogic extends GameLogic {
                     entPick = new EntityPickRequest();
                     entPick.pickingRestriction = EntityPickRequest.FLAG_PICK_BOAT_WITH_ROOM;
                     entPick.player = null;
-                    entPick.pickNearTile = ent.getTile();
-                    entPick.avoidEntity = pt.getBoat();
+                    if (pt.getState() == PlayerToken.STATE_SWIMMING) {
+                        // On nage: on est obligé d'être sur la tile du bateau pour monter dessus
+                        entPick.pickOnTile = ent.getTile();
+                        entPick.pickNearTile = null;
+                    } else {
+                        // On est sur terre: on peut monter sur les bateaux alentours
+                        entPick.pickNearTile = ent.getTile();
+                        entPick.pickOnTile = null;
+                    }
+                    entPick.avoidEntity.add(pt.getBoat());
+                    entPick.avoidEntity.addAll(getCurrentTurn().getSwimmersMoved());
+                } else {
+                    // On ne met pas un bateau sur une tile avec un bateau
+                    tilePick.noBoatOnTile = true;
                 }
 
                 // On lance la requête
@@ -647,6 +667,8 @@ public class Game3DLogic extends GameLogic {
     public void onTilePicked(GameTile tile) {
         logger.log(Level.FINE, "Game3DLogic: Tile picked ", new Object[]{tile.getName()});
 
+        boolean dontClearEntity = false;
+
         GameTurn currentTurn = mRenderer.getLogic().getCurrentTurn();
         if (currentTurn.getTokenToPlace() != null) {
             // On a un token a placer, on a donc pas encore commencé la partie.
@@ -657,9 +679,19 @@ public class Game3DLogic extends GameLogic {
         } else if (currentTurn.getTileAction() != null && !currentTurn.getTileAction().hasBeenUsed()) {
             // On a une tile d'action qui n'a pas finie d'être utilisée
             TileAction ta = currentTurn.getTileAction();
-            if (ta.getAction() == TileAction.ACTION_MOVE_ANIMAL) {
-                // On déplace l'unité là bas
-                currentTurn.tileActionTeleport(mPickedEntity, tile);
+            switch (ta.getAction()) {
+                case TileAction.ACTION_MOVE_ANIMAL:
+                    // On déplace l'unité là bas
+                    currentTurn.tileActionTeleport(mPickedEntity, tile);
+                    break;
+
+                case TileAction.ACTION_BONUS_BOAT:
+                case TileAction.ACTION_BONUS_SWIM:
+                    currentTurn.tileActionBonusBoatOrSwim(mPickedEntity, tile);
+                    if (ta.getMovesRemaining() > 0) {
+                        dontClearEntity = true;
+                    }
+                    break;
             }
         } else if (currentTurn.getRemainingMoves() > 0) {
             // On assume que ce picking de tile était pour le déplacement d'unités.
@@ -670,9 +702,16 @@ public class Game3DLogic extends GameLogic {
         } else if (currentTurn.hasRolledDice() && currentTurn.getRemainingDiceMoves() > 0) {
             // On bouge une entité suite au lancé de dé
             currentTurn.moveDiceEntity(mPickedEntity, tile);
+
+            if (currentTurn.getRemainingDiceMoves() > 0) {
+                // On bouge forcément la même entité
+                dontClearEntity = true;
+            }
         }
 
-        mPickedEntity = null;
+        if (!dontClearEntity) {
+            mPickedEntity = null;
+        }
         mCanCancelPickingAction = false;
         mRenderer.getHud().getGameHud().hideRightClickHint();
     }
@@ -688,4 +727,69 @@ public class Game3DLogic extends GameLogic {
         node.attachChild(pm);
         pm.setLocalTranslation(existingPos);
     }
+
+    @Override
+    public void onTileWhirl(final GameTile tile) {
+        // On coule les unités dans les tiles water alentours
+        List<GameTile> tilesToSink = new ArrayList<GameTile>();
+        tilesToSink.add(tile);
+        if (tile.getLeftBottomTile() != null) tilesToSink.add(tile.getLeftBottomTile());
+        if (tile.getLeftTile() != null) tilesToSink.add(tile.getLeftTile());
+        if (tile.getLeftUpperTile() != null) tilesToSink.add(tile.getLeftUpperTile());
+        if (tile.getRightBottomTile() != null) tilesToSink.add(tile.getRightBottomTile());
+        if (tile.getRightTile() != null) tilesToSink.add(tile.getRightTile());
+        if (tile.getRightUpperTile() != null) tilesToSink.add(tile.getRightUpperTile());
+
+        for (final GameTile sinking : tilesToSink) {
+            if (sinking instanceof WaterTile) {
+                // On joue l'animation de coulage sur les entités dessus aussi
+                List<GameEntity> entities = sinking.getEntities();
+                for (final GameEntity ent : entities) {
+                    AnimatedModel am = (AnimatedModel) mRenderer.getEntitiesRenderer().getNodeFromEntity(ent);
+                    AnimationBrain.State animation = AnimationBrain.getDrownAnimation(ent);
+                    am.playAnimation(animation, new AnimEventListener() {
+                        public void onAnimCycleDone(AnimControl control, AnimChannel channel, String animName) {
+                            ent.die(Game3DLogic.this);
+                            control.removeListener(this);
+                        }
+
+                        public void onAnimChange(AnimControl control, AnimChannel channel, String animName) {
+                        }
+                    });
+                }
+            }
+        }
+    }
+
+    private void doTileSinkAnimation(GameTile tile, MotionPathListener listener) {
+        AbstractTileModel tileNode = mRenderer.getBoardRenderer().findTileModel(tile);
+        if (tileNode == null) {
+            logger.log(Level.SEVERE, "Aucune node 3D trouvée pour la tile de destination!", new Object[]{});
+            throw new IllegalStateException("Aucune node 3D trouvée pour la tile de destination!");
+        }
+
+        // Effet visuel de splash d'eau
+        Node splashEffect = ParticlesFactory.makeWaterSplash(mRenderer.getAssetManager());
+        splashEffect.setLocalTranslation(tileNode.getTileTopCenter());
+        mRenderer.getRootNode().attachChild(splashEffect);
+        ParticlesFactory.emitAllParticles(splashEffect);
+
+        // Génération du mouvement de la tile
+        final MotionEvent motionEvent = generateTileSinkMotion((Node) tileNode);
+
+        // Callback lorsque l'animation est terminée
+        motionEvent.getPath().addListener(listener);
+
+        motionEvent.play();
+    }
+
+    @Override
+    public void onTileVolcano() {
+        super.onTileVolcano();
+        // TODO: Game Over
+
+
+    }
+
+
 }

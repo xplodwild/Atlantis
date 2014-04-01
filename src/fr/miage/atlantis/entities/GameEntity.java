@@ -54,6 +54,11 @@ public class GameEntity {
      */
     private GameTile mTile;
 
+    /**
+     * Indique si l'entité est morte
+     */
+    private boolean mIsDead;
+
 
     /**
      * Constructeur de l'entité
@@ -63,6 +68,14 @@ public class GameEntity {
      */
     public GameEntity(final String name) {
         mName = name;
+        mIsDead = false;
+    }
+
+    /**
+     * @return true si l'entité est morte (retirée du jeu)
+     */
+    public boolean isDead() {
+        return mIsDead;
     }
 
 
@@ -109,6 +122,7 @@ public class GameEntity {
     public void die(GameLogic logic) {
         // On supprime le perso du jeu
         logic.onUnitDie(this);
+        mIsDead = true;
     }
 
 

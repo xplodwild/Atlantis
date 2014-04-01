@@ -24,6 +24,8 @@ import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.entities.Boat;
 import fr.miage.atlantis.entities.GameEntity;
 import fr.miage.atlantis.entities.PlayerToken;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Classe représentant toute la partie logique du jeu
@@ -60,6 +62,10 @@ public abstract class GameLogic implements GameTurnListener {
      * Nombre de bateaux placés lors du début d'une partie
      */
     private int mBoatsPlaced;
+    /**
+     * Indique si le volcan a été tiré
+     */
+    private boolean mVolcanized;
 
 
     public static class EntityPickRequest {
@@ -69,6 +75,7 @@ public abstract class GameLogic implements GameTurnListener {
         public static final int FLAG_PICK_SEASERPENT        = (1 << 3);
         public static final int FLAG_PICK_BOAT_WITH_ROOM    = (1 << 4);
         public static final int FLAG_PICK_BOAT_WITHOUT_ROOM = (1 << 5);
+        public static final int FLAG_PICK_SWIMMER           = (1 << 6);
 
         /**
          * Restriction des entités pouvant être pickées
@@ -89,9 +96,14 @@ public abstract class GameLogic implements GameTurnListener {
         public GameTile pickNearTile;
 
         /**
-         * Si avoidEntity n'est pas null, le picking ne sélectionnera pas l'entité pointée
+         * Permet de sélectionner uniquement les entités étant sur la tile indiquée.
          */
-        public GameEntity avoidEntity;
+        public GameTile pickOnTile;
+
+        /**
+         * Liste d'entités qui seront ignorées par le picking
+         */
+        public List<GameEntity> avoidEntity = new ArrayList<GameEntity>();
 
         @Override
         public String toString() {
@@ -121,6 +133,12 @@ public abstract class GameLogic implements GameTurnListener {
          * sélectionnables
          */
         public boolean noEntitiesOnTile;
+
+        /**
+         * Si noBoatOnTile vaut true, seulement les tiles n'ayant pas de bateau dessus seront
+         * sélectionnables
+         */
+        public boolean noBoatOnTile;
 
         /**
          * Si requiredHeight est supérieur ou égal à zéro, seules les tiles au niveau spécifiées
@@ -165,6 +183,8 @@ public abstract class GameLogic implements GameTurnListener {
             // Aucun bateau initialement placé
             mBoatsPlaced = 0;
         }
+
+        mVolcanized = true;
     }
 
     /**
@@ -216,10 +236,24 @@ public abstract class GameLogic implements GameTurnListener {
      * @return True si le jeu est fini, false sinon
      */
     public boolean isFinished() {
+        if (mVolcanized) {
+            // On a pické le volcan, on a terminé
+            return true;
+        } else {
+            // On teste tous les pions: La partie est finie seulement si tous les pions sont soit
+            // safe, soit morts.
+            for (Player p : mPlayers) {
+                List<PlayerToken> tokens = p.getTokens();
+                for (PlayerToken token : tokens) {
+                    // Si le pionn'est pas mort, ou si le pion n'est pas safe, on a pas fini
+                    if (!token.isDead() || token.getState() != PlayerToken.STATE_SAFE) {
+                        return false;
+                    }
+                }
+            }
+        }
 
-        //Fini si le tile Volcan est sorti , ou si tout les mToken sont sauvés.
-
-        return false;
+        return true;
     }
 
     /**
@@ -244,6 +278,14 @@ public abstract class GameLogic implements GameTurnListener {
     @Override
     public void onUnitMove(final GameEntity ent, final GameTile dest) {
         ent.moveToTile(this, dest);
+    }
+
+    /**
+     * Actions lors de la tile volcan
+     * @param tile
+     */
+    public void onTileVolcano() {
+        mVolcanized = true;
     }
 
     //--------------------------------------------------------------------------
@@ -274,6 +316,8 @@ public abstract class GameLogic implements GameTurnListener {
      */
     public abstract void boot();
 
+    public abstract GameEntity getLastPickedEntity();
+
     /**
      * Indique à la logique du jeu qu'on a besoin de sélectionner une entité ou une tile
      * @param entRq Si non null, la requête permettant de filtrer les entités à picker
@@ -300,9 +344,6 @@ public abstract class GameLogic implements GameTurnListener {
      */
     public abstract void onTilePicked(GameTile tile);
 
-    /**
-     * Signale au moteur logique qu'on est descendu d'un bateau
-     */
-    public abstract void onPlayerDismountBoat(PlayerToken player, Boat b);
+    public abstract void onTileWhirl(final GameTile tile);
     //--------------------------------------------------------------------------
 }
