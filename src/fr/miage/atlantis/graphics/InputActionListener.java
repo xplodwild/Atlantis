@@ -499,6 +499,28 @@ public class InputActionListener {
             }
         }
 
+        if (request.landEdgeOnly) {
+            boolean isAtEdge = false;
+
+            if (tile.getLeftBottomTile() != null && tile.getLeftBottomTile().getHeight() > 0) {
+                isAtEdge = true;
+            } else if (tile.getLeftUpperTile() != null && tile.getLeftUpperTile().getHeight() > 0) {
+                isAtEdge = true;
+            } else if (tile.getLeftTile() != null && tile.getLeftTile().getHeight() > 0) {
+                isAtEdge = true;
+            } else if (tile.getRightTile() != null && tile.getRightTile().getHeight() > 0) {
+                isAtEdge = true;
+            } else if (tile.getRightUpperTile() != null && tile.getRightUpperTile().getHeight() > 0) {
+                isAtEdge = true;
+            } else if (tile.getRightBottomTile() != null && tile.getRightBottomTile().getHeight() > 0) {
+                isAtEdge = true;
+            }
+
+            if (!isAtEdge) {
+                return false;
+            }
+        }
+
         if (request.pickNearTile != null) {
             if (tile.getLeftBottomTile() != request.pickNearTile &&
                     tile.getLeftTile() != request.pickNearTile &&

@@ -36,7 +36,7 @@ import java.util.List;
  */
 public abstract class GameLogic implements GameTurnListener {
 
-    protected static final boolean DBG_AUTOPREPARE = true;
+    protected static final boolean DBG_AUTOPREPARE = false;
 
     /**
      * Plateau du jeu
@@ -122,6 +122,12 @@ public abstract class GameLogic implements GameTurnListener {
          * Si waterEdgeOnly vaut true, seulement les tiles au bord de l'eau seront sélectionnables
          */
         public boolean waterEdgeOnly;
+
+        /**
+         * Si landEdgeOnly vaut true, seulement les tiles au bord d'une tile de terre seront
+         * sélectionnables
+         */
+        public boolean landEdgeOnly;
 
         /**
          * Si landTilesOnly vaut true, seulement les tiles de terre seront sélectionnables
