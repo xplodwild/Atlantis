@@ -82,7 +82,7 @@ public final class GameBoard {
         this.generateDefaultBoard();
         this.setDefaultBoardTileAttributes();
         this.placeDefaultEntitiesOnBoard();
-        printrequestTiles();
+       
 
     }
 
@@ -151,12 +151,12 @@ public final class GameBoard {
         GameTile temp;
         SeaSerpent ss;
 
-        temp = (WaterTile) this.mTileSet.get("Water #64");
+        temp = (WaterTile) this.mTileSet.get("Water #66");
         ss = new SeaSerpent();
         ss.moveToTile(null, temp);
 
 
-        temp = (WaterTile) this.mTileSet.get("Water #84");
+        temp = (WaterTile) this.mTileSet.get("Water #86");
         ss = new SeaSerpent();
         ss.moveToTile(null, temp);
 
@@ -531,8 +531,7 @@ public final class GameBoard {
         nextTile2 = (WaterTile) this.mTileSet.get("Water #55");
         this.placeTileAtTheRightOf(nextTile2, new WaterTile(this, "Water #56"));
         nextTile2 = (WaterTile) this.mTileSet.get("Water #56");
-        this.placeTileAtTheRightOf(nextTile2, new WaterTile(this, "Water #57"));
-        nextTile2 = (WaterTile) this.mTileSet.get("Water #57");
+        
         
         tmp2 = null;
         nextTile3 = nextTile2;
@@ -543,12 +542,12 @@ public final class GameBoard {
             nextTile3 = this.mTileSet.get(tmpname);
         }
 
-        nextTile2 = new WaterTile(this, "Water #58");
+        nextTile2 = new WaterTile(this, "Water #57");
         this.placeTileAtTheRightOf(nextTile3, nextTile2);
-        nextTile2 = (WaterTile) this.mTileSet.get("Water #58");
+        nextTile2 = (WaterTile) this.mTileSet.get("Water #57");
 
         tmp = null;
-        for (int i = 59; i < 61; i++) {
+        for (int i = 58; i < 60; i++) {
             tmp = new WaterTile(this, "Water #" + i);
             this.placeTileAtTheRightOf(nextTile2, tmp);
             nextTile2 = (WaterTile) this.mTileSet.get("Water #" + i);
@@ -571,11 +570,11 @@ public final class GameBoard {
         this.placeTileAtTheBottomRightOf(n37, nextTile);
         nextTile = (BorderTile) this.mTileSet.get("Border #36");
 
-        nextTile2 = new WaterTile(this, "Water #61");
+        nextTile2 = new WaterTile(this, "Water #60");
         this.placeTileAtTheRightOf(nextTile, nextTile2);
-        nextTile2 = (WaterTile) this.mTileSet.get("Water #61");
+        nextTile2 = (WaterTile) this.mTileSet.get("Water #60");
 
-        for (int i = 62; i < 64; i++) {
+        for (int i = 61; i < 63; i++) {
             tmp = new WaterTile(this, "Water #" + i);
             this.placeTileAtTheRightOf(nextTile2, tmp);
             nextTile2 = (WaterTile) this.mTileSet.get("Water #" + i);;
@@ -590,12 +589,12 @@ public final class GameBoard {
             nextTile3 = this.mTileSet.get(tmpname);
         }
 
-        nextTile2 = new WaterTile(this, "Water #64");
+        nextTile2 = new WaterTile(this, "Water #63");
         this.placeTileAtTheRightOf(nextTile3, nextTile2);
-        nextTile2 = (WaterTile) this.mTileSet.get("Water #64");
+        nextTile2 = (WaterTile) this.mTileSet.get("Water #63");
 
         tmp = null;
-        for (int i = 65; i < 67; i++) {
+        for (int i = 64; i < 66; i++) {
             tmp = new WaterTile(this, "Water #" + i);
             this.placeTileAtTheRightOf(nextTile2, tmp);
             nextTile2 = (WaterTile) this.mTileSet.get("Water #" + i);
@@ -618,12 +617,12 @@ public final class GameBoard {
         this.placeTileAtTheBottomLeftOf(n36, nextTile);
         nextTile = (BorderTile) this.mTileSet.get("Border #35");
 
-        nextTile2 = new WaterTile(this, "Water #67");
+        nextTile2 = new WaterTile(this, "Water #66");
         this.placeTileAtTheRightOf(nextTile, nextTile2);
-        nextTile2 = (WaterTile) this.mTileSet.get("Water #67");
+        nextTile2 = (WaterTile) this.mTileSet.get("Water #66");
 
         tmp = null;
-        for (int i = 68; i < 78; i++) {
+        for (int i = 67; i < 77; i++) {
             tmp = new WaterTile(this, "Water #" + i);
             this.placeTileAtTheRightOf(nextTile2, tmp);
             nextTile2 = (WaterTile) this.mTileSet.get("Water #" + i);
@@ -646,12 +645,12 @@ public final class GameBoard {
         this.placeTileAtTheBottomRightOf(n35, nextTile);
         nextTile = (BorderTile) this.mTileSet.get("Border #34");
 
-        nextTile2 = new WaterTile(this, "Water #78");
+        nextTile2 = new WaterTile(this, "Water #77");
         this.placeTileAtTheRightOf(nextTile, nextTile2);
-        nextTile2 = (WaterTile) this.mTileSet.get("Water #78");
+        nextTile2 = (WaterTile) this.mTileSet.get("Water #77");
 
         tmp = null;
-        for (int i = 79; i < 88; i++) {
+        for (int i = 78; i < 87; i++) {
             tmp = new WaterTile(this, "Water #" + i);
             this.placeTileAtTheRightOf(nextTile2, tmp);
             nextTile2 = (WaterTile) this.mTileSet.get("Water #" + i);;
@@ -678,12 +677,12 @@ public final class GameBoard {
         this.placeTileAtTheRightOf(nextTile, nextTile3);
         nextTile3 = (BorderTile) this.mTileSet.get("Border #32");
 
-        nextTile2 = new WaterTile(this, "Water #88");
+        nextTile2 = new WaterTile(this, "Water #87");
         this.placeTileAtTheRightOf(nextTile3, nextTile2);
-        nextTile2 = (WaterTile) this.mTileSet.get("Water #88");
+        nextTile2 = (WaterTile) this.mTileSet.get("Water #87");
 
         tmp = null;
-        for (int i = 89; i < 95; i++) {
+        for (int i = 88; i < 94; i++) {
             tmp = new WaterTile(this, "Water #" + i);
             this.placeTileAtTheRightOf(nextTile2, tmp);
             nextTile2 = (WaterTile) this.mTileSet.get("Water #" + i);
@@ -994,20 +993,7 @@ public final class GameBoard {
         }
     }
 
-    public void printrequestTiles() {
-
-        System.out.println("______________________________");
-        System.out.println(this.mTileSet.get("Water #54"));
-        System.out.println("______________________________");
-        System.out.println(this.mTileSet.get("Water #55"));
-        System.out.println("______________________________");
-        System.out.println(this.mTileSet.get("Water #56"));
-        System.out.println("______________________________");
-        System.out.println(this.mTileSet.get("Water #57"));
-        System.out.println("______________________________");
-
-    }
-
+  
     /**
      * Renvoie si oui ou non il existe une entité de la classe indiquée sur le
      * plateau
