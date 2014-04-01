@@ -267,7 +267,7 @@ public class GameBoardTest {
         tile= tile.getRightBottomTile();
         tile=tile.getLeftBottomTile();
         assertEquals(tile.getLeftUpperTile(), newtile);
-        assertEquals(newtile, tile.getRightBottomTile());
+        assertEquals(newtile.getRightBottomTile(), tile);
         
                    
     }
