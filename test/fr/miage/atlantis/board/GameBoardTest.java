@@ -187,7 +187,7 @@ public class GameBoardTest {
 
     /**
      * Test of sinkTile method, of class GameBoard.
-     *
+     */
     @Test
     public void testSinkTile() {
         System.out.println("sinkTile");
