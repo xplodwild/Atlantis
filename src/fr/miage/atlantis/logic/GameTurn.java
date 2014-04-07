@@ -17,7 +17,6 @@
  */
 package fr.miage.atlantis.logic;
 
-import fr.miage.atlantis.Game3DLogic;
 import fr.miage.atlantis.GameDice;
 import fr.miage.atlantis.Player;
 import fr.miage.atlantis.board.GameTile;
@@ -59,14 +58,12 @@ public class GameTurn implements GameRenderListener {
     private int mRemainingDiceMoves;
     private boolean mDiceEntityPicked;
     private PlayerToken mTokenToPlace;
+    private List<PlayerToken> mSwimmersMoved;
 
     /**
      * Instance du logger Java
      */
     private static final Logger logger = Logger.getGlobal();
-
-
-
 
     /**
      * Constructeur de GameTurn
@@ -82,6 +79,7 @@ public class GameTurn implements GameRenderListener {
         mDiceEntityPicked = false;
         mSunkenTile = null;
         mMoves = new ArrayList<EntityMove>();
+        mSwimmersMoved = new ArrayList<PlayerToken>();
     }
 
     public TileAction getTileAction() {
@@ -97,10 +95,22 @@ public class GameTurn implements GameRenderListener {
         mController.onTurnStart(mPlayer);
     }
 
+    /**
+     * Indique la fin du tour, et le passage au tour suivant
+     */
     private void finishTurn() {
         logger.log(Level.FINE, "GameTurn: finishTurn()", new Object[]{});
         mTurnIsOver = true;
         mController.nextTurn();
+    }
+
+    /**
+     * Renvoie la liste des nageurs qui ont déjà été déplacés pendant ce tour (chaque nageur ne
+     * peut se déplacer qu'une seule fois)
+     * @return Une liste de PlayerToken nageurs bougés
+     */
+    public List<PlayerToken> getSwimmersMoved() {
+        return mSwimmersMoved;
     }
 
     /**
@@ -131,6 +141,14 @@ public class GameTurn implements GameRenderListener {
                     pt.setState(PlayerToken.STATE_ON_LAND);
                 }
                 mController.onPlayerDismountBoat(pt, b);
+            }
+
+            // On ne peut déplacer un nageur que d'une seule tile (sortir ou entrer sur un bateau
+            // compte comme un déplacement nageur)
+            if (dest instanceof WaterTile) {
+                if (!mSwimmersMoved.contains(pt)) {
+                    mSwimmersMoved.add(pt);
+                }
             }
         }
 
@@ -339,6 +357,9 @@ public class GameTurn implements GameRenderListener {
                         request.requiredHeight = 0;
                         request.waterEdgeOnly = false;
                         request.pickNearTile = mTileAction.getInitialEntity().getTile();
+                        if (mTileAction.getAction() == TileAction.ACTION_BONUS_BOAT) {
+                            request.noBoatOnTile = true;
+                        }
                         mController.requestPick(null, request);
                         logger.log(Level.FINE, "GameTurn: picking for BONUS_BOAT or BONUS_SWIM");
                     } else {
@@ -430,6 +451,8 @@ public class GameTurn implements GameRenderListener {
                 GameLogic.EntityPickRequest.FLAG_PICK_BOAT_WITHOUT_ROOM);
 
         request.player = mPlayer;
+        request.avoidEntity.addAll(mSwimmersMoved);
+
         mController.requestPick(request, null);
     }
 

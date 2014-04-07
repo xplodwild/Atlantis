@@ -24,6 +24,7 @@ import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.entities.Boat;
 import fr.miage.atlantis.entities.GameEntity;
 import fr.miage.atlantis.entities.PlayerToken;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -95,9 +96,14 @@ public abstract class GameLogic implements GameTurnListener {
         public GameTile pickNearTile;
 
         /**
-         * Si avoidEntity n'est pas null, le picking ne sélectionnera pas l'entité pointée
+         * Permet de sélectionner uniquement les entités étant sur la tile indiquée.
          */
-        public GameEntity avoidEntity;
+        public GameTile pickOnTile;
+
+        /**
+         * Liste d'entités qui seront ignorées par le picking
+         */
+        public List<GameEntity> avoidEntity = new ArrayList<GameEntity>();
 
         @Override
         public String toString() {
@@ -127,6 +133,12 @@ public abstract class GameLogic implements GameTurnListener {
          * sélectionnables
          */
         public boolean noEntitiesOnTile;
+
+        /**
+         * Si noBoatOnTile vaut true, seulement les tiles n'ayant pas de bateau dessus seront
+         * sélectionnables
+         */
+        public boolean noBoatOnTile;
 
         /**
          * Si requiredHeight est supérieur ou égal à zéro, seules les tiles au niveau spécifiées

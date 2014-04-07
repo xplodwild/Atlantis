@@ -16,7 +16,7 @@ import org.junit.runners.Suite;
  * @author Lucie
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({fr.miage.atlantis.logic.GameTurnTest.class, fr.miage.atlantis.logic.GameLogicTest.class, fr.miage.atlantis.logic.GameRenderListenerTest.class, fr.miage.atlantis.logic.GameLogTest.class, fr.miage.atlantis.logic.GameTurnListenerTest.class})
+@Suite.SuiteClasses({fr.miage.atlantis.logic.GameTurnTest.class, fr.miage.atlantis.logic.GameRenderListenerTest.class, fr.miage.atlantis.logic.GameLogTest.class, fr.miage.atlantis.logic.GameTurnListenerTest.class})
 public class LogicSuite {
 
     @BeforeClass
