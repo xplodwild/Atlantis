@@ -124,6 +124,12 @@ public abstract class GameLogic implements GameTurnListener {
         public boolean waterEdgeOnly;
 
         /**
+         * Si landEdgeOnly vaut true, seulement les tiles au bord d'une tile de terre seront
+         * sélectionnables
+         */
+        public boolean landEdgeOnly;
+
+        /**
          * Si landTilesOnly vaut true, seulement les tiles de terre seront sélectionnables
          */
         public boolean landTilesOnly;

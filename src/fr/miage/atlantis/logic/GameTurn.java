@@ -302,6 +302,7 @@ public class GameTurn implements GameRenderListener {
                 GameLogic.TilePickRequest request = new GameLogic.TilePickRequest();
                 request.landTilesOnly = false;
                 request.noEntitiesOnTile = true;
+                request.landEdgeOnly = true;
                 request.requiredHeight = 0;
 
                 mController.requestPick(null, request);
