@@ -25,9 +25,15 @@
                     </control>
                 </panel>
                 
-                <panel id="optiongamezone" paddingTop="20%" align="center" height="8%" width="60%" childLayout="vertical" visibleToMouse="true">                
-                    <control paddingTop="10%" id="btnOptions"   height="100%" width="100%" name="button" label="Options">
-                        <interact onClick="optionsGame()" />
+                <panel  paddingTop="20%" align="center" height="8%" width="60%"  childLayout="vertical" visibleToMouse="true">                
+                    <control paddingTop="10%" id="btnOptions"   height="100%" width="100%" name="button" label="Sons on/off">
+                        <interact onClick="soundToggle()" />
+                    </control>
+                </panel>
+                
+                <panel paddingTop="20%" align="center" height="8%" width="60%"  childLayout="vertical" visibleToMouse="true">                
+                    <control paddingTop="10%" id="btnOptions2"   height="100%" width="100%" name="button" label="Musique on/off">
+                        <interact onClick="musicToggle()" />
                     </control>
                 </panel>
                 
@@ -89,7 +95,7 @@
                     
                     <panel id="bas_4" height="100%" width="24%" align="right" backgroundColor="#c6000b4d" valign="top" childLayout="vertical" visibleToMouse="true">
                         <panel id="haut_4" height="25%" width="80%" align="right" valign="top" childLayout="vertical" visibleToMouse="true">
-                            <text  align="center" text="Joueur 4" font="Fonts/sansitc.fnt"  color="#c6000bff" /> 
+                            <text  align="center" text="Joueur 4" font="Fonts/sansitc.fnt"  color="#ff2222ff" /> 
                             <control id="inputJ4" name="textfield" width="80%" text=""/>
                             <!-- Ajouter une checkbox qui valide si un pseudo a été entré. -->
                         </panel> 
@@ -140,9 +146,15 @@
                     </control>
                 </panel>
                 
-                <panel id="optiongamezone" paddingTop="20%" align="center" height="8%" width="60%"  childLayout="vertical" visibleToMouse="true">                
-                    <control paddingTop="10%" id="btnOptions"   height="100%" width="100%" name="button" label="Options">
-                        <interact onClick="optionsGame()" />
+                <panel  paddingTop="20%" align="center" height="8%" width="60%"  childLayout="vertical" visibleToMouse="true">                
+                    <control paddingTop="10%" id="btnOptions"   height="100%" width="100%" name="button" label="Sons on/off">
+                        <interact onClick="soundToggle()" />
+                    </control>
+                </panel>
+                
+                <panel paddingTop="20%" align="center" height="8%" width="60%"  childLayout="vertical" visibleToMouse="true">                
+                    <control paddingTop="10%" id="btnOptions2"   height="100%" width="100%" name="button" label="Musique on/off">
+                        <interact onClick="musicToggle()" />
                     </control>
                 </panel>
                 
@@ -210,7 +222,7 @@
                     
                     <panel id="bas_4" height="100%" width="24%" align="right" backgroundColor="#c6000b4d" valign="top" childLayout="vertical" visibleToMouse="true">
                         <panel id="haut_4" height="25%" width="80%" align="right" valign="top" childLayout="vertical" visibleToMouse="true">
-                            <text  align="center" text="Joueur 4" font="Fonts/sansitc.fnt"  color="#c6000bff" /> 
+                            <text  align="center" text="Joueur 4" font="Fonts/sansitc.fnt"  color="#ff2222ff" /> 
                             <text id="nomJ4"  textHAlign="left" textVAlign="center" align="left" valign="center" text="" font="Fonts/sansitc.fnt"  color="#eeeeeeff" /> 
                             <!-- Ajouter une checkbox qui valide si un pseudo a été entré. -->
                         </panel> 
