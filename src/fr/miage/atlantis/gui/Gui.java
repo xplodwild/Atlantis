@@ -169,9 +169,8 @@ public class Gui {
         return new ActionListener() {
             public void onAction(String name, boolean isPressed, float tpf) {
                 if (isPressed) {
-
-                    Gui.this.mNifty.gotoScreen("start");
-                    ((GuiController) mNifty.getScreen("start").getScreenController()).set3DRenderer(mGame3DRenderer);
+                      Gui.this.mNifty.gotoScreen("inGameMenu");
+                    ((GuiController) mNifty.getScreen("inGameMenu").getScreenController()).set3DRenderer(mGame3DRenderer); 
                     Camera cam = mGame3DRenderer.getCamera();
                     CamConstants.moveMenu(mGame3DRenderer.getCameraNode(), cam);
                 }
