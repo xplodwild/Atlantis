@@ -28,6 +28,9 @@ import com.jme3.math.Quaternion;
 import com.jme3.scene.Geometry;
 import fr.miage.atlantis.graphics.AnimationBrain;
 import fr.miage.atlantis.graphics.BoneAttachControl;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.logging.Logger;
 
 /**
  *
@@ -57,13 +60,24 @@ public class AnimatedModel extends StaticModel {
         playAnimation(animation, true, true, null);
     }
 
-    public void playAnimation(String animation, boolean loop, boolean animateTransition,
-            AnimEventListener listener) {
+    public void playAnimation(final String animation, boolean loop, boolean animateTransition,
+            final AnimEventListener listener) {
         mChannel.setLoopMode(loop ? LoopMode.Loop : LoopMode.DontLoop);
         mChannel.setAnim(animation, animateTransition ? BLEND_TIME : 0.0f);
 
         if (listener != null) {
             mChannel.getControl().addListener(listener);
+            ///////////////////////////
+            // WORKAROUND FOR BUGGED JMONKEYENGINE 3.0.7
+            // SEE http://hub.jmonkeyengine.org/forum/topic/onanimcycledone-not-call/
+            ///////////////////////////
+            Timer t = new Timer();
+            t.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    listener.onAnimCycleDone(mChannel.getControl(), mChannel, animation);
+                }
+            }, (long) mChannel.getControl().getAnimationLength(animation) * 1000);
         }
 
         if (loop) {
