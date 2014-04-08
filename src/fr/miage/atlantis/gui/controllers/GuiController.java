@@ -4,6 +4,7 @@
  */
 package fr.miage.atlantis.gui.controllers;
 
+import com.jme3.audio.AudioRenderer;
 import com.jme3.renderer.Camera;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.TextField;
@@ -19,14 +20,16 @@ import java.util.Random;
 public class GuiController implements ScreenController {
 
     private Game3DRenderer g3rdr;
+    private AudioRenderer maudioRenderer;
     private Nifty nifty;
     private Screen screen;
     private ArrayList<String> nameRandomizer;
     private String[] players;
 
-    public GuiController(Game3DRenderer g3d) {
+    public GuiController(Game3DRenderer g3d, AudioRenderer ardr) {
         super();
         this.g3rdr = g3d;
+        this.maudioRenderer = ardr;
         this.nameRandomizer = new ArrayList();
         this.fillNameRandomizer();
         this.players = new String[4];
@@ -61,7 +64,7 @@ public class GuiController implements ScreenController {
 
         players = new String[4];
 
-       TextField fieldJ1 = this.nifty.getScreen("start").findElementByName("inputJ1").getNiftyControl(TextField.class);
+        TextField fieldJ1 = this.nifty.getScreen("start").findElementByName("inputJ1").getNiftyControl(TextField.class);
 
         if (!fieldJ1.getRealText().isEmpty() && fieldJ1.getRealText().matches("[.-_'éèà,;:/!<>*+()#`è°^ëäïâêî$€µù a-zA-Z1-9]*")) {
             players[0] = fieldJ1.getRealText();
@@ -105,10 +108,10 @@ public class GuiController implements ScreenController {
         this.g3rdr.getLogic().startGame();
 
         this.nifty.gotoScreen("inGameHud");
-        
+
         this.updatePlayerName();
-        
-        
+
+
         Camera cam = g3rdr.getCamera();
         CamConstants.moveAboveBoard(g3rdr.getCameraNode(), cam);
 
@@ -123,65 +126,78 @@ public class GuiController implements ScreenController {
         this.g3rdr.getLogic().startGame();
 
         this.nifty.gotoScreen("inGameHud");
-        
+
         this.updatePlayerName();
-        
+
         Camera cam = g3rdr.getCamera();
         CamConstants.moveAboveBoard(g3rdr.getCameraNode(), cam);
 
     }
-    
-    
+
+    public void soundToggle() {
+        /**
+         * TODO : toggle les sons FX ingame
+         */
+        
+    }
+
+    public void musicToggle() {
+        /**
+         * TODO : toggle la musique du jeu
+         */
+        this.maudioRenderer.pauseSource(
+                /**
+                 * Renseigner la source audio a pause à la place de null
+                 */
+                null
+        );
+    }
+
     public void backToMenu() {
         this.nifty.gotoScreen("start");
-        
+
         /**
          * Reinitialiser tout.
          */
     }
-    
-    
-    public void load(){
+
+    public void load() {
         /**
          * TODO : chargement du dernier jeu
          */
     }
-    
-    
-    public void save(){
+
+    public void save() {
         /**
          * TODO : sauvegarde du jeu
          */
     }
-    
-    
-    public void exit(){
-        
+
+    public void exit() {
+
         /**
          * Savoir si on save ou pas le game avant de quitter.
          */
         //Si la partie n'est pas finie, save sinon save pas
         //this.save();
-        
-        System.exit(0);        
+        System.exit(0);
     }
 
-    
-    public void updatePlayerName(){
-       
+    public void updatePlayerName() {
+
         Element niftyElement = nifty.getScreen("inGameHud").findElementByName("nomJ1");
         // swap old with new text
         niftyElement.getRenderer(TextRenderer.class).setText(players[0]);
-        
+
         niftyElement = nifty.getScreen("inGameHud").findElementByName("nomJ2");
         niftyElement.getRenderer(TextRenderer.class).setText(players[1]);
         niftyElement = nifty.getScreen("inGameHud").findElementByName("nomJ3");
         niftyElement.getRenderer(TextRenderer.class).setText(players[2]);
         niftyElement = nifty.getScreen("inGameHud").findElementByName("nomJ4");
         niftyElement.getRenderer(TextRenderer.class).setText(players[3]);
-        
-        niftyElement = nifty.getScreen("inGameMenu").findElementByName("nomJ1");       
-        niftyElement.getRenderer(TextRenderer.class).setText(players[0]);        
+
+        niftyElement = nifty.getScreen("inGameMenu").findElementByName("nomJ1");
+        niftyElement.getRenderer(TextRenderer.class).setText(players[0]);
         niftyElement = nifty.getScreen("inGameMenu").findElementByName("nomJ2");
         niftyElement.getRenderer(TextRenderer.class).setText(players[1]);
         niftyElement = nifty.getScreen("inGameMenu").findElementByName("nomJ3");
@@ -189,8 +205,6 @@ public class GuiController implements ScreenController {
         niftyElement = nifty.getScreen("inGameMenu").findElementByName("nomJ4");
         niftyElement.getRenderer(TextRenderer.class).setText(players[3]);
     }
-    
-    
 
     private void fillNameRandomizer() {
         this.nameRandomizer.add("Fee-Lycia");
