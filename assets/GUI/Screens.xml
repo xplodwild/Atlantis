@@ -13,15 +13,31 @@
             <!-- +++++++++++++++++++++++++++++++++++++++ -->
             <panel id="panelGauche" height="100%" width="20%" align="left" valign="top" backgroundColor="#00000080" childLayout="vertical" visibleToMouse="true">                
                 
-                <panel id="startgamezone" paddingTop="20%" align="center" height="8%" width="60%" backgroundColor="#00000080" childLayout="vertical" visibleToMouse="true">                
+                <panel id="startgamezone" paddingTop="20%" align="center" height="8%" width="60%"  childLayout="vertical" visibleToMouse="true">                
                     <control  id="btnNouvPartie"   height="100%" width="100%" name="button" label="Nouvelle partie">
                         <interact onClick="startGame()" />
                     </control>
                 </panel>
                 
-                <panel id="optiongamezone" paddingTop="20%" align="center" height="8%" width="60%" backgroundColor="#00000080" childLayout="vertical" visibleToMouse="true">                
+                <panel id="load" paddingTop="20%" align="center" height="8%" width="60%"  childLayout="vertical" visibleToMouse="true">                
+                    <control paddingTop="10%" id="loadBtn"   height="100%" width="100%" name="button" label="Charger dern. sauvegarde">
+                        <interact onClick="load()" />
+                    </control>
+                </panel>
+                
+                <panel id="optiongamezone" paddingTop="20%" align="center" height="8%" width="60%" childLayout="vertical" visibleToMouse="true">                
                     <control paddingTop="10%" id="btnOptions"   height="100%" width="100%" name="button" label="Options">
                         <interact onClick="optionsGame()" />
+                    </control>
+                </panel>
+                
+                <panel id="padding" paddingTop="20%" align="center" height="8%" width="60%"  childLayout="vertical" visibleToMouse="true">                
+                    
+                </panel>
+                
+                <panel id="exitgamezone" paddingTop="20%" align="center" height="8%" width="60%" childLayout="vertical" visibleToMouse="true">                
+                    <control paddingTop="10%" id="btnExit"   height="100%" width="100%" name="button" label="Quitter">
+                        <interact onClick="exit()" />
                     </control>
                 </panel>
                 
@@ -106,23 +122,47 @@
             <!-- Panel de gauche de l'ecran ou l'on place les boutons   -->
             <!-- +++++++++++++++++++++++++++++++++++++++ -->
             <panel id="panelGauche" height="100%" width="20%" align="left" valign="top" backgroundColor="#00000080" childLayout="vertical" visibleToMouse="true">                
-                <panel id="restartgamezone" paddingTop="20%" align="center" height="8%" width="60%" backgroundColor="#00000080" childLayout="vertical" visibleToMouse="true">                
+                <panel id="restartgamezone" paddingTop="20%" align="center" height="8%" width="60%" childLayout="vertical" visibleToMouse="true">                
                     <control paddingTop="10%" id="btnRRPartie"   height="100%" width="100%" name="button" label="Redemarrer">
                         <interact onClick="reStartGame()" />
                     </control>
                 </panel>
                 
-                <panel id="optiongamezone" paddingTop="20%" align="center" height="8%" width="60%" backgroundColor="#00000080" childLayout="vertical" visibleToMouse="true">                
+                <panel id="save" paddingTop="20%" align="center" height="8%" width="60%"  childLayout="vertical" visibleToMouse="true">                
+                    <control paddingTop="10%" id="loadBtn"   height="100%" width="100%" name="button" label="Sauvegarder">
+                        <interact onClick="save()" />
+                    </control>
+                </panel>
+                
+                <panel id="load" paddingTop="20%" align="center" height="8%" width="60%"  childLayout="vertical" visibleToMouse="true">                
+                    <control paddingTop="10%" id="loadBtn"   height="100%" width="100%" name="button" label="Charger dernière sauvegarde">
+                        <interact onClick="load()" />
+                    </control>
+                </panel>
+                
+                <panel id="optiongamezone" paddingTop="20%" align="center" height="8%" width="60%"  childLayout="vertical" visibleToMouse="true">                
                     <control paddingTop="10%" id="btnOptions"   height="100%" width="100%" name="button" label="Options">
                         <interact onClick="optionsGame()" />
                     </control>
                 </panel>
                 
-                <panel id="menu" paddingTop="20%" align="center" height="8%" width="60%" backgroundColor="#00000080" childLayout="vertical" visibleToMouse="true">                
+                 <panel id="menu" paddingTop="20%" align="center" height="8%" width="60%" childLayout="vertical" visibleToMouse="true">                
                     <control  id="btnMenu"   height="100%" width="100%" name="button" label="Lobby">
                         <interact onClick="backToMenu()" />
                     </control>
                 </panel>
+                
+                <panel id="padding" paddingTop="20%" align="center" height="8%" width="60%"hildLayout="vertical" visibleToMouse="true">                
+                    
+                </panel>
+                
+                <panel id="exitgamezone" paddingTop="20%" align="center" height="8%" width="60%"  childLayout="vertical" visibleToMouse="true">                
+                    <control paddingTop="10%" id="btnExit"   height="100%" width="100%" name="button" label="Quitter">
+                        <interact onClick="exit()" />
+                    </control>
+                </panel>
+                
+               
             </panel>
       
             <panel id="panelDroit" height="100%" width="80%" align="right" valign="top" childLayout="center" visibleToMouse="true">

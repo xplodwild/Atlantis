@@ -139,6 +139,32 @@ public class GuiController implements ScreenController {
          * Reinitialiser tout.
          */
     }
+    
+    
+    public void load(){
+        /**
+         * TODO : chargement du dernier jeu
+         */
+    }
+    
+    
+    public void save(){
+        /**
+         * TODO : sauvegarde du jeu
+         */
+    }
+    
+    
+    public void exit(){
+        
+        /**
+         * Savoir si on save ou pas le game avant de quitter.
+         */
+        //Si la partie n'est pas finie, save sinon save pas
+        //this.save();
+        
+        System.exit(0);        
+    }
 
     
     public void updatePlayerName(){
