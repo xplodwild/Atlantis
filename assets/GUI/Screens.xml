@@ -135,7 +135,7 @@
                 </panel>
                 
                 <panel id="load" paddingTop="20%" align="center" height="8%" width="60%"  childLayout="vertical" visibleToMouse="true">                
-                    <control paddingTop="10%" id="loadBtn"   height="100%" width="100%" name="button" label="Charger dernière sauvegarde">
+                    <control paddingTop="10%" id="loadBtn"   height="100%" width="100%" name="button" label="Charger dern. sauvegarde">
                         <interact onClick="load()" />
                     </control>
                 </panel>
@@ -147,7 +147,7 @@
                 </panel>
                 
                  <panel id="menu" paddingTop="20%" align="center" height="8%" width="60%" childLayout="vertical" visibleToMouse="true">                
-                    <control  id="btnMenu"   height="100%" width="100%" name="button" label="Lobby">
+                    <control  id="btnMenu"   height="100%" width="100%" name="button" label="Retour à l'accueil">
                         <interact onClick="backToMenu()" />
                     </control>
                 </panel>
