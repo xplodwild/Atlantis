@@ -94,7 +94,7 @@ public class GuiController implements ScreenController {
         TextField fieldJ4 = this.nifty.getScreen("start").findElementByName("inputJ4").getNiftyControl(TextField.class);
 
         if (!fieldJ4.getRealText().isEmpty() && fieldJ4.getRealText().matches("[.-_'éèà,;:/!<>*+()#`è°^ëäïâêî$€µù a-zA-Z1-9]*")) {
-            players[3] = fieldJ3.getRealText();
+            players[3] = fieldJ4.getRealText();
         } else {
             players[3] = this.nameRandomizer.get(new Random().nextInt(this.nameRandomizer.size()));
             this.nameRandomizer.remove(players[3]);
