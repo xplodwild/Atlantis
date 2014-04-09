@@ -162,7 +162,7 @@ public class Game3DLogic extends GameLogic {
     public void onTurnStart(Player p) {
         // TODO: Animations
         
-        GuiController.changeTurn(p.getName());
+        GuiController.changeTurn(p.getName(),this.getPlayers());
         
         logger.log(Level.FINE, "Game3DLogic: onTurnStart()", new Object[]{});
 

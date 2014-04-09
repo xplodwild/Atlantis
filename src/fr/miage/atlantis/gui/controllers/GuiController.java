@@ -147,7 +147,7 @@ public class GuiController implements ScreenController {
     }
     
     
-    public static void changeTurn(String playerNick) {
+    public static void changeTurn(String playerNick,Player[] pTable) {
         
         
         
