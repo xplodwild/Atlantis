@@ -60,6 +60,10 @@ public class GuiController implements ScreenController {
         this.g3rdr = g3d;
     }
 
+    
+    /**
+     * Demarre une nouvelle partie avec les pseudos données ou des pseudos aléatoires si non renseigné.
+     */
     public void startGame() {
 
         players = new String[4];
@@ -117,6 +121,11 @@ public class GuiController implements ScreenController {
 
     }
 
+    
+    /**
+     * Redemarre le jeu en cours (avec les memes joueurs
+     * 
+     */
     public void reStartGame() {
 
         //On garde les mêmes nick donc pas besoin de redefinir.
@@ -134,6 +143,11 @@ public class GuiController implements ScreenController {
 
     }
 
+    
+    /**
+     * Désactive tout les sons du jeu
+     * 
+     */
     public void soundToggle() {
         /**
          * TODO : toggle les sons FX ingame
@@ -141,6 +155,11 @@ public class GuiController implements ScreenController {
         
     }
 
+    
+    /**
+     * Met en pause la musique du jeu
+     * 
+     */
     public void musicToggle() {
         /**
          * TODO : toggle la musique du jeu
@@ -153,31 +172,56 @@ public class GuiController implements ScreenController {
         );
     }
 
+    
+    /**
+     * Retourne au menu initial du jeu
+     * .
+     */
     public void backToMenu() {
+        
+        boolean gameOver=this.g3rdr.getLogic().isFinished();        
+        if(!gameOver){
+            this.save();
+        } 
+        
         this.nifty.gotoScreen("start");
 
         /**
-         * Reinitialiser tout.
+         * @TODO : Reinitialiser tout.
          */
     }
 
+    
+    /**
+     * Charge le dernier fichier de sauvegarde existant
+     */
     public void load() {
         /**
-         * TODO : chargement du dernier jeu
+         * @TODO : chargement du dernier jeu
          */
+        
+        //Si le fichier existe
+        //charge
+        //sinon 
+        //rien ou nouvelle partie ou disable le button(à debattre)
     }
 
+    
+    /**
+     * Sauvegarde la partie en cours
+     */
     public void save() {
         /**
-         * TODO : sauvegarde du jeu
+         * @TODO : sauvegarde du jeu
          */
     }
 
-    public void exit() {
-
-        /**
-         * Savoir si on save ou pas le game avant de quitter.
-         */        
+    
+    /**
+     * Quitte le jeu et sauvegarde si la partie n'est pas terminée.
+     * 
+     */
+    public void exit() {        
         boolean gameOver=this.g3rdr.getLogic().isFinished();        
         if(!gameOver){
             this.save();
@@ -185,6 +229,11 @@ public class GuiController implements ScreenController {
         System.exit(0);
     }
 
+    
+    /**
+     * Met à jour les pseudo joueurs sur le GUI
+     * 
+     */
     public void updatePlayerName() {
 
         Element niftyElement = nifty.getScreen("inGameHud").findElementByName("nomJ1");
@@ -208,6 +257,11 @@ public class GuiController implements ScreenController {
         niftyElement.getRenderer(TextRenderer.class).setText(players[3]);
     }
 
+    
+    /**
+     * Ajoute des pseudos dans le randomizer de pseudo.
+     * 
+     */
     private void fillNameRandomizer() {
         this.nameRandomizer.add("Fee-Lycia");
         this.nameRandomizer.add("Dunnkor-Leone");
