@@ -127,5 +127,13 @@ public class GameRenderListenerTest {
 
         public void onEntityActionFinished() {
         }
+
+        public void onInitialTokenPutDone() {
+           
+        }
+
+        public void onInitialBoatPutDone() {
+           
+        }
     }
 }

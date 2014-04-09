@@ -100,7 +100,15 @@ public class NullGameLogic extends GameLogic {
     }
 
     public Object getTileSet() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return null;
+    }
+
+    public void onCancellableEntityAction(GameEntity source, GameEntity target, int action) {
+        
+    }
+
+    public void onCancelAction() {
+    
     }
     
 }
