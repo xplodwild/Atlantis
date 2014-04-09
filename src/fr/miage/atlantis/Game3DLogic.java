@@ -78,17 +78,16 @@ public class Game3DLogic extends GameLogic {
 
 
 
-  /**
+    /**
      * Instance du logger Java
      */
     private static final Logger logger = Logger.getGlobal();
 
-
-    private int mBypassCallbackCount;
-    private List<EntityPickRequest> mEntRequestHistory;
-    private List<TilePickRequest> mTileRequestHistory;
-    private boolean mCanCancelPickingAction;
-
+    
+    /**
+     * Constructeur de Game3DLogic 
+     * 
+     */
     public Game3DLogic() {
         super();
         mRenderer = new Game3DRenderer(this);
@@ -98,11 +97,18 @@ public class Game3DLogic extends GameLogic {
         mCanCancelPickingAction = false;
     }
 
+    /**
+     * Demarre le renderer graphique
+     */
     @Override
     public void boot() {
-    mRenderer.start();
+        mRenderer.start();
     }
 
+    
+    /**
+     * Demarre une partie
+     */
     @Override
     public void startGame() {
 
@@ -131,6 +137,7 @@ public class Game3DLogic extends GameLogic {
         super.startGame();
     }
 
+    
     /**
      * Remet à zéro les éléments pickée et relance le dernier picking
      */
