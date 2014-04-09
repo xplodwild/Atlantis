@@ -12,12 +12,15 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
+import fr.miage.atlantis.Player;
 import fr.miage.atlantis.graphics.CamConstants;
 import fr.miage.atlantis.graphics.Game3DRenderer;
 import java.util.ArrayList;
 import java.util.Random;
 
 public class GuiController implements ScreenController {
+
+   
 
     private Game3DRenderer g3rdr;
     private AudioRenderer maudioRenderer;
@@ -141,6 +144,13 @@ public class GuiController implements ScreenController {
         Camera cam = g3rdr.getCamera();
         CamConstants.moveAboveBoard(g3rdr.getCameraNode(), cam);
 
+    }
+    
+    
+    public static void changeTurn(String playerNick) {
+        
+        
+        
     }
 
     

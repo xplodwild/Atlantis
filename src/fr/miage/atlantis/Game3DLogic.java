@@ -49,6 +49,7 @@ import fr.miage.atlantis.graphics.models.PlayerModel;
 import fr.miage.atlantis.graphics.models.SeaSerpentModel;
 import fr.miage.atlantis.graphics.models.SharkModel;
 import fr.miage.atlantis.graphics.models.StaticModel;
+import fr.miage.atlantis.gui.controllers.GuiController;
 import fr.miage.atlantis.logic.GameLogic;
 import fr.miage.atlantis.logic.GameTurn;
 import java.util.ArrayList;
@@ -160,6 +161,9 @@ public class Game3DLogic extends GameLogic {
 
     public void onTurnStart(Player p) {
         // TODO: Animations
+        
+        GuiController.changeTurn(p.getName());
+        
         logger.log(Level.FINE, "Game3DLogic: onTurnStart()", new Object[]{});
 
         mRenderer.getHud().getGameHud().displayPlayerTiles(getCurrentTurn().getPlayer().getActionTiles());
