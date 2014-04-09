@@ -212,5 +212,13 @@ public class GameTurnListenerTest {
         public void onTileVolcano() {
             
         }
+
+        public void onCancellableEntityAction(GameEntity source, GameEntity target, int action) {
+            
+        }
+
+        public void onCancelAction() {
+            
+        }
     }
 }
