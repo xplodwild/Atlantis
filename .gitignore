@@ -3,3 +3,4 @@
 /nbproject/private
 OpenAL64.dll
 lwjgl64.dll
+*.db

@@ -20,7 +20,6 @@ package fr.miage.atlantis.gui.console.commands;
 
 import de.lessvoid.nifty.controls.Console;
 import de.lessvoid.nifty.controls.ConsoleCommands;
-import fr.miage.atlantis.gui.console.GuiConsole;
 
 
 /**
@@ -31,6 +30,12 @@ import fr.miage.atlantis.gui.console.GuiConsole;
  * @date 03/03/2014
  */
 public class HelpCommand implements ConsoleCommands.ConsoleCommand {
+
+    private Console console;
+    
+    public HelpCommand(Console mConsole) {
+        this.console=mConsole;
+    }
     
     /**
      * Methode executée lors de l'appel de la commande
@@ -40,7 +45,7 @@ public class HelpCommand implements ConsoleCommands.ConsoleCommand {
     public void execute(final String[] args) {
                 
         //On liste ici toutes les commandes executable dans la console 
-        Console csl=GuiConsole.getConsole();
+        Console csl=console;
                 
         csl.output("");
         csl.output("____________________________________________________");

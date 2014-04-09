@@ -19,11 +19,7 @@ package fr.miage.atlantis.gui.console.commands;
 
 import de.lessvoid.nifty.controls.Console;
 import de.lessvoid.nifty.controls.ConsoleCommands;
-import fr.miage.atlantis.gui.console.GuiConsole;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Handler;
 import java.util.logging.Level;
-import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
 /**
@@ -34,6 +30,13 @@ import java.util.logging.Logger;
  * @date 03/03/2014
  */
 public class LoggingCommand implements ConsoleCommands.ConsoleCommand {
+
+    
+    private Console console;
+    
+    public LoggingCommand(Console mConsole) {
+        this.console=mConsole;
+    }
 
     /**
      * Methode executée lors de l'appel de la commande
@@ -48,7 +51,7 @@ public class LoggingCommand implements ConsoleCommands.ConsoleCommand {
         }
         int nb1 = -99;
 
-        Console csl=GuiConsole.getConsole();
+        Console csl=console;
         
         if ("-all".equals(s1)) {
             nb1 = 1;
