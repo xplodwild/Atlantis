@@ -28,8 +28,12 @@ public class TileActionDisplay extends AbstractDisplay {
 
     private TileAction mAction;
 
+        public final static int IMAGE_WIDTH = 256;
+    public final static int IMAGE_HEIGHT = 223;
+
+    
     public TileActionDisplay(final AssetManager assetManager, final TileAction action) {
-        super(256, 223, "HUD TileAction Display", assetManager);
+        super(IMAGE_WIDTH, IMAGE_HEIGHT, "HUD TileAction Display", assetManager);
         mAction = action;
     }
 

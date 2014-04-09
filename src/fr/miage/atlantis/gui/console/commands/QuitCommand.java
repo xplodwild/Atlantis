@@ -18,6 +18,7 @@
 
 package fr.miage.atlantis.gui.console.commands;
 
+import de.lessvoid.nifty.controls.Console;
 import de.lessvoid.nifty.controls.ConsoleCommands;
 
 
@@ -29,6 +30,10 @@ import de.lessvoid.nifty.controls.ConsoleCommands;
  * @date 03/03/2014
  */
 public class QuitCommand implements ConsoleCommands.ConsoleCommand {
+
+    public QuitCommand() {
+        
+    }
     
     /**
      * Methode executée lors de l'appel de la commande

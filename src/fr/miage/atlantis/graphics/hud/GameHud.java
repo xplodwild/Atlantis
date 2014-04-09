@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package fr.miage.atlantis.graphics.hud;
 
 import com.jme3.math.Vector3f;
@@ -56,14 +55,16 @@ public class GameHud {
     }
 
     /**
-     * Met en opacité complète le hint indiquant qu'on peut faire un clic droit pour annuler
+     * Met en opacité complète le hint indiquant qu'on peut faire un clic droit
+     * pour annuler
      */
     public void showRightClickHint() {
         mHudManager.getAnimator().animateFade(mRightClickToCancel, 1.0f);
     }
 
     /**
-     * "Cache" (rend plus transparent) le hint indiquant qu'on peut faire un clic droit pour annuler
+     * "Cache" (rend plus transparent) le hint indiquant qu'on peut faire un
+     * clic droit pour annuler
      */
     public void hideRightClickHint() {
         mHudManager.getAnimator().animateFade(mRightClickToCancel, 0.5f);
@@ -71,6 +72,7 @@ public class GameHud {
 
     /**
      * Affiche les tiles d'action du joueur
+     *
      * @param actions Liste des tiles d'action
      */
     public void displayPlayerTiles(List<TileAction> actions) {
@@ -105,7 +107,9 @@ public class GameHud {
     }
 
     /**
-     * Retourne la tile pickée aux ooordonnées souris indiquées, ou null si il n'y en a pas
+     * Retourne la tile pickée aux ooordonnées souris indiquées, ou null si il
+     * n'y en a pas
+     *
      * @param x Coordonnée X de la souris (de gauche)
      * @param y Coordonnée Y de la souris (du haut)
      * @return Une tileactiondisplay, ou null

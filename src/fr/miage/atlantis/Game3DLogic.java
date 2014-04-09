@@ -76,7 +76,7 @@ public class Game3DLogic extends GameLogic {
     private TileAction mTileUsedToCancel;
     private GameEntity mCancellableSource;
 
-     /**
+    /**
      * Instance du logger Java
      */
     private static final Logger logger = Logger.getGlobal();
@@ -92,12 +92,13 @@ public class Game3DLogic extends GameLogic {
 
     @Override
     public void boot() {
-        mRenderer.start();
-        prepareGame(new String[]{"Romain", "Olivier"});
+    mRenderer.start();
     }
 
     @Override
     public void startGame() {
+
+
         if (DBG_AUTOPREPARE) {
             // TEST: On place des tokens
              Player[] plays = getPlayers();
@@ -337,10 +338,16 @@ public class Game3DLogic extends GameLogic {
                             if (action.isImmediate()) {
                                 onPlayTileAction(newTile, action);
                             } else {
+
+
+                                logger.log(Level.WARNING, "TODO: Tile is not immediate: " + action.toString(), new Object[]{});
+                                // TODO: Stocker la tile dans les tiles du joueur
+
                                 // L'action est pas immédiate, on stock la tile dans la pile du
                                 // joueur.
                                 Player player = getCurrentTurn().getPlayer();
                                 player.addActionTile(action);
+
                             }
 
                             // Fin de l'action, étape suivante
@@ -637,7 +644,9 @@ public class Game3DLogic extends GameLogic {
     @Override
     public void requestPick(EntityPickRequest entRq, TilePickRequest tileRq) {
         // On a besoin de picker une entité
+
         logger.log(Level.FINE, "Game3DLogic: requestPick ", new Object[]{});
+
         mEntRequestHistory.add(entRq);
         mTileRequestHistory.add(tileRq);
 

@@ -37,7 +37,6 @@ import java.util.List;
 public abstract class GameLogic implements GameTurnListener {
 
     protected static final boolean DBG_AUTOPREPARE = false;
-
     /**
      * Plateau du jeu
      */
@@ -67,39 +66,35 @@ public abstract class GameLogic implements GameTurnListener {
      */
     private boolean mVolcanized;
 
-
     public static class EntityPickRequest {
-        public static final int FLAG_PICK_PLAYER_ENTITIES   = (1 << 0);
-        public static final int FLAG_PICK_SHARK             = (1 << 1);
-        public static final int FLAG_PICK_WHALE             = (1 << 2);
-        public static final int FLAG_PICK_SEASERPENT        = (1 << 3);
-        public static final int FLAG_PICK_BOAT_WITH_ROOM    = (1 << 4);
-        public static final int FLAG_PICK_BOAT_WITHOUT_ROOM = (1 << 5);
-        public static final int FLAG_PICK_SWIMMER           = (1 << 6);
 
+        public static final int FLAG_PICK_PLAYER_ENTITIES = (1 << 0);
+        public static final int FLAG_PICK_SHARK = (1 << 1);
+        public static final int FLAG_PICK_WHALE = (1 << 2);
+        public static final int FLAG_PICK_SEASERPENT = (1 << 3);
+        public static final int FLAG_PICK_BOAT_WITH_ROOM = (1 << 4);
+        public static final int FLAG_PICK_BOAT_WITHOUT_ROOM = (1 << 5);
+        public static final int FLAG_PICK_SWIMMER = (1 << 6);
         /**
-         * Restriction des entités pouvant être pickées
-         * La valeur doit être une ou plusieurs de FLAG_PICK_**
+         * Restriction des entités pouvant être pickées La valeur doit être une
+         * ou plusieurs de FLAG_PICK_**
          */
         public int pickingRestriction;
-
         /**
-         * En cas de restriction d'entités appartenant au joueur,
-         * la restriction s'appliquera au joueur passé ici
+         * En cas de restriction d'entités appartenant au joueur, la restriction
+         * s'appliquera au joueur passé ici
          */
         public Player player;
-
         /**
-         * Permet de sélectionner uniquement les entités étant dans les tiles autour
-         * de la tile indiquée.
+         * Permet de sélectionner uniquement les entités étant dans les tiles
+         * autour de la tile indiquée.
          */
         public GameTile pickNearTile;
-
         /**
-         * Permet de sélectionner uniquement les entités étant sur la tile indiquée.
+         * Permet de sélectionner uniquement les entités étant sur la tile
+         * indiquée.
          */
         public GameTile pickOnTile;
-
         /**
          * Liste d'entités qui seront ignorées par le picking
          */
@@ -112,43 +107,40 @@ public abstract class GameLogic implements GameTurnListener {
     }
 
     public static class TilePickRequest {
+
         /**
-         * Si cette variable n'est pas nulle, le picking de tile ne fonctionnera que sur les tiles
-         * adjacentes à celle-ci
+         * Si cette variable n'est pas nulle, le picking de tile ne fonctionnera
+         * que sur les tiles adjacentes à celle-ci
          */
         public GameTile pickNearTile;
-
         /**
-         * Si waterEdgeOnly vaut true, seulement les tiles au bord de l'eau seront sélectionnables
+         * Si waterEdgeOnly vaut true, seulement les tiles au bord de l'eau
+         * seront sélectionnables
          */
         public boolean waterEdgeOnly;
-
         /**
-         * Si landEdgeOnly vaut true, seulement les tiles au bord d'une tile de terre seront
-         * sélectionnables
+         * Si landEdgeOnly vaut true, seulement les tiles au bord d'une tile de
+         * terre seront sélectionnables
          */
         public boolean landEdgeOnly;
-
         /**
-         * Si landTilesOnly vaut true, seulement les tiles de terre seront sélectionnables
+         * Si landTilesOnly vaut true, seulement les tiles de terre seront
+         * sélectionnables
          */
         public boolean landTilesOnly;
-
         /**
-         * Si noEntitiesOnTile vaut true, seulement les tiles n'ayant pas d'entités dessus seront
-         * sélectionnables
+         * Si noEntitiesOnTile vaut true, seulement les tiles n'ayant pas
+         * d'entités dessus seront sélectionnables
          */
         public boolean noEntitiesOnTile;
-
         /**
-         * Si noBoatOnTile vaut true, seulement les tiles n'ayant pas de bateau dessus seront
-         * sélectionnables
+         * Si noBoatOnTile vaut true, seulement les tiles n'ayant pas de bateau
+         * dessus seront sélectionnables
          */
         public boolean noBoatOnTile;
-
         /**
-         * Si requiredHeight est supérieur ou égal à zéro, seules les tiles au niveau spécifiées
-         * pourront être pickées
+         * Si requiredHeight est supérieur ou égal à zéro, seules les tiles au
+         * niveau spécifiées pourront être pickées
          */
         public int requiredHeight = -1;
 
@@ -288,6 +280,7 @@ public abstract class GameLogic implements GameTurnListener {
 
     /**
      * Actions lors de la tile volcan
+     *
      * @param tile
      */
     public void onTileVolcano() {
@@ -314,9 +307,12 @@ public abstract class GameLogic implements GameTurnListener {
     }
     //--------------------------------------------------------------------------
 
+    
     //--------------------------------------------------------------------------
     //METHODES ABSTRAITES                                                      |
     //--------------------------------------------------------------------------
+    
+    
     /**
      * Methode permettant de lancer une partie
      */
@@ -325,9 +321,13 @@ public abstract class GameLogic implements GameTurnListener {
     public abstract GameEntity getLastPickedEntity();
 
     /**
-     * Indique à la logique du jeu qu'on a besoin de sélectionner une entité ou une tile
-     * @param entRq Si non null, la requête permettant de filtrer les entités à picker
-     * @param tileRq Si non null, la requête permettant de filtrer les tiles à picker
+     * Indique à la logique du jeu qu'on a besoin de sélectionner une entité ou
+     * une tile
+     *
+     * @param entRq Si non null, la requête permettant de filtrer les entités à
+     * picker
+     * @param tileRq Si non null, la requête permettant de filtrer les tiles à
+     * picker
      */
     public abstract void requestPick(EntityPickRequest entRq, TilePickRequest tileRq);
 
@@ -350,6 +350,11 @@ public abstract class GameLogic implements GameTurnListener {
      */
     public abstract void onTilePicked(GameTile tile);
 
+    /**
+     * Signale au moteur de logique qu'on a pické une tile tourbillon
+     * 
+     * @param tile Le tourbillon pické
+     */
     public abstract void onTileWhirl(final GameTile tile);
 
     public abstract void onHitSpace();
