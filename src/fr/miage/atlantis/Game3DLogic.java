@@ -380,58 +380,83 @@ public class Game3DLogic extends GameLogic {
         }
     }
 
+    private TileAction findCancelAction(int entity, List<TileAction> playTilesList) {
+        for (TileAction tile : playTilesList) {
+            if (tile.getAction() == TileAction.ACTION_CANCEL_ANIMAL
+                    && tile.getEntity() == entity) {
+                return tile;
+            }
+        }
+
+        return null;
+    }
+
     public void onCancellableEntityAction(final GameEntity source, final GameEntity target,
             final int action) {
+        final PlayerToken token = (PlayerToken) target;
+        final List<TileAction> playTilesList = token.getPlayer().getActionTiles();
+
+        if (mTileUsedToCancel != null) {
+            /**
+             * TODO: On ne sait pas quel joueur sera touché en premier par le requin dans la tile.
+             * Si deux joueurs différents ont un pion dans la tile attaquée par le requin, on ne
+             * sait pas lequel sera touché en premier, et si les deux ont une tile permettant
+             * d'annuler l'attaque, on ne sait pas laquelle sera utilisée.
+             * De même, si le premier pion testé n'a pas de tile d'annulation, le requin lancera
+             * quand même son attaque sur lui, même si un autre a une tile permettant d'annuler.
+             * Pour l'instant, on laisse comme ça, mais c'est à fixer (transformer cette méthode
+             * en boolean, et lancer onEntityAction depuis Shark si tous les onCancellableEntity
+             * ont retourné false par exemple). De même, mettre en queue les cancellable au cas où
+             * on a plusieurs joueurs permettant d'annuler.
+             */
+            return;
+        }
+
+        // On cherche si le joueur a une tile permettant d'annuler l'action
         switch (action) {
-            case GameEntity.ACTION_SHARK_EAT: {
-                // On cherche si le joueur a une tile permettant d'annuler l'action
-                final Shark shark = (Shark) source;
-                final PlayerToken token = (PlayerToken) target;
+            case GameEntity.ACTION_SHARK_EAT:
+                mTileUsedToCancel = findCancelAction(TileAction.ENTITY_SHARK, playTilesList);
+                break;
 
-                List<TileAction> playTilesList = token.getPlayer().getActionTiles();
-                boolean hasCancelAction = false;
+            case GameEntity.ACTION_WHALE_NUKE:
+                mTileUsedToCancel = findCancelAction(TileAction.ENTITY_WHALE, playTilesList);
+                break;
 
-                for (TileAction tile : playTilesList) {
-                    if (tile.getAction() == TileAction.ACTION_CANCEL_ANIMAL
-                            && tile.getEntity() == TileAction.ENTITY_SHARK) {
-                        hasCancelAction = true;
-                        mTileUsedToCancel = tile;
-                        break;
-                    }
-                }
-
-                if (hasCancelAction) {
-                    // On a une tile d'annulation pour ça, on poll sur le HUD pendant 3 secondes
-                    // si l'utilisateur veut jouer sa tile. Si il appuie sur espace, la tile
-                    // d'annulation est utilisée et la tile est annulée.
-                    mCancellableSource = shark;
-                    mRenderer.getHud().getGameHud().promptCancel();
-                    mCancelActionCallback = new FutureCallback(3.0f) {
-                        @Override
-                        public void onFutureHappened() {
-                            if (mTileUsedToCancel != null) {
-                                // La tile n'a pas été utilisée, donc on lance l'action
-                                mTileUsedToCancel = null;
-                                mCancelActionCallback = null;
-                                mCancellableSource = null;
-
-                                onEntityAction(source, target, action);
-                                mRenderer.getHud().getGameHud().hidePromptCancel();
-                            }
-                        }
-                    };
-
-                    mRenderer.getFuture().addFutureTimeCallback(mCancelActionCallback);
-                } else {
-                    // On n'a pas de tile pour annuler, on lance l'action
-                    onEntityAction(source, target, action);
-                }
-            }
-            break;
+            case GameEntity.ACTION_SEASERPENT_CRUSH:
+                mTileUsedToCancel = findCancelAction(TileAction.ENTITY_SEASERPENT, playTilesList);
+                break;
 
             default:
-                onEntityAction(source, target, action);
+                mTileUsedToCancel = null;
                 break;
+
+        }
+
+        if (mTileUsedToCancel != null) {
+            // On a une tile d'annulation pour ça, on poll sur le HUD pendant 3 secondes
+            // si l'utilisateur veut jouer sa tile. Si il appuie sur espace, la tile
+            // d'annulation est utilisée et la tile est annulée.
+            mCancellableSource = source;
+            mRenderer.getHud().getGameHud().promptCancel();
+            mCancelActionCallback = new FutureCallback(3.0f) {
+                @Override
+                public void onFutureHappened() {
+                    if (mTileUsedToCancel != null) {
+                        // La tile n'a pas été utilisée, donc on lance l'action
+                        mTileUsedToCancel = null;
+                        mCancelActionCallback = null;
+                        mCancellableSource = null;
+
+                        onEntityAction(source, target, action);
+                        mRenderer.getHud().getGameHud().hidePromptCancel();
+                    }
+                }
+            };
+
+            mRenderer.getFuture().addFutureTimeCallback(mCancelActionCallback);
+        } else {
+            // On n'a pas de tile pour annuler, on lance l'action
+            onEntityAction(source, target, action);
         }
     }
 
