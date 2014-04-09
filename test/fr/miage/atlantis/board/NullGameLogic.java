@@ -94,5 +94,13 @@ public class NullGameLogic extends GameLogic {
     public NullGameLogic onDiceRollFinished() {
       return null;
     }
+
+    public void startTurn() {
+  
+    }
+
+    public Object getTileSet() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

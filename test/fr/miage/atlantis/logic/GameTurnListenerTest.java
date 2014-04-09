@@ -192,5 +192,25 @@ public class GameTurnListenerTest {
 
         public void onUnitDie(GameEntity zombie) {
         }
+
+        public void onInitialTokenPut(PlayerToken pt) {
+            
+        }
+
+        public void onInitialBoatPut(Boat b) {
+            
+        }
+
+        public void onPlayerDismountBoat(PlayerToken player, Boat b) {
+            
+        }
+
+        public void onTileWhirl(GameTile tile) {
+           
+        }
+
+        public void onTileVolcano() {
+            
+        }
     }
 }

@@ -136,6 +136,11 @@ public class Game3DLogic extends GameLogic {
 
             // Une seule action peut être annulée.
             mCanCancelPickingAction = false;
+
+            // Les actions annulables sont seulement actives lorsqu'on pick une entité initiale. Il
+            // faut donc reset l'entité pickée.
+            mPickedEntity = null;
+            
             mRenderer.getHud().getGameHud().hideRightClickHint();
 
             return true;
@@ -252,7 +257,7 @@ public class Game3DLogic extends GameLogic {
                         WaterTile wt = (WaterTile) dest;
                         PlayerToken pt = (PlayerToken) ent;
 
-                        if (wt.isLandingTile()) {
+                        if (!pt.isDead() && wt.isLandingTile()) {
                             mBypassCallbackCount++;
                             onUnitMove(ent, wt.findEscapeBorder());
                             pt.setState(PlayerToken.STATE_SAFE);
@@ -556,6 +561,9 @@ public class Game3DLogic extends GameLogic {
                 tileRq.landTilesOnly = false;
                 tileRq.requiredHeight = 0;
                 tileRq.noEntitiesOnTile = false;
+                if (ta.getAction() == TileAction.ACTION_BONUS_BOAT) {
+                    tileRq.noBoatOnTile = true;
+                }
                 tileRq.waterEdgeOnly = false;
                 tileRq.pickNearTile = mPickedEntity.getTile();
                 ta.setInitialEntity(mPickedEntity);
@@ -598,7 +606,7 @@ public class Game3DLogic extends GameLogic {
 
                 // Request pour les bateaux (on peut bouger un perso sur un bateau ayant de la place)
                 // si on a pas déjà cliqué sur un bateau (on ne bouge pas un bateau sur un autre
-                // bateau)
+                // bateau), et on ne peut picker un bateau, étant nageur, que si on est sur la tile.
                 EntityPickRequest entPick = null;
                 if (!(mPickedEntity instanceof Boat)) {
                     PlayerToken pt = (PlayerToken) mPickedEntity;
@@ -606,8 +614,20 @@ public class Game3DLogic extends GameLogic {
                     entPick = new EntityPickRequest();
                     entPick.pickingRestriction = EntityPickRequest.FLAG_PICK_BOAT_WITH_ROOM;
                     entPick.player = null;
-                    entPick.pickNearTile = ent.getTile();
-                    entPick.avoidEntity = pt.getBoat();
+                    if (pt.getState() == PlayerToken.STATE_SWIMMING) {
+                        // On nage: on est obligé d'être sur la tile du bateau pour monter dessus
+                        entPick.pickOnTile = ent.getTile();
+                        entPick.pickNearTile = null;
+                    } else {
+                        // On est sur terre: on peut monter sur les bateaux alentours
+                        entPick.pickNearTile = ent.getTile();
+                        entPick.pickOnTile = null;
+                    }
+                    entPick.avoidEntity.add(pt.getBoat());
+                    entPick.avoidEntity.addAll(getCurrentTurn().getSwimmersMoved());
+                } else {
+                    // On ne met pas un bateau sur une tile avec un bateau
+                    tilePick.noBoatOnTile = true;
                 }
 
                 // On lance la requête

@@ -146,13 +146,7 @@ public class GameBoardTest {
         assertEquals(16,b);
         assertEquals(16,f);
         assertEquals(8,m);
-        
-        /* BUG à FIX ici
-         * Le randomizer est déjà vidé lorsque je fais new Gameboard
-         * Du coup dans ma boucle for ca exceptionne parce que le randomizer est vide.
-         * Faudrait le mettre dans une classe à part.
-         * 
-         */
+       
     }
 
     /**
@@ -168,8 +162,8 @@ public class GameBoardTest {
         assertTrue(instance.hasTileAtLevel(1));
         
         // Il ne doit plus rester de tuiles sable
-        for(int i=0;i<16;i++){
-            instance.sinkTile(new NullGameLogic() { }, instance.getTileSet().get("Beach #"+i));
+        for(int i=1;i<17;i++){
+            instance.sinkTile(new NullGameLogic(), instance.getTileSet().get("Beach #"+i));
         }
         assertFalse(instance.hasTileAtLevel(1));
         
@@ -177,8 +171,8 @@ public class GameBoardTest {
         assertTrue(instance.hasTileAtLevel(2));
         
         // Il ne doit plus rester de tuiles foret
-        for(int i=0;i<16;i++){
-            instance.sinkTile(new NullGameLogic() { }, instance.getTileSet().get("Forest #"+i));
+        for(int i=1;i<17;i++){
+            instance.sinkTile(new NullGameLogic(), instance.getTileSet().get("Forest #"+i));
         }
         assertFalse(instance.hasTileAtLevel(2));
         
@@ -186,8 +180,8 @@ public class GameBoardTest {
         assertTrue(instance.hasTileAtLevel(3));
         
         // Il ne doit plus rester de tuiles foret
-        for(int i=0;i<8;i++){
-            instance.sinkTile(new NullGameLogic() { }, instance.getTileSet().get("Mountain #"+i));
+        for(int i=1;i<9;i++){
+            instance.sinkTile(new NullGameLogic(), instance.getTileSet().get("Mountain #"+i));
         }
         assertFalse(instance.hasTileAtLevel(3));
     }
@@ -228,7 +222,7 @@ public class GameBoardTest {
         GameBoard instance = new GameBoard();
         GameTile tile = instance.getTileSet().get("Water #37");
         tile = tile.getRightTile();
-        
+
         GameTile newtile = new WaterTile(instance, "Water #yolo");
         instance.placeTileAtTheRightOf(tile, newtile);
         
@@ -239,6 +233,11 @@ public class GameBoardTest {
         assertEquals(tile.getRightTile(), newtile);
         assertEquals(newtile.getLeftTile(),tile);
         
+        tile = tile.getRightBottomTile();
+        assertEquals(tile.getRightUpperTile(), newtile);
+        assertEquals(newtile.getLeftBottomTile(),tile);
+        
+        tile = tile.getLeftUpperTile();
         tile = tile.getRightUpperTile();
         assertEquals(tile.getRightBottomTile(), newtile);
         assertEquals(newtile.getLeftUpperTile(),tile);
@@ -261,6 +260,7 @@ public class GameBoardTest {
         */
     }
 
+
     /**
      * Test of placeTileAtTheLeftOf method, of class GameBoard.
      *
@@ -268,103 +268,141 @@ public class GameBoardTest {
     public void testPlaceTileAtTheLeftOf() {
         System.out.println("placeTileAtTheLeftOf");
         GameBoard instance = new GameBoard();
-        GameTile tile = instance.getTileSet().get("Water #37").getLeftTile();
-        GameTile newtile = new WaterTile(instance, "Water #yo");
+        GameTile tile = instance.getTileSet().get("Water #12").getLeftTile();   
+        GameTile newtile = new WaterTile(instance, "Water #yolo");
         instance.placeTileAtTheLeftOf(tile, newtile);
         
-        /**pb sur la newtile qui trouve pas toute sa gauche*
+        System.out.println("La newtile\n"+newtile);
+
         assertEquals(tile.getLeftTile(), newtile);
         assertEquals(newtile.getRightTile(),tile);
-        System.out.println(tile.getLeftUpperTile());
-         System.out.println(newtile);
         
         tile = tile.getLeftUpperTile();
-        
         assertEquals(tile.getLeftBottomTile(), newtile);
-        assertEquals(newtile.getRightUpperTile(),tile);
-        
-       /* tile = tile.getLeftTile();
-        assertEquals(tile.getRightBottomTile(), newtile);
-        assertEquals(newtile.getLeftUpperTile(),tile);
-        
-        tile = tile.getLeftBottomTile();
-        assertEquals(tile.getRightTile(), newtile);
-        assertEquals(newtile.getLeftTile(),tile);
+        assertEquals(newtile.getRightUpperTile(), tile );
         
         tile = tile.getRightBottomTile();
-        assertEquals(tile.getRightUpperTile(), newtile);
-        assertEquals(newtile.getLeftBottomTile(),tile);
-        
-        tile = tile.getRightTile();
+        tile = tile.getLeftBottomTile();
         assertEquals(tile.getLeftUpperTile(), newtile);
-        assertEquals(newtile.getRightBottomTile(),tile);*
-      
+
+        assertEquals(newtile.getRightBottomTile(), tile);
+
     }
 
     /**
      * Test of placeTileAtTheBottomRightOf method, of class GameBoard.
-     *
+     */
     @Test
     public void testPlaceTileAtTheBottomRightOf() {
         System.out.println("placeTileAtTheBottomRightOf");
-        GameTile base = null;
-        GameTile newTile = null;
         GameBoard instance = new GameBoard();
-        instance.placeTileAtTheBottomRightOf(base, newTile);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        GameTile tile = instance.getTileSet().get("Water #30").getRightBottomTile(); 
+        GameTile newtile = new WaterTile(instance, "Water #yolo");
+        instance.placeTileAtTheBottomRightOf(tile, newtile);
+      
+        assertEquals(tile.getRightBottomTile(), newtile);
+        assertEquals(newtile.getLeftUpperTile(),tile);
+        
+        /*Nouvelle tile : tile en bas à gauche.
+        *Vérification : tile en haut à gauche de la tile = à la newtile
+        *Vérification : tile en bas à droite de la newtile = à la tile*/     
+        tile = tile.getLeftBottomTile();
+        assertEquals(tile.getRightTile(), newtile);
+        assertEquals(newtile.getLeftTile(),tile);
+        
+        tile=tile.getRightUpperTile();
+        tile=tile.getRightTile();
+        assertEquals(tile.getLeftBottomTile(), newtile);
+        assertEquals(newtile.getRightUpperTile(),tile);
+        
+     
     }
 
     /**
      * Test of placeTileAtTheBottomLeftOf method, of class GameBoard.
-     *
+     * Non test des borders vides (gauche, bas gauche, bas droite)
+     */
     @Test
     public void testPlaceTileAtTheBottomLeftOf() {
         System.out.println("placeTileAtTheBottomLeftOf");
-        GameTile base = null;
-        GameTile newTile = null;
         GameBoard instance = new GameBoard();
-        instance.placeTileAtTheBottomLeftOf(base, newTile);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
+        GameTile tile = instance.getTileSet().get("Water #30").getLeftBottomTile(); 
+        GameTile newtile = new WaterTile(instance, "Water #yolo");
+        instance.placeTileAtTheBottomLeftOf(tile, newtile);
+      
+        assertEquals(tile.getLeftBottomTile(), newtile);
+        assertEquals(newtile.getRightUpperTile(),tile);
+        
+        /*Nouvelle tile : tile en bas à droite.
+        *Vérification : tile à gauche de la tile = à la newtile
+        *Vérification : tile à droite de la newtile = à la tile*/
+        tile = tile.getRightBottomTile();
+        assertEquals(tile.getLeftTile(), newtile);
+        assertEquals(newtile.getRightTile(),tile);
+              
+        /*Nouvelle tile : tile à gauche.
+        *Vérification : tile en haut à droite de la tile = à la newtile
+        *Vérification : tile en bas à gauche de la newtile = à la tile*/     
+        tile=tile.getLeftUpperTile();
+        tile = tile.getLeftTile();
+        assertEquals(tile.getRightBottomTile(), newtile);
+        assertEquals(newtile.getLeftUpperTile(),tile);      
+       }
 
    
-
     /**
      * Test of hasEntityOfType method, of class GameBoard.
-     *
+     */
     @Test
     public void testHasEntityOfType() {
-        System.out.println("hasEntityOfType");
-        Class type = null;
+        System.out.println("hasEntityOfType");   
+        /**tester avec aucune entité dans le jeu **/
+        /**tester avec une entité de chaque **/
+        /** tester avec plusieurs entité de chaque **/
         GameBoard instance = new GameBoard();
+        Class type = null;
         boolean expResult = false;
         boolean result = instance.hasEntityOfType(type);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        
     }
-*/
+
     /**
      * Test of hasTileAtWaterEdge method, of class GameBoard.
-     *
+     */
     @Test
     public void testHasTileAtWaterEdge() {
         System.out.println("hasTileAtWaterEdge");
-        int level = 0;
         GameBoard board = new GameBoard();
         
-        for(int i =0; i<16;i++){
-             boolean result = board.hasTileAtWaterEdge(1);
-             
+        // On laisse une tile de chaque (pour s'assurer du contact avec l'eau)
+        for(int i =1; i<16;i++){
+            GameTile killme = board.getTileSet().get("Beach #"+i);
+            if (killme != null) board.sinkTile(new NullGameLogic(), killme);
         }
-       
+        for(int i =1; i<16;i++){
+            GameTile killme = board.getTileSet().get("Forest #"+i);
+            if (killme != null) board.sinkTile(new NullGameLogic(), killme);
+        }
+        for(int i =1; i<8;i++){
+            GameTile killme = board.getTileSet().get("Mountain #"+i);
+            if (killme != null) board.sinkTile(new NullGameLogic(), killme);
+        }
         
+        // Test plage
+        assertTrue(board.hasTileAtWaterEdge(1));
+        board.sinkTile(new NullGameLogic(), board.getTileSet().get("Beach #16"));
+        assertFalse(board.hasTileAtWaterEdge(1));
         
-        boolean result = board.hasTileAtWaterEdge(1);
-        assertEquals(expResult, result);
+        // Test foret
+        assertTrue(board.hasTileAtWaterEdge(2));
+        board.sinkTile(new NullGameLogic(), board.getTileSet().get("Forest #16"));
+        assertFalse(board.hasTileAtWaterEdge(2));
         
+        // Test montagne
+        assertTrue(board.hasTileAtWaterEdge(3));
+        board.sinkTile(new NullGameLogic(), board.getTileSet().get("Mountain #8"));
+        assertFalse(board.hasTileAtWaterEdge(3));
     }
-    */
+    
 }

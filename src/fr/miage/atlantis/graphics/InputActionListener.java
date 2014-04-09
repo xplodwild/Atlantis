@@ -354,8 +354,15 @@ public class InputActionListener {
             }
         }
 
+        if (request.pickOnTile != null) {
+            GameTile tile = ent.getTile();
+            if (request.pickOnTile != tile) {
+                return false;
+            }
+        }
+
         // On vérfie ensuite la contrainte de non-sélection d'une entité en particulier
-        if (request.avoidEntity != null && request.avoidEntity == ent) {
+        if (request.avoidEntity != null && request.avoidEntity.contains(ent)) {
             return false;
         }
 
@@ -460,6 +467,14 @@ public class InputActionListener {
 
         if (request.noEntitiesOnTile && tile.getEntities().size() > 0) {
             return false;
+        }
+
+        if (request.noBoatOnTile && tile.getEntities().size() > 0) {
+            for (GameEntity ent : tile.getEntities()) {
+                if (ent instanceof Boat) {
+                    return false;
+                }
+            }
         }
 
         if (request.waterEdgeOnly) {
