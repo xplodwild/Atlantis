@@ -177,9 +177,11 @@ public class GuiController implements ScreenController {
 
         /**
          * Savoir si on save ou pas le game avant de quitter.
-         */
-        //Si la partie n'est pas finie, save sinon save pas
-        //this.save();
+         */        
+        boolean gameOver=this.g3rdr.getLogic().isFinished();        
+        if(!gameOver){
+            this.save();
+        }        
         System.exit(0);
     }
 
