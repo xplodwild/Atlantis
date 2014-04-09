@@ -528,7 +528,7 @@ public class TileAction {
 
             case ACTION_CANCEL_ANIMAL:
                 // Déclenché différé
-                return true;
+                return false;
 
             case ACTION_MOVE_ANIMAL:
                 // Fonctionne si il y a un animal du type indiqué
