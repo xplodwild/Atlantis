@@ -175,6 +175,11 @@ public class GameTurn implements GameRenderListener {
         mController.onUnitMove(ent, dest.getTile());
     }
 
+    /**
+     * déplacement de l'entité sur lequel on est tombé au lancé de dés
+     * @param ent
+     * @param dest 
+     */
     public void moveDiceEntity(GameEntity ent, GameTile dest) {
         logger.log(Level.FINE, "GameTurn: moveDiceEntity ", new Object[]{});
 
