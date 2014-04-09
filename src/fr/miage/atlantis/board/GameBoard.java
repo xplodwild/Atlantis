@@ -116,11 +116,11 @@ public final class GameBoard {
         this.mTileSet.put("Water #86", temp);        
         temp = (WaterTile) this.mTileSet.get("Water #77");
         temp.setIsLandingTile(true);
-        this.mTileSet.put("Water #74", temp);
+        this.mTileSet.put("Water #77", temp);
         temp = (WaterTile) this.mTileSet.get("Water #66");
         temp.setIsLandingTile(true);
         temp.setIsBeginningWithSeaShark(true);
-        this.mTileSet.put("Water #64", temp);
+        this.mTileSet.put("Water #66", temp);
         //-----------------------------------------------------------------------
     }
 
