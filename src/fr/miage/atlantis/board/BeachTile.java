@@ -23,16 +23,34 @@ package fr.miage.atlantis.board;
  * 
  * @author AtlantisTeam
  * @version 1.0
- * @date 28/02/2014 * 
+ * @date 01/03/2014  
  */
 public class BeachTile extends GameTile{
-
+   
     /**
-     * Constructeur de classe
+     * Constructeur de Beachtile
      * 
      * @param board Plateau de jeu auquel appartient le tiles de type plage
+     * @param name Nom du tile
      */
-    public BeachTile(GameBoard board, int x, int y){ 
-        super(board, x, y, 1);
+    public BeachTile(GameBoard board,String name){ 
+        super(board, name, 1);
     }
+    
+    /**
+     * Constructeur de Beachtile #2
+     * 
+     * @param board Plateau auquel appartient le tile
+     * @param hg Tile en haut a gauche du tile courant
+     * @param hd Tile en haut a droite du tile courant
+     * @param g Tile a gauche du tile courant
+     * @param d Tile a droite du tile courant
+     * @param bd Tile en bas a droite du tile courant
+     * @param bg Tile en bas a gauche du tile courant
+     * @param name Nom du tile (placement selon le schema établi (de la forme A1 B1 B2 ...)
+     * @param height hauteur du tile
+     */    
+    public BeachTile(GameBoard board,GameTile hg,GameTile hd,GameTile g,GameTile d,GameTile bd,GameTile bg,String name, int height) {
+        super(board, hg, hd, g, d, bd, bg, name, 1);
+    }    
 }

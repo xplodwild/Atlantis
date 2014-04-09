@@ -21,19 +21,55 @@ package fr.miage.atlantis.entities;
 import fr.miage.atlantis.board.GameTile;
 
 /**
- *
+ * Classe representant les movements d'entitée sur le plateau de jeu
+ * 
+ * @author AtlantisTeam
+ * @version 1.0
+ * @date 02/03/2014  
  */
 public class EntityMove {
     
+    /**
+     * Tile source
+     */
     private GameTile mSource;
+    
+    /**
+     * Tile destination
+     */
     private GameTile mDestination;
+    
+    /**
+     * Entité qui à bougé
+     */
     private GameEntity mEntity;
     
-    public EntityMove(GameTile src, GameTile dest, GameEntity ent) {
-        mSource = src;
-        mDestination = dest;
-        mEntity = ent;
+    /**
+     * Numero du tour ou le mouvement à eu lieu
+     */
+    private int mTurnNumber;
+    
+    /**
+     * Constructeur des EntityMove
+     * 
+     * @param src Source Tile
+     * @param dest Destination Tile
+     * @param ent Entity to move
+     */
+    public EntityMove(GameTile src, GameTile dest, GameEntity ent,int turn) {
+        this.mSource = src;
+        this.mDestination = dest;
+        this.mEntity = ent;
+        this.mTurnNumber=turn;
     }
+    
+    
+    
+    
+    //--------------------------------------------------------------------------
+    //GETTERS                                                                  |
+    //--------------------------------------------------------------------------
+    
     
     public GameTile getSource() {
         return mSource;
@@ -46,4 +82,9 @@ public class EntityMove {
     public GameEntity getEntity() {
         return mEntity;
     }
+    
+    public int getTurnNumber(){
+        return this.mTurnNumber;
+    }
+    //--------------------------------------------------------------------------
 }

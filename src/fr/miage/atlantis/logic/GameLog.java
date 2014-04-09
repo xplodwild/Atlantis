@@ -22,22 +22,54 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * Classe stockant les tours de jeu d'une partie
+ * 
+ * @author AtlantisTeam
+ * @version 1.0
+ * @date 03/03/2014  
  */
 public class GameLog {
 
+    /**
+     * Liste des tours de jeu
+     */
     private List<GameTurn> mTurns;
     
+    
+    /**
+     * Constructeur de GameLog
+     * 
+     */
     public GameLog() {
         mTurns = new ArrayList<GameTurn>();
     }
     
+    
+    
+    /**
+     * Log un nouveau tour de jeu
+     * 
+     * @param i Tour de jeu a logger
+     */
+    public void logTurn(GameTurn i){
+        this.mTurns.add(i);
+    }
+   
+    
+    
+    
+    //--------------------------------------------------------------------------
+    //GETTERS                                                                  |
+    //--------------------------------------------------------------------------
+    
+    
+    /**
+     * Retourne le tour de jeu numero i
+     * 
+     * @param i Numero de tour a retourner
+     * @return GameTurn correspondant
+     */
     public GameTurn getTurn(int i) {
         return mTurns.get(i);
     }
-    
-    public GameTurn getNextTurn() {
-        throw new UnsupportedOperationException("Not implemented");
-    }
-
 }
