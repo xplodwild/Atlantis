@@ -467,6 +467,10 @@ public class TileAction {
                 performActionSpawnEntity(tile, logic);
                 break;
 
+            case ACTION_CANCEL_ANIMAL:
+                performActionCancelAnimal(logic);
+                break;
+
             case ACTION_MOVE_ANIMAL:
                 performActionMoveAnimal(logic);
                 break;
@@ -544,6 +548,14 @@ public class TileAction {
         }
 
         return false;
+    }
+
+    /**
+     * Lance l'action d'une tile d'annulation de mouvement d'animal
+     * @param logic La logique du jeu
+     */
+    private void performActionCancelAnimal(GameLogic logic) {
+        logic.onCancelAction();
     }
 
     /**

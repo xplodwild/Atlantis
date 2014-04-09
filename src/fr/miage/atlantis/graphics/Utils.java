@@ -81,6 +81,7 @@ public class Utils {
             BoxGeoPair cachePair = new BoxGeoPair();
             cachePair.geo = output;
             cachePair.box = box;
+            mBoxCache.add(cachePair);
         } else {
             // En cache, on clone pour aller plus vite. On peut réutiliser le material.
             output = cache.geo.clone();

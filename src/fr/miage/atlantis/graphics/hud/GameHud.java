@@ -30,6 +30,7 @@ public class GameHud {
 
     private HudManager mHudManager;
     private AbstractDisplay mRightClickToCancel;
+    private AbstractDisplay mSpaceToSkip;
     private List<TileActionDisplay> mPlayerTiles;
 
     public GameHud(HudManager man) {
@@ -39,11 +40,19 @@ public class GameHud {
     }
 
     private void setup() {
+        // HUD: Clic droit pour annuler, affiché dans le coin en bas à droite
         mRightClickToCancel = new AbstractDisplay(52, 75, "RightClick Cancel Hint",
                 mHudManager.getAssetManager());
         mRightClickToCancel.showImage("Interface/HintRightClickCancel.png");
         mRightClickToCancel.setAlpha(0.0f);
         mHudManager.displayBottomRight(mRightClickToCancel);
+
+        // HUD: Image centrée invitant à appuyer sur espace pour annuler
+        mSpaceToSkip = new AbstractDisplay(220, 120, "HUD Space Prompt",
+                mHudManager.getAssetManager());
+        mSpaceToSkip.showImage("Interface/SpaceToSkip.png");
+        mSpaceToSkip.setAlpha(0.0f);
+        mHudManager.displayCenter(mSpaceToSkip);
     }
 
     /**
@@ -116,5 +125,19 @@ public class GameHud {
         }
 
         return null;
+    }
+
+    /**
+     * Affiche une image indiquant à l'utilisateur qu'il peut annuler l'action qui va se passer
+     * (exemple un shark attaque un pion du joueur, et il a une tile permettant d'annuler l'action)
+     * en appuyant sur la touche espace avant les 3 prochaines secondes.
+     */
+    public void promptCancel() {
+        mSpaceToSkip.setAlpha(0.0f);
+        mHudManager.getAnimator().animateFade(mSpaceToSkip, 1.0f);
+    }
+
+    public void hidePromptCancel() {
+        mHudManager.getAnimator().animateFade(mSpaceToSkip, 0.0f);
     }
 }

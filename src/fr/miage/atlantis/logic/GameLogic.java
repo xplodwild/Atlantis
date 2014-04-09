@@ -351,5 +351,7 @@ public abstract class GameLogic implements GameTurnListener {
     public abstract void onTilePicked(GameTile tile);
 
     public abstract void onTileWhirl(final GameTile tile);
+
+    public abstract void onHitSpace();
     //--------------------------------------------------------------------------
 }

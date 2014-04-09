@@ -53,6 +53,11 @@ public class AnimationBrain {
             animateTransition = aT;
         }
 
+        public State setLoop(boolean loop) {
+            this.loop = loop;
+            return this;
+        }
+
         /**
          * Nom de l'animation à jouer
          */
@@ -147,11 +152,11 @@ public class AnimationBrain {
 
     public static State getSpawnAnimation(GameEntity ent) {
         if (ent instanceof Shark) {
-            return new State(SharkModel.ANIMATION_RISE);
+            return new State(SharkModel.ANIMATION_RISE).setLoop(false);
         } else if (ent instanceof SeaSerpent) {
-            return new State(SeaSerpentModel.ANIMATION_RISE);
+            return new State(SeaSerpentModel.ANIMATION_RISE).setLoop(false);
         } else if (ent instanceof Whale) {
-            return new State(WhaleModel.ANIMATION_RISE);
+            return new State(WhaleModel.ANIMATION_RISE).setLoop(false);
         }
 
         return null;

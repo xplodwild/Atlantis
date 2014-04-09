@@ -75,7 +75,7 @@ public class AnimatedModel extends StaticModel {
             t.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    listener.onAnimCycleDone(mChannel.getControl(), mChannel, animation);
+                     listener.onAnimCycleDone(mChannel.getControl(), mChannel, animation);
                 }
             }, (long) mChannel.getControl().getAnimationLength(animation) * 1000);
         }

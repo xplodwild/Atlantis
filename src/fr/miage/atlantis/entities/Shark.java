@@ -58,7 +58,7 @@ public class Shark extends Animal {
 
             if (pt.getState() != PlayerToken.STATE_ON_BOAT) {
                 // Les sharks mangent les petits humains n'étant pas sur un bateau
-                logic.onEntityAction(this, ent, GameEntity.ACTION_SHARK_EAT);
+                logic.onCancellableEntityAction(this, ent, GameEntity.ACTION_SHARK_EAT);
                 return true;
             }
         }

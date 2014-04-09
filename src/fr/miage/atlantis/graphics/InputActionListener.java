@@ -23,6 +23,7 @@ import com.jme3.input.InputManager;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.AnalogListener;
+import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseAxisTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.material.MatParam;
@@ -34,6 +35,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.entities.Boat;
 import fr.miage.atlantis.entities.GameEntity;
@@ -46,7 +48,6 @@ import fr.miage.atlantis.graphics.models.AnimatedModel;
 import fr.miage.atlantis.graphics.models.EmptyTileModel;
 import fr.miage.atlantis.graphics.models.TileModel;
 import fr.miage.atlantis.logic.GameLogic;
-import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -62,6 +63,7 @@ public class InputActionListener {
     private final static String INPUTMAP_MOUSE_HOVER = "mouse_hover";
     private final static String INPUTMAP_MOUSE_CLICK = "mouse_click";
     private final static String INPUTMAP_MOUSE_RIGHT_CLICK = "mouse_right_click";
+    private final static String INPUTMAP_KEY_SPACE = "key_space";
 
     private InputManager mInputManager;
     private Game3DRenderer mRenderer;
@@ -77,6 +79,15 @@ public class InputActionListener {
         public Geometry geometry;
         public int source;
     }
+
+    private ActionListener mKeyboardListener = new ActionListener() {
+        public void onAction(String name, boolean isPressed, float tpf) {
+            if (name.equals(INPUTMAP_KEY_SPACE)) {
+                // Touche espace, on notifie la logique
+                mRenderer.getLogic().onHitSpace();
+            }
+        }
+    };
 
     private AnalogListener mMouseHoverListener = new AnalogListener() {
 
@@ -217,6 +228,11 @@ public class InputActionListener {
         inputManager.addMapping(INPUTMAP_MOUSE_RIGHT_CLICK,
                 new MouseButtonTrigger(MouseInput.BUTTON_RIGHT));
         inputManager.addListener(mMouseRightClickListener, INPUTMAP_MOUSE_RIGHT_CLICK);
+
+        // Espace pour annuler une action (shark, etc)
+        inputManager.addMapping(INPUTMAP_KEY_SPACE,
+                new KeyTrigger(KeyboardInputEvent.KEY_SPACE));
+        inputManager.addListener(mKeyboardListener, INPUTMAP_KEY_SPACE);
     }
 
     /**

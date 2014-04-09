@@ -93,6 +93,19 @@ public interface GameTurnListener {
      */
     public void onEntityAction(GameEntity source, GameEntity target, int action);
 
+    /**
+     * Action annulable a effectuer lors d'une action d'entité
+     *
+     * @param source Entity source
+     * @param target Entity cible
+     * @param action Action à réaliser
+     */
+    public void onCancellableEntityAction(GameEntity source, GameEntity target, int action);
+
+    /**
+     * Confirme l'annulation d'une action annulable
+     */
+    public void onCancelAction();
 
     /**
      * Action a réaliser lors du spawn d'entité

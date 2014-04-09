@@ -72,6 +72,9 @@ public class Game3DLogic extends GameLogic {
     private List<EntityPickRequest> mEntRequestHistory;
     private List<TilePickRequest> mTileRequestHistory;
     private boolean mCanCancelPickingAction;
+    private FutureCallback mCancelActionCallback;
+    private TileAction mTileUsedToCancel;
+    private GameEntity mCancellableSource;
 
      /**
      * Instance du logger Java
@@ -140,7 +143,6 @@ public class Game3DLogic extends GameLogic {
             // Les actions annulables sont seulement actives lorsqu'on pick une entité initiale. Il
             // faut donc reset l'entité pickée.
             mPickedEntity = null;
-            
             mRenderer.getHud().getGameHud().hideRightClickHint();
 
             return true;
@@ -258,9 +260,20 @@ public class Game3DLogic extends GameLogic {
                         PlayerToken pt = (PlayerToken) ent;
 
                         if (!pt.isDead() && wt.isLandingTile()) {
-                            mBypassCallbackCount++;
-                            onUnitMove(ent, wt.findEscapeBorder());
-                            pt.setState(PlayerToken.STATE_SAFE);
+                            // On recherche la tile sur laquelle placer le bonhomme en lieu sûr
+                            GameTile escapeBorder = wt.findEscapeBorder();
+                            if (escapeBorder != null) {
+                                mBypassCallbackCount++;
+                                onUnitMove(ent, escapeBorder);
+                                pt.setState(PlayerToken.STATE_SAFE);
+                            } else {
+                                // BEWARE DRAGONS! La tile est flaggée comme étant une tile d'escape,
+                                // mais il n'y a aucun border d'escape autour! On ne fait rien et
+                                // on prévient Cristian qu'il a merdé
+                                Logger.getGlobal().severe("La tile " + wt.getName() + " est marquée"
+                                        + " comme étant une tile d'escape, mais il n'y a aucun"
+                                        + " border d'escape autour!");
+                            }
                         }
                     }
 
@@ -337,6 +350,89 @@ public class Game3DLogic extends GameLogic {
                 }
             }
         });
+    }
+
+    /**
+     * Appelé lorsque l'utilisateur appuie sur Espace
+     */
+    public void onHitSpace() {
+        // On a appuyé sur espace: Si on est en train de laisser la possibilité à l'utilisateur
+        // d'annuler une action, on le fait.
+        if (mCancelActionCallback != null && mTileUsedToCancel != null) {
+            getCurrentTurn().useRemoteTile(mTileUsedToCancel);
+
+            mTileUsedToCancel = null;
+            mCancelActionCallback = null;
+
+            mRenderer.getHud().getGameHud().hidePromptCancel();
+        }
+    }
+
+    public void onCancelAction() {
+        if (mTileUsedToCancel != null) {
+            if (mTileUsedToCancel.getAction() == TileAction.ACTION_CANCEL_ANIMAL) {
+                mCancellableSource.die(this);
+            }
+            mCancellableSource = null;
+            mTileUsedToCancel = null;
+            mCancelActionCallback = null;
+            mRenderer.getHud().getGameHud().hidePromptCancel();
+        }
+    }
+
+    public void onCancellableEntityAction(final GameEntity source, final GameEntity target,
+            final int action) {
+        switch (action) {
+            case GameEntity.ACTION_SHARK_EAT: {
+                // On cherche si le joueur a une tile permettant d'annuler l'action
+                final Shark shark = (Shark) source;
+                final PlayerToken token = (PlayerToken) target;
+
+                List<TileAction> playTilesList = token.getPlayer().getActionTiles();
+                boolean hasCancelAction = false;
+
+                for (TileAction tile : playTilesList) {
+                    if (tile.getAction() == TileAction.ACTION_CANCEL_ANIMAL
+                            && tile.getEntity() == TileAction.ENTITY_SHARK) {
+                        hasCancelAction = true;
+                        mTileUsedToCancel = tile;
+                        break;
+                    }
+                }
+
+                if (hasCancelAction) {
+                    // On a une tile d'annulation pour ça, on poll sur le HUD pendant 3 secondes
+                    // si l'utilisateur veut jouer sa tile. Si il appuie sur espace, la tile
+                    // d'annulation est utilisée et la tile est annulée.
+                    mCancellableSource = shark;
+                    mRenderer.getHud().getGameHud().promptCancel();
+                    mCancelActionCallback = new FutureCallback(3.0f) {
+                        @Override
+                        public void onFutureHappened() {
+                            if (mTileUsedToCancel != null) {
+                                // La tile n'a pas été utilisée, donc on lance l'action
+                                mTileUsedToCancel = null;
+                                mCancelActionCallback = null;
+                                mCancellableSource = null;
+
+                                onEntityAction(source, target, action);
+                                mRenderer.getHud().getGameHud().hidePromptCancel();
+                            }
+                        }
+                    };
+
+                    mRenderer.getFuture().addFutureTimeCallback(mCancelActionCallback);
+                } else {
+                    // On n'a pas de tile pour annuler, on lance l'action
+                    onEntityAction(source, target, action);
+                }
+            }
+            break;
+
+            default:
+                onEntityAction(source, target, action);
+                break;
+        }
     }
 
     public void onEntityAction(GameEntity source, GameEntity target, int action) {
@@ -778,6 +874,5 @@ public class Game3DLogic extends GameLogic {
 
 
     }
-
 
 }

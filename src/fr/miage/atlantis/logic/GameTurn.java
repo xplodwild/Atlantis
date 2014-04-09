@@ -78,6 +78,7 @@ public class GameTurn implements GameRenderListener {
         mDiceRolled = false;
         mDiceEntityPicked = false;
         mSunkenTile = null;
+        mRemoteTiles = new ArrayList<TileAction>();
         mMoves = new ArrayList<EntityMove>();
         mSwimmersMoved = new ArrayList<PlayerToken>();
     }
@@ -203,7 +204,7 @@ public class GameTurn implements GameRenderListener {
         if (!DBG_QUICKTEST) {
             mDiceAction = mController.getDice().roll();
         } else {
-            mDiceAction = GameDice.FACE_WHALE;
+            mDiceAction = GameDice.FACE_SHARK;
         }
         switch (mDiceAction) {
             case GameDice.FACE_SEASERPENT:
@@ -272,7 +273,13 @@ public class GameTurn implements GameRenderListener {
     }
 
     public void useRemoteTile(TileAction action) {
-        throw new UnsupportedOperationException("Not implemented");
+        mRemoteTiles.add(action);
+
+        // On enlève la taile du joueur
+        mPlayer.removeActionTile(action);
+
+        // On lance l'annulation (les tiles remotes sont toutes des ta
+        mController.onCancelAction();
     }
 
     public void useLocalTile(TileAction action) {
