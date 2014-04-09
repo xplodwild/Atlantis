@@ -4,7 +4,6 @@
  */
 package fr.miage.atlantis.gui.controllers;
 
-import com.jme3.audio.AudioRenderer;
 import com.jme3.renderer.Camera;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.TextField;
@@ -12,24 +11,24 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
+import fr.miage.atlantis.audio.AudioManager;
 import fr.miage.atlantis.graphics.CamConstants;
 import fr.miage.atlantis.graphics.Game3DRenderer;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.logging.Logger;
 
 public class GuiController implements ScreenController {
 
     private Game3DRenderer g3rdr;
-    private AudioRenderer maudioRenderer;
     private Nifty nifty;
     private Screen screen;
     private ArrayList<String> nameRandomizer;
     private String[] players;
 
-    public GuiController(Game3DRenderer g3d, AudioRenderer ardr) {
+    public GuiController(Game3DRenderer g3d) {
         super();
         this.g3rdr = g3d;
-        this.maudioRenderer = ardr;
         this.nameRandomizer = new ArrayList();
         this.fillNameRandomizer();
         this.players = new String[4];
@@ -118,6 +117,8 @@ public class GuiController implements ScreenController {
 
         Camera cam = g3rdr.getCamera();
         CamConstants.moveAboveBoard(g3rdr.getCameraNode(), cam);
+        
+        AudioManager.getDefault().setMainMusic(false);
 
     }
 
@@ -164,12 +165,6 @@ public class GuiController implements ScreenController {
         /**
          * TODO : toggle la musique du jeu
          */
-        this.maudioRenderer.pauseSource(
-                /**
-                 * Renseigner la source audio a pause à la place de null
-                 */
-                null
-        );
     }
 
     
@@ -185,6 +180,8 @@ public class GuiController implements ScreenController {
         } 
         
         this.nifty.gotoScreen("start");
+        AudioManager.getDefault().setMainMusic(true);
+        Logger.getGlobal().severe("BLAHH BACKTOMENU");
 
         /**
          * @TODO : Reinitialiser tout.
