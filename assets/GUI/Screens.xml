@@ -63,7 +63,11 @@
                         <panel id="haut_1"  height="25%" width="80%" align="right" valign="top" childLayout="vertical" visibleToMouse="true">
                             <text align="center" text="Joueur 1" font="Fonts/sansitc.fnt"  color="#0060abff" /> 
                             <control id="inputJ1" name="textfield" width="80%" text=""/>
-                            <!-- Ajouter une checkbox qui valide si un pseudo a été entré. -->
+                            
+                            <control paddingTop="5%" id="btnRandom1"   height="25%" width="80%" name="button" label="Aléatoire">
+                                <interact onClick="nickRandomJ1()" />
+                            </control>
+                            
                         </panel> 
                     
                     </panel>                    
@@ -75,7 +79,9 @@
                         <panel id="haut_2"  height="25%" width="80%" align="right" valign="top" childLayout="vertical" visibleToMouse="true">
                             <text align="center"  text="Joueur 2" font="Fonts/sansitc.fnt"  color="#349b14ff" /> 
                             <control id="inputJ2" name="textfield" width="80%" text=""/>
-                            <!-- Ajouter une checkbox qui valide si un pseudo a été entré. -->
+                            <control paddingTop="5%" id="btnRandom2"   height="25%" width="80%" name="button" label="Aléatoire">
+                                <interact onClick="nickRandomJ2()" />
+                            </control>
                         </panel> 
                     </panel> 
                     
@@ -86,7 +92,9 @@
                         <panel id="haut_3" height="25%" width="80%" align="right" valign="top" childLayout="vertical" visibleToMouse="true">
                             <text  align="center" text="Joueur 3" font="Fonts/sansitc.fnt"  color="#eda000ff" /> 
                             <control id="inputJ3" name="textfield" width="80%" text=""/>
-                            <!-- Ajouter une checkbox qui valide si un pseudo a été entré. -->
+                            <control paddingTop="5%" id="btnRandom3"   height="25%" width="80%" name="button" label="Aléatoire">
+                                <interact onClick="nickRandomJ3()" />
+                            </control>
                         </panel> 
                     </panel> 
                                         
@@ -97,7 +105,9 @@
                         <panel id="haut_4" height="25%" width="80%" align="right" valign="top" childLayout="vertical" visibleToMouse="true">
                             <text  align="center" text="Joueur 4" font="Fonts/sansitc.fnt"  color="#ff2222ff" /> 
                             <control id="inputJ4" name="textfield" width="80%" text=""/>
-                            <!-- Ajouter une checkbox qui valide si un pseudo a été entré. -->
+                            <control paddingTop="5%" id="btnRandom4"   height="25%" width="80%" name="button" label="Aléatoire">
+                                <interact onClick="nickRandomJ4()" />
+                            </control>
                         </panel> 
                     </panel> 
                     
@@ -105,8 +115,8 @@
                     </panel> 
                 </panel>   
                 <panel id="barreDuBas" height="20%" width="100%" align="left" valign="bottom" backgroundColor="#00000080" childLayout="vertical" visibleToMouse="true">                
-                    <text align="left" valign="bottom" text="Parfois quand je m'ennuie je vais dans le jardin, " font="Fonts/sansitc.fnt"  color="#ffffffff" /> 
-                    <text align="left" valign="bottom" text="me couvre de terre et je me prends pour une carotte." font="Fonts/sansitc.fnt"  color="#ffffffff" />                 
+                    <control name="label" id="tips1" align="left" valign="bottom" text="Parfois quand je m'ennuie je vais dans le jardin, " font="Fonts/sansitc.fnt"  color="#ffffffff" /> 
+                    <control name="label" id="tips2" align="left" valign="bottom" text="me couvre de terre et je me prends pour une carotte." font="Fonts/sansitc.fnt"  color="#ffffffff" />                 
                 </panel>  
             </panel>            
              
@@ -128,6 +138,13 @@
             <!-- Panel de gauche de l'ecran ou l'on place les boutons   -->
             <!-- +++++++++++++++++++++++++++++++++++++++ -->
             <panel id="panelGauche" height="100%" width="20%" align="left" valign="top" backgroundColor="#00000080" childLayout="vertical" visibleToMouse="true">                
+                
+                <panel id="returngame" paddingTop="20%" align="center" height="8%" width="60%" childLayout="vertical" visibleToMouse="true">                
+                    <control paddingTop="10%" id="btnReturnPartie"   height="100%" width="100%" name="button" label="Retour au jeu">
+                        <interact onClick="returnToGame()" />
+                    </control>
+                </panel>
+                
                 <panel id="restartgamezone" paddingTop="20%" align="center" height="8%" width="60%" childLayout="vertical" visibleToMouse="true">                
                     <control paddingTop="10%" id="btnRRPartie"   height="100%" width="100%" name="button" label="Redemarrer">
                         <interact onClick="reStartGame()" />
@@ -286,9 +303,91 @@
                 <control id="console" name="nifty-console" width="100%" align="left" valign="top" visible="false" lines="15">
                 </control>  
             </panel>
+        </layer>
+    </screen>
+    
+    
+    
+    <!-- +++++++++++++++++++++++++++++++++++++++ -->
+    <!-- hud screen -->
+    <!-- +++++++++++++++++++++++++++++++++++++++ -->
+    <screen id="inGameHud3J" controller="fr.miage.atlantis.gui.controllers.GuiController">
+        <!-- +++++++++++++++++++++++++++++++++++++++ -->
+        <!-- Layer principal -->
+        <!-- +++++++++++++++++++++++++++++++++++++++ -->
+        <layer id="HudLayer" childLayout="center">
+            <!-- +++++++++++++++++++++++++++++++++++++++ -->
+            <!-- Zones HUD des joueurs   -->
+            <!-- +++++++++++++++++++++++++++++++++++++++ -->
+           
+            <panel id="HudPanelTop"     height="5%"     width="100%"     align="center"  valign="top"    childLayout="horizontal"> 
+                <panel id="HudPanelTop2"     height="100%"     width="50%"     backgroundColor="#349b144d" align="left"  valign="center"    childLayout="horizontal"> 
+                    <panel width="5%"> </panel>
+                    <text id="nomJ2"  textHAlign="left" textVAlign="center"   valign="center" align="left" text="" font="Fonts/sansitc.fnt"  color="#eeeeeeff" /> 
+                </panel>                
+                <panel id="HudPanelTop3"     height="100%"     width="50%"     backgroundColor="#eda0004d" align="left"  valign="center"    childLayout="horizontal"> 
+                    <panel width="5%"> </panel>
+                    <text id="nomJ3"   textHAlign="left" textVAlign="center" align="left" valign="center" text="" font="Fonts/sansitc.fnt"  color="#eeeeeeff" /> 
+                </panel>   
+            </panel>  
+                      
+            <panel id="HudPanelRight"   height="95%"    width="10%"      backgroundColor="#0060ab4d" align="right"   valign="bottom"    childLayout="horizontal"> 
+                
+            </panel>
             
-                    
+            <panel id="HudPanelBottom"  height="10%"    width="90%"    backgroundColor="#0060ab4d" align="left"  valign="bottom" childLayout="horizontal">
+                <panel width="2%"> </panel>
+                <text id="nomJ1" align="left" textHAlign="left" textVAlign="center" valign="center" text="" font="Fonts/sansitc.fnt"  color="#eeeeeeff" />                             
+            </panel>
             
+          
+            
+           
+            <!-- Panel transparent de la console -->
+            <panel id="HudPanel" height="33%" width="50%" align="left" valign="top" childLayout="vertical">                
+                <control id="console" name="nifty-console" width="100%" align="left" valign="top" visible="false" lines="15">
+                </control>  
+            </panel>
+        </layer>
+    </screen>
+
+    
+    <!-- +++++++++++++++++++++++++++++++++++++++ -->
+    <!-- hud screen -->
+    <!-- +++++++++++++++++++++++++++++++++++++++ -->
+    <screen id="inGameHud2J" controller="fr.miage.atlantis.gui.controllers.GuiController">
+        <!-- +++++++++++++++++++++++++++++++++++++++ -->
+        <!-- Layer principal -->
+        <!-- +++++++++++++++++++++++++++++++++++++++ -->
+        <layer id="HudLayer" childLayout="center">
+            <!-- +++++++++++++++++++++++++++++++++++++++ -->
+            <!-- Zones HUD des joueurs   -->
+            <!-- +++++++++++++++++++++++++++++++++++++++ -->
+           
+            <panel id="HudPanelTop"     height="5%"     width="100%"     align="center"  valign="top"    childLayout="horizontal"> 
+                <panel id="HudPanelTop2"     height="100%"     width="100%"     backgroundColor="#349b144d" align="left"  valign="center"    childLayout="horizontal"> 
+                    <panel width="5%"> </panel>
+                    <text id="nomJ2"  textHAlign="left" textVAlign="center"   valign="center" align="left" text="" font="Fonts/sansitc.fnt"  color="#eeeeeeff" /> 
+                </panel>     
+            </panel>  
+                      
+            <panel id="HudPanelRight"   height="95%"    width="10%"      backgroundColor="#0060ab4d" align="right"   valign="bottom"    childLayout="horizontal"> 
+                
+            </panel>
+            
+            <panel id="HudPanelBottom"  height="10%"    width="90%"    backgroundColor="#0060ab4d" align="left"  valign="bottom" childLayout="horizontal">
+                <panel width="2%"> </panel>
+                <text id="nomJ1" align="left" textHAlign="left" textVAlign="center" valign="center" text="" font="Fonts/sansitc.fnt"  color="#eeeeeeff" />                             
+            </panel>
+            
+          
+            
+           
+            <!-- Panel transparent de la console -->
+            <panel id="HudPanel" height="33%" width="50%" align="left" valign="top" childLayout="vertical">                
+                <control id="console" name="nifty-console" width="100%" align="left" valign="top" visible="false" lines="15">
+                </control>  
+            </panel>
         </layer>
     </screen>
     
