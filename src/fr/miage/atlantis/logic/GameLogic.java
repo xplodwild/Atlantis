@@ -202,6 +202,8 @@ public abstract class GameLogic implements GameTurnListener {
     public void nextTurn() {
         mLog.logTurn(mCurrentTurn);
         Player p = mCurrentTurn.getPlayer();
+        
+        
         mCurrentTurn = new GameTurn(this, this.nextPlayer(p));
 
         // Lance le nouveau tour
