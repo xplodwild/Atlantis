@@ -272,18 +272,22 @@
             <!-- +++++++++++++++++++++++++++++++++++++++ -->
            
             <panel id="HudPanelTop"     height="5%"     width="100%"     align="center"  valign="top"    childLayout="horizontal"> 
-                <panel id="HudPanelTop2"     height="100%"     width="33.3%"     backgroundColor="#349b144d" align="left"  valign="center"    childLayout="horizontal"> 
-                    <panel width="5%"> </panel>
-                    <text id="nomJ2"  textHAlign="left" textVAlign="center"   valign="center" align="left" text="" font="Fonts/sansitc.fnt"  color="#eeeeeeff" /> 
-                </panel>                
-                <panel id="HudPanelTop3"     height="100%"     width="33.3%"     backgroundColor="#eda0004d" align="left"  valign="center"    childLayout="horizontal"> 
-                    <panel width="5%"> </panel>
-                    <text id="nomJ3"   textHAlign="left" textVAlign="center" align="left" valign="center" text="" font="Fonts/sansitc.fnt"  color="#eeeeeeff" /> 
-                </panel>                
                 <panel id="HudPanelTop4"     height="100%"     width="33.3%"     backgroundColor="#c6000b4d" align="left"  valign="center"    childLayout="horizontal"> 
                     <panel width="5%"> </panel>
                     <text id="nomJ4"  textHAlign="left" textVAlign="center" align="left" valign="center" text="" font="Fonts/sansitc.fnt"  color="#eeeeeeff" /> 
                 </panel>
+                
+                <panel id="HudPanelTop3"     height="100%"     width="33.3%"     backgroundColor="#eda0004d" align="left"  valign="center"    childLayout="horizontal"> 
+                    <panel width="5%"> </panel>
+                    <text id="nomJ3"   textHAlign="left" textVAlign="center" align="left" valign="center" text="" font="Fonts/sansitc.fnt"  color="#eeeeeeff" /> 
+                </panel>  
+                
+                <panel id="HudPanelTop2"     height="100%"     width="33.3%"     backgroundColor="#349b144d" align="left"  valign="center"    childLayout="horizontal"> 
+                    <panel width="5%"> </panel>
+                    <text id="nomJ2"  textHAlign="left" textVAlign="center"   valign="center" align="left" text="" font="Fonts/sansitc.fnt"  color="#eeeeeeff" /> 
+                </panel>                
+                              
+                
             </panel>  
                       
             <panel id="HudPanelRight"   height="95%"    width="10%"      backgroundColor="#0060ab4d" align="right"   valign="bottom"    childLayout="horizontal"> 
@@ -321,14 +325,16 @@
             <!-- +++++++++++++++++++++++++++++++++++++++ -->
            
             <panel id="HudPanelTop"     height="5%"     width="100%"     align="center"  valign="top"    childLayout="horizontal"> 
+                <panel id="HudPanelTop3"     height="100%"     width="50%"     backgroundColor="#eda0004d" align="left"  valign="center"    childLayout="horizontal"> 
+                    <panel width="5%"> </panel>
+                    <text id="nomJ3"   textHAlign="left" textVAlign="center" align="left" valign="center" text="" font="Fonts/sansitc.fnt"  color="#eeeeeeff" /> 
+                </panel>  
+                
                 <panel id="HudPanelTop2"     height="100%"     width="50%"     backgroundColor="#349b144d" align="left"  valign="center"    childLayout="horizontal"> 
                     <panel width="5%"> </panel>
                     <text id="nomJ2"  textHAlign="left" textVAlign="center"   valign="center" align="left" text="" font="Fonts/sansitc.fnt"  color="#eeeeeeff" /> 
                 </panel>                
-                <panel id="HudPanelTop3"     height="100%"     width="50%"     backgroundColor="#eda0004d" align="left"  valign="center"    childLayout="horizontal"> 
-                    <panel width="5%"> </panel>
-                    <text id="nomJ3"   textHAlign="left" textVAlign="center" align="left" valign="center" text="" font="Fonts/sansitc.fnt"  color="#eeeeeeff" /> 
-                </panel>   
+                 
             </panel>  
                       
             <panel id="HudPanelRight"   height="95%"    width="10%"      backgroundColor="#0060ab4d" align="right"   valign="bottom"    childLayout="horizontal"> 

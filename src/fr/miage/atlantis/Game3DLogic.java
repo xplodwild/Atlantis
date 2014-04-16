@@ -818,10 +818,12 @@ public class Game3DLogic extends GameLogic {
      */
     @Override
     public void nextTurn() {
+        
         super.nextTurn();
-
         Player p = this.getCurrentTurn().getPlayer();
-
+        
+        
+        
         String joueurCourant = p.getName();
 
         Player[] plr = this.getPlayers();
@@ -838,7 +840,7 @@ public class Game3DLogic extends GameLogic {
         LinkedList<Player> lkl = new LinkedList();
         lkl.add(plr[0]);
         lkl.add(plr[1]);
-        if (lg == 3) {
+        if (lg >= 3) {
             lkl.add(plr[2]);
         }
         if (lg == 4) {
@@ -849,11 +851,14 @@ public class Game3DLogic extends GameLogic {
         Element text, panel;
         Nifty nifty = mRenderer.getNifty();
         switch (lg) {
+            
+            
+            //PARTIE A 2 JOUEURS***********************************************/ 
             case 2:
                 //Lie les pseudos a leurs couleurs.
                 playerAndColor.put(plr[0].getName(), colorP1);
                 playerAndColor.put(plr[1].getName(), colorP2);
-               
+
                 //Defini le panel du bas et de droite à la couleur du joueur courant.
                 panel = nifty.getScreen("inGameHud2J").findElementByName("HudPanelBottom");
                 panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(p.getName())));
@@ -862,37 +867,82 @@ public class Game3DLogic extends GameLogic {
                 //Defini le nom du joueur courant (zone du bas)
                 text = nifty.getScreen("inGameHud2J").findElementByName("nomJ1");
                 text.getRenderer(TextRenderer.class).setText(p.getName());
-                
-                if(lkl.indexOf(p)==1){                    
+
+                if (lkl.indexOf(p) == 1) {
                     panel = nifty.getScreen("inGameHud2J").findElementByName("HudPanelTop2");
                     panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(lkl.get(0).getName())));
                     text = nifty.getScreen("inGameHud2J").findElementByName("nomJ2");
                     text.getRenderer(TextRenderer.class).setText(lkl.get(0).getName());
-                }else{
+                } else {
                     panel = nifty.getScreen("inGameHud2J").findElementByName("HudPanelTop2");
                     panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(lkl.get(1).getName())));
                     text = nifty.getScreen("inGameHud2J").findElementByName("nomJ2");
                     text.getRenderer(TextRenderer.class).setText(lkl.get(1).getName());
                 }
-
-
                 break;
+                
+                
+                
+            //PARTIE A 3 JOUEURS***********************************************/    
             case 3:
                 playerAndColor.put(plr[0].getName(), colorP1);
                 playerAndColor.put(plr[1].getName(), colorP2);
                 playerAndColor.put(plr[2].getName(), colorP3);
 
                 //Defini le panel du bas et de droite à la couleur du joueur courant.
-                panel = nifty.getScreen("inGameHud2J").findElementByName("HudPanelBottom");
+                panel = nifty.getScreen("inGameHud3J").findElementByName("HudPanelBottom");
                 panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(p.getName())));
-                panel = nifty.getScreen("inGameHud2J").findElementByName("HudPanelRight");
+                panel = nifty.getScreen("inGameHud3J").findElementByName("HudPanelRight");
                 panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(p.getName())));
                 //Defini le nom du joueur courant (zone du bas)
-                text = nifty.getScreen("inGameHud2J").findElementByName("nomJ1");
+                text = nifty.getScreen("inGameHud3J").findElementByName("nomJ1");
                 text.getRenderer(TextRenderer.class).setText(p.getName());
 
 
+                switch (lkl.indexOf(p)) {
+                    case 0:
+                        panel = nifty.getScreen("inGameHud3J").findElementByName("HudPanelTop2");
+                        panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(lkl.get(1).getName())));
+                        text = nifty.getScreen("inGameHud3J").findElementByName("nomJ2");
+                        text.getRenderer(TextRenderer.class).setText(lkl.get(1).getName());
+
+                        panel = nifty.getScreen("inGameHud3J").findElementByName("HudPanelTop3");
+                        panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(lkl.get(2).getName())));
+                        text = nifty.getScreen("inGameHud3J").findElementByName("nomJ3");
+                        text.getRenderer(TextRenderer.class).setText(lkl.get(2).getName());
+                        break;
+                        
+                    case 1:
+                        panel = nifty.getScreen("inGameHud3J").findElementByName("HudPanelTop2");
+                        panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(lkl.get(2).getName())));
+                        text = nifty.getScreen("inGameHud3J").findElementByName("nomJ2");
+                        text.getRenderer(TextRenderer.class).setText(lkl.get(2).getName());
+
+                        panel = nifty.getScreen("inGameHud3J").findElementByName("HudPanelTop3");
+                        panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(lkl.get(0).getName())));
+                        text = nifty.getScreen("inGameHud3J").findElementByName("nomJ3");
+                        text.getRenderer(TextRenderer.class).setText(lkl.get(0).getName());
+                        
+                        break;
+
+                    case 2:
+                        panel = nifty.getScreen("inGameHud3J").findElementByName("HudPanelTop2");
+                        panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(lkl.get(0).getName())));
+                        text = nifty.getScreen("inGameHud3J").findElementByName("nomJ2");
+                        text.getRenderer(TextRenderer.class).setText(lkl.get(0).getName());
+
+                        panel = nifty.getScreen("inGameHud3J").findElementByName("HudPanelTop3");
+                        panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(lkl.get(1).getName())));
+                        text = nifty.getScreen("inGameHud3J").findElementByName("nomJ3");
+                        text.getRenderer(TextRenderer.class).setText(lkl.get(1).getName());
+                        break;
+                }
+                
                 break;
+                
+                
+                
+            //PARTIE A 4 JOUEURS***********************************************/ 
             case 4:
                 playerAndColor.put(plr[0].getName(), colorP1);
                 playerAndColor.put(plr[1].getName(), colorP2);
@@ -900,14 +950,85 @@ public class Game3DLogic extends GameLogic {
                 playerAndColor.put(plr[3].getName(), colorP4);
 
                 //Defini le panel du bas et de droite à la couleur du joueur courant.
-                panel = nifty.getScreen("inGameHud2J").findElementByName("HudPanelBottom");
+                panel = nifty.getScreen("inGameHud").findElementByName("HudPanelBottom");
                 panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(p.getName())));
-                panel = nifty.getScreen("inGameHud2J").findElementByName("HudPanelRight");
+                panel = nifty.getScreen("inGameHud").findElementByName("HudPanelRight");
                 panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(p.getName())));
                 //Defini le nom du joueur courant (zone du bas)
-                text = nifty.getScreen("inGameHud2J").findElementByName("nomJ1");
+                text = nifty.getScreen("inGameHud").findElementByName("nomJ1");
                 text.getRenderer(TextRenderer.class).setText(p.getName());
 
+                switch (lkl.indexOf(p)) {
+                    case 0:
+                        panel = nifty.getScreen("inGameHud").findElementByName("HudPanelTop2");
+                        panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(lkl.get(1).getName())));
+                        text = nifty.getScreen("inGameHud").findElementByName("nomJ2");
+                        text.getRenderer(TextRenderer.class).setText(lkl.get(1).getName());
+
+                        panel = nifty.getScreen("inGameHud").findElementByName("HudPanelTop3");
+                        panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(lkl.get(2).getName())));
+                        text = nifty.getScreen("inGameHud").findElementByName("nomJ3");
+                        text.getRenderer(TextRenderer.class).setText(lkl.get(2).getName());
+                        
+                        panel = nifty.getScreen("inGameHud").findElementByName("HudPanelTop4");
+                        panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(lkl.get(3).getName())));
+                        text = nifty.getScreen("inGameHud").findElementByName("nomJ4");
+                        text.getRenderer(TextRenderer.class).setText(lkl.get(3).getName());
+                        
+                        break;
+                        
+                    case 1:
+                        panel = nifty.getScreen("inGameHud").findElementByName("HudPanelTop2");
+                        panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(lkl.get(2).getName())));
+                        text = nifty.getScreen("inGameHud").findElementByName("nomJ2");
+                        text.getRenderer(TextRenderer.class).setText(lkl.get(2).getName());
+
+                        panel = nifty.getScreen("inGameHud").findElementByName("HudPanelTop3");
+                        panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(lkl.get(3).getName())));
+                        text = nifty.getScreen("inGameHud").findElementByName("nomJ3");
+                        text.getRenderer(TextRenderer.class).setText(lkl.get(3).getName());
+                        
+                        panel = nifty.getScreen("inGameHud").findElementByName("HudPanelTop4");
+                        panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(lkl.get(0).getName())));
+                        text = nifty.getScreen("inGameHud").findElementByName("nomJ4");
+                        text.getRenderer(TextRenderer.class).setText(lkl.get(0).getName());
+                        
+                        break;
+
+                    case 2:
+                        panel = nifty.getScreen("inGameHud").findElementByName("HudPanelTop2");
+                        panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(lkl.get(3).getName())));
+                        text = nifty.getScreen("inGameHud").findElementByName("nomJ2");
+                        text.getRenderer(TextRenderer.class).setText(lkl.get(3).getName());
+
+                        panel = nifty.getScreen("inGameHud").findElementByName("HudPanelTop3");
+                        panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(lkl.get(0).getName())));
+                        text = nifty.getScreen("inGameHud").findElementByName("nomJ3");
+                        text.getRenderer(TextRenderer.class).setText(lkl.get(0).getName());
+                        
+                        panel = nifty.getScreen("inGameHud").findElementByName("HudPanelTop4");
+                        panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(lkl.get(1).getName())));
+                        text = nifty.getScreen("inGameHud").findElementByName("nomJ4");
+                        text.getRenderer(TextRenderer.class).setText(lkl.get(1).getName());
+                        break;
+                        
+                    case 3:
+                        panel = nifty.getScreen("inGameHud").findElementByName("HudPanelTop2");
+                        panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(lkl.get(0).getName())));
+                        text = nifty.getScreen("inGameHud").findElementByName("nomJ2");
+                        text.getRenderer(TextRenderer.class).setText(lkl.get(0).getName());
+
+                        panel = nifty.getScreen("inGameHud").findElementByName("HudPanelTop3");
+                        panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(lkl.get(1).getName())));
+                        text = nifty.getScreen("inGameHud").findElementByName("nomJ3");
+                        text.getRenderer(TextRenderer.class).setText(lkl.get(1).getName());
+                        
+                        panel = nifty.getScreen("inGameHud").findElementByName("HudPanelTop4");
+                        panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(lkl.get(2).getName())));
+                        text = nifty.getScreen("inGameHud").findElementByName("nomJ4");
+                        text.getRenderer(TextRenderer.class).setText(lkl.get(2).getName());
+                        break;
+                }
 
                 break;
         }
