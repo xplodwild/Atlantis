@@ -91,6 +91,11 @@ public class Game3DLogic extends GameLogic {
      */
     private static final Logger logger = Logger.getGlobal();
 
+    
+    /**
+     * Constructeur de Game3DLogic 
+     * 
+     */
     public Game3DLogic() {
         super();
         mRenderer = new Game3DRenderer(this);
@@ -100,11 +105,18 @@ public class Game3DLogic extends GameLogic {
         mCanCancelPickingAction = false;
     }
 
+    /**
+     * Demarre le renderer graphique
+     */
     @Override
     public void boot() {
         mRenderer.start();
     }
 
+    
+    /**
+     * Demarre une partie
+     */
     @Override
     public void startGame() {
 
@@ -133,6 +145,7 @@ public class Game3DLogic extends GameLogic {
         super.startGame();
     }
 
+    
     /**
      * Remet à zéro les éléments pickée et relance le dernier picking
      */
