@@ -27,6 +27,9 @@ import com.jme3.math.Quaternion;
 import com.jme3.math.Spline;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
+import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.loaderv2.types.PanelType;
 import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.board.TileAction;
 import fr.miage.atlantis.board.WaterTile;
@@ -53,6 +56,8 @@ import fr.miage.atlantis.gui.controllers.GuiController;
 import fr.miage.atlantis.logic.GameLogic;
 import fr.miage.atlantis.logic.GameTurn;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
@@ -69,7 +74,6 @@ public class Game3DLogic extends GameLogic {
 
     private Game3DRenderer mRenderer;
     private GameEntity mPickedEntity;
-
 
   /**
      * Instance du logger Java
@@ -793,6 +797,64 @@ public class Game3DLogic extends GameLogic {
         // TODO: Game Over
 
 
+    }
+    
+    
+    
+    /**
+     * Stocke le tour présent, génère le suivant et le démarre via start()
+     *
+     */
+    @Override
+    public void nextTurn() {
+        super.nextTurn();
+                
+        Player p = this.getCurrentTurn().getPlayer();
+        
+        String joueurCourant=p.getName();
+       
+        Player[] plr=this.getPlayers();
+        
+        int lg=plr.length;
+        
+        String colorP1="#0060ab4d";
+        String colorP2="#349b144d";
+        String colorP3="#eda0004d";
+        String colorP4="#c6000b4d";
+        
+        HashMap<String,String> playerAndColor=new HashMap();
+        
+        
+        
+        switch(lg){
+            case 2:                
+                playerAndColor.put(plr[0].getName(), colorP1);
+                playerAndColor.put(plr[1].getName(), colorP2);
+                
+                Nifty nifty=mRenderer.getNifty();
+                
+                Element panel =  nifty.getScreen("inGameHud3J").findElementByName("HudPanelTop");
+                
+                
+               
+               
+                break;
+            case 3 :
+                playerAndColor.put(plr[0].getName(), colorP1);
+                playerAndColor.put(plr[1].getName(), colorP2);
+                playerAndColor.put(plr[2].getName(), colorP3);
+                
+                break;
+            case 4:
+                playerAndColor.put(plr[0].getName(), colorP1);
+                playerAndColor.put(plr[1].getName(), colorP2);
+                playerAndColor.put(plr[2].getName(), colorP3);
+                playerAndColor.put(plr[3].getName(), colorP4);
+                
+                break;
+        }
+        
+      
     }
 
 

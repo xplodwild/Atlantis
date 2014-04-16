@@ -63,6 +63,9 @@ public class Game3DRenderer extends SimpleApplication {
     private Gui mGui;
     private HudAnimator mHudAnimator;
     private HudManager mHudManager;
+    private Nifty mNifty;
+
+    
 
     public Game3DRenderer(Game3DLogic parent) {
         mParent = parent;
@@ -127,11 +130,11 @@ public class Game3DRenderer extends SimpleApplication {
         mHudManager = new HudManager(this);
 
         NiftyJmeDisplay jmdsp = new NiftyJmeDisplay(assetManager, inputManager, audioRenderer, viewPort);
-        Nifty n = jmdsp.getNifty();
+        mNifty = jmdsp.getNifty();
         this.guiViewPort.addProcessor(jmdsp);
 
-        mGui = new Gui(this, n);
-        n.gotoScreen("start");
+        mGui = new Gui(this, mNifty);
+        mNifty.gotoScreen("start");
     }
 
     public void toggleGraphicsStats() {
@@ -252,6 +255,10 @@ public class Game3DRenderer extends SimpleApplication {
 
         // Mise à jour des callbacks temporels
         mFutureUpdater.update(tpf);
+    }
+    
+    public Nifty getNifty() {
+        return mNifty;
     }
 
     @Override
