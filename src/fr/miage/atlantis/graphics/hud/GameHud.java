@@ -76,7 +76,7 @@ public class GameHud {
      * @param actions Liste des tiles d'action
      */
     public void displayPlayerTiles(List<TileAction> actions) {
-        int x = 0;
+        int y = 0;
         final float scale = 0.5f;
 
         // On enlève les tiles précédentes
@@ -84,14 +84,17 @@ public class GameHud {
             mHudManager.removeFromDisplay(tad);
         }
         mPlayerTiles.clear();
+        
+        final int width = mHudManager.getScreenWidth();
+        final int height = mHudManager.getScreenHeight() - 200;
 
         // On affiche les nouvelles tiles
         for (TileAction action : actions) {
             TileActionDisplay tad = TileActionDisplay.getTileForAction(action, mHudManager.getAssetManager());
             tad.scale(scale);
-            mHudManager.displayAt(tad, x, 0);
+            mHudManager.displayAt(tad, width - (width / 10), height - y);
             tad.setAlpha(1.0f);
-            x += tad.getWidth();
+            y += tad.getHeight();
 
             mPlayerTiles.add(tad);
         }

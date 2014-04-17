@@ -95,5 +95,13 @@ public class HudManager {
     public void displayBottomRight(AbstractDisplay disp) {
         displayAt(disp, mRenderer.getCamera().getWidth() - disp.getWidth() - 25, 25);
     }
+    
+    public int getScreenWidth() {
+        return mRenderer.getCamera().getWidth();
+    }
+    
+    public int getScreenHeight() {
+        return mRenderer.getCamera().getHeight();
+    }
 
 }
