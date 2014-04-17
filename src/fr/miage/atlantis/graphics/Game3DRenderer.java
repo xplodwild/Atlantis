@@ -65,8 +65,6 @@ public class Game3DRenderer extends SimpleApplication {
     private HudManager mHudManager;
     private Nifty mNifty;
 
-    
-
     public Game3DRenderer(Game3DLogic parent) {
         mParent = parent;
         mHudAnimator = new HudAnimator();
@@ -256,7 +254,7 @@ public class Game3DRenderer extends SimpleApplication {
         // Mise à jour des callbacks temporels
         mFutureUpdater.update(tpf);
     }
-    
+
     public Nifty getNifty() {
         return mNifty;
     }

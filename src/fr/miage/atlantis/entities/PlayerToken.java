@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package fr.miage.atlantis.entities;
 
 import fr.miage.atlantis.Player;
@@ -32,32 +31,27 @@ import fr.miage.atlantis.logic.GameLogic;
  */
 public class PlayerToken extends GameEntity {
 
-    public final static int STATE_UNDEFINED=-1;
-    public final static int STATE_ON_LAND  = 0;
+    public final static int STATE_UNDEFINED = -1;
+    public final static int STATE_ON_LAND = 0;
     public final static int STATE_SWIMMING = 1;
-    public final static int STATE_ON_BOAT  = 2;
-    public final static int STATE_SAFE     = 3;
-
+    public final static int STATE_ON_BOAT = 2;
+    public final static int STATE_SAFE = 3;
     /**
      * Joueur a qui appartient le pion
      */
     private Player mPlayer;
-
     /**
      * Etat du pion
      */
     private int mState;
-
     /**
      * Valeur du pion
      */
     private int mPoints;
-
     /**
      * Bateau (si applicable) sur lequel est ce joueur
      */
     private Boat mBoat;
-
 
     /**
      * Constructeur des pions
@@ -73,7 +67,6 @@ public class PlayerToken extends GameEntity {
         mPlayer = p;
     }
 
-
     @Override
     public boolean moveToTile(GameLogic logic, GameTile tile) {
         boolean result = super.moveToTile(logic, tile);
@@ -84,8 +77,6 @@ public class PlayerToken extends GameEntity {
 
         return result;
     }
-
-
 
     //--------------------------------------------------------------------------
     //GETTERS                                                                  |
@@ -107,13 +98,9 @@ public class PlayerToken extends GameEntity {
     }
     //--------------------------------------------------------------------------
 
-
-
-
     //--------------------------------------------------------------------------
     //SETTERS                                                                  |
     //--------------------------------------------------------------------------
-
     public void setState(int state) {
         if (mState == STATE_ON_BOAT && state != STATE_ON_BOAT) {
             // On n'est plus sur un bateau, donc on l'enlève pour éviter toute confusion

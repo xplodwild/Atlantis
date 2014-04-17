@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package fr.miage.atlantis.logic;
 
 import java.util.ArrayList;
@@ -23,10 +22,10 @@ import java.util.List;
 
 /**
  * Classe stockant les tours de jeu d'une partie
- * 
+ *
  * @author AtlantisTeam
  * @version 1.0
- * @date 03/03/2014  
+ * @date 03/03/2014
  */
 public class GameLog {
 
@@ -34,38 +33,30 @@ public class GameLog {
      * Liste des tours de jeu
      */
     private List<GameTurn> mTurns;
-    
-    
+
     /**
      * Constructeur de GameLog
-     * 
+     *
      */
     public GameLog() {
         mTurns = new ArrayList<GameTurn>();
     }
-    
-    
-    
+
     /**
      * Log un nouveau tour de jeu
-     * 
+     *
      * @param i Tour de jeu a logger
      */
-    public void logTurn(GameTurn i){
+    public void logTurn(GameTurn i) {
         this.mTurns.add(i);
     }
-   
-    
-    
-    
+
     //--------------------------------------------------------------------------
     //GETTERS                                                                  |
     //--------------------------------------------------------------------------
-    
-    
     /**
      * Retourne le tour de jeu numero i
-     * 
+     *
      * @param i Numero de tour a retourner
      * @return GameTurn correspondant
      */

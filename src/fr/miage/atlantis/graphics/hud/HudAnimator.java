@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package fr.miage.atlantis.graphics.hud;
 
 import java.util.ArrayList;
@@ -29,11 +28,11 @@ public class HudAnimator {
     private static final float SPEED_MULT = 3.0f;
 
     private class State {
+
         public AbstractDisplay display;
         public int direction;
         public float targetAlpha;
     }
-
     private List<State> mActiveStates;
     private List<State> mDeletionStates;
 
@@ -44,14 +43,15 @@ public class HudAnimator {
 
     /**
      * Appelé par le renderer, met à jour les animations
+     *
      * @param timeDelta Temps en secondes depuis la dernière frame
      */
     public void update(float timeDelta) {
         for (State state : mActiveStates) {
             boolean stop = false;
             float alpha = state.display.getAlpha() + timeDelta * SPEED_MULT * (float) state.direction;
-            if (state.direction < 0 && alpha <= state.targetAlpha ||
-                    state.direction > 0 && alpha >= state.targetAlpha) {
+            if (state.direction < 0 && alpha <= state.targetAlpha
+                    || state.direction > 0 && alpha >= state.targetAlpha) {
                 alpha = state.targetAlpha;
                 stop = true;
             }
@@ -74,6 +74,7 @@ public class HudAnimator {
 
     /**
      * Anime l'élément du hud en fade-in ou out, jusqu'à l'alpha target
+     *
      * @param disp L'élément à animer
      * @param targetAlpha La transparence finale, entre 0 et 1
      */
@@ -89,5 +90,4 @@ public class HudAnimator {
 
         mActiveStates.add(state);
     }
-
 }

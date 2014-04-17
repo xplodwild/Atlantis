@@ -84,7 +84,7 @@ public class Gui {
     private void instanciateScreens() {
 
         this.mNifty.fromXmlWithoutStartScreen("GUI/Screens.xml");
-        this.mNifty.registerScreenController(new GuiController(this.mGame3DRenderer,this.maudioRenderer));
+        this.mNifty.registerScreenController(new GuiController(this.mGame3DRenderer, this.maudioRenderer));
         //this.mNifty.fromXml("GUI/startScreen.xml", "start");
         //this.mNifty.fromXml("GUI/startScreen.xml","start",new GuiController(this.mGame3DRenderer));
         ((GuiController) this.mNifty.getScreen("start").getScreenController()).set3DRenderer(this.mGame3DRenderer);
@@ -111,8 +111,6 @@ public class Gui {
         // and register the command as a command with the console
         /*ConsoleCommands.ConsoleCommand simpleCommand = new SimpleCommand();
          consoleCommands.registerCommand("simple", simpleCommand);*/
-
-
 
         // create another command (this time we can even register arguments with nifty so that the command completion will work with arguments too)
 
@@ -169,8 +167,8 @@ public class Gui {
         return new ActionListener() {
             public void onAction(String name, boolean isPressed, float tpf) {
                 if (isPressed) {
-                      Gui.this.mNifty.gotoScreen("inGameMenu");
-                    ((GuiController) mNifty.getScreen("inGameMenu").getScreenController()).set3DRenderer(mGame3DRenderer); 
+                    Gui.this.mNifty.gotoScreen("inGameMenu");
+                    ((GuiController) mNifty.getScreen("inGameMenu").getScreenController()).set3DRenderer(mGame3DRenderer);
                     Camera cam = mGame3DRenderer.getCamera();
                     CamConstants.moveMenu(mGame3DRenderer.getCameraNode(), cam);
                 }

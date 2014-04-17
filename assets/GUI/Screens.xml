@@ -26,13 +26,13 @@
                 </panel>
                 
                 <panel  paddingTop="20%" align="center" height="8%" width="60%"  childLayout="vertical" visibleToMouse="true">                
-                    <control paddingTop="10%" id="btnOptions"   height="100%" width="100%" name="button" label="Sons on/off">
+                    <control paddingTop="10%" id="btnOptions"   height="100%" width="100%" name="button" label="Sons off">
                         <interact onClick="soundToggle()" />
                     </control>
                 </panel>
                 
                 <panel paddingTop="20%" align="center" height="8%" width="60%"  childLayout="vertical" visibleToMouse="true">                
-                    <control paddingTop="10%" id="btnOptions2"   height="100%" width="100%" name="button" label="Musique on/off">
+                    <control paddingTop="10%" id="btnOptions2"   height="100%" width="100%" name="button" label="Musique off">
                         <interact onClick="musicToggle()" />
                     </control>
                 </panel>
@@ -164,18 +164,18 @@
                 </panel>
                 
                 <panel  paddingTop="20%" align="center" height="8%" width="60%"  childLayout="vertical" visibleToMouse="true">                
-                    <control paddingTop="10%" id="btnOptions"   height="100%" width="100%" name="button" label="Sons on/off">
+                    <control paddingTop="10%" id="btnOptions"   height="100%" width="100%" name="button" label="Sons off">
                         <interact onClick="soundToggle()" />
                     </control>
                 </panel>
                 
                 <panel paddingTop="20%" align="center" height="8%" width="60%"  childLayout="vertical" visibleToMouse="true">                
-                    <control paddingTop="10%" id="btnOptions2"   height="100%" width="100%" name="button" label="Musique on/off">
+                    <control paddingTop="10%" id="btnOptions2"   height="100%" width="100%" name="button" label="Musique off">
                         <interact onClick="musicToggle()" />
                     </control>
                 </panel>
                 
-                 <panel id="menu" paddingTop="20%" align="center" height="8%" width="60%" childLayout="vertical" visibleToMouse="true">                
+                <panel id="menu" paddingTop="20%" align="center" height="8%" width="60%" childLayout="vertical" visibleToMouse="true">                
                     <control  id="btnMenu"   height="100%" width="100%" name="button" label="Retour à l'accueil">
                         <interact onClick="backToMenu()" />
                     </control>
@@ -229,7 +229,7 @@
                     <panel id="bas_3" height="100%" width="24%"  backgroundColor="#eda0004d" align="right" valign="top" childLayout="vertical" visibleToMouse="true">
                         <panel id="haut_3" height="25%" width="80%" align="right" valign="top" childLayout="vertical" visibleToMouse="true">
                             <text  align="center" text="Joueur 3" font="Fonts/sansitc.fnt"  color="#eda000ff" /> 
-                           <text id="nomJ3"   textHAlign="left" textVAlign="center" align="left" valign="center" text="" font="Fonts/sansitc.fnt"  color="#eeeeeeff" /> 
+                            <text id="nomJ3"   textHAlign="left" textVAlign="center" align="left" valign="center" text="" font="Fonts/sansitc.fnt"  color="#eeeeeeff" /> 
                             <!-- Ajouter une checkbox qui valide si un pseudo a été entré. -->
                         </panel> 
                     </panel> 

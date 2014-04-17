@@ -7,6 +7,7 @@ package fr.miage.atlantis.gui.controllers;
 import com.jme3.audio.AudioRenderer;
 import com.jme3.renderer.Camera;
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.controls.Button;
 import de.lessvoid.nifty.controls.Label;
 import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.elements.Element;
@@ -28,6 +29,8 @@ public class GuiController implements ScreenController {
     private ArrayList<String> nameRandomizer;
     private String[] players;
     private static int mScreenType;
+    private boolean musicState;
+    private boolean soundState;
 
     public GuiController(Game3DRenderer g3d, AudioRenderer ardr) {
         super();
@@ -36,6 +39,8 @@ public class GuiController implements ScreenController {
         this.nameRandomizer = new ArrayList();
         this.fillNameRandomizer();
         this.players = new String[4];
+        this.musicState = true;
+        this.soundState = true;
     }
 
     public GuiController() {
@@ -183,6 +188,21 @@ public class GuiController implements ScreenController {
         /**
          * TODO : toggle les sons FX ingame
          */
+        if (this.soundState) {
+            /**
+             * Renseigner la source audio a pause à la place de null
+             */
+            // this.maudioRenderer.pauseSource(null);
+            this.nifty.getScreen("start").findElementByName("btnOptions").getNiftyControl(Button.class).setText("Sons on");
+            this.nifty.getScreen("inGameMenu").findElementByName("btnOptions").getNiftyControl(Button.class).setText("Sons on");
+            this.soundState = false;
+        } else {
+            // this.maudioRenderer.playSource(null);
+
+            this.nifty.getScreen("start").findElementByName("btnOptions").getNiftyControl(Button.class).setText("Sons off");
+            this.nifty.getScreen("inGameMenu").findElementByName("btnOptions").getNiftyControl(Button.class).setText("Sons off");
+            this.soundState = true;
+        }
     }
 
     /**
@@ -193,11 +213,21 @@ public class GuiController implements ScreenController {
         /**
          * TODO : toggle la musique du jeu
          */
-        this.maudioRenderer.pauseSource(
-                /**
-                 * Renseigner la source audio a pause à la place de null
-                 */
-                null);
+        if (this.musicState) {
+            /**
+             * Renseigner la source audio a pause à la place de null
+             */
+            // this.maudioRenderer.pauseSource(null);
+            this.nifty.getScreen("start").findElementByName("btnOptions2").getNiftyControl(Button.class).setText("Musique on");
+            this.nifty.getScreen("inGameMenu").findElementByName("btnOptions2").getNiftyControl(Button.class).setText("Musique on");
+            this.musicState = false;
+        } else {
+            // this.maudioRenderer.playSource(null);
+
+            this.nifty.getScreen("start").findElementByName("btnOptions2").getNiftyControl(Button.class).setText("Musique off");
+            this.nifty.getScreen("inGameMenu").findElementByName("btnOptions2").getNiftyControl(Button.class).setText("Musique off");
+            this.musicState = true;
+        }
     }
 
     /**
@@ -221,8 +251,8 @@ public class GuiController implements ScreenController {
         fieldJ2.setText("");
         fieldJ3.setText("");
         fieldJ4.setText("");
-        
-        this.players=new String[4];
+
+        this.players = new String[4];
         this.cleanPlayerName();
 
         //Réaffiche les boutons Pseudo aleatoires
@@ -274,58 +304,52 @@ public class GuiController implements ScreenController {
         System.exit(0);
     }
 
-    
-    
-    
     /**
      * Met à jour les pseudo joueurs sur le GUI
      *
      */
     public void cleanPlayerName() {
         Element niftyElement;
-       
-            //Ecran 4 Joueurs
-            niftyElement = nifty.getScreen("inGameHud").findElementByName("nomJ1");
-            niftyElement.getRenderer(TextRenderer.class).setText("");
-            niftyElement = nifty.getScreen("inGameHud").findElementByName("nomJ2");
-            niftyElement.getRenderer(TextRenderer.class).setText("");
-            niftyElement = nifty.getScreen("inGameHud").findElementByName("nomJ3");
-            niftyElement.getRenderer(TextRenderer.class).setText("");
-            niftyElement = nifty.getScreen("inGameHud").findElementByName("nomJ4");
-            niftyElement.getRenderer(TextRenderer.class).setText("");
-      
-            //Ecran 3 Joueurs
-            niftyElement = nifty.getScreen("inGameHud3J").findElementByName("nomJ1");
-            niftyElement.getRenderer(TextRenderer.class).setText("");
-            niftyElement = nifty.getScreen("inGameHud3J").findElementByName("nomJ2");
-            niftyElement.getRenderer(TextRenderer.class).setText("");
-            niftyElement = nifty.getScreen("inGameHud3J").findElementByName("nomJ3");
-            niftyElement.getRenderer(TextRenderer.class).setText("");
-       
-            //Ecran 2 Joueurs
-            niftyElement = nifty.getScreen("inGameHud2J").findElementByName("nomJ1");
-            niftyElement.getRenderer(TextRenderer.class).setText("");
-            niftyElement = nifty.getScreen("inGameHud2J").findElementByName("nomJ2");
-            niftyElement.getRenderer(TextRenderer.class).setText("");
-      
 
-            //Ecran Accueil
-            niftyElement = nifty.getScreen("inGameMenu").findElementByName("nomJ1");
-            niftyElement.getRenderer(TextRenderer.class).setText("");
-            niftyElement = nifty.getScreen("inGameMenu").findElementByName("nomJ2");
-            niftyElement.getRenderer(TextRenderer.class).setText("");
+        //Ecran 4 Joueurs
+        niftyElement = nifty.getScreen("inGameHud").findElementByName("nomJ1");
+        niftyElement.getRenderer(TextRenderer.class).setText("");
+        niftyElement = nifty.getScreen("inGameHud").findElementByName("nomJ2");
+        niftyElement.getRenderer(TextRenderer.class).setText("");
+        niftyElement = nifty.getScreen("inGameHud").findElementByName("nomJ3");
+        niftyElement.getRenderer(TextRenderer.class).setText("");
+        niftyElement = nifty.getScreen("inGameHud").findElementByName("nomJ4");
+        niftyElement.getRenderer(TextRenderer.class).setText("");
 
-            niftyElement = nifty.getScreen("inGameMenu").findElementByName("nomJ3");
-            niftyElement.getRenderer(TextRenderer.class).setText("");
+        //Ecran 3 Joueurs
+        niftyElement = nifty.getScreen("inGameHud3J").findElementByName("nomJ1");
+        niftyElement.getRenderer(TextRenderer.class).setText("");
+        niftyElement = nifty.getScreen("inGameHud3J").findElementByName("nomJ2");
+        niftyElement.getRenderer(TextRenderer.class).setText("");
+        niftyElement = nifty.getScreen("inGameHud3J").findElementByName("nomJ3");
+        niftyElement.getRenderer(TextRenderer.class).setText("");
 
-            niftyElement = nifty.getScreen("inGameMenu").findElementByName("nomJ4");
-            niftyElement.getRenderer(TextRenderer.class).setText("");
-       
+        //Ecran 2 Joueurs
+        niftyElement = nifty.getScreen("inGameHud2J").findElementByName("nomJ1");
+        niftyElement.getRenderer(TextRenderer.class).setText("");
+        niftyElement = nifty.getScreen("inGameHud2J").findElementByName("nomJ2");
+        niftyElement.getRenderer(TextRenderer.class).setText("");
+
+
+        //Ecran Accueil
+        niftyElement = nifty.getScreen("inGameMenu").findElementByName("nomJ1");
+        niftyElement.getRenderer(TextRenderer.class).setText("");
+        niftyElement = nifty.getScreen("inGameMenu").findElementByName("nomJ2");
+        niftyElement.getRenderer(TextRenderer.class).setText("");
+
+        niftyElement = nifty.getScreen("inGameMenu").findElementByName("nomJ3");
+        niftyElement.getRenderer(TextRenderer.class).setText("");
+
+        niftyElement = nifty.getScreen("inGameMenu").findElementByName("nomJ4");
+        niftyElement.getRenderer(TextRenderer.class).setText("");
+
     }
-    
-    
-    
-    
+
     /**
      * Met à jour les pseudo joueurs sur le GUI
      *
@@ -448,7 +472,7 @@ public class GuiController implements ScreenController {
                         players[1] = players[3];
                         players[3] = "";
                     } else {
-                        
+
                         if (players[3].isEmpty()) {
                             players[1] = players[2];
                             players[2] = "";

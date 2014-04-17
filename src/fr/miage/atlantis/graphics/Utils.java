@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package fr.miage.atlantis.graphics;
 
 import com.jme3.asset.AssetManager;
@@ -34,14 +33,15 @@ import java.util.List;
 public class Utils {
 
     private static class BoxGeoPair {
+
         public Box box;
         public Geometry geo;
     }
-
     private static final List<BoxGeoPair> mBoxCache = new ArrayList<BoxGeoPair>();
 
     /**
      * Génère un material transparent (invisible)
+     *
      * @param am AssetManager
      * @return Un material transparent
      */
@@ -55,7 +55,9 @@ public class Utils {
     }
 
     /**
-     * Génère un cube avec un material invisible (pour les volumes de collision par exemple)
+     * Génère un cube avec un material invisible (pour les volumes de collision
+     * par exemple)
+     *
      * @param am AssetManager
      * @param box Box représentant le cube
      * @return Geometry cube

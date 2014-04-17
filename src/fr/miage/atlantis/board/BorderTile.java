@@ -15,56 +15,49 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package fr.miage.atlantis.board;
 
 /**
  * Tile de type plage
- * 
+ *
  * @author AtlantisTeam
  * @version 1.0
- * @date 28/02/2014  
+ * @date 28/02/2014
  */
-public class BorderTile extends GameTile{
+public class BorderTile extends GameTile {
 
     /**
-     * Attribut discriminant si oui ou non le tile frontiere est 
+     * Attribut discriminant si oui ou non le tile frontiere est
      */
     private boolean mIsEscapeBorder;
-    
-    
+
     /**
      * Constructeur de BorderTile
-     * 
+     *
      * @param board Plateau de jeu auquel appartient le tiles de type frontiere
      * @param name Nom du tile
      */
-    public BorderTile(GameBoard board,String name){ 
+    public BorderTile(GameBoard board, String name) {
         super(board, name, -99);
-        this.mIsEscapeBorder=false;
+        this.mIsEscapeBorder = false;
     }
-    
-    
+
     /**
      * Constructeur de BorderTile
-     * 
+     *
      * @param board Plateau de jeu auquel appartient le tiles de type frontiere
      * @param name Nom du tile
-     * @param isEscapeBorder true si la frontiere represente les echapatoires pour les pions dans les 4 coins du board
+     * @param isEscapeBorder true si la frontiere represente les echapatoires
+     * pour les pions dans les 4 coins du board
      */
-    public BorderTile(GameBoard board,String name,boolean isEscapeBorder){ 
+    public BorderTile(GameBoard board, String name, boolean isEscapeBorder) {
         super(board, name, -99);
-        this.mIsEscapeBorder=isEscapeBorder;
+        this.mIsEscapeBorder = isEscapeBorder;
     }
-    
-           
-    
-    
+
     //--------------------------------------------------------------------------
     //GETTERS                                                                  |
     //--------------------------------------------------------------------------
-    
-    
     public boolean isEscapeBorder() {
         return mIsEscapeBorder;
     }
