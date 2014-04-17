@@ -12,6 +12,7 @@ import fr.miage.atlantis.board.NullGameLogic;
 import fr.miage.atlantis.board.TileAction;
 import fr.miage.atlantis.entities.Boat;
 import fr.miage.atlantis.entities.GameEntity;
+import fr.miage.atlantis.entities.PlayerToken;
 import fr.miage.atlantis.entities.Shark;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -46,27 +47,22 @@ public class GameTurnTest {
     }
 
     /**
-     * Test of startTurn method, of class GameTurn.
-     */
-    @Test
-    public void testStartTurn() {
-        System.out.println("startTurn");
-        NullGameLogic instance = new NullGameLogic();
-        instance.startTurn();       
-    }
-
-    /**
      * Test of moveEntity method, of class GameTurn.
-     *
+     */
     @Test
     public void testMoveEntity_GameEntity_GameTile() {
         System.out.println("moveEntity");
-        GameEntity ent = null;
-        GameTile dest = null;
-        GameTurn instance = null;
-        instance.moveEntity(ent, dest);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        
+        Player joueur = new Player("lu",1);
+        NullGameLogic gl = new NullGameLogic();
+        GameTurn instance = new GameTurn(gl, joueur);
+        GameBoard board = new GameBoard();       
+        GameTile tile = board.getTileSet().get("Water #37");
+        GameEntity pion = new PlayerToken(joueur,6);
+        instance.moveEntity(pion, tile);
+        
+        assertEquals(pion, tile.getEntities());
+        
     }
 
     /**
