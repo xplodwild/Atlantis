@@ -15,12 +15,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package fr.miage.atlantis.gui.console.commands;
 
 import de.lessvoid.nifty.controls.Console;
 import de.lessvoid.nifty.controls.ConsoleCommands;
-
 
 /**
  * Clear command of the console
@@ -35,22 +33,23 @@ public class ClearConsoleCommand implements ConsoleCommands.ConsoleCommand {
      * Console sur laquelle on execute la commande
      */
     private Console mConsole;
-    
+
     /**
      * Constructeur de la commande
-     * 
+     *
      * @param mConsole Console sur laquelle on execute le clear
      */
     public ClearConsoleCommand(Console mConsole) {
-        this.mConsole=mConsole;
+        this.mConsole = mConsole;
     }
-    
+
     /**
      * Methode executée lors de l'appel de la commande
+     *
      * @param args arguments passés à la commande
      */
     @Override
-    public void execute(final String[] args) {        
-        mConsole.clear();      
+    public void execute(final String[] args) {
+        mConsole.clear();
     }
 }

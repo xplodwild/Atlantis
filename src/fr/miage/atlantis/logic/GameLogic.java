@@ -202,8 +202,8 @@ public abstract class GameLogic implements GameTurnListener {
     public void nextTurn() {
         mLog.logTurn(mCurrentTurn);
         Player p = mCurrentTurn.getPlayer();
-        
-        
+
+
         mCurrentTurn = new GameTurn(this, this.nextPlayer(p));
 
         // Lance le nouveau tour
@@ -309,12 +309,9 @@ public abstract class GameLogic implements GameTurnListener {
     }
     //--------------------------------------------------------------------------
 
-    
     //--------------------------------------------------------------------------
     //METHODES ABSTRAITES                                                      |
     //--------------------------------------------------------------------------
-    
-    
     /**
      * Methode permettant de lancer une partie
      */
@@ -354,7 +351,7 @@ public abstract class GameLogic implements GameTurnListener {
 
     /**
      * Signale au moteur de logique qu'on a pické une tile tourbillon
-     * 
+     *
      * @param tile Le tourbillon pické
      */
     public abstract void onTileWhirl(final GameTile tile);

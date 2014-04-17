@@ -31,11 +31,10 @@ import java.util.logging.Logger;
  */
 public class LoggingCommand implements ConsoleCommands.ConsoleCommand {
 
-    
     private Console console;
-    
+
     public LoggingCommand(Console mConsole) {
-        this.console=mConsole;
+        this.console = mConsole;
     }
 
     /**
@@ -46,13 +45,13 @@ public class LoggingCommand implements ConsoleCommands.ConsoleCommand {
     @Override
     public void execute(final String[] args) {
         String s1 = null;
-        if(args.length>1 ){        
+        if (args.length > 1) {
             s1 = args[1];
         }
         int nb1 = -99;
 
-        Console csl=console;
-        
+        Console csl = console;
+
         if ("-all".equals(s1)) {
             nb1 = 1;
         }
@@ -73,10 +72,10 @@ public class LoggingCommand implements ConsoleCommands.ConsoleCommand {
         switch (nb1) {
 
             case 1:
-                Logger.getGlobal().setLevel(Level.ALL);        
+                Logger.getGlobal().setLevel(Level.ALL);
                 break;
 
-            case 2:                
+            case 2:
                 Logger.getGlobal().setLevel(Level.WARNING);
                 break;
             case 3:
@@ -86,7 +85,7 @@ public class LoggingCommand implements ConsoleCommands.ConsoleCommand {
                 Logger.getGlobal().setLevel(Level.OFF);
                 break;
 
-            case 5:  
+            case 5:
             default:
                 csl.output("");
                 csl.output("Les arguments suivants sont supportes :");

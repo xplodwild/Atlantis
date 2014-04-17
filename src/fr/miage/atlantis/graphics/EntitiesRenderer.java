@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package fr.miage.atlantis.graphics;
 
 import com.jme3.asset.AssetManager;
@@ -43,7 +42,6 @@ public class EntitiesRenderer extends Node {
 
     private AssetManager mAssetManager;
     private BoardRenderer mBoardRenderer;
-
     private Map<GameEntity, Node> mEntityToNode;
     private Map<Node, GameEntity> mNodeToEntity;
 
@@ -124,5 +122,4 @@ public class EntitiesRenderer extends Node {
         WhaleModel model = new WhaleModel(mAssetManager);
         return model;
     }
-
 }

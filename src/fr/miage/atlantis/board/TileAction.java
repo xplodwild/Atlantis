@@ -50,11 +50,13 @@ public class TileAction {
      */
     public final static int ACTION_MOVE_ANIMAL = 0;
     /**
-     * Action déclenchable permettant d'annuler l'action d'un animal sur le joueur
+     * Action déclenchable permettant d'annuler l'action d'un animal sur le
+     * joueur
      */
     public final static int ACTION_CANCEL_ANIMAL = 1;
     /**
-     * Action immédiate faisant apparaître une nouvelle entité (shark, whale, boat)
+     * Action immédiate faisant apparaître une nouvelle entité (shark, whale,
+     * boat)
      */
     public final static int ACTION_SPAWN_ENTITY = 2;
     /**
@@ -73,97 +75,160 @@ public class TileAction {
      * Action de la tile volcan
      */
     public final static int ACTION_VOLCANO = 6;
-
-
     //--------------------------------------------------------------------------
     //TileAction sous les Tiles Beach
     //--------------------------------------------------------------------------
-
-    /** Nombre de tile action de type Spawn Animal Shark     */
+    /**
+     * Nombre de tile action de type Spawn Animal Shark
+     */
     public final static int TILE_COUNT_ANIMAL_SHARK_UNDERBEACHTILE = 3;
-    /** Nombre de tile action de type Spawn Animal Whale     */
+    /**
+     * Nombre de tile action de type Spawn Animal Whale
+     */
     public final static int TILE_COUNT_ANIMAL_WHALE_UNDERBEACHTILE = 3;
-    /** Nombre de tile action de type Move Animal Shark     */
+    /**
+     * Nombre de tile action de type Move Animal Shark
+     */
     private final static int TILE_COUNT_MOVE_SHARK_UNDERBEACHTILE = 1;
-    /** Nombre de tile action de type Move Animal Whale     */
+    /**
+     * Nombre de tile action de type Move Animal Whale
+     */
     private final static int TILE_COUNT_MOVE_WHALE_UNDERBEACHTILE = 1;
-    /** Nombre de tile action de type Move Animal Seaserpent     */
+    /**
+     * Nombre de tile action de type Move Animal Seaserpent
+     */
     private final static int TILE_COUNT_MOVE_SEASERPENT_UNDERBEACHTILE = 1;
-    /** Nombre de tile action de type Cancel Animal Shark     */
+    /**
+     * Nombre de tile action de type Cancel Animal Shark
+     */
     private final static int TILE_COUNT_CANCEL_SHARK_UNDERBEACHTILE = 1;
-    /** Nombre de tile action de type Cancel Animal Whale     */
+    /**
+     * Nombre de tile action de type Cancel Animal Whale
+     */
     private final static int TILE_COUNT_CANCEL_WHALE_UNDERBEACHTILE = 0;
-    /** Nombre de tile action de type Spawn Boat     */
+    /**
+     * Nombre de tile action de type Spawn Boat
+     */
     private final static int TILE_COUNT_SPAWN_BOAT_UNDERBEACHTILE = 1;
-    /** Nombre de tile action de type BonusSwim     */
+    /**
+     * Nombre de tile action de type BonusSwim
+     */
     private final static int TILE_COUNT_BONUS_SWIM_UNDERBEACHTILE = 3;
-    /** Nombre de tile action de type BonusBoat     */
+    /**
+     * Nombre de tile action de type BonusBoat
+     */
     private final static int TILE_COUNT_BONUS_BOAT_UNDERBEACHTILE = 2;
-    /** Nombre de tile action de type tourbillon     */
+    /**
+     * Nombre de tile action de type tourbillon
+     */
     private final static int TILE_COUNT_WHIRL_UNDERBEACHTILE = 0;
-    /** Nombre de tile action de type volcan     */
+    /**
+     * Nombre de tile action de type volcan
+     */
     private final static int TILE_COUNT_VOLCANO_UNDERBEACHTILE = 0;
-
     //--------------------------------------------------------------------------
     //TileAction sous les Tiles Forest
     //--------------------------------------------------------------------------
-
-    /** Nombre de tile de type Spawn Requin*/
+    /**
+     * Nombre de tile de type Spawn Requin
+     */
     public final static int TILE_COUNT_ANIMAL_SHARK_UNDERFORESTTILE = 2;
-    /** Nombre de tile action de type Spawn Animal Whale */
+    /**
+     * Nombre de tile action de type Spawn Animal Whale
+     */
     public final static int TILE_COUNT_ANIMAL_WHALE_UNDERFORESTTILE = 2;
-    /** Nombre de tile action de type Move Animal Shark  */
+    /**
+     * Nombre de tile action de type Move Animal Shark
+     */
     private final static int TILE_COUNT_MOVE_SHARK_UNDERFORESTTILE = 1;
-    /** Nombre de tile action de type Move Animal Whale  */
+    /**
+     * Nombre de tile action de type Move Animal Whale
+     */
     private final static int TILE_COUNT_MOVE_WHALE_UNDERFORESTTILE = 1;
-    /** Nombre de tile action de type Move Animal Seaserpent    */
+    /**
+     * Nombre de tile action de type Move Animal Seaserpent
+     */
     private final static int TILE_COUNT_MOVE_SEASERPENT_UNDERFORESTTILE = 1;
-    /** Nombre de tile action de type Cancel Animal Shark    */
+    /**
+     * Nombre de tile action de type Cancel Animal Shark
+     */
     private final static int TILE_COUNT_CANCEL_SHARK_UNDERFORESTTILE = 1;
-    /** Nombre de tile action de type Cancel Animal Whale     */
+    /**
+     * Nombre de tile action de type Cancel Animal Whale
+     */
     private final static int TILE_COUNT_CANCEL_WHALE_UNDERFORESTTILE = 2;
-    /** Nombre de tile action de type Spawn Boat     */
+    /**
+     * Nombre de tile action de type Spawn Boat
+     */
     private final static int TILE_COUNT_SPAWN_BOAT_UNDERFORESTTILE = 3;
-    /** Nombre de tile action de type BonusSwim     */
+    /**
+     * Nombre de tile action de type BonusSwim
+     */
     private final static int TILE_COUNT_BONUS_SWIM_UNDERFORESTTILE = 1;
-    /** Nombre de tile action de type BonusBoat     */
+    /**
+     * Nombre de tile action de type BonusBoat
+     */
     private final static int TILE_COUNT_BONUS_BOAT_UNDERFORESTTILE = 0;
-    /** Nombre de tile action de type tourbillon     */
+    /**
+     * Nombre de tile action de type tourbillon
+     */
     private final static int TILE_COUNT_WHIRL_UNDERFORESTTILE = 2;
-    /** Nombre de tile action de type volcan     */
+    /**
+     * Nombre de tile action de type volcan
+     */
     private final static int TILE_COUNT_VOLCANO_UNDERFORESTTILE = 0;
     //--------------------------------------------------------------------------
-
-
     //--------------------------------------------------------------------------
     //TileAction sous les Tiles Mountain
     //--------------------------------------------------------------------------
-
-    /** Nombre de tile action de type Spawn Animal Shark     */
+    /**
+     * Nombre de tile action de type Spawn Animal Shark
+     */
     public final static int TILE_COUNT_ANIMAL_SHARK_UNDERMOUNTAINTILE = 1;
-    /** Nombre de tile action de type Spawn Animal Whale     */
+    /**
+     * Nombre de tile action de type Spawn Animal Whale
+     */
     public final static int TILE_COUNT_ANIMAL_WHALE_UNDERMOUNTAINTILE = 0;
-    /** Nombre de tile action de type Move Animal Shark     */
+    /**
+     * Nombre de tile action de type Move Animal Shark
+     */
     private final static int TILE_COUNT_MOVE_SHARK_UNDERMOUNTAINTILE = 0;
-    /** Nombre de tile action de type Move Animal Whale     */
+    /**
+     * Nombre de tile action de type Move Animal Whale
+     */
     private final static int TILE_COUNT_MOVE_WHALE_UNDERMOUNTAINTILE = 0;
-    /** Nombre de tile action de type Move Animal Seaserpent     */
+    /**
+     * Nombre de tile action de type Move Animal Seaserpent
+     */
     private final static int TILE_COUNT_MOVE_SEASERPENT_UNDERMOUNTAINTILE = 0;
-    /** Nombre de tile action de type Cancel Animal Shark     */
+    /**
+     * Nombre de tile action de type Cancel Animal Shark
+     */
     private final static int TILE_COUNT_CANCEL_SHARK_UNDERMOUNTAINTILE = 1;
-    /** Nombre de tile action de type Cancel Animal Whale     */
+    /**
+     * Nombre de tile action de type Cancel Animal Whale
+     */
     private final static int TILE_COUNT_CANCEL_WHALE_UNDERMOUNTAINTILE = 1;
-    /** Nombre de tile action de type Spawn Boat     */
+    /**
+     * Nombre de tile action de type Spawn Boat
+     */
     private final static int TILE_COUNT_SPAWN_BOAT_UNDERMOUNTAINTILE = 0;
-    /** Nombre de tile action de type BonusSwim     */
+    /**
+     * Nombre de tile action de type BonusSwim
+     */
     private final static int TILE_COUNT_BONUS_SWIM_UNDERMOUNTAINTILE = 0;
-    /** Nombre de tile action de type BonusBoat     */
+    /**
+     * Nombre de tile action de type BonusBoat
+     */
     private final static int TILE_COUNT_BONUS_BOAT_UNDERMOUNTAINTILE = 0;
-    /** Nombre de tile action de type tourbillon     */
+    /**
+     * Nombre de tile action de type tourbillon
+     */
     private final static int TILE_COUNT_WHIRL_UNDERMOUNTAINTILE = 4;
-    /** Nombre de tile action de type volcan     */
+    /**
+     * Nombre de tile action de type volcan
+     */
     private final static int TILE_COUNT_VOLCANO_UNDERMOUNTAINTILE = 1;
-
     /**
      * Defini si l'action est une action a realiser immediatement ou non
      */
@@ -184,11 +249,7 @@ public class TileAction {
     private static ArrayList<TileAction> sRandomizerBeach;
     private static ArrayList<TileAction> sRandomizerForest;
     private static ArrayList<TileAction> sRandomizerMountain;
-
-
     private static final Logger logger = Logger.getLogger(GameBoard.class.getName());
-
-
 
     private TileAction(int action, int entity, boolean isImmediate,
             boolean isTriggerable, boolean isVolcano) {
@@ -218,6 +279,7 @@ public class TileAction {
 
     /**
      * Indique si oui ou non la tile a fini d'être utilisée
+     *
      * @return true si la tile est finie d'être utilisée
      */
     public boolean hasBeenUsed() {
@@ -327,7 +389,6 @@ public class TileAction {
         return retour;
     }
 
-
     /**
      * Genere une action au hasard à placer sous un tile montagne
      *
@@ -389,8 +450,7 @@ public class TileAction {
         return retour;
     }
 
-
-        /**
+    /**
      * Genere une action au hasard à placer sous un tile foret
      *
      * @return A random ActionTile
@@ -450,16 +510,15 @@ public class TileAction {
         return retour;
     }
 
-
-
-
     /**
-     * Defini la logique de jeu à lancer lors de l'utilisation de l'action d'un tile
+     * Defini la logique de jeu à lancer lors de l'utilisation de l'action d'un
+     * tile
      *
      * @param tile Tile d'action, si l'action est immédiate
      * @param logic Logique a executer à l'utilisation
-     * @return true si l'action s'est lancée, false si elle ne s'est pas lancée (par exemple, si
-     * c'est un mouvement de baleine mais qu'il n'y a pas de baleine dans le plateau)
+     * @return true si l'action s'est lancée, false si elle ne s'est pas lancée
+     * (par exemple, si c'est un mouvement de baleine mais qu'il n'y a pas de
+     * baleine dans le plateau)
      */
     public void use(GameTile tile, GameLogic logic) {
         switch (mAction) {
@@ -493,8 +552,10 @@ public class TileAction {
     }
 
     /**
-     * Retourne si oui ou non cette action peut être utilisée (c'est-à-dire qu'il existe des entités
-     * sur lesquelles l'action de cette classe est possible)
+     * Retourne si oui ou non cette action peut être utilisée (c'est-à-dire
+     * qu'il existe des entités sur lesquelles l'action de cette classe est
+     * possible)
+     *
      * @return true si l'action a une utilité dans l'état actuel du jeu
      */
     public boolean canBeUsed(GameLogic logic) {
@@ -548,6 +609,7 @@ public class TileAction {
 
     /**
      * Lance l'action d'une tile volcan
+     *
      * @param logic Logique du jeu
      */
     private void performActionVolcano(GameLogic logic) {
@@ -557,8 +619,9 @@ public class TileAction {
 
     /**
      * Lance l'action d'une tile tourbillon
+     *
      * @param tile La tile tourbillon
-     * @param logic  Logique du jeu
+     * @param logic Logique du jeu
      */
     private void performActionWhirl(GameTile tile, GameLogic logic) {
         // Tourbillon: Tout ce qui est sur la tile et les tiles adjacentes meurent (absolument tout)
@@ -568,6 +631,7 @@ public class TileAction {
 
     /**
      * Lance l'action de bonus de déplacement de bateau
+     *
      * @param logic Logique du jeu
      */
     private void performActionBonusBoat(GameLogic logic) {
@@ -591,6 +655,7 @@ public class TileAction {
 
     /**
      * Lance l'action de bonus de nage des bateaux
+     *
      * @param logic Logique du jeu
      */
     private void performActionBonusSwim(GameLogic logic) {
@@ -613,6 +678,7 @@ public class TileAction {
 
     /**
      * Lance l'action de téléportation d'un animal
+     *
      * @param logic Logique du jeu
      */
     private void performActionMoveAnimal(GameLogic logic) {
@@ -648,6 +714,7 @@ public class TileAction {
 
     /**
      * Lance l'action de spawning d'une entité
+     *
      * @param tile La tile où l'entité va spawn
      * @param logic Logique du jeu
      */
@@ -709,6 +776,6 @@ public class TileAction {
 
     @Override
     public String toString() {
-        return "TileAction(action=" + mAction + ", entity="+mEntity+", isImmediate=" + mIsImmediate + ", isTriggerable=" + mIsTriggerable + ")";
+        return "TileAction(action=" + mAction + ", entity=" + mEntity + ", isImmediate=" + mIsImmediate + ", isTriggerable=" + mIsTriggerable + ")";
     }
 }

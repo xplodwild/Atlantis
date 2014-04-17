@@ -1,4 +1,4 @@
-/*
+ /*
  * Copyright (C) 2014 Loris Durand, Guillaume Lesniak, Cristian Sanna,
  *                    Lucie Wiemert
  *
@@ -15,12 +15,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package fr.miage.atlantis.gui.console.commands;
 
 import de.lessvoid.nifty.controls.Console;
 import de.lessvoid.nifty.controls.ConsoleCommands;
-
 
 /**
  * BindList command of the console
@@ -31,34 +29,31 @@ import de.lessvoid.nifty.controls.ConsoleCommands;
  */
 public class BindListCommand implements ConsoleCommands.ConsoleCommand {
 
-    
-    
     private Console console;
-    
-    
+
     public BindListCommand(Console mConsole) {
-        this.console=mConsole;
+        this.console = mConsole;
     }
 
-    
     /**
      * Methode executée lors de l'appel de la commande
+     *
      * @param args arguments passés à la commande
      */
     @Override
-    public void execute(final String[] args) { 
-        
-         //On liste ici toutes les commandes executable dans la console 
-        Console csl=console;
-        
+    public void execute(final String[] args) {
+
+        //On liste ici toutes les commandes executable dans la console 
+        Console csl = console;
+
         csl.output("");
         csl.output("____________________________________________________");
-        csl.output("| Keyboard bind list                                |"); 
+        csl.output("| Keyboard bind list                                |");
         csl.output("____________________________________________________");
-        csl.output("|                                                   |");  
-        csl.output("| F10           :   Toggle FPS & Graphics info      |");  
-        csl.output("| F11           :   Toggle QuickTest mod            |");  
-        csl.output("| F12           :   Toggle console                  |"); 
+        csl.output("|                                                   |");
+        csl.output("| F10           :   Toggle FPS & Graphics info      |");
+        csl.output("| F11           :   Toggle QuickTest mod            |");
+        csl.output("| F12           :   Toggle console                  |");
         csl.output("|___________________________________________________|");
         csl.output("");
     }

@@ -55,14 +55,11 @@ import java.util.logging.Logger;
 public class InputActionListener {
 
     private final static int REQUEST_NONE = -1;
-
     public final static int REQUEST_ENTITY_PICK = (1 << 0);
-    public final static int REQUEST_TILE_PICK   = (1 << 1);
-
+    public final static int REQUEST_TILE_PICK = (1 << 1);
     private final static String INPUTMAP_MOUSE_HOVER = "mouse_hover";
     private final static String INPUTMAP_MOUSE_CLICK = "mouse_click";
     private final static String INPUTMAP_MOUSE_RIGHT_CLICK = "mouse_right_click";
-
     private InputManager mInputManager;
     private Game3DRenderer mRenderer;
     private PickingResult mPickingResult;
@@ -71,15 +68,13 @@ public class InputActionListener {
     private GameLogic.TilePickRequest mTileRequest;
 
     private class PickingResult {
+
         public final static int SOURCE_BOARD = 0;
         public final static int SOURCE_ENTITY = 1;
-
         public Geometry geometry;
         public int source;
     }
-
     private AnalogListener mMouseHoverListener = new AnalogListener() {
-
         private Spatial mPreviousGeometry = null;
         private Material mOriginalMaterial = null;
 
@@ -124,7 +119,6 @@ public class InputActionListener {
             }
         }
     };
-
     private ActionListener mMouseRightClickListener = new ActionListener() {
         public void onAction(String name, boolean isPressed, float tpf) {
             // Si on clic droit et qu'on est en requête, on demande à annuler les requêtes
@@ -133,7 +127,6 @@ public class InputActionListener {
             }
         }
     };
-
     private ActionListener mMouseClickListener = new ActionListener() {
         public void onAction(String name, boolean isPressed, float tpf) {
             // Si on clique et qu'on a effectivement une requête de picking
@@ -245,8 +238,9 @@ public class InputActionListener {
     }
 
     /**
-     * Demande à ce listener d'effectuer un picking en particulier. Le résultat sera rapporté
-     * au GameLogic correspondant.
+     * Demande à ce listener d'effectuer un picking en particulier. Le résultat
+     * sera rapporté au GameLogic correspondant.
+     *
      * @param request Un ou des flags REQUEST_** de cette classe
      */
     private boolean requestPicking(int request) {
@@ -335,7 +329,9 @@ public class InputActionListener {
     }
 
     /**
-     * Vérifie que l'entité pickée correspond aux contraintes de la requête de picking
+     * Vérifie que l'entité pickée correspond aux contraintes de la requête de
+     * picking
+     *
      * @param request La requête
      * @param ent L'entité pickée
      * @return true si l'entité respecte au moins une condition, false sinon
@@ -344,12 +340,12 @@ public class InputActionListener {
         // On vérifie tout d'abord la contrainte de tile alentour, s'il y en a une.
         if (request.pickNearTile != null) {
             GameTile tile = ent.getTile();
-            if (tile.getLeftBottomTile() != request.pickNearTile &&
-                    tile.getLeftTile() != request.pickNearTile &&
-                    tile.getLeftUpperTile() != request.pickNearTile &&
-                    tile.getRightBottomTile() != request.pickNearTile &&
-                    tile.getRightTile() != request.pickNearTile &&
-                    tile.getRightUpperTile() != request.pickNearTile) {
+            if (tile.getLeftBottomTile() != request.pickNearTile
+                    && tile.getLeftTile() != request.pickNearTile
+                    && tile.getLeftUpperTile() != request.pickNearTile
+                    && tile.getRightBottomTile() != request.pickNearTile
+                    && tile.getRightTile() != request.pickNearTile
+                    && tile.getRightUpperTile() != request.pickNearTile) {
                 return false;
             }
         }
@@ -522,12 +518,12 @@ public class InputActionListener {
         }
 
         if (request.pickNearTile != null) {
-            if (tile.getLeftBottomTile() != request.pickNearTile &&
-                    tile.getLeftTile() != request.pickNearTile &&
-                    tile.getLeftUpperTile() != request.pickNearTile &&
-                    tile.getRightBottomTile() != request.pickNearTile &&
-                    tile.getRightTile() != request.pickNearTile &&
-                    tile.getRightUpperTile() != request.pickNearTile) {
+            if (tile.getLeftBottomTile() != request.pickNearTile
+                    && tile.getLeftTile() != request.pickNearTile
+                    && tile.getLeftUpperTile() != request.pickNearTile
+                    && tile.getRightBottomTile() != request.pickNearTile
+                    && tile.getRightTile() != request.pickNearTile
+                    && tile.getRightUpperTile() != request.pickNearTile) {
                 return false;
             }
         }
@@ -537,6 +533,7 @@ public class InputActionListener {
 
     /**
      * Retrouve l'entité a partir d'une géometrie d'entité pickée
+     *
      * @param geometry
      * @return
      */
@@ -548,6 +545,7 @@ public class InputActionListener {
 
     /**
      * Retrouve une GameTile à partir d'une géométrie de tile pickée
+     *
      * @param geometry
      * @return
      */

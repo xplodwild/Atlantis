@@ -32,7 +32,6 @@ import com.jme3.texture.Texture2D;
 import com.jme3.util.SkyFactory;
 import com.jme3.water.WaterFilter;
 
-
 /**
  *
  */
@@ -77,7 +76,7 @@ public class Environment {
 
     private void setupSky(Node parent, ViewPort viewPort, AssetManager am, Camera cam) {
         parent.attachChild(SkyFactory.createSky(am,
-            "Textures/Sky/Bright/BrightSky.dds", false));
+                "Textures/Sky/Bright/BrightSky.dds", false));
     }
 
     private void setupLight(Node parent, AssetManager am, ViewPort viewPort) {

@@ -25,18 +25,17 @@ import fr.miage.atlantis.logic.GameLogic;
 public class Atlantis {
 
     private GameLogic mGameLogic;
-    
+
     public static void main(String[] args) {
         Atlantis app = new Atlantis();
         app.start();
     }
-    
+
     public Atlantis() {
         mGameLogic = new Game3DLogic();
     }
-    
+
     public void start() {
         mGameLogic.boot();
     }
-
 }

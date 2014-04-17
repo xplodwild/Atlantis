@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package fr.miage.atlantis.graphics.models;
 
 import com.jme3.animation.AnimChannel;
@@ -35,9 +34,7 @@ import fr.miage.atlantis.graphics.BoneAttachControl;
 public class AnimatedModel extends StaticModel {
 
     public final static String DATA_IS_CUSTOM_COLMODEL = "is_custom_colmodel";
-
     private final static float BLEND_TIME = 0.2f;
-
     private AnimControl mControl;
     private AnimChannel mChannel;
 
@@ -94,10 +91,11 @@ public class AnimatedModel extends StaticModel {
     }
 
     /**
-     * Met en place la Geometry de collision placée en paramètre, et la colle automatiquement
-     * au bone nommé selon la variable boneName.
-     * Cette fonction se charge d'attacher automatiquement 'shape' a la scène, et à lui définir
+     * Met en place la Geometry de collision placée en paramètre, et la colle
+     * automatiquement au bone nommé selon la variable boneName. Cette fonction
+     * se charge d'attacher automatiquement 'shape' a la scène, et à lui définir
      * le bon UserData.
+     *
      * @param shape La géométrie de collision à utiliser
      * @param boneName Le nom du bone auquel attacher la géométrie
      */

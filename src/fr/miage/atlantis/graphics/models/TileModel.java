@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package fr.miage.atlantis.graphics.models;
 
 import com.jme3.asset.AssetManager;
@@ -29,7 +28,6 @@ public class TileModel extends StaticModel implements AbstractTileModel {
 
     public final static String DATA_IS_TILE = "is_tile";
     public final static String DATA_TILE_NAME = "tile_name";
-
     private int mHeight;
 
     public TileModel(final String tileName, int height, AssetManager am) {
@@ -50,12 +48,12 @@ public class TileModel extends StaticModel implements AbstractTileModel {
 
     public Vector3f getTileTopCenter() {
         updateWorldBound();
-        return getModelNode().getWorldBound().getCenter().add(0.0f, 6.0f * (mHeight+1), 0.0f);
+        return getModelNode().getWorldBound().getCenter().add(0.0f, 6.0f * (mHeight + 1), 0.0f);
     }
 
     public Vector3f getRandomizedTileTopCenter() {
         Random r = new Random();
-        return getTileTopCenter().add(-10.0f + r.nextFloat() * 20.0f, 0f,  -10.0f + r.nextFloat() * 20.0f);
+        return getTileTopCenter().add(-10.0f + r.nextFloat() * 20.0f, 0f, -10.0f + r.nextFloat() * 20.0f);
     }
 
     private static String getModelPathFromHeight(int height) {
