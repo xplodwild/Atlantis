@@ -61,7 +61,8 @@ public class GameTurnTest {
         GameEntity pion = new PlayerToken(joueur,6);
         instance.moveEntity(pion, tile);
         
-        assertEquals(pion, tile.getEntities());
+        assertTrue(tile.getEntities().contains(pion));
+        //assertSame(pion, tile.getEntities());
         
     }
 
