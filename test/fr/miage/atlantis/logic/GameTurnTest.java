@@ -57,27 +57,45 @@ public class GameTurnTest {
         NullGameLogic gl = new NullGameLogic();
         GameTurn instance = new GameTurn(gl, joueur);
         GameBoard board = new GameBoard();       
-        GameTile tile = board.getTileSet().get("Water #37");
+        
+        //on ajoute un pion sur une tile et on test qu'elle est dessus.
         GameEntity pion = new PlayerToken(joueur,6);
-        instance.moveEntity(pion, tile);
+        GameTile tileDep = board.getTileSet().get("Water #35");
+        tileDep.addEntity(pion);       
+        assertTrue(tileDep.getEntities().contains(pion));
         
+        //on déplace le pion sur une autre tile et on test que le pion s'est déplacé.
+        GameTile tile = board.getTileSet().get("Water #37");
+        instance.moveEntity(pion, tile);               
         assertTrue(tile.getEntities().contains(pion));
-        //assertSame(pion, tile.getEntities());
         
+       /*on teste si le pion n'est plus sur la tile d'origine (à revoir)
+        assertFalse(tileDep.getEntities().contains(pion));
+       */        
     }
 
     /**
      * Test of moveEntity method, of class GameTurn.
-     *
+     */
     @Test
     public void testMoveEntity_GameEntity_Boat() {
         System.out.println("moveEntity");
-        GameEntity ent = null;
-        Boat dest = null;
-        GameTurn instance = null;
-        instance.moveEntity(ent, dest);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Player joueur = new Player("Lucie", 1);
+        NullGameLogic gl = new NullGameLogic();
+        GameTurn instance = new GameTurn(gl, joueur);
+        GameBoard board = new GameBoard();
+        GameTile tile = board.getTileSet().get("Water #37");
+        PlayerToken pion = new PlayerToken(joueur,6);
+        Boat boat = new Boat();
+                
+        //on met un bateau sur une tile et on déplace le pion sur un bateau
+         tile.addEntity(boat);
+         instance.moveEntity(pion, boat);
+     
+        System.out.println(boat.getOnboardTokens());
+        assertTrue(boat.getOnboardTokens().contains(pion));
+                  
+        
     }
 
     /**
