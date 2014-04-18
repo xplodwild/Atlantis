@@ -31,7 +31,6 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.PanelRenderer;
 import de.lessvoid.nifty.elements.render.TextRenderer;
-import de.lessvoid.nifty.loaderv2.types.PanelType;
 import de.lessvoid.nifty.tools.Color;
 import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.board.TileAction;
@@ -60,7 +59,6 @@ import fr.miage.atlantis.logic.GameLogic;
 import fr.miage.atlantis.logic.GameTurn;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -203,8 +201,6 @@ public class Game3DLogic extends GameLogic {
 
     public void onTurnStart(Player p) {
         // TODO: Animations
-
-        GuiController.changeTurn(p.getName(), this.getPlayers());
 
         logger.log(Level.FINE, "Game3DLogic: onTurnStart()", new Object[]{});
 
