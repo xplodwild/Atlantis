@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -239,5 +240,19 @@ public class BoardRenderer extends Node {
         mTileOffset = (Float) srcNode.getUserData(DATA_TILE_OFFSET);
 
         addTileToRender(dest, x, y);
+    }
+    
+    /**
+     * Enlève tous les éléments en rendu du board
+     */
+    public void clearBoard() {
+        Set<Node> nodes = mNodeToGameTiles.keySet();
+        for (Node node : nodes) {
+            detachChild(node);
+        }
+        
+        mTiles.clear();
+        mNodeToGameTiles.clear();
+        mGameTileToModel.clear();
     }
 }

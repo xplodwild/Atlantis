@@ -63,6 +63,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -91,10 +92,10 @@ public class Game3DLogic extends GameLogic {
      */
     private static final Logger logger = Logger.getGlobal();
 
-    
+
     /**
-     * Constructeur de Game3DLogic 
-     * 
+     * Constructeur de Game3DLogic
+     *
      */
     public Game3DLogic() {
         super();
@@ -113,7 +114,26 @@ public class Game3DLogic extends GameLogic {
         mRenderer.start();
     }
 
-    
+    @Override
+    public void prepareGame(String[] players) {
+        super.prepareGame(players);
+
+        // On fait le rendu des tiles
+        mRenderer.getBoardRenderer().clearBoard();
+        mRenderer.getBoardRenderer().renderBoard(getBoard());
+
+        // Rendu des entités déjà placées sur le plateau
+        mRenderer.getEntitiesRenderer().clearEntities();
+        Map<String, GameTile> tiles = getBoard().getTileSet();
+        for (GameTile tile : tiles.values()) {
+            for (GameEntity ent : tile.getEntities()) {
+                mRenderer.getEntitiesRenderer().addEntity(ent);
+            }
+        }
+    }
+
+
+
     /**
      * Demarre une partie
      */
@@ -145,7 +165,7 @@ public class Game3DLogic extends GameLogic {
         super.startGame();
     }
 
-    
+
     /**
      * Remet à zéro les éléments pickée et relance le dernier picking
      */
@@ -989,7 +1009,9 @@ public class Game3DLogic extends GameLogic {
         switch (lg) {
 
 
+
             //PARTIE A 2 JOUEURS***********************************************/ 
+
             case 2:
                 //Lie les pseudos a leurs couleurs.
                 playerAndColor.put(plr[0].getName(), colorP1);
@@ -1019,7 +1041,9 @@ public class Game3DLogic extends GameLogic {
 
 
 
+
             //PARTIE A 3 JOUEURS***********************************************/    
+
             case 3:
                 playerAndColor.put(plr[0].getName(), colorP1);
                 playerAndColor.put(plr[1].getName(), colorP2);
@@ -1078,7 +1102,11 @@ public class Game3DLogic extends GameLogic {
 
 
 
+
             //PARTIE A 4 JOUEURS***********************************************/ 
+
+            //PARTIE A 4 JOUEURS***********************************************/
+
             case 4:
                 playerAndColor.put(plr[0].getName(), colorP1);
                 playerAndColor.put(plr[1].getName(), colorP2);
