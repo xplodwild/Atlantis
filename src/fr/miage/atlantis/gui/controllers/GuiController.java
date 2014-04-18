@@ -178,9 +178,6 @@ public class GuiController implements ScreenController {
         }
     }
 
-    public static void changeTurn(String playerNick, Player[] pTable) {
-    }
-
     /**
      * Désactive tout les sons du jeu
      *
