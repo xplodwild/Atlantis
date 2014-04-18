@@ -35,6 +35,7 @@ import fr.miage.atlantis.graphics.models.SharkModel;
 import fr.miage.atlantis.graphics.models.WhaleModel;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -83,7 +84,24 @@ public class EntitiesRenderer extends Node {
         output.playAnimation(AnimationBrain.getIdleAnimation(ent));
         return output;
     }
+    
+    /**
+     * Supprime toutes les entitées présentes sur le plateau
+     */
+    public void clearEntities() {
+        Set<Node> nodes = mNodeToEntity.keySet();
+        for (Node node : nodes) {
+            detachChild(node);
+        }
+        
+        mEntityToNode.clear();
+        mNodeToEntity.clear();
+    }
 
+    /**
+     * Supprime du plateau l'entité indiquée
+     * @param ent L'entité à supprimer
+     */
     public void removeEntity(GameEntity ent) {
         Node node = mEntityToNode.get(ent);
         detachChild(node);

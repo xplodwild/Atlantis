@@ -63,6 +63,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -91,10 +92,10 @@ public class Game3DLogic extends GameLogic {
      */
     private static final Logger logger = Logger.getGlobal();
 
-    
+
     /**
-     * Constructeur de Game3DLogic 
-     * 
+     * Constructeur de Game3DLogic
+     *
      */
     public Game3DLogic() {
         super();
@@ -113,7 +114,26 @@ public class Game3DLogic extends GameLogic {
         mRenderer.start();
     }
 
-    
+    @Override
+    public void prepareGame(String[] players) {
+        super.prepareGame(players);
+
+        // On fait le rendu des tiles
+        mRenderer.getBoardRenderer().clearBoard();
+        mRenderer.getBoardRenderer().renderBoard(getBoard());
+
+        // Rendu des entités déjà placées sur le plateau
+        mRenderer.getEntitiesRenderer().clearEntities();
+        Map<String, GameTile> tiles = getBoard().getTileSet();
+        for (GameTile tile : tiles.values()) {
+            for (GameEntity ent : tile.getEntities()) {
+                mRenderer.getEntitiesRenderer().addEntity(ent);
+            }
+        }
+    }
+
+
+
     /**
      * Demarre une partie
      */
@@ -145,7 +165,7 @@ public class Game3DLogic extends GameLogic {
         super.startGame();
     }
 
-    
+
     /**
      * Remet à zéro les éléments pickée et relance le dernier picking
      */
@@ -954,12 +974,12 @@ public class Game3DLogic extends GameLogic {
      */
     @Override
     public void nextTurn() {
-        
+
         super.nextTurn();
         Player p = this.getCurrentTurn().getPlayer();
-        
-        
-        
+
+
+
         String joueurCourant = p.getName();
 
         Player[] plr = this.getPlayers();
@@ -987,9 +1007,9 @@ public class Game3DLogic extends GameLogic {
         Element text, panel;
         Nifty nifty = mRenderer.getNifty();
         switch (lg) {
-            
-            
-            //PARTIE A 2 JOUEURS***********************************************/ 
+
+
+            //PARTIE A 2 JOUEURS***********************************************/
             case 2:
                 //Lie les pseudos a leurs couleurs.
                 playerAndColor.put(plr[0].getName(), colorP1);
@@ -1016,10 +1036,10 @@ public class Game3DLogic extends GameLogic {
                     text.getRenderer(TextRenderer.class).setText(lkl.get(1).getName());
                 }
                 break;
-                
-                
-                
-            //PARTIE A 3 JOUEURS***********************************************/    
+
+
+
+            //PARTIE A 3 JOUEURS***********************************************/
             case 3:
                 playerAndColor.put(plr[0].getName(), colorP1);
                 playerAndColor.put(plr[1].getName(), colorP2);
@@ -1047,7 +1067,7 @@ public class Game3DLogic extends GameLogic {
                         text = nifty.getScreen("inGameHud3J").findElementByName("nomJ3");
                         text.getRenderer(TextRenderer.class).setText(lkl.get(2).getName());
                         break;
-                        
+
                     case 1:
                         panel = nifty.getScreen("inGameHud3J").findElementByName("HudPanelTop2");
                         panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(lkl.get(2).getName())));
@@ -1058,7 +1078,7 @@ public class Game3DLogic extends GameLogic {
                         panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(lkl.get(0).getName())));
                         text = nifty.getScreen("inGameHud3J").findElementByName("nomJ3");
                         text.getRenderer(TextRenderer.class).setText(lkl.get(0).getName());
-                        
+
                         break;
 
                     case 2:
@@ -1073,12 +1093,12 @@ public class Game3DLogic extends GameLogic {
                         text.getRenderer(TextRenderer.class).setText(lkl.get(1).getName());
                         break;
                 }
-                
+
                 break;
-                
-                
-                
-            //PARTIE A 4 JOUEURS***********************************************/ 
+
+
+
+            //PARTIE A 4 JOUEURS***********************************************/
             case 4:
                 playerAndColor.put(plr[0].getName(), colorP1);
                 playerAndColor.put(plr[1].getName(), colorP2);
@@ -1105,14 +1125,14 @@ public class Game3DLogic extends GameLogic {
                         panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(lkl.get(2).getName())));
                         text = nifty.getScreen("inGameHud").findElementByName("nomJ3");
                         text.getRenderer(TextRenderer.class).setText(lkl.get(2).getName());
-                        
+
                         panel = nifty.getScreen("inGameHud").findElementByName("HudPanelTop4");
                         panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(lkl.get(3).getName())));
                         text = nifty.getScreen("inGameHud").findElementByName("nomJ4");
                         text.getRenderer(TextRenderer.class).setText(lkl.get(3).getName());
-                        
+
                         break;
-                        
+
                     case 1:
                         panel = nifty.getScreen("inGameHud").findElementByName("HudPanelTop2");
                         panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(lkl.get(2).getName())));
@@ -1123,12 +1143,12 @@ public class Game3DLogic extends GameLogic {
                         panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(lkl.get(3).getName())));
                         text = nifty.getScreen("inGameHud").findElementByName("nomJ3");
                         text.getRenderer(TextRenderer.class).setText(lkl.get(3).getName());
-                        
+
                         panel = nifty.getScreen("inGameHud").findElementByName("HudPanelTop4");
                         panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(lkl.get(0).getName())));
                         text = nifty.getScreen("inGameHud").findElementByName("nomJ4");
                         text.getRenderer(TextRenderer.class).setText(lkl.get(0).getName());
-                        
+
                         break;
 
                     case 2:
@@ -1141,13 +1161,13 @@ public class Game3DLogic extends GameLogic {
                         panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(lkl.get(0).getName())));
                         text = nifty.getScreen("inGameHud").findElementByName("nomJ3");
                         text.getRenderer(TextRenderer.class).setText(lkl.get(0).getName());
-                        
+
                         panel = nifty.getScreen("inGameHud").findElementByName("HudPanelTop4");
                         panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(lkl.get(1).getName())));
                         text = nifty.getScreen("inGameHud").findElementByName("nomJ4");
                         text.getRenderer(TextRenderer.class).setText(lkl.get(1).getName());
                         break;
-                        
+
                     case 3:
                         panel = nifty.getScreen("inGameHud").findElementByName("HudPanelTop2");
                         panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(lkl.get(0).getName())));
@@ -1158,7 +1178,7 @@ public class Game3DLogic extends GameLogic {
                         panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(lkl.get(1).getName())));
                         text = nifty.getScreen("inGameHud").findElementByName("nomJ3");
                         text.getRenderer(TextRenderer.class).setText(lkl.get(1).getName());
-                        
+
                         panel = nifty.getScreen("inGameHud").findElementByName("HudPanelTop4");
                         panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(lkl.get(2).getName())));
                         text = nifty.getScreen("inGameHud").findElementByName("nomJ4");

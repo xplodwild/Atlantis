@@ -156,7 +156,6 @@ public abstract class GameLogic implements GameTurnListener {
      *
      */
     public GameLogic() {
-        mBoard = new GameBoard();
         mDice = GameDice.createDefault();
         mLog = new GameLog();
         mBoatsPlaced = 0;
@@ -168,6 +167,9 @@ public abstract class GameLogic implements GameTurnListener {
      * @param players Tableau des pseudo des joueurs
      */
     public void prepareGame(String[] players) {
+        // Création du board
+        mBoard = new GameBoard();
+        
         // On créé les joueurs
         mPlayers = new Player[players.length];
         for (int i = 0; i < mPlayers.length; i++) {
