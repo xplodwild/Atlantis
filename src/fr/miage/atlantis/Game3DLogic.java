@@ -20,6 +20,7 @@ package fr.miage.atlantis;
 import com.jme3.animation.AnimChannel;
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.AnimEventListener;
+import com.jme3.audio.AudioNode;
 import com.jme3.cinematic.MotionPath;
 import com.jme3.cinematic.MotionPathListener;
 import com.jme3.cinematic.events.MotionEvent;
@@ -27,6 +28,8 @@ import com.jme3.math.Quaternion;
 import com.jme3.math.Spline;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
+import fr.miage.atlantis.audio.AudioConstants;
+import fr.miage.atlantis.audio.AudioManager;
 import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.board.TileAction;
 import fr.miage.atlantis.board.WaterTile;
@@ -235,10 +238,16 @@ public class Game3DLogic extends GameLogic {
                     if (entNode instanceof PlayerModel) {
                         PlayerToken pt = (PlayerToken) ent;
                         if (pt.getState() == PlayerToken.STATE_ON_BOAT) {
+                            // Tour de magie! On détache en fait le personnage du monde normal, et
+                            // on l'attache au bateau directement. Ainsi, le personnage bougera
+                            // automatiquement avec le bateau.
                             Boat b = pt.getBoat();
                             BoatModel bm = (BoatModel) mRenderer.getEntitiesRenderer().getNodeFromEntity(b);
                             entNode.getParent().detachChild(entNode);
                             bm.attachChild(entNode);
+
+                            // Du coup, on remet à zéro la position pour qu'elle soit relative cette
+                            // fois-ci au bateau et non à l'origine du monde 3D
                             entNode.setLocalTranslation(Vector3f.ZERO);
                             entNode.rotate(0, Utils.degreesToRad(90), 0);
 
@@ -251,6 +260,11 @@ public class Game3DLogic extends GameLogic {
                                     entNode.setLocalTranslation(-10, 0, 0);
                                     break;
                             }
+
+                            // Et on joue un son lié à cet événement
+                            final AudioManager audioMan = AudioManager.getDefault();
+                            AudioNode node = audioMan.playSound(AudioConstants.Path.GO_IN_BOAT);
+                            audioMan.expireSoundAfter(node, AudioConstants.Length.GO_IN_BOAT);
                         }
                     }
 
@@ -295,6 +309,8 @@ public class Game3DLogic extends GameLogic {
 
         // On lance le mouvement
         motionEvent.play();
+
+        // On lis un son
     }
 
     public void onDiceRoll(int face) {
