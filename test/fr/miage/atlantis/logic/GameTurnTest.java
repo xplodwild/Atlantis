@@ -10,9 +10,11 @@ import fr.miage.atlantis.board.GameBoard;
 import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.board.NullGameLogic;
 import fr.miage.atlantis.board.TileAction;
+import fr.miage.atlantis.board.WaterTile;
 import fr.miage.atlantis.entities.Boat;
 import fr.miage.atlantis.entities.GameEntity;
 import fr.miage.atlantis.entities.PlayerToken;
+import fr.miage.atlantis.entities.SeaSerpent;
 import fr.miage.atlantis.entities.Shark;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -100,16 +102,24 @@ public class GameTurnTest {
 
     /**
      * Test of moveDiceEntity method, of class GameTurn.
-     *
+     */
     @Test
     public void testMoveDiceEntity() {
         System.out.println("moveDiceEntity");
-        GameEntity ent = null;
-        GameTile dest = null;
-        GameTurn instance = null;
+        GameEntity ent = new SeaSerpent();
+        GameTile dep = new WaterTile(null, "Depart");
+        dep.addEntity(ent);
+        GameTile dest = new WaterTile(null, "Arrivee");
+        GameTurn instance = new GameTurn(new NullGameLogic(), new Player(null, 0));
         instance.moveDiceEntity(ent, dest);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        
+        // L'entité s'est elle bien déplacée ?
+        assertTrue(dest.getEntities().contains(ent));
+        
+        // L'entité n'est plus sur la précedente tuile ?
+        assertFalse(dep.getEntities().contains(ent));
+        
+        //TODO L'entité est au deux endroits ca va pas.
     }
 
     /**
