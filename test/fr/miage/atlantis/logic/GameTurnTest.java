@@ -183,21 +183,36 @@ public class GameTurnTest {
         TileAction action = null;
         GameTurn instance = null;
         instance.useRemoteTile(action);
-        // TODO review the generated test code and remove the default call to fail.
+        // TODO Méthode non implémentée
         fail("The test case is a prototype.");
     }
 
     /**
      * Test of useLocalTile method, of class GameTurn.
-     *
+     */
     @Test
     public void testUseLocalTile() {
         System.out.println("useLocalTile");
-        TileAction action = null;
-        GameTurn instance = null;
+        GameBoard gb = new GameBoard();
+        TileAction action = gb.getTileSet().get("Beach #1").getAction();
+        Player p = new Player("P1", 0);
+        p.addActionTile(action);
+        GameLogic gl = new NullGameLogic();
+        GameTurn instance = new GameTurn(gl, p);
+        
+        // Le joueur utilise son actiontile
         instance.useLocalTile(action);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        
+        assertFalse(p.getActionTiles().contains(action));
+       
+        try{
+            // Le joueur utilise encore son actiontile
+            instance.useLocalTile(action);
+            fail("L'exception ne s'est pas déclenchée, "
+                + "on a utilisé deux fois une tileaction en un tour");
+        }catch (Exception e){
+            assertTrue(true);
+        }
     }
 
     /**
