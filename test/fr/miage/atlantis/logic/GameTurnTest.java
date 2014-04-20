@@ -63,7 +63,7 @@ public class GameTurnTest {
         //on ajoute un pion sur une tile et on test qu'elle est dessus.
         GameEntity pion = new PlayerToken(joueur,6);
         GameTile tileDep = board.getTileSet().get("Water #35");
-        tileDep.addEntity(pion);       
+        pion.moveToTile(gl, tileDep);
         assertTrue(tileDep.getEntities().contains(pion));
         
         //on déplace le pion sur une autre tile et on test que le pion s'est déplacé.
@@ -71,9 +71,9 @@ public class GameTurnTest {
         instance.moveEntity(pion, tile);               
         assertTrue(tile.getEntities().contains(pion));
         
-       /*on teste si le pion n'est plus sur la tile d'origine (à revoir)
+       //on teste si le pion n'est plus sur la tile d'origine (à revoir)
         assertFalse(tileDep.getEntities().contains(pion));
-       */        
+        
     }
 
     /**
@@ -91,8 +91,8 @@ public class GameTurnTest {
         Boat boat = new Boat();
                 
         //on met un bateau sur une tile et on déplace le pion sur un bateau
-         tile.addEntity(boat);
-         instance.moveEntity(pion, boat);
+        boat.moveToTile(gl, tile);
+        boat.addPlayer(pion);
      
         System.out.println(boat.getOnboardTokens());
         assertTrue(boat.getOnboardTokens().contains(pion));
@@ -108,7 +108,7 @@ public class GameTurnTest {
         System.out.println("moveDiceEntity");
         GameEntity ent = new SeaSerpent();
         GameTile dep = new WaterTile(null, "Depart");
-        dep.addEntity(ent);
+        ent.moveToTile(new NullGameLogic(), dep);
         GameTile dest = new WaterTile(null, "Arrivee");
         GameTurn instance = new GameTurn(new NullGameLogic(), new Player(null, 0));
         instance.moveDiceEntity(ent, dest);
@@ -118,8 +118,6 @@ public class GameTurnTest {
         
         // L'entité n'est plus sur la précedente tuile ?
         assertFalse(dep.getEntities().contains(ent));
-        
-        //TODO L'entité est au deux endroits ca va pas.
     }
 
     /**
