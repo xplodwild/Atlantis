@@ -122,30 +122,16 @@ public class GameTurnTest {
 
     /**
      * Test of rollDice method, of class GameTurn.
-     *
+     */
     @Test
     public void testRollDice() {
         System.out.println("rollDice");
-        GameTurn instance = null;
-        int expResult = 0;
-        int result = instance.rollDice();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getRemainingDiceMoves method, of class GameTurn.
-     *
-    @Test
-    public void testGetRemainingDiceMoves() {
-        System.out.println("getRemainingDiceMoves");
-        GameTurn instance = null;
-        int expResult = 0;
-        int result = instance.getRemainingDiceMoves();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        GameLogic gl = new NullGameLogic();
+        GameTurn instance = new GameTurn(gl, new Player("P1", 1));
+        for(int i=0;i<1000;i++){
+            int res = instance.rollDice();
+            assertFalse(res<0 || res>=GameDice.FACE_COUNT);
+        }
     }
 
     /**

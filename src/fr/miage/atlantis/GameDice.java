@@ -43,7 +43,7 @@ public class GameDice {
     /**
      * Nombre de faces du dé
      */
-    private final static int FACE_COUNT = 3;
+    public final static int FACE_COUNT = 3;
     /**
      * Tableau de probabilités des faces
      */
