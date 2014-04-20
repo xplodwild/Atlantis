@@ -6,6 +6,7 @@ package fr.miage.atlantis.logic;
 
 import fr.miage.atlantis.GameDice;
 import fr.miage.atlantis.Player;
+import fr.miage.atlantis.board.BeachTile;
 import fr.miage.atlantis.board.GameBoard;
 import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.board.NullGameLogic;
@@ -142,26 +143,35 @@ public class GameTurnTest {
         System.out.println("hasSunkLandTile");
         GameLogic gl = new NullGameLogic();
         GameTurn instance = new GameTurn(gl, new Player("P1",0));
+        GameTile tile = new BeachTile(new GameBoard(), "Beach #yolo");
         
         // Aucune tuile n'a été coulée
         assertFalse(instance.hasSunkLandTile());
-        instance.sinkLandTile(new WaterTile(new GameBoard(),"Water #yolo"));
         
-        //On a coulé une tuile
+        //On coule une tuile
+        instance.sinkLandTile(tile);
+        
+        //On a bien coulé une tuile
         assertTrue(instance.hasSunkLandTile());
     }
 
     /**
      * Test of sinkLandTile method, of class GameTurn.
-     *
+     */
     @Test
     public void testSinkLandTile() {
         System.out.println("sinkLandTile");
-        GameTile tile = null;
-        GameTurn instance = null;
+        GameLogic gl = new NullGameLogic();
+        GameTurn instance = new GameTurn(gl, new Player("P1",0));
+        GameTile tile = new BeachTile(new GameBoard(), "Beach #yolo");
+        
+        // Aucune tuile n'a été coulée
+        assertFalse(instance.hasSunkLandTile());
+        
         instance.sinkLandTile(tile);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        
+        //On a bien coulé une tuile
+        assertTrue(instance.hasSunkLandTile());      
     }
 
     /**
