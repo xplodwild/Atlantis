@@ -136,16 +136,19 @@ public class GameTurnTest {
 
     /**
      * Test of hasSunkLandTile method, of class GameTurn.
-     *
+     */
     @Test
     public void testHasSunkLandTile() {
         System.out.println("hasSunkLandTile");
-        GameTurn instance = null;
-        boolean expResult = false;
-        boolean result = instance.hasSunkLandTile();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        GameLogic gl = new NullGameLogic();
+        GameTurn instance = new GameTurn(gl, new Player("P1",0));
+        
+        // Aucune tuile n'a été coulée
+        assertFalse(instance.hasSunkLandTile());
+        instance.sinkLandTile(new WaterTile(new GameBoard(),"Water #yolo"));
+        
+        //On a coulé une tuile
+        assertTrue(instance.hasSunkLandTile());
     }
 
     /**
