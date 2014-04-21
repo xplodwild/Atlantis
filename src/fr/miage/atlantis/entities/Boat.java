@@ -51,7 +51,7 @@ public class Boat extends GameEntity {
         this.mOnboard = new ArrayList();
     }
 
-     /**
+    /**
      * Deplace cette entité sur le Tile tile, avec la logique de jeu logic
      *
      * @param logic Logique de jeu à adopter
@@ -117,9 +117,11 @@ public class Boat extends GameEntity {
     }
 
     /**
-     * Renvoie si oui ou non le bateau appartient (= est contrôlé par) au joueur p
+     * Renvoie si oui ou non le bateau appartient (= est contrôlé par) au joueur
+     * p
+     *
      * @param p Le joueur
-     * @return  true si le joueur passé contrôle ce bateau
+     * @return true si le joueur passé contrôle ce bateau
      */
     public boolean belongsToPlayer(Player p) {
         // Un bateau "appartient" au joueur si :

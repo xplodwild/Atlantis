@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package fr.miage.atlantis.graphics;
 
 import fr.miage.atlantis.board.GameTile;
@@ -38,6 +37,7 @@ import java.util.Random;
 public class AnimationBrain {
 
     public static class State {
+
         public State(String a) {
             this(a, 0);
         }
@@ -57,22 +57,18 @@ public class AnimationBrain {
             this.loop = loop;
             return this;
         }
-
         /**
          * Nom de l'animation à jouer
          */
         public String animationName;
-
         /**
          * Offset d'angle Y
          */
         public float yOffset;
-
         /**
          * Mettre ou non en boucle
          */
         public boolean loop = true;
-
         /**
          * Animer ou non la transition
          */

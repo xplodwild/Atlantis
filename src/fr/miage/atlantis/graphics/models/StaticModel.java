@@ -15,17 +15,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package fr.miage.atlantis.graphics.models;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
-import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import com.jme3.scene.shape.Box;
 import com.jme3.texture.Texture;
 import com.jme3.util.TangentBinormalGenerator;
 import fr.miage.atlantis.graphics.ModelCache;
@@ -37,7 +34,6 @@ public class StaticModel extends Node {
 
     private final static float DEFAULT_SCALE = 5.0f;
     private final static boolean ENABLE_NORMAL_MAP = false;
-
     private Spatial mModel;
     private Material mMaterial;
     private Node mModelNode;
@@ -105,6 +101,4 @@ public class StaticModel extends Node {
     public Material getMaterial() {
         return mMaterial;
     }
-
-
 }

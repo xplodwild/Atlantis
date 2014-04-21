@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package fr.miage.atlantis.graphics.models;
 
 import com.jme3.asset.AssetManager;
@@ -25,10 +24,10 @@ import com.jme3.math.ColorRGBA;
  *
  */
 public class DiceModel extends StaticModel {
+
     public DiceModel(AssetManager am) {
         super(am, "Models/cube.mesh.xml", "Textures/dice.png", null);
         getMaterial().setFloat("Shininess", 1.0f);
         getMaterial().setColor("Specular", ColorRGBA.White);
     }
-
 }

@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package fr.miage.atlantis.graphics.hud;
 
 import com.jme3.asset.AssetManager;
@@ -27,11 +26,9 @@ import fr.miage.atlantis.board.TileAction;
 public class TileActionDisplay extends AbstractDisplay {
 
     private TileAction mAction;
-
-        public final static int IMAGE_WIDTH = 256;
+    public final static int IMAGE_WIDTH = 256;
     public final static int IMAGE_HEIGHT = 223;
 
-    
     public TileActionDisplay(final AssetManager assetManager, final TileAction action) {
         super(IMAGE_WIDTH, IMAGE_HEIGHT, "HUD TileAction Display", assetManager);
         mAction = action;
@@ -39,6 +36,7 @@ public class TileActionDisplay extends AbstractDisplay {
 
     /**
      * Retourne l'action originale représentée par ce display
+     *
      * @return L'action originale (TileAction)
      */
     public TileAction getAction() {
@@ -88,6 +86,7 @@ public class TileActionDisplay extends AbstractDisplay {
 
     /**
      * Affiche une tile d'annulation d'action à l'écran
+     *
      * @param entity L'entité annulée, l'un de TileAction.ENTITY_**
      */
     public void displayActionCancel(int entity) {
@@ -109,6 +108,7 @@ public class TileActionDisplay extends AbstractDisplay {
 
     /**
      * Affiche une tile de téléportation d'entité à l'écran
+     *
      * @param entity L'entité annulée, l'un de TileAction.ENTITY_**
      */
     public void displayActionTeleport(int entity) {

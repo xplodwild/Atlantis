@@ -97,15 +97,15 @@ public class NullGameLogic extends GameLogic {
 
     @Override
     public void onHitSpace() {
-        
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
     public void onCancellableEntityAction(GameEntity source, GameEntity target, int action) {
-      
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public void onCancelAction() {
-        
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

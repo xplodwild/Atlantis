@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package fr.miage.atlantis.entities;
 
 import fr.miage.atlantis.board.GameTile;
@@ -41,24 +40,19 @@ public class GameEntity {
     public final static int ACTION_WHALE_NUKE = 1;
     public final static int ACTION_SEASERPENT_CRUSH = 2;
     public final static int ACTION_PLAYER_ESCAPE = 3;
-
     private static final Logger logger = Logger.getGlobal();
-
     /**
      * Nom de l'entité
      */
     private String mName;
-
     /**
      * Tile de l'entité
      */
     private GameTile mTile;
-
     /**
      * Indique si l'entité est morte
      */
     private boolean mIsDead;
-
 
     /**
      * Constructeur de l'entité
@@ -78,7 +72,6 @@ public class GameEntity {
         return mIsDead;
     }
 
-
     /**
      * Deplace cette entité sur le Tile tile, avec la logique de jeu logic
      *
@@ -95,7 +88,7 @@ public class GameEntity {
         tile.addEntity(this);
         mTile = tile;
 
-        logger.log(Level.FINE, "MOVE " + mName + " TO " + tile.getName(),new Object[]{this,tile});
+        logger.log(Level.FINE, "MOVE " + mName + " TO " + tile.getName(), new Object[]{this, tile});
 
         boolean somethingHappened = false;
         if (logic != null) {
@@ -113,7 +106,6 @@ public class GameEntity {
         return somethingHappened;
     }
 
-
     /**
      * Tue l'unité visée
      *
@@ -125,7 +117,6 @@ public class GameEntity {
         mIsDead = true;
     }
 
-
     /**
      * Spawn une unité.
      *
@@ -134,7 +125,6 @@ public class GameEntity {
     public void spawn(GameLogic logic) {
         throw new UnsupportedOperationException("Not implemented");
     }
-
 
     /**
      * Actions a effectuer lors d'un croisement de deux Entity this et ent
@@ -148,14 +138,9 @@ public class GameEntity {
         return false;
     }
 
-
-
-
     //--------------------------------------------------------------------------
     //GETTERS                                                                  |
     //--------------------------------------------------------------------------
-
-
     public GameTile getTile() {
         return mTile;
     }

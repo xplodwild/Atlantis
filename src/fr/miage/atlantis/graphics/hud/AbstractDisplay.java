@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package fr.miage.atlantis.graphics.hud;
 
 import com.jme3.asset.AssetManager;
@@ -29,6 +28,7 @@ import com.jme3.ui.Picture;
  *
  */
 public class AbstractDisplay extends Picture {
+
     private Material mMaterial;
     private AssetManager mAssetManager;
     private int mWidth;
@@ -59,6 +59,7 @@ public class AbstractDisplay extends Picture {
 
     /**
      * Définit l'image affichée
+     *
      * @param image Chemin vers l'image
      */
     protected void showImage(final String image) {
@@ -77,7 +78,7 @@ public class AbstractDisplay extends Picture {
             // On créé un material spécial afin de pouvoir changer la valeur alpha (transparence)
             // de l'image.
             mMaterial = getMaterial().clone();
-            mMaterial.setColor("Color", new ColorRGBA(1,1,1,1));
+            mMaterial.setColor("Color", new ColorRGBA(1, 1, 1, 1));
             mMaterial.getAdditionalRenderState().setBlendMode(RenderState.BlendMode.Alpha);
             this.setMaterial(mMaterial);
         }
@@ -85,11 +86,12 @@ public class AbstractDisplay extends Picture {
 
     /**
      * Définit la transparence de l'image
+     *
      * @param alpha Transparence, où 1.0f est opaque, et 0.0f est transparent
      */
     public void setAlpha(float alpha) {
         setupMaterialIfNeeded();
-        mMaterial.setColor("Color", new ColorRGBA(1,1,1,alpha));
+        mMaterial.setColor("Color", new ColorRGBA(1, 1, 1, alpha));
     }
 
     /**

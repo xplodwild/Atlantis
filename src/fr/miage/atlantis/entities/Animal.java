@@ -15,11 +15,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package fr.miage.atlantis.entities;
 
 /**
- * Classe Animal, reprensente les entités Animales que l'on place sur le Plateau de jeu
+ * Classe Animal, reprensente les entités Animales que l'on place sur le Plateau
+ * de jeu
  *
  * @author AtlantisTeam
  * @version 1.0
@@ -32,7 +32,6 @@ public abstract class Animal extends GameEntity {
      */
     private int mMaxMoves;
 
-
     /**
      * Constructeur d'animaux
      *
@@ -42,17 +41,12 @@ public abstract class Animal extends GameEntity {
      */
     Animal(String name, int maxMoves) {
         super(name);
-        this.mMaxMoves=maxMoves;
+        this.mMaxMoves = maxMoves;
     }
-
-
-
 
     //--------------------------------------------------------------------------
     //GETTERS                                                                  |
     //--------------------------------------------------------------------------
-
-
     public int getMaxMoves() {
         return mMaxMoves;
     }

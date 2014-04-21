@@ -15,75 +15,66 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package fr.miage.atlantis.entities;
 
 import fr.miage.atlantis.board.GameTile;
 
 /**
  * Classe representant les movements d'entitée sur le plateau de jeu
- * 
+ *
  * @author AtlantisTeam
  * @version 1.0
- * @date 02/03/2014  
+ * @date 02/03/2014
  */
 public class EntityMove {
-    
+
     /**
      * Tile source
      */
     private GameTile mSource;
-    
     /**
      * Tile destination
      */
     private GameTile mDestination;
-    
     /**
      * Entité qui à bougé
      */
     private GameEntity mEntity;
-    
     /**
      * Numero du tour ou le mouvement à eu lieu
      */
     private int mTurnNumber;
-    
+
     /**
      * Constructeur des EntityMove
-     * 
+     *
      * @param src Source Tile
      * @param dest Destination Tile
      * @param ent Entity to move
      */
-    public EntityMove(GameTile src, GameTile dest, GameEntity ent,int turn) {
+    public EntityMove(GameTile src, GameTile dest, GameEntity ent, int turn) {
         this.mSource = src;
         this.mDestination = dest;
         this.mEntity = ent;
-        this.mTurnNumber=turn;
+        this.mTurnNumber = turn;
     }
-    
-    
-    
-    
+
     //--------------------------------------------------------------------------
     //GETTERS                                                                  |
     //--------------------------------------------------------------------------
-    
-    
     public GameTile getSource() {
         return mSource;
     }
-    
+
     public GameTile getDestination() {
         return mDestination;
     }
-    
+
     public GameEntity getEntity() {
         return mEntity;
     }
-    
-    public int getTurnNumber(){
+
+    public int getTurnNumber() {
         return this.mTurnNumber;
     }
     //--------------------------------------------------------------------------

@@ -112,8 +112,6 @@ public class Gui {
         /*ConsoleCommands.ConsoleCommand simpleCommand = new SimpleCommand();
          consoleCommands.registerCommand("simple", simpleCommand);*/
 
-
-
         // create another command (this time we can even register arguments with nifty so that the command completion will work with arguments too)
 
 
@@ -169,8 +167,8 @@ public class Gui {
         return new ActionListener() {
             public void onAction(String name, boolean isPressed, float tpf) {
                 if (isPressed) {
-                      Gui.this.mNifty.gotoScreen("inGameMenu");
-                    ((GuiController) mNifty.getScreen("inGameMenu").getScreenController()).set3DRenderer(mGame3DRenderer); 
+                    Gui.this.mNifty.gotoScreen("inGameMenu");
+                    ((GuiController) mNifty.getScreen("inGameMenu").getScreenController()).set3DRenderer(mGame3DRenderer);
                     Camera cam = mGame3DRenderer.getCamera();
                     CamConstants.moveMenu(mGame3DRenderer.getCameraNode(), cam);
                 }

@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package fr.miage.atlantis.graphics.models;
 
 import com.jme3.asset.AssetManager;
@@ -36,7 +35,6 @@ public class EmptyTileModel extends StaticModel implements AbstractTileModel {
 
     // Détermine si la tile pickée est juste un cocon autour de la tile
     public final static String DATA_IS_TILE_SHELL = "is_tile_shell";
-
     private final static String COLLISION_MESH_FILE_NAME = "Models/collision_tile.mesh.xml";
 
     public EmptyTileModel(final String tileName, AssetManager assetManager, ColorRGBA color) {
@@ -85,6 +83,6 @@ public class EmptyTileModel extends StaticModel implements AbstractTileModel {
 
     public Vector3f getRandomizedTileTopCenter() {
         Random r = new Random();
-        return getTileTopCenter().add(-10.0f + r.nextFloat() * 20.0f, 0f,  -10.0f + r.nextFloat() * 20.0f);
+        return getTileTopCenter().add(-10.0f + r.nextFloat() * 20.0f, 0f, -10.0f + r.nextFloat() * 20.0f);
     }
 }

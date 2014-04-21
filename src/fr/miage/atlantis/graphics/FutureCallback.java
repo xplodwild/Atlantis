@@ -15,13 +15,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package fr.miage.atlantis.graphics;
 
 /**
  * Fonction étant appelée au bout d'un certain temps ou nombre de frames rendues
  */
 public abstract class FutureCallback {
+
     private float mTimeRemaining;
 
     public FutureCallback(float timeSec) {
@@ -29,7 +29,9 @@ public abstract class FutureCallback {
     }
 
     /**
-     * Fonction appelée par l'engine - décrémente le temps restant avant l'appel de l'événement
+     * Fonction appelée par l'engine - décrémente le temps restant avant l'appel
+     * de l'événement
+     *
      * @param timeSinceLastFrame
      * @return
      */
