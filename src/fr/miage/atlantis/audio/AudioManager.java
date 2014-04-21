@@ -64,8 +64,9 @@ public class AudioManager {
      */
     public void setMainMusic(boolean playing) {
         if (mMainMusicNode == null) {
-            mMainMusicNode = new AudioNode(mAssetManager, AudioConstants.Path.MAIN_MUSIC, true);
+            mMainMusicNode = new AudioNode(mAssetManager, AudioConstants.Path.MAIN_MUSIC, false);
             mMainMusicNode.setPositional(false);
+            mMainMusicNode.setLooping(true);
             mRootNode.attachChild(mMainMusicNode);
         }
 
@@ -83,8 +84,9 @@ public class AudioManager {
      */
     public void setAmbience(boolean playing) {
         if (mAmbienceNode == null) {
-            mAmbienceNode = new AudioNode(mAssetManager, AudioConstants.Path.AMBIENCE, true);
+            mAmbienceNode = new AudioNode(mAssetManager, AudioConstants.Path.AMBIENCE, false);
             mAmbienceNode.setPositional(false);
+            mAmbienceNode.setLooping(true);
             mRootNode.attachChild(mAmbienceNode);
         }
 
@@ -116,9 +118,10 @@ public class AudioManager {
             node.setPositional(false);
             node.setLooping(loop);
             mRootNode.attachChild(node);
+            mKnownNodes.put(path, node);
         }
         
-        // node.setTimeOffset(0.0f);
+        node.setTimeOffset(0.0f);
         node.play();
 
         return node;
@@ -126,13 +129,10 @@ public class AudioManager {
 
     /**
      * Arrête la lecture de la node passée en paramètre.
-     * Notez qu'une fois la lecture arrêtée, il est impossible de rappeler "play" sur l'objet
-     * AudioNode puisqu'il est supprimé du noeud principal.
      * @param node Le noeud audio à arrêter (ce que renvoie playSound)
      */
     public void stopSound(final AudioNode node) {
-        node.stop();
-        mRootNode.detachChild(node);
+        node.pause();
     }
 
 }

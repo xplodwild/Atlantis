@@ -20,6 +20,7 @@ package fr.miage.atlantis;
 import com.jme3.animation.AnimChannel;
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.AnimEventListener;
+import com.jme3.audio.AudioNode;
 import com.jme3.cinematic.MotionPath;
 import com.jme3.cinematic.MotionPathListener;
 import com.jme3.cinematic.events.MotionEvent;
@@ -171,6 +172,7 @@ public class Game3DLogic extends GameLogic {
             mPickedEntity = null;
 
             mRenderer.getHud().getGameHud().hideRightClickHint();
+            AudioManager.getDefault().playSound(AudioConstants.Path.WHOOSH);
 
             return true;
         } else {
@@ -184,12 +186,12 @@ public class Game3DLogic extends GameLogic {
     }
 
     public void onTurnStart(Player p) {
-        // TODO: Animations
-
-        GuiController.changeTurn(p.getName(), this.getPlayers());
-
         logger.log(Level.FINE, "Game3DLogic: onTurnStart()", new Object[]{});
-
+        
+        AudioManager.getDefault().playSound(AudioConstants.Path.DING);
+        
+        GuiController.changeTurn(p.getName(), this.getPlayers());
+        
         mRenderer.getHud().getGameHud().displayPlayerTiles(getCurrentTurn().getPlayer().getActionTiles());
 
         getCurrentTurn().onTurnStarted();
@@ -241,6 +243,15 @@ public class Game3DLogic extends GameLogic {
         } else {
             motionEvent = generateEntityOnTileMotion(entNode, tileNode);
         }
+        
+        // On gère l'effet sonore
+        AudioNode tmpAudioNode = null;
+        if (ent instanceof Boat) {
+            tmpAudioNode = AudioManager.getDefault().playSound(AudioConstants.Path.MOVE_BOAT, true);
+        } else if (dest instanceof WaterTile) {
+            tmpAudioNode = AudioManager.getDefault().playSound(AudioConstants.Path.MOVE_SWIM, true);
+        }
+        final AudioNode audioEvent = tmpAudioNode; 
 
         // Callback lorsque l'animation est terminée
         motionEvent.getPath().addListener(new MotionPathListener() {
@@ -316,6 +327,11 @@ public class Game3DLogic extends GameLogic {
                             }
                         }
                     }
+                    
+                    // On arrête le son
+                    if (audioEvent != null) {
+                        AudioManager.getDefault().stopSound(audioEvent);
+                    }
 
 
                     // On notifie le jeu, toutes les actions nécessaires sont faites (si on
@@ -341,10 +357,13 @@ public class Game3DLogic extends GameLogic {
     public void onDiceRoll(int face) {
         // On a besoin de lancer le dé
         logger.log(Level.FINE, "Game3DLogic: onDiceRoll", new Object[]{});
+        AudioManager.getDefault().playSound(AudioConstants.Path.DICE_ROLL);
         mRenderer.rollDiceAnimation(face);
     }
 
     public void onSinkTile(final GameTile tile) {
+        AudioManager.getDefault().playSound(AudioConstants.Path.TILE_SPLASH);
+        
         doTileSinkAnimation(tile, new MotionPathListener() {
             public void onWayPointReach(MotionEvent control, int wayPointIndex) {
                 if (control.getPath().getNbWayPoints() == wayPointIndex + 1) {

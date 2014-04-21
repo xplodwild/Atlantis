@@ -14,6 +14,7 @@ import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import fr.miage.atlantis.Player;
+import fr.miage.atlantis.audio.AudioConstants;
 import fr.miage.atlantis.audio.AudioManager;
 import fr.miage.atlantis.graphics.CamConstants;
 import fr.miage.atlantis.graphics.Game3DRenderer;
@@ -100,6 +101,7 @@ public class GuiController implements ScreenController {
             Label tips2 = this.nifty.getScreen("start").findElementByName("tips2").getNiftyControl(Label.class);
             tips1.setText("Deux joueurs minimum pour commencer");
             tips2.setText("veuillez entrez au minimum 2 noms de joueurs.");
+            AudioManager.getDefault().playSound(AudioConstants.Path.ERROR);
         } else {
 
             players[0] = fieldJ1.getRealText();
@@ -429,6 +431,7 @@ public class GuiController implements ScreenController {
         String tmp = this.nameRandomizer.get(new Random().nextInt(this.nameRandomizer.size()));
         this.nameRandomizer.remove(tmp);
         fieldJ1.setText(tmp);
+        AudioManager.getDefault().playSound(AudioConstants.Path.WHOOSH);
     }
 
     public void nickRandomJ2() {
@@ -437,6 +440,7 @@ public class GuiController implements ScreenController {
         String tmp = this.nameRandomizer.get(new Random().nextInt(this.nameRandomizer.size()));
         this.nameRandomizer.remove(tmp);
         fieldJ2.setText(tmp);
+        AudioManager.getDefault().playSound(AudioConstants.Path.WHOOSH);
     }
 
     public void nickRandomJ3() {
@@ -445,6 +449,7 @@ public class GuiController implements ScreenController {
         String tmp = this.nameRandomizer.get(new Random().nextInt(this.nameRandomizer.size()));
         this.nameRandomizer.remove(tmp);
         fieldJ3.setText(tmp);
+        AudioManager.getDefault().playSound(AudioConstants.Path.WHOOSH);
     }
 
     public void nickRandomJ4() {
@@ -453,6 +458,7 @@ public class GuiController implements ScreenController {
         String tmp = this.nameRandomizer.get(new Random().nextInt(this.nameRandomizer.size()));
         this.nameRandomizer.remove(tmp);
         fieldJ4.setText(tmp);
+        AudioManager.getDefault().playSound(AudioConstants.Path.WHOOSH);
     }
 
     private void reArrangePlayers(int nbPlayers) {
