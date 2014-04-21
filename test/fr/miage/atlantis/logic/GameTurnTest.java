@@ -17,6 +17,7 @@ import fr.miage.atlantis.entities.GameEntity;
 import fr.miage.atlantis.entities.PlayerToken;
 import fr.miage.atlantis.entities.SeaSerpent;
 import fr.miage.atlantis.entities.Shark;
+import fr.miage.atlantis.entities.Whale;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -72,7 +73,7 @@ public class GameTurnTest {
         instance.moveEntity(pion, tile);               
         assertTrue(tile.getEntities().contains(pion));
         
-       //on teste si le pion n'est plus sur la tile d'origine (à revoir)
+       //on teste si le pion n'est plus sur la tile d'origine
         assertFalse(tileDep.getEntities().contains(pion));
         
     }
@@ -251,29 +252,47 @@ boat.addPlayer(pion);
     }
 
     /**
-     *  //On vérifie que l'entité donné par le dé est présent sur la board
-     *
+     *  On vérifie que l'entité donné par le dé est présent sur la board
+     */
     @Test
     public void testOnDiceRollFinished() {
         System.out.println("onDiceRollFinished");
-        NullGameLogic instance = new NullGameLogic();
+        NullGameLogic gl = new NullGameLogic();
         GameBoard board = new GameBoard();
-             
-        /*On créé l'entité requin sur la tile Water 37
-       instance.getDice().roll();
-       GameEntity entity = new Shark();
-      GameTile tile =  instance.getTileSet().
-      tile.addEntity(entity);*/
+        GameTurn instance = new GameTurn(gl, new Player("P1",0)); 
+        GameEntity req = new Shark();
+        GameEntity ser = new SeaSerpent();
+        GameEntity bal = new Whale();
        
-      
-        /*On lance le dé et on récupère le résultat
-        System.out.println(instance.onDiceRollFinished());
-      System.out.println(result);*/
-        
-      /*on vérifie qu'il existe cette entité sur le plateau
-       assertEquals(entity, result);
     
-    }*/
+        GameTile tile = board.getTileSet().get("Water #37");
+        GameTile tile1 = board.getTileSet().get("Water #23");
+        GameTile tile2 = board.getTileSet().get("Water #40");
+        
+        //on ajoute les entités sur une tile du jeu
+        req.moveToTile(gl, tile);
+        //bal.moveToTile(gl, tile1);
+        ser.moveToTile(gl, tile2);
+       
+        
+        //int result = gl.getDice().roll();
+        int result = 2;
+        //on compare que le résultat du dé correspond à une entité déjà présente sur le jeu
+        switch(result){
+            case 0:
+                assertTrue(tile1.getEntities().contains(ser));
+                break;
+            case 1:
+                 assertTrue(tile.getEntities().contains(req));
+                break;
+            case 2:
+                 assertTrue(tile2.getEntities().contains(bal));
+                break;
+        }
+       
+                
+    
+    }
 
     /**
      * Test of onSinkTileFinished method, of class GameTurn.
