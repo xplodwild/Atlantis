@@ -218,7 +218,7 @@ boat.addPlayer(pion);
 
     /**
      * Test of onTurnStarted method, of class GameTurn.
-     *
+     */
     @Test
     public void testOnTurnStarted() {
         System.out.println("onTurnStarted");
@@ -230,6 +230,7 @@ boat.addPlayer(pion);
 
     /**
      * Test of onPlayedTileAction method, of class GameTurn.
+     * Méthode non implémentée
      *
     @Test
     public void testOnPlayedTileAction() {
