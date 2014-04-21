@@ -168,6 +168,7 @@ boat.addPlayer(pion);
         // Aucune tuile n'a été coulée
         assertFalse(instance.hasSunkLandTile());
         
+        // On coule une tuile
         instance.sinkLandTile(tile);
         
         //On a bien coulé une tuile
@@ -316,61 +317,6 @@ boat.addPlayer(pion);
         instance.onEntityActionFinished();
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getPlayer method, of class GameTurn.
-     *
-    @Test
-    public void testGetPlayer() {
-        System.out.println("getPlayer");
-        GameTurn instance = null;
-        Player expResult = null;
-        Player result = instance.getPlayer();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getRemainingMoves method, of class GameTurn.
-     *
-    @Test
-    public void testGetRemainingMoves() {
-        System.out.println("getRemainingMoves");
-        GameTurn instance = null;
-        int expResult = 0;
-        int result = instance.getRemainingMoves();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getEndOfTurn method, of class GameTurn.
-     *
-    @Test
-    public void testGetEndOfTurn() {
-        System.out.println("getEndOfTurn");
-        GameTurn instance = null;
-        boolean expResult = false;
-        boolean result = instance.getEndOfTurn();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of hasRolledDice method, of class GameTurn.
-     *
-    @Test
-    public void testHasRolledDice() {
-        System.out.println("hasRolledDice");
-        GameTurn instance = null;
-        boolean expResult = false;
-        boolean result = instance.hasRolledDice();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }*/
+
 }
