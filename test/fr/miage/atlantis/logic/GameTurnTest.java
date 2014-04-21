@@ -89,8 +89,8 @@ public class GameTurnTest {
         Boat boat = new Boat();
                 
         //on met un bateau sur une tile et on déplace le pion sur un bateau
-         tile.addEntity(boat);
-         instance.moveEntity(pion, boat);
+        tile.addEntity(boat);
+        instance.moveEntity(pion, boat);
      
         System.out.println(boat.getOnboardTokens());
         assertTrue(boat.getOnboardTokens().contains(pion));
