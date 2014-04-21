@@ -101,6 +101,8 @@ public class Game3DLogic extends GameLogic {
     @Override
     public void startGame() {
 
+        // On joue la musique!
+        AudioManager.getDefault().setAmbience(true);
 
         if (DBG_AUTOPREPARE) {
             // TEST: On place des tokens
@@ -263,8 +265,7 @@ public class Game3DLogic extends GameLogic {
 
                             // Et on joue un son lié à cet événement
                             final AudioManager audioMan = AudioManager.getDefault();
-                            AudioNode node = audioMan.playSound(AudioConstants.Path.GO_IN_BOAT);
-                            audioMan.expireSoundAfter(node, AudioConstants.Length.GO_IN_BOAT);
+                            audioMan.playSound(AudioConstants.Path.GO_IN_BOAT);
                         }
                     }
 

@@ -20,8 +20,8 @@ package fr.miage.atlantis.audio;
 import com.jme3.asset.AssetManager;
 import com.jme3.audio.AudioNode;
 import com.jme3.scene.Node;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Classe gérant les sons du jeu
@@ -30,22 +30,14 @@ public class AudioManager {
 
     private static final AudioManager INSTANCE = new AudioManager();
 
-    private static final class AudioNodeFloatPair {
-        public AudioNode node;
-        public float val;
-        public AudioNodeFloatPair(AudioNode n, float v) {
-            node = n;
-            val = v;
-        }
-    }
-
     private AssetManager mAssetManager;
     private Node mRootNode;
     private AudioNode mMainMusicNode;
-    private List<AudioNodeFloatPair> mExpiringNodes;
+    private AudioNode mAmbienceNode;
+    private Map<String, AudioNode> mKnownNodes;
 
     private AudioManager() {
-        mExpiringNodes = new ArrayList<AudioNodeFloatPair>();
+        mKnownNodes = new HashMap<String, AudioNode>();
     }
 
     public static AudioManager getDefault() {
@@ -63,16 +55,7 @@ public class AudioManager {
      * @param timeDelta Temps en secondes depuis le dernier appel
      */
     public void update(float timeDelta) {
-        // Mise à jour de l'expiration des nodes
-        List<AudioNodeFloatPair> expiration = new ArrayList<AudioNodeFloatPair>(mExpiringNodes);
-        for (AudioNodeFloatPair pair : expiration) {
-            pair.val -= timeDelta;
-
-            if (pair.val <= 0.0f) {
-                stopSound(pair.node);
-                mExpiringNodes.remove(pair);
-            }
-        }
+        
     }
 
     /**
@@ -93,6 +76,25 @@ public class AudioManager {
             mMainMusicNode.pause();
         }
     }
+    
+    /**
+     * Lit ou arrête la lecture de l'ambiance audio "eau" de fond
+     * @param playing true pour lire, false pour arrêter
+     */
+    public void setAmbience(boolean playing) {
+        if (mAmbienceNode == null) {
+            mAmbienceNode = new AudioNode(mAssetManager, AudioConstants.Path.AMBIENCE, true);
+            mAmbienceNode.setPositional(false);
+            mRootNode.attachChild(mAmbienceNode);
+        }
+
+        if (playing) {
+            mAmbienceNode.setTimeOffset(0.0f);
+            mAmbienceNode.play();
+        } else {
+            mAmbienceNode.pause();
+        }
+    }
 
     /**
      * Lis le song indiqué en chemin et renvoie une node
@@ -108,23 +110,18 @@ public class AudioManager {
      * @param loop true pour lire en boucle
      */
     public AudioNode playSound(final String path, final boolean loop) {
-        AudioNode node = new AudioNode(mAssetManager, path);
-        node.setPositional(false);
-        node.setLooping(loop);
-        mRootNode.attachChild(node);
-
+        AudioNode node = mKnownNodes.get(path);
+        if (node == null) {
+            node = new AudioNode(mAssetManager, path, false);
+            node.setPositional(false);
+            node.setLooping(loop);
+            mRootNode.attachChild(node);
+        }
+        
+        // node.setTimeOffset(0.0f);
         node.play();
 
         return node;
-    }
-
-    /**
-     * Fait en sorte qu'un son en cours de lecture soit retiré des ressources après un certain temps
-     * @param node Le noeud renvoyé par {@link #playSound(java.lang.String)}
-     * @param time Le temps, en secondes, après lequel le son est retiré
-     */
-    public void expireSoundAfter(final AudioNode node, final float time) {
-        mExpiringNodes.add(new AudioNodeFloatPair(node, time));
     }
 
     /**
