@@ -10,12 +10,10 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Button;
 import de.lessvoid.nifty.controls.Label;
 import de.lessvoid.nifty.controls.TextField;
-import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
-import fr.miage.atlantis.Player;
 import fr.miage.atlantis.graphics.CamConstants;
 import fr.miage.atlantis.graphics.Game3DRenderer;
 import java.util.ArrayList;
@@ -140,6 +138,41 @@ public class GuiController implements ScreenController {
 
     }
 
+    public void lanHost(){
+        /**
+         * INIT UN SERVEUR ICI
+         */
+        
+        /**
+         * Se connecte a son propre serveur
+         */
+        
+        
+        
+    }  
+    
+     public void lanJoin(){
+        
+         /**
+          * Swappe sur un screen ou on entre une adresse IP et un Nick joueur.
+          */
+        
+         /**Si connection OK , screen de menu de jeu Sinon , screen erreur connection*/
+        
+         
+         this.nifty.gotoScreen("JoinLan");
+    }  
+     
+     
+    public void lanConnect(){
+        
+        
+        
+        
+        this.nifty.gotoScreen("ErrorConnect");
+    }
+     
+    
     /**
      * Redemarre le jeu en cours (avec les memes joueurs
      *
@@ -191,13 +224,13 @@ public class GuiController implements ScreenController {
              * Renseigner la source audio a pause à la place de null
              */
             // this.maudioRenderer.pauseSource(null);
-            this.nifty.getScreen("start").findElementByName("btnOptions").getNiftyControl(Button.class).setText("Sons on");
+           
             this.nifty.getScreen("inGameMenu").findElementByName("btnOptions").getNiftyControl(Button.class).setText("Sons on");
             this.soundState = false;
         } else {
             // this.maudioRenderer.playSource(null);
 
-            this.nifty.getScreen("start").findElementByName("btnOptions").getNiftyControl(Button.class).setText("Sons off");
+           
             this.nifty.getScreen("inGameMenu").findElementByName("btnOptions").getNiftyControl(Button.class).setText("Sons off");
             this.soundState = true;
         }
@@ -216,13 +249,13 @@ public class GuiController implements ScreenController {
              * Renseigner la source audio a pause à la place de null
              */
             // this.maudioRenderer.pauseSource(null);
-            this.nifty.getScreen("start").findElementByName("btnOptions2").getNiftyControl(Button.class).setText("Musique on");
+           
             this.nifty.getScreen("inGameMenu").findElementByName("btnOptions2").getNiftyControl(Button.class).setText("Musique on");
             this.musicState = false;
         } else {
             // this.maudioRenderer.playSource(null);
 
-            this.nifty.getScreen("start").findElementByName("btnOptions2").getNiftyControl(Button.class).setText("Musique off");
+          
             this.nifty.getScreen("inGameMenu").findElementByName("btnOptions2").getNiftyControl(Button.class).setText("Musique off");
             this.musicState = true;
         }
@@ -234,11 +267,14 @@ public class GuiController implements ScreenController {
     public void backToMenu() {
 
         //Si le jeu n'est pas finis on sauvegarde par defaut.
+        /*
         boolean gameOver = this.g3rdr.getLogic().isFinished();
         if (!gameOver) {
             this.save();
         }
-
+        */
+        
+        
         TextField fieldJ1 = this.nifty.getScreen("start").findElementByName("inputJ1").getNiftyControl(TextField.class);
         TextField fieldJ2 = this.nifty.getScreen("start").findElementByName("inputJ2").getNiftyControl(TextField.class);
         TextField fieldJ3 = this.nifty.getScreen("start").findElementByName("inputJ3").getNiftyControl(TextField.class);
@@ -295,10 +331,14 @@ public class GuiController implements ScreenController {
      *
      */
     public void exit() {
+       /*
         boolean gameOver = this.g3rdr.getLogic().isFinished();
         if (!gameOver) {
+           
             this.save();
-        }
+        }        
+        */ 
+        
         System.exit(0);
     }
 
@@ -416,9 +456,21 @@ public class GuiController implements ScreenController {
         this.nameRandomizer.add("Gabry-Aile");
         this.nameRandomizer.add("Sid-Rick");
         this.nameRandomizer.add("The-Eau");
-        this.nameRandomizer.add("Parla Jessica");
-        this.nameRandomizer.add("Prod-yge");
-        this.nameRandomizer.add("Alpa-Tchino");
+        this.nameRandomizer.add("Jessica");
+        this.nameRandomizer.add("Prodigy");
+        this.nameRandomizer.add("Romer");
+        this.nameRandomizer.add("Gab");
+        this.nameRandomizer.add("Alphonse");
+        this.nameRandomizer.add("Brown");
+        this.nameRandomizer.add("Grumpy Cat");
+        this.nameRandomizer.add("Scumbag Steve");
+        this.nameRandomizer.add("Good Guy Greg");
+        this.nameRandomizer.add("Stinky-Winky");
+        this.nameRandomizer.add("Dispy");
+        this.nameRandomizer.add("Lala");
+        this.nameRandomizer.add("Po");
+        this.nameRandomizer.add("Swaggy");
+        this.nameRandomizer.add("Youlow");
     }
 
     public void nickRandomJ1() {
@@ -451,6 +503,14 @@ public class GuiController implements ScreenController {
         String tmp = this.nameRandomizer.get(new Random().nextInt(this.nameRandomizer.size()));
         this.nameRandomizer.remove(tmp);
         fieldJ4.setText(tmp);
+    }
+    
+      public void nickRandomMulti() {
+        this.nifty.getScreen("start").findElementByName("btnRandom4").hide();
+        TextField fieldMulti = this.nifty.getScreen("JoinLan").findElementByName("inputNick").getNiftyControl(TextField.class);
+        String tmp = this.nameRandomizer.get(new Random().nextInt(this.nameRandomizer.size()));
+        this.nameRandomizer.remove(tmp);
+        fieldMulti.setText(tmp);
     }
 
     private void reArrangePlayers(int nbPlayers) {
