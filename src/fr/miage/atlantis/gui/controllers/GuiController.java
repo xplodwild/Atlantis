@@ -395,6 +395,8 @@ public class GuiController implements ScreenController {
             niftyElement.getRenderer(TextRenderer.class).setText(players[2]);
         }
         if (players.length == 4) {
+            niftyElement = nifty.getScreen("inGameMenu").findElementByName("nomJ3");
+            niftyElement.getRenderer(TextRenderer.class).setText(players[2]);
             niftyElement = nifty.getScreen("inGameMenu").findElementByName("nomJ4");
             niftyElement.getRenderer(TextRenderer.class).setText(players[3]);
         }
