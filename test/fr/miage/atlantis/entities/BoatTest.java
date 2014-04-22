@@ -126,15 +126,33 @@ public class BoatTest {
 
     /**
      * Test of removePlayer method, of class Boat.
-     *
+     */
     @Test
     public void testRemovePlayer() {
         System.out.println("removePlayer");
-        PlayerToken token = null;
-        Boat instance = new Boat();
-        instance.removePlayer(token);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Boat b = new Boat();
+        PlayerToken pt = new PlayerToken(new Player("P1",0), 10);
+        b.addPlayer(pt);
+        
+        // On a bien ajouté l'objet
+        assertTrue(b.getOnboardTokens().contains(pt));
+        
+        //On retire
+        b.removePlayer(pt);
+        
+        //Le bateau est de nouveau vide
+        assertFalse(b.getOnboardTokens().contains(pt));
+        assertTrue(b.getOnboardTokens().isEmpty());
+        
+        try{
+            // Si on retire un item qui n'y est pas on continue sans soucis
+            b.removePlayer(pt);
+            assertTrue(true);
+            // Si on met null en argument on plante
+            b.removePlayer(null);
+        }catch(NullPointerException ne){
+            assertTrue(true);
+        }
     }
 
     /**
