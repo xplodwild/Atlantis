@@ -315,7 +315,17 @@
                     <effect>
                         <onActive name="textSize" startSize="1" endSize="1" oneShot="true"/>
                     </effect>
-                </text>                             
+                </text>  
+                
+               <panel width="86%"> 
+                </panel>
+            
+                <panel width="10%" height="80%" align="right"  valign="center" childLayout="center"> 
+                    <control  id="btnStop"   height="100%" width="100%" name="button" label="Finir l'action">
+                        <interact onClick="stopCurrentAction()" />
+                    </control>                      
+                </panel>                                
+                                                                                              
             </panel>
             
           
@@ -375,6 +385,15 @@
                         <onActive name="textSize" startSize="1" endSize="1" oneShot="true"/>
                     </effect>
                 </text>
+                
+                <panel width="86%"> 
+                </panel>
+            
+                <panel width="10%" height="80%" align="right"  valign="center"  childLayout="center"> 
+                    <control  id="btnStop"   height="100%" width="100%" name="button" label="Finir l'action">
+                        <interact onClick="stopCurrentAction()" />
+                    </control>                      
+                </panel>   
             </panel>
             
           
@@ -418,16 +437,24 @@
             
             <panel id="HudPanelBottom"  height="10%"    width="90%"    backgroundColor="#0060ab4d" align="left"  valign="bottom" childLayout="horizontal">
                 <panel width="2%"> </panel>
+                
                 <text id="nomJ1" align="left" textHAlign="left" textVAlign="center" valign="center" text="" font="Fonts/sansitc.fnt"  color="#eeeeeeff" >  
                     <effect>
                         <onActive name="textSize" startSize="1" endSize="1" oneShot="true"/>
                     </effect>
-                </text>                           
+                </text>    
+                 
+                <panel width="86%"> 
+                </panel>
+            
+                <panel width="10%" height="80%" align="right"  valign="center"  childLayout="center"> 
+                    <control  id="btnStop"   height="100%" width="100%" name="button" label="Finir l'action">
+                        <interact onClick="stopCurrentAction()" />
+                    </control>                      
+                </panel>                                          
+                                                                                                        
             </panel>
-            
-          
-            
-           
+                       
             <!-- Panel transparent de la console -->
             <panel id="HudPanel" height="33%" width="50%" align="left" valign="top" childLayout="vertical">                
                 <control id="console" name="nifty-console" width="100%" align="left" valign="top" visible="false" lines="15">
@@ -686,7 +713,7 @@
 
                 </panel>
                 
-                 <panel id="HudPanelTop4"     height="24%"     width="25%" align="left"  valign="bottom"    childLayout="center">                   
+                <panel id="HudPanelTop4"     height="24%"     width="25%" align="left"  valign="bottom"    childLayout="center">                   
                     <control  id="btnMenu"   height="25%" width="80%" name="button" label="Retour à l'accueil">
                         <interact onClick="backToMenu()" />
                     </control>

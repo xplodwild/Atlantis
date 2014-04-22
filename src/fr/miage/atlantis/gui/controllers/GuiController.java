@@ -77,6 +77,17 @@ public class GuiController implements ScreenController {
         this.g3rdr = g3d;
     }
 
+    
+    /**
+     * Arrete l'action en cours lors d'une partie 
+     */
+    public void stopCurrentAction(){
+        //@TODO : Gerer les differents cas ou l'on peut arreter une action
+        //Ne rien faire si on ne peut pas
+    }
+    
+    
+    
     /**
      * Demarre une nouvelle partie avec les pseudos données ou des pseudos
      * aléatoires si non renseigné.
