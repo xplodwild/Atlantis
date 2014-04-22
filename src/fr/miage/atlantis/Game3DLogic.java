@@ -87,6 +87,7 @@ public class Game3DLogic extends GameLogic {
     private FutureCallback mCancelActionCallback;
     private TileAction mTileUsedToCancel;
     private GameEntity mCancellableSource;
+    private GameEntity mCancellableTarget;
 
     /**
      * Instance du logger Java
@@ -444,7 +445,7 @@ public class Game3DLogic extends GameLogic {
         // On a appuyé sur espace: Si on est en train de laisser la possibilité à l'utilisateur
         // d'annuler une action, on le fait.
         if (mCancelActionCallback != null && mTileUsedToCancel != null) {
-            getCurrentTurn().useRemoteTile(mTileUsedToCancel);
+            getCurrentTurn().useRemoteTile(((PlayerToken)mCancellableTarget).getPlayer(),mTileUsedToCancel);
 
             mTileUsedToCancel = null;
             mCancelActionCallback = null;
@@ -522,6 +523,7 @@ public class Game3DLogic extends GameLogic {
             // si l'utilisateur veut jouer sa tile. Si il appuie sur espace, la tile
             // d'annulation est utilisée et la tile est annulée.
             mCancellableSource = source;
+            mCancellableTarget = target;
             mRenderer.getHud().getGameHud().promptCancel();
             mCancelActionCallback = new FutureCallback(3.0f) {
                 @Override

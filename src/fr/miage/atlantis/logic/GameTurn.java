@@ -276,11 +276,11 @@ public class GameTurn implements GameRenderListener {
         }
     }
 
-    public void useRemoteTile(TileAction action) {
+    public void useRemoteTile(Player playuse, TileAction action) {
         mRemoteTiles.add(action);
 
         // On enlève la taile du joueur
-        mPlayer.removeActionTile(action);
+        playuse.removeActionTile(action);
 
         // On lance l'annulation (les tiles remotes sont toutes des ta
         mController.onCancelAction();

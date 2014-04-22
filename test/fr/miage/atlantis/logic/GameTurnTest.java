@@ -190,18 +190,9 @@ boat.addPlayer(pion);
         p2.addActionTile(action);
         
         // Le joueur use son action pas pdt son tour
-        instance.useRemoteTile(action);
+        instance.useRemoteTile(p2,action);
         
         assertFalse(p2.getActionTiles().contains(action));
-        
-        try{
-            // Le joueur utilise encore son actiontile
-            instance.useRemoteTile(action);
-            fail("L'exception ne s'est pas déclenchée, "
-                + "on a utilisé deux fois une tileaction en un tour");
-        }catch (Exception e){
-            assertTrue(true);
-        }
     }
 
     /**
