@@ -13,7 +13,8 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
-
+import fr.miage.atlantis.GameSaver;
+import fr.miage.atlantis.Player;
 import fr.miage.atlantis.audio.AudioConstants;
 import fr.miage.atlantis.audio.AudioManager;
 
@@ -136,7 +137,7 @@ public class GuiController implements ScreenController {
 
             this.updatePlayerName();
 
-            this.g3rdr.getLogic().prepareGame(players);
+            this.g3rdr.getLogic().prepareGame(players, true);
             this.g3rdr.getLogic().startGame();
 
             Camera cam = g3rdr.getCamera();
@@ -192,7 +193,7 @@ public class GuiController implements ScreenController {
         //On garde les mêmes nick donc pas besoin de redefinir.
 
 
-        this.g3rdr.getLogic().prepareGame(players);
+        this.g3rdr.getLogic().prepareGame(players, true);
         this.g3rdr.getLogic().startGame();
 
         this.nifty.gotoScreen("inGameHud");
@@ -320,22 +321,42 @@ public class GuiController implements ScreenController {
      * Charge le dernier fichier de sauvegarde existant
      */
     public void load() {
-        /**
-         * @TODO : chargement du dernier jeu
-         */
         //Si le fichier existe
         //charge
         //sinon 
         //rien ou nouvelle partie ou disable le button(à debattre)
+        GameSaver loader = new GameSaver();
+        try {
+            loader.loadFromFile(g3rdr.getLogic(), "C:\\Users\\Guigui\\test_save.atlantis");
+            
+            this.nifty.gotoScreen("inGameHud");
+
+            Player[] logicPlayers = g3rdr.getLogic().getPlayers();
+            players = new String[logicPlayers.length];
+            int i = 0;
+            for (Player p : logicPlayers) {
+                players[i] = p.getName();
+                i++;
+            }
+            this.updatePlayerName();
+
+            Camera cam = g3rdr.getCamera();
+            CamConstants.moveAboveBoard(g3rdr.getCameraNode(), cam);
+        } catch (IOException ex) {
+            Logger.getGlobal().log(Level.SEVERE, "Error while loading game!", ex);
+        }
     }
 
     /**
      * Sauvegarde la partie en cours
      */
     public void save() {
-        /**
-         * @TODO : sauvegarde du jeu
-         */
+        GameSaver saver = new GameSaver();
+        try {
+            saver.saveToFile("C:\\Users\\Guigui\\test_save.atlantis", g3rdr.getLogic());
+        } catch (IOException ex) {
+            Logger.getGlobal().log(Level.SEVERE, "Error while saving game!", ex);
+        }
     }
 
     /**

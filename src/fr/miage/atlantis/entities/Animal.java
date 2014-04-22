@@ -39,8 +39,8 @@ public abstract class Animal extends GameEntity {
      * @param tile Tile sur lequel est placé cet animal
      * @param maxMoves Nombre maximal de movement possible de cet animal
      */
-    Animal(String name, int maxMoves) {
-        super(name);
+    Animal(String name, int maxMoves, boolean appendUniqueID) {
+        super(name, appendUniqueID);
         this.mMaxMoves = maxMoves;
     }
 

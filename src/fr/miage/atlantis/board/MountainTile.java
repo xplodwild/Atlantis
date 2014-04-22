@@ -17,6 +17,9 @@
  */
 package fr.miage.atlantis.board;
 
+import java.io.DataInputStream;
+import java.io.IOException;
+
 /**
  * Tile de type montagne
  *
@@ -52,5 +55,15 @@ public class MountainTile extends GameTile {
      */
     public MountainTile(GameBoard board, GameTile hg, GameTile hd, GameTile g, GameTile d, GameTile bd, GameTile bg, String name, int height) {
         super(board, hg, hd, g, d, bd, bg, name, 3);
+    }
+    
+    public MountainTile(GameBoard board, DataInputStream stream) throws IOException {
+        super(board, stream);
+        readSerialized(stream);
+    }
+    
+    @Override
+    public int getType() {
+        return TILE_MOUNTAIN;
     }
 }

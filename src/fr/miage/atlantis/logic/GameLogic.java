@@ -24,6 +24,9 @@ import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.entities.Boat;
 import fr.miage.atlantis.entities.GameEntity;
 import fr.miage.atlantis.entities.PlayerToken;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -165,15 +168,16 @@ public abstract class GameLogic implements GameTurnListener {
      * Initialise les joueurs du jeu
      *
      * @param players Tableau des pseudo des joueurs
+     * @param prepareBoard Indique si il faut générer un board ou non
      */
-    public void prepareGame(String[] players) {
+    public void prepareGame(String[] players, boolean prepareBoard) {
         // Création du board
-        mBoard = new GameBoard();
+        mBoard = new GameBoard(prepareBoard);
         
         // On créé les joueurs
         mPlayers = new Player[players.length];
         for (int i = 0; i < mPlayers.length; i++) {
-            mPlayers[i] = new Player(players[i], i + 1);
+            mPlayers[i] = new Player(players[i], i + 1, prepareBoard);
         }
 
         if (DBG_AUTOPREPARE) {
@@ -184,7 +188,26 @@ public abstract class GameLogic implements GameTurnListener {
             mBoatsPlaced = 0;
         }
 
-        mVolcanized = true;
+        mVolcanized = false;
+    }
+    
+    /**
+     * Restaure un GameTurn (sauvegardé par exemple)
+     * @param turn 
+     */
+    public void restoreTurn(GameTurn turn) {
+        mCurrentTurn = turn;
+        mCurrentTurn.startTurn();
+    }
+    
+    public void serializeEssentialData(DataOutputStream data) throws IOException {
+        data.writeInt(mBoatsPlaced);
+        data.writeBoolean(mVolcanized);
+    }
+    
+    public void deserializeData(DataInputStream data) throws IOException {
+        mBoatsPlaced = data.readInt();
+        mVolcanized = data.readBoolean();
     }
 
     /**
