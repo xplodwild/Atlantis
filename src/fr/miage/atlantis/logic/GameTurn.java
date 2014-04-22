@@ -103,7 +103,7 @@ public class GameTurn implements GameRenderListener {
         // mTokenToPlace: On ne laisse pas sauvegarder une partie qui n'a pas commencé
         data.writeInt(mSwimmersMoved.size());
         for (PlayerToken token : mSwimmersMoved) {
-            // TODO: Sauver les tokens nageurs (il faut donner un nom unique aux GameEntities...)
+            data.writeUTF(token.getName());
         }
     }
     
@@ -122,7 +122,12 @@ public class GameTurn implements GameRenderListener {
         mRemainingDiceMoves = data.readInt();
         mDiceEntityPicked = data.readBoolean();
         // mTokenToPlace
-        // mSwimmersMoved
+        int swimmersCount = data.readInt();
+        for (int i = 0; i < swimmersCount; i++) {
+            String swimmerName = data.readUTF();
+            PlayerToken swimmer = (PlayerToken) mController.getBoard().getEntity(swimmerName);
+            mSwimmersMoved.add(swimmer);
+        }
     }
 
     public TileAction getTileAction() {
