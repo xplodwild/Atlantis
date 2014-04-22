@@ -138,37 +138,44 @@ public class GuiController implements ScreenController {
 
     }
 
+    
+    /**
+     * Fonction appelée lorsqu'on hoste une nouvelle partie sur le réseau local
+     */
     public void lanHost(){
         /**
-         * INIT UN SERVEUR ICI
+         * @TODO : INIT UN SERVEUR ICI
          */
         
         /**
-         * Se connecte a son propre serveur
+         * @TODO : Se connecte a son propre serveur
          */
         
         
         
+        /**
+         * @TODO : Faire un écran spécifique
+         */ 
+        this.nifty.gotoScreen("HostLan");
     }  
     
-     public void lanJoin(){
-        
-         /**
-          * Swappe sur un screen ou on entre une adresse IP et un Nick joueur.
-          */
-        
-         /**Si connection OK , screen de menu de jeu Sinon , screen erreur connection*/
-        
-         
-         this.nifty.gotoScreen("JoinLan");
-    }  
+    
      
-     
+    /**
+     * Fonction appelée une fois que les champs de l'ecran pour rejoindre une partie lan sont remplis.
+     */
     public void lanConnect(){
         
+        TextField ip = this.nifty.getScreen("JoinLan").findElementByName("IPServeur").getNiftyControl(TextField.class);
+        TextField nick = this.nifty.getScreen("JoinLan").findElementByName("Nick").getNiftyControl(TextField.class);
         
+        String ipServ=ip.getRealText();
+        String nickname=nick.getRealText();
         
-        
+        /**
+         * @TODO : Traitement de la connection réseau ici.
+         */
+                
         this.nifty.gotoScreen("ErrorConnect");
     }
      
@@ -578,4 +585,14 @@ public class GuiController implements ScreenController {
             this.players = tmp;
         }
     }
+    
+    
+    
+    
+    /**
+     * Changement d'ecran vers l'ecran "Rejoindre une partie réseau"
+     */
+    public void lanJoin(){      
+         this.nifty.gotoScreen("JoinLan");
+    }  
 }
