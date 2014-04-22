@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package fr.miage.atlantis.graphics.models;
 
 import com.jme3.asset.AssetManager;
@@ -33,7 +32,6 @@ public class SeaSerpentModel extends AnimatedModel {
     public final static String ANIMATION_SUCKED_DOWN = "Sucked Down";
     public final static String ANIMATION_SWIM_CYCLE = "swim cycle";
     public final static String ANIMATION_DIVE = "Dive";
-
     private final static String COLLISION_BONE_ATTACH = "root";
 
     public SeaSerpentModel(AssetManager am) {
@@ -47,6 +45,4 @@ public class SeaSerpentModel extends AnimatedModel {
         Box box = new Box(6, 13, 6);
         setupCustomCollisionShape(Utils.generateInvisibleBox(am, box), COLLISION_BONE_ATTACH);
     }
-
-
 }

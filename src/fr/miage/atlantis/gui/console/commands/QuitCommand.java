@@ -15,11 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package fr.miage.atlantis.gui.console.commands;
 
 import de.lessvoid.nifty.controls.ConsoleCommands;
-
 
 /**
  * Quit command of the console
@@ -29,19 +27,22 @@ import de.lessvoid.nifty.controls.ConsoleCommands;
  * @date 03/03/2014
  */
 public class QuitCommand implements ConsoleCommands.ConsoleCommand {
-    
+
+    public QuitCommand() {
+    }
+
     /**
      * Methode executée lors de l'appel de la commande
+     *
      * @param args arguments passés à la commande
      */
     @Override
     public void execute(final String[] args) {
-        
+
         /**
-         * @TODO :
-         * Définir ici les fermetures de connexions en cas de multijoueur etc
-         */       
-        
-        System.exit(0);        
+         * @TODO : Définir ici les fermetures de connexions en cas de
+         * multijoueur etc
+         */
+        System.exit(0);
     }
 }

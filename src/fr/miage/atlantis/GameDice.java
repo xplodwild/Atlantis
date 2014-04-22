@@ -65,7 +65,8 @@ public class GameDice {
     /**
      * Créé un dés standard, non pipé
      *
-     * @return Nouveau dé standard , toutes les faces on la meme probabilité de tomber.
+     * @return Nouveau dé standard , toutes les faces on la meme probabilité de
+     * tomber.
      */
     public static GameDice createDefault() {
         return new GameDice(new float[]{0.33333333f, 0.3333333f, 0.3333333f});

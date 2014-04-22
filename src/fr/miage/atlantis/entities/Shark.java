@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package fr.miage.atlantis.entities;
 
 import fr.miage.atlantis.logic.GameLogic;
@@ -34,7 +33,6 @@ public class Shark extends Animal {
      */
     public final static int MAX_MOVES = 2;
 
-
     /**
      * Constructeur de Requin
      *
@@ -44,7 +42,6 @@ public class Shark extends Animal {
         super("Shark", MAX_MOVES);
     }
 
-    
     /**
      * Resultat d'un croisement entres entitées
      *
@@ -58,7 +55,7 @@ public class Shark extends Animal {
 
             if (pt.getState() != PlayerToken.STATE_ON_BOAT) {
                 // Les sharks mangent les petits humains n'étant pas sur un bateau
-                logic.onEntityAction(this, ent, GameEntity.ACTION_SHARK_EAT);
+                logic.onCancellableEntityAction(this, ent, GameEntity.ACTION_SHARK_EAT);
                 return true;
             }
         }

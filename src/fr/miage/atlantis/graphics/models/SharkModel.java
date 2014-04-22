@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package fr.miage.atlantis.graphics.models;
 
 import com.jme3.asset.AssetManager;
@@ -36,5 +35,4 @@ public class SharkModel extends AnimatedModel {
         getModel().scale(0.9f);
         getModel().setLocalTranslation(0, -3.0f, 0);
     }
-
 }

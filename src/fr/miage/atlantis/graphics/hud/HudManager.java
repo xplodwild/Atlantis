@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package fr.miage.atlantis.graphics.hud;
 
 import com.jme3.asset.AssetManager;
@@ -25,6 +24,7 @@ import fr.miage.atlantis.graphics.Game3DRenderer;
  *
  */
 public class HudManager {
+
     private HudAnimator mHudAnimator;
     private GameHud mGameHud;
     private Game3DRenderer mRenderer;
@@ -56,8 +56,9 @@ public class HudManager {
     }
 
     /**
-     * Met à jour les éléments du HUD
-     * Appelé automatiquement une fois par frame par le Game3DRenderer
+     * Met à jour les éléments du HUD Appelé automatiquement une fois par frame
+     * par le Game3DRenderer
+     *
      * @param tpf Temps depuis la dernière frame
      */
     public void update(float tpf) {
@@ -70,6 +71,7 @@ public class HudManager {
 
     /**
      * Affiche 'disp' à l'endroit spécifié
+     *
      * @param disp L'iamge à afficher
      * @param x Position horizontale de l'image, de la gauche
      * @param y Position verticale de l'image, du bas
@@ -81,19 +83,31 @@ public class HudManager {
 
     /**
      * Affiche 'disp' au centre de l'écran
+     *
      * @param disp L'image à afficher
      */
     public void displayCenter(AbstractDisplay disp) {
         displayAt(disp, mRenderer.getCamera().getWidth() / 2 - disp.getWidth() / 2,
-                    mRenderer.getCamera().getHeight() / 2 - disp.getHeight() / 2);
+                mRenderer.getCamera().getHeight() / 2 - disp.getHeight() / 2);
     }
 
     /**
      * Affiche 'disp' en bas à droite de l'écran
+     *
      * @param disp L'image à afficher
      */
     public void displayBottomRight(AbstractDisplay disp) {
         displayAt(disp, mRenderer.getCamera().getWidth() - disp.getWidth() - 25, 25);
     }
+
+    
+    public int getScreenWidth() {
+        return mRenderer.getCamera().getWidth();
+    }
+    
+    public int getScreenHeight() {
+        return mRenderer.getCamera().getHeight();
+    }
+
 
 }

@@ -76,13 +76,14 @@ public final class GameBoard {
         this.forestTilesRemaining = NB_FORESTTILES;
         this.mountainTilesRemaining = NB_MOUNTAINTILES;
 
+
         this.randomiser = new ArrayList();
 
         this.fillInRandomizerWithTiles();
         this.generateDefaultBoard();
         this.setDefaultBoardTileAttributes();
         this.placeDefaultEntitiesOnBoard();
-       
+
 
     }
 
@@ -106,20 +107,20 @@ public final class GameBoard {
         temp.setIsLandingTile(true);
         temp.setIsBeginningWithSeaShark(true);
         this.mTileSet.put("Water #28", temp);
-        temp = (WaterTile) this.mTileSet.get("Water #75");
+        temp = (WaterTile) this.mTileSet.get("Water #76");
         temp.setIsLandingTile(true);
-        this.mTileSet.put("Water #75", temp);
-        temp = (WaterTile) this.mTileSet.get("Water #84");
-        temp.setIsLandingTile(true);
-        temp.setIsBeginningWithSeaShark(true);
-        this.mTileSet.put("Water #84", temp);
-        temp = (WaterTile) this.mTileSet.get("Water #74");
-        temp.setIsLandingTile(true);
-        this.mTileSet.put("Water #74", temp);
-        temp = (WaterTile) this.mTileSet.get("Water #64");
+        this.mTileSet.put("Water #76", temp);
+        temp = (WaterTile) this.mTileSet.get("Water #86");
         temp.setIsLandingTile(true);
         temp.setIsBeginningWithSeaShark(true);
-        this.mTileSet.put("Water #64", temp);
+        this.mTileSet.put("Water #86", temp);
+        temp = (WaterTile) this.mTileSet.get("Water #77");
+        temp.setIsLandingTile(true);
+        this.mTileSet.put("Water #77", temp);
+        temp = (WaterTile) this.mTileSet.get("Water #66");
+        temp.setIsLandingTile(true);
+        temp.setIsBeginningWithSeaShark(true);
+        this.mTileSet.put("Water #66", temp);
         //-----------------------------------------------------------------------
     }
 
@@ -527,13 +528,13 @@ public final class GameBoard {
 
         nextTile2 = new WaterTile(this, "Water #54");
         this.placeTileAtTheRightOf(nextTile, nextTile2);
-        nextTile2 = (WaterTile) this.mTileSet.get("Water #54");       
-        this.placeTileAtTheRightOf(nextTile2, new WaterTile(this, "Water #55"));        
+        nextTile2 = (WaterTile) this.mTileSet.get("Water #54");
+        this.placeTileAtTheRightOf(nextTile2, new WaterTile(this, "Water #55"));
         nextTile2 = (WaterTile) this.mTileSet.get("Water #55");
         this.placeTileAtTheRightOf(nextTile2, new WaterTile(this, "Water #56"));
         nextTile2 = (WaterTile) this.mTileSet.get("Water #56");
-        
-        
+
+
         tmp2 = null;
         nextTile3 = nextTile2;
         for (int i = 32; i < 37; i++) {
@@ -994,7 +995,6 @@ public final class GameBoard {
         }
     }
 
-  
     /**
      * Renvoie si oui ou non il existe une entité de la classe indiquée sur le
      * plateau

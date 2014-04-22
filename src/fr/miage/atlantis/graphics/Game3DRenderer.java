@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package fr.miage.atlantis.graphics;
 
 import com.jme3.app.SimpleApplication;
@@ -25,17 +24,25 @@ import com.jme3.cinematic.events.MotionEvent;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Spline;
 import com.jme3.math.Vector3f;
+import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
+import com.jme3.scene.CameraNode;
 import com.jme3.scene.Node;
+import com.jme3.scene.control.CameraControl.ControlDirection;
 import com.jme3.scene.plugins.blender.BlenderModelLoader;
+import de.lessvoid.nifty.Nifty;
 import fr.miage.atlantis.Game3DLogic;
 import fr.miage.atlantis.GameDice;
+import fr.miage.atlantis.audio.AudioManager;
 import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.entities.GameEntity;
+import fr.miage.atlantis.graphics.hud.AbstractDisplay;
+import fr.miage.atlantis.graphics.hud.HudAnimator;
 import fr.miage.atlantis.graphics.hud.HudManager;
+import fr.miage.atlantis.graphics.hud.TileActionDisplay;
 import fr.miage.atlantis.graphics.models.DiceModel;
-import fr.miage.atlantis.gui.console.GuiConsole;
+import fr.miage.atlantis.gui.Gui;
 import java.util.Map;
 import java.util.Random;
 
@@ -44,9 +51,9 @@ import java.util.Random;
  */
 public class Game3DRenderer extends SimpleApplication {
 
-
     private boolean mDisplayGraphicalStats = false;
     private Node mSceneNode;
+    private CameraNode mCameraNode;
     private Environment mEnvironment;
     private Game3DLogic mParent;
     private BoardRenderer mBoardRenderer;
@@ -54,11 +61,14 @@ public class Game3DRenderer extends SimpleApplication {
     private InputActionListener mInputListener;
     private DiceModel mDiceModel;
     private FutureUpdater mFutureUpdater;
+    private Gui mGui;
+    private HudAnimator mHudAnimator;
     private HudManager mHudManager;
-    private GuiConsole mConsole;
+    private Nifty mNifty;
 
     public Game3DRenderer(Game3DLogic parent) {
         mParent = parent;
+        mHudAnimator = new HudAnimator();
         mFutureUpdater = new FutureUpdater();
     }
 
@@ -66,18 +76,26 @@ public class Game3DRenderer extends SimpleApplication {
     public void simpleInitApp() {
         // Pré-configuration
         assetManager.registerLoader(BlenderModelLoader.class, "blend");
+        AudioManager.getDefault().initialize(assetManager, rootNode);
+        AudioManager.getDefault().setMainMusic(true);
+
+        inputManager.clearMappings();
 
         setDisplayFps(false);
         setDisplayStatView(false);
 
         // Configuration camera
+        mCameraNode = new CameraNode("Main Camera", cam);
+        mCameraNode.setControlDir(ControlDirection.SpatialToCamera);
+        flyCam.setDragToRotate(true);
+        flyCam.setEnabled(false);
         flyCam.setMoveSpeed(200.0f);
         cam.setFrustumFar(4000.0f);
-        cam.setLocation(new Vector3f(-398.292f, 572.2102f, 176.78018f));
-        cam.setRotation(new Quaternion(0.43458012f, 0.5573096f, -0.4326719f, 0.5597688f));
+        CamConstants.moveMenu(mCameraNode, cam);
+        rootNode.attachChild(mCameraNode);
 
         inputManager.setCursorVisible(true);
-        flyCam.setDragToRotate(true);
+
 
         // Configuration des ombres
         rootNode.setShadowMode(ShadowMode.Off);
@@ -88,19 +106,9 @@ public class Game3DRenderer extends SimpleApplication {
 
         // Rendu du plateau
         mBoardRenderer = new BoardRenderer(assetManager);
-        mBoardRenderer.renderBoard(mParent.getBoard());
         mSceneNode.attachChild(mBoardRenderer);
 
         mEntitiesRenderer = new EntitiesRenderer(assetManager, mBoardRenderer);
-
-        // Rendu des entités déjà placées sur le plateau
-        Map<String, GameTile> tiles = mParent.getBoard().getTileSet();
-        for (GameTile tile : tiles.values()) {
-            for (GameEntity ent : tile.getEntities()) {
-                mEntitiesRenderer.addEntity(ent);
-            }
-        }
-
         mSceneNode.attachChild(mEntitiesRenderer);
 
         // Configuration de l'input (picking souris, clavier)
@@ -109,23 +117,31 @@ public class Game3DRenderer extends SimpleApplication {
         // Configuration du dé
         mDiceModel = new DiceModel(assetManager);
 
+
         mHudManager = new HudManager(this);
 
-        mConsole = new GuiConsole(assetManager,guiViewPort,audioRenderer,inputManager,this);
+        NiftyJmeDisplay jmdsp = new NiftyJmeDisplay(assetManager, inputManager, audioRenderer, viewPort);
+        mNifty = jmdsp.getNifty();
+        this.guiViewPort.addProcessor(jmdsp);
 
-
+        mGui = new Gui(this, mNifty);
+        mNifty.gotoScreen("start");
     }
 
-    public void toggleGraphicsStats(){
+    public void toggleGraphicsStats() {
         if (!mDisplayGraphicalStats) {
-            mDisplayGraphicalStats=true;
+            mDisplayGraphicalStats = true;
             setDisplayFps(true);
             setDisplayStatView(true);
-        }else{
-            mDisplayGraphicalStats=false;
+        } else {
+            mDisplayGraphicalStats = false;
             setDisplayFps(false);
             setDisplayStatView(false);
         }
+    }
+
+    public CameraNode getCameraNode() {
+        return mCameraNode;
     }
 
     public BoardRenderer getBoardRenderer() {
@@ -142,6 +158,16 @@ public class Game3DRenderer extends SimpleApplication {
 
     public Game3DLogic getLogic() {
         return mParent;
+    }
+
+    public HudAnimator getHudAnimator() {
+        return mHudAnimator;
+    }
+
+    public void displayHudCenter(AbstractDisplay disp) {
+        disp.setPosition(cam.getWidth() / 2 - TileActionDisplay.IMAGE_WIDTH / 2,
+                cam.getHeight() / 2 - TileActionDisplay.IMAGE_HEIGHT / 2);
+        guiNode.attachChild(disp);
     }
 
     public HudManager getHud() {
@@ -166,7 +192,7 @@ public class Game3DRenderer extends SimpleApplication {
         final MotionPath path = new MotionPath();
         path.addWayPoint(mDiceModel.getLocalTranslation());
 
-        for (int i = 0; i < 2*3; i++) {
+        for (int i = 0; i < 2 * 3; i++) {
             path.addWayPoint(mDiceModel.getLocalTranslation()
                     .add(-5.0f + rand.nextFloat() * 10.0f,
                     -5.0f + rand.nextFloat() * 10.0f,
@@ -210,17 +236,10 @@ public class Game3DRenderer extends SimpleApplication {
         motionControl.play();
     }
 
-
-    int FRAME_COUNT = 0;
-
     @Override
     public void simpleUpdate(float tpf) {
-        FRAME_COUNT++;
 
-        // TEST == Evenements de test
-        if (FRAME_COUNT == 10) {
-            mParent.startGame();
-        }
+        mHudAnimator.update(tpf);
 
         // Mise à jour des animations du HUD
         mHudManager.update(tpf);
@@ -229,8 +248,11 @@ public class Game3DRenderer extends SimpleApplication {
         mFutureUpdater.update(tpf);
     }
 
+    public Nifty getNifty() {
+        return mNifty;
+    }
+
     @Override
     public void simpleRender(RenderManager rm) {
-
     }
 }

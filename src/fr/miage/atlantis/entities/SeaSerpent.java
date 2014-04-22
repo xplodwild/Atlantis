@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package fr.miage.atlantis.entities;
 
 import fr.miage.atlantis.logic.GameLogic;
@@ -34,7 +33,6 @@ public class SeaSerpent extends Animal {
      */
     public final static int MAX_MOVES = 1;
 
-
     /**
      * Constructeur de SeaSerpent
      *
@@ -43,7 +41,6 @@ public class SeaSerpent extends Animal {
     public SeaSerpent() {
         super("Serpent de mer", MAX_MOVES);
     }
-
 
     /**
      * Resultat d'un croisement entres entitées

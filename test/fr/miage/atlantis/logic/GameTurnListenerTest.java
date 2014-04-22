@@ -214,7 +214,7 @@ public class GameTurnListenerTest {
         }
 
         public void onCancellableEntityAction(GameEntity source, GameEntity target, int action) {
-            
+
         }
 
         public void onCancelAction() {

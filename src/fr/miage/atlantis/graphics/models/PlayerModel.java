@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package fr.miage.atlantis.graphics.models;
 
 import com.jme3.asset.AssetManager;
@@ -40,12 +39,10 @@ public class PlayerModel extends AnimatedModel {
     public final static String ANIMATION_LAND_IDLE_1 = "Land_Idle1";
     public final static String ANIMATION_LAND_IDLE_2 = "Land_Idle2";
     public final static String ANIMATION_LAND_IDLE_3 = "Land_Idle3";
-
     public final static String COLOR_BLUE = "blue";
     public final static String COLOR_GREEN = "green";
     public final static String COLOR_ORANGE = "orange";
     public final static String COLOR_RED = "red";
-
     private final static String COLLISION_BONE_ATTACH = "UpperBody";
 
     public PlayerModel(AssetManager am, final String color) {
@@ -77,5 +74,4 @@ public class PlayerModel extends AnimatedModel {
                 throw new IllegalStateException("Unknown player number");
         }
     }
-
 }

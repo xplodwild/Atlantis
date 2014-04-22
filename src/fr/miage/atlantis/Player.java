@@ -74,9 +74,9 @@ public class Player {
         mTokens.add(new PlayerToken(this, 1));
     }
 
-
     /**
      * Renvoie si oui ou non il existe un nageur appartenant à ce joueur
+     *
      * @return true si il y a au moins un nageur
      */
     public boolean hasSwimmer() {

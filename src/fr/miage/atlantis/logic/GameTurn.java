@@ -44,7 +44,6 @@ import java.util.logging.Logger;
 public class GameTurn implements GameRenderListener {
 
     public static boolean DBG_QUICKTEST = false;
-
     private TileAction mTileAction;
     private List<TileAction> mRemoteTiles;
     private List<EntityMove> mMoves;
@@ -59,7 +58,6 @@ public class GameTurn implements GameRenderListener {
     private boolean mDiceEntityPicked;
     private PlayerToken mTokenToPlace;
     private List<PlayerToken> mSwimmersMoved;
-
     /**
      * Instance du logger Java
      */
@@ -78,6 +76,7 @@ public class GameTurn implements GameRenderListener {
         mDiceRolled = false;
         mDiceEntityPicked = false;
         mSunkenTile = null;
+        mRemoteTiles = new ArrayList<TileAction>();
         mMoves = new ArrayList<EntityMove>();
         mSwimmersMoved = new ArrayList<PlayerToken>();
     }
@@ -85,7 +84,6 @@ public class GameTurn implements GameRenderListener {
     public TileAction getTileAction() {
         return mTileAction;
     }
-
 
     /**
      * Demarre le début du tour de jeu du joueur courant
@@ -105,8 +103,9 @@ public class GameTurn implements GameRenderListener {
     }
 
     /**
-     * Renvoie la liste des nageurs qui ont déjà été déplacés pendant ce tour (chaque nageur ne
-     * peut se déplacer qu'une seule fois)
+     * Renvoie la liste des nageurs qui ont déjà été déplacés pendant ce tour
+     * (chaque nageur ne peut se déplacer qu'une seule fois)
+     *
      * @return Une liste de PlayerToken nageurs bougés
      */
     public List<PlayerToken> getSwimmersMoved() {
@@ -158,6 +157,7 @@ public class GameTurn implements GameRenderListener {
 
     /**
      * Déplace une entité sur un bateau donné
+     *
      * @param ent L'entité qui se déplace
      * @param dest Bateau ciblé
      */
@@ -208,7 +208,7 @@ public class GameTurn implements GameRenderListener {
         if (!DBG_QUICKTEST) {
             mDiceAction = mController.getDice().roll();
         } else {
-            mDiceAction = GameDice.FACE_WHALE;
+            mDiceAction = GameDice.FACE_SHARK;
         }
         switch (mDiceAction) {
             case GameDice.FACE_SEASERPENT:
@@ -277,7 +277,13 @@ public class GameTurn implements GameRenderListener {
     }
 
     public void useRemoteTile(TileAction action) {
-        throw new UnsupportedOperationException("Not implemented");
+        mRemoteTiles.add(action);
+
+        // On enlève la taile du joueur
+        mPlayer.removeActionTile(action);
+
+        // On lance l'annulation (les tiles remotes sont toutes des ta
+        mController.onCancelAction();
     }
 
     public void useLocalTile(TileAction action) {
@@ -307,6 +313,7 @@ public class GameTurn implements GameRenderListener {
                 GameLogic.TilePickRequest request = new GameLogic.TilePickRequest();
                 request.landTilesOnly = false;
                 request.noEntitiesOnTile = true;
+                request.landEdgeOnly = true;
                 request.requiredHeight = 0;
 
                 mController.requestPick(null, request);
@@ -438,17 +445,17 @@ public class GameTurn implements GameRenderListener {
     }
 
     /**
-     * Demande à la logique de jeu de picker des entités appartenant au joueur (PlayerToken, ou
-     * bateau ayant un pion du joueur en cours dessus).
+     * Demande à la logique de jeu de picker des entités appartenant au joueur
+     * (PlayerToken, ou bateau ayant un pion du joueur en cours dessus).
      */
     private void requestPlayerMovePicking() {
         logger.log(Level.FINE, "GameTurn: picking for player move");
 
         GameLogic.EntityPickRequest request = new GameLogic.EntityPickRequest();
         request.pickingRestriction =
-                (GameLogic.EntityPickRequest.FLAG_PICK_PLAYER_ENTITIES |
-                GameLogic.EntityPickRequest.FLAG_PICK_BOAT_WITH_ROOM |
-                GameLogic.EntityPickRequest.FLAG_PICK_BOAT_WITHOUT_ROOM);
+                (GameLogic.EntityPickRequest.FLAG_PICK_PLAYER_ENTITIES
+                | GameLogic.EntityPickRequest.FLAG_PICK_BOAT_WITH_ROOM
+                | GameLogic.EntityPickRequest.FLAG_PICK_BOAT_WITHOUT_ROOM);
 
         request.player = mPlayer;
         request.avoidEntity.addAll(mSwimmersMoved);
@@ -457,7 +464,8 @@ public class GameTurn implements GameRenderListener {
     }
 
     /**
-     * Demande à la logique de jeu de picker l'entité qui a été obtenue via le dé
+     * Demande à la logique de jeu de picker l'entité qui a été obtenue via le
+     * dé
      */
     private void requestDiceEntityPicking(GameTile tile) {
         if (!mDiceEntityPicked) {

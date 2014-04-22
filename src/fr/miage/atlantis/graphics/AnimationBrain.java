@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package fr.miage.atlantis.graphics;
 
 import fr.miage.atlantis.board.GameTile;
@@ -38,6 +37,7 @@ import java.util.Random;
 public class AnimationBrain {
 
     public static class State {
+
         public State(String a) {
             this(a, 0);
         }
@@ -53,21 +53,22 @@ public class AnimationBrain {
             animateTransition = aT;
         }
 
+        public State setLoop(boolean loop) {
+            this.loop = loop;
+            return this;
+        }
         /**
          * Nom de l'animation à jouer
          */
         public String animationName;
-
         /**
          * Offset d'angle Y
          */
         public float yOffset;
-
         /**
          * Mettre ou non en boucle
          */
         public boolean loop = true;
-
         /**
          * Animer ou non la transition
          */
@@ -147,11 +148,11 @@ public class AnimationBrain {
 
     public static State getSpawnAnimation(GameEntity ent) {
         if (ent instanceof Shark) {
-            return new State(SharkModel.ANIMATION_RISE);
+            return new State(SharkModel.ANIMATION_RISE).setLoop(false);
         } else if (ent instanceof SeaSerpent) {
-            return new State(SeaSerpentModel.ANIMATION_RISE);
+            return new State(SeaSerpentModel.ANIMATION_RISE).setLoop(false);
         } else if (ent instanceof Whale) {
-            return new State(WhaleModel.ANIMATION_RISE);
+            return new State(WhaleModel.ANIMATION_RISE).setLoop(false);
         }
 
         return null;

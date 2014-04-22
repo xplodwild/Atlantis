@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package fr.miage.atlantis.graphics;
 
 import com.jme3.material.Material;
@@ -34,15 +33,19 @@ public class ModelCache {
     private ModelCache() {
         mModels = new HashMap<String, Spatial>();
         mMaterials = new HashMap<String, Material>();
-    }
 
+        // Preload des modèles
+        getModel("Models/Avatar_A.mesh.xml");
+        getModel("Models/boat.mesh.xml");
+        getModel("Models/serpentA.mesh.xml");
+    }
     private final static ModelCache INSTANCE = new ModelCache();
 
     public static ModelCache getInstance() {
         return INSTANCE;
     }
 
-    public Spatial getModel(final String path) {
+    public final Spatial getModel(final String path) {
         return mModels.get(path);
     }
 
@@ -57,5 +60,4 @@ public class ModelCache {
     public void putMaterial(final String key, final Material mat) {
         mMaterials.put(key, mat);
     }
-
 }

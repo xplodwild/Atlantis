@@ -103,12 +103,17 @@ public class NullGameLogic extends GameLogic {
         return null;
     }
 
+    @Override
+    public void onHitSpace() {
+        
+    }
+
     public void onCancellableEntityAction(GameEntity source, GameEntity target, int action) {
         
     }
 
     public void onCancelAction() {
-    
+        
     }
     
 }

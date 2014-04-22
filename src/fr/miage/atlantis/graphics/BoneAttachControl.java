@@ -32,8 +32,9 @@ import com.jme3.scene.control.Control;
 import java.io.IOException;
 
 /**
- * Control permettant, lorsqu'il est attaché à un noeud (exemple un PlayerModel), de mettre à jour
- * un autre spatial en fonction de la position d'un Bone du modèle.
+ * Control permettant, lorsqu'il est attaché à un noeud (exemple un
+ * PlayerModel), de mettre à jour un autre spatial en fonction de la position
+ * d'un Bone du modèle.
  */
 public class BoneAttachControl extends AbstractControl implements Savable, Cloneable {
 
@@ -57,8 +58,8 @@ public class BoneAttachControl extends AbstractControl implements Savable, Clone
     }
 
     /**
-     * Cette méthode est appelée lorsque le Control est ajouté au noeud, et quand il est retiré
-     * du noeud (en définissant null).
+     * Cette méthode est appelée lorsque le Control est ajouté au noeud, et
+     * quand il est retiré du noeud (en définissant null).
      */
     @Override
     public void setSpatial(Spatial spatial) {

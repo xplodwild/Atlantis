@@ -22,24 +22,21 @@ package fr.miage.atlantis.board;
  *
  * @author AtlantisTeam
  * @version 1.0
- * @date 28/02/2014 
+ * @date 28/02/2014
  */
 public class WaterTile extends GameTile {
 
-    
     /**
      * mIsBeginningWithSeaShark : Defini si le waterTile est un des 5
      * emplacement ou se placent les serpent de mer
      */
     private boolean mIsBeginningWithSeaShark;
-    
     /**
      * mIsLandingBay : Defini si le tile est l'un des 8 tile permettant de
      * sauver un pion
      */
     private boolean mIsLandingTile;
 
-    
     /**
      * Constructeur de WaterTile
      *
@@ -52,7 +49,6 @@ public class WaterTile extends GameTile {
         this.mIsBeginningWithSeaShark = false;
     }
 
-    
     /**
      * Constructeur de WaterTile #2
      *
@@ -65,7 +61,6 @@ public class WaterTile extends GameTile {
         this.mIsBeginningWithSeaShark = seashark;
     }
 
-    
     /**
      * Constructeur de WaterTile #3
      *
@@ -84,14 +79,9 @@ public class WaterTile extends GameTile {
         super(board, hg, hd, g, d, bd, bg, name, 0);
     }
 
-    
-    
-    
     //--------------------------------------------------------------------------
     //GETTERS                                                                  |
     //--------------------------------------------------------------------------
-    
-    
     public boolean isBeginningWithSeaShark() {
         return this.mIsBeginningWithSeaShark;
     }
@@ -100,14 +90,10 @@ public class WaterTile extends GameTile {
         return this.mIsLandingTile;
     }
     //--------------------------------------------------------------------------
-    
-    
-    
+
     //--------------------------------------------------------------------------
     //SETTERS                                                                  |
     //--------------------------------------------------------------------------
-    
-    
     public void setIsBeginningWithSeaShark(boolean mIsBeginningWithSeaShark) {
         this.mIsBeginningWithSeaShark = mIsBeginningWithSeaShark;
     }

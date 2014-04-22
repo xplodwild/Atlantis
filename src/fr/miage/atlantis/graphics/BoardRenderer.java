@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package fr.miage.atlantis.graphics;
 
 import com.jme3.asset.AssetManager;
@@ -33,6 +32,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -43,12 +43,10 @@ public class BoardRenderer extends Node {
     public final static String DATA_TILE_X = "tile_x";
     public final static String DATA_TILE_Y = "tile_y";
     public final static String DATA_TILE_OFFSET = "tile_offset";
-
     private final static boolean DEBUG_ITERATION = false;
     private final static float TILE_WIDTH = 35.0f;
     private final static float TILE_HEIGHT = 39.9f;
     private final static float GRID_HEIGHT = 1.0f;
-
     private float mTileOffset = 0.0f;
     private AssetManager mAssetManager;
     private List<Node> mTiles;
@@ -83,6 +81,7 @@ public class BoardRenderer extends Node {
     /**
      * Parcours le board passé en paramètre et crée toutes les nodes 3D en
      * fonction de l'état actuel du board.
+     *
      * @param board Le board a rendre
      */
     public void renderBoard(final GameBoard board) {
@@ -99,14 +98,18 @@ public class BoardRenderer extends Node {
 
             // On ajoute la tile présente
             addTileToRender(currentTile, x, y);
-            if (DEBUG_ITERATION) System.out.println("Adding self tile " + x + "," + y + " (" + currentTile.getName() + ")");
+            if (DEBUG_ITERATION) {
+                System.out.println("Adding self tile " + x + "," + y + " (" + currentTile.getName() + ")");
+            }
 
             // On ajoute toutes les tiles à droite
             while (currentTile.getRightTile() != null) {
                 x++;
                 currentTile = currentTile.getRightTile();
                 addTileToRender(currentTile, x, y);
-                if (DEBUG_ITERATION) System.out.println("Adding right row tile " + x + "," + y + " (" + currentTile.getName() + ")");
+                if (DEBUG_ITERATION) {
+                    System.out.println("Adding right row tile " + x + "," + y + " (" + currentTile.getName() + ")");
+                }
             }
 
             // On ajoute toutes les tiles à gauche
@@ -117,7 +120,9 @@ public class BoardRenderer extends Node {
                 x--;
                 currentTile = currentTile.getLeftTile();
                 addTileToRender(currentTile, x, y);
-                if (DEBUG_ITERATION) System.out.println("Adding left row tile " + x + "," + y + " (" + currentTile.getName() + ")");
+                if (DEBUG_ITERATION) {
+                    System.out.println("Adding left row tile " + x + "," + y + " (" + currentTile.getName() + ")");
+                }
             }
 
             // On cherche l'élément du dessous. On est déjà à gauche, donc
@@ -125,7 +130,9 @@ public class BoardRenderer extends Node {
             boolean belowFound = false;
             while (!belowFound && currentTile != null) {
                 if (currentTile.getLeftBottomTile() != null) {
-                    if (DEBUG_ITERATION) System.out.println("Going below left of " + currentTile.getName());
+                    if (DEBUG_ITERATION) {
+                        System.out.println("Going below left of " + currentTile.getName());
+                    }
                     rowHeadTile = currentTile.getLeftBottomTile();
                     currentTile = rowHeadTile;
                     mTileOffset -= TILE_HEIGHT / 2.0f;
@@ -133,7 +140,9 @@ public class BoardRenderer extends Node {
                     y++;
                     belowFound = true;
                 } else if (currentTile.getRightBottomTile() != null) {
-                    if (DEBUG_ITERATION) System.out.println("Going below right of " + currentTile.getName());
+                    if (DEBUG_ITERATION) {
+                        System.out.println("Going below right of " + currentTile.getName());
+                    }
                     rowHeadTile = currentTile.getRightBottomTile();
                     currentTile = rowHeadTile;
                     mTileOffset += TILE_HEIGHT / 2.0f;
@@ -156,6 +165,7 @@ public class BoardRenderer extends Node {
     /**
      * Ajoute une tile au rendu à l'endroit singulier spécifié. Les coordonnées
      * sont converties automatiquement en coordonnées de l'univers 3D
+     *
      * @param tile La tile à ajouter
      * @param x L'emplacement X sur le GameBoard
      * @param y L'emplacement Y sur le GameBoard
@@ -174,8 +184,8 @@ public class BoardRenderer extends Node {
                 color = ColorRGBA.Red;
             } else if (tile.getHeight() == 0) {
                 WaterTile wt = (WaterTile) tile;
-                color = wt.isLandingTile() ? ColorRGBA.White :
-                        new ColorRGBA(51.0f / 255.0f, 181.0f / 255.0f, 229.0f / 255.0f, 1.0f);
+                color = wt.isLandingTile() ? ColorRGBA.White
+                        : new ColorRGBA(51.0f / 255.0f, 181.0f / 255.0f, 229.0f / 255.0f, 1.0f);
                 //color = wt.isBeginningWithSeaShark() ? ColorRGBA.Magenta : color;
             }
 
@@ -208,8 +218,9 @@ public class BoardRenderer extends Node {
     }
 
     /**
-     * Remplace une tile existante au rendu. Cela est utile pour ne pas avoir à recalculer la position
-     * x et y de la tile
+     * Remplace une tile existante au rendu. Cela est utile pour ne pas avoir à
+     * recalculer la position x et y de la tile
+     *
      * @param src La tile supprimée
      * @param dest La nouvelle tiel
      */
@@ -229,5 +240,19 @@ public class BoardRenderer extends Node {
         mTileOffset = (Float) srcNode.getUserData(DATA_TILE_OFFSET);
 
         addTileToRender(dest, x, y);
+    }
+    
+    /**
+     * Enlève tous les éléments en rendu du board
+     */
+    public void clearBoard() {
+        Set<Node> nodes = mNodeToGameTiles.keySet();
+        for (Node node : nodes) {
+            detachChild(node);
+        }
+        
+        mTiles.clear();
+        mNodeToGameTiles.clear();
+        mGameTileToModel.clear();
     }
 }

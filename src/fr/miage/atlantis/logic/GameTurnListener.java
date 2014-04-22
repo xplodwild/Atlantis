@@ -35,6 +35,7 @@ public interface GameTurnListener {
 
     /**
      * Action à effectuer au debut du tour du joueur p
+     *
      * @param p Joueur qui debute son tour
      */
     public void onTurnStart(Player p);
@@ -45,11 +46,12 @@ public interface GameTurnListener {
     public void onInitialTokenPut(PlayerToken pt);
 
     /**
-     * Action à effectuer quant un bateau a été initialement placé (début du jeu)
+     * Action à effectuer quant un bateau a été initialement placé (début du
+     * jeu)
+     *
      * @param b Le bateau placé
      */
     public void onInitialBoatPut(Boat b);
-
 
     /**
      * Action a effectuer lors du jeu d'un playtile
@@ -59,7 +61,6 @@ public interface GameTurnListener {
      */
     public void onPlayTileAction(GameTile tile, TileAction action);
 
-
     /**
      * Action a realiser lors d'un movement d'entité
      *
@@ -68,14 +69,12 @@ public interface GameTurnListener {
      */
     public void onUnitMove(GameEntity ent, GameTile dest);
 
-
     /**
      * Action à effectuer lors d'un lancé de dé
      *
      * @param face Face qui est apparue au lancement
      */
     public void onDiceRoll(int face);
-
 
     /**
      * Action a effectuer lors du coulage d'un tile
@@ -93,6 +92,19 @@ public interface GameTurnListener {
      */
     public void onEntityAction(GameEntity source, GameEntity target, int action);
 
+    /**
+     * Action annulable a effectuer lors d'une action d'entité
+     *
+     * @param source Entity source
+     * @param target Entity cible
+     * @param action Action à réaliser
+     */
+    public void onCancellableEntityAction(GameEntity source, GameEntity target, int action);
+
+    /**
+     * Confirme l'annulation d'une action annulable
+     */
+    public void onCancelAction();
 
     /**
      * Action a réaliser lors du spawn d'entité

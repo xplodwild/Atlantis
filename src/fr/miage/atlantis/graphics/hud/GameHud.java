@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package fr.miage.atlantis.graphics.hud;
 
 import com.jme3.math.Vector3f;
@@ -30,6 +29,7 @@ public class GameHud {
 
     private HudManager mHudManager;
     private AbstractDisplay mRightClickToCancel;
+    private AbstractDisplay mSpaceToSkip;
     private List<TileActionDisplay> mPlayerTiles;
 
     public GameHud(HudManager man) {
@@ -39,22 +39,32 @@ public class GameHud {
     }
 
     private void setup() {
-        mRightClickToCancel = new AbstractDisplay(52, 75, "RightClick Cancel Hint",
-                mHudManager.getAssetManager());
+        // HUD: Clic droit pour annuler, affiché dans le coin en bas à droite
+        mRightClickToCancel = new AbstractDisplay(52, 75, "RightClick Cancel Hint", mHudManager.getAssetManager());
+
         mRightClickToCancel.showImage("Interface/HintRightClickCancel.png");
         mRightClickToCancel.setAlpha(0.0f);
         mHudManager.displayBottomRight(mRightClickToCancel);
+
+        // HUD: Image centrée invitant à appuyer sur espace pour annuler
+        mSpaceToSkip = new AbstractDisplay(220, 120, "HUD Space Prompt",
+                mHudManager.getAssetManager());
+        mSpaceToSkip.showImage("Interface/SpaceToSkip.png");
+        mSpaceToSkip.setAlpha(0.0f);
+        mHudManager.displayCenter(mSpaceToSkip);
     }
 
     /**
-     * Met en opacité complète le hint indiquant qu'on peut faire un clic droit pour annuler
+     * Met en opacité complète le hint indiquant qu'on peut faire un clic droit
+     * pour annuler
      */
     public void showRightClickHint() {
         mHudManager.getAnimator().animateFade(mRightClickToCancel, 1.0f);
     }
 
     /**
-     * "Cache" (rend plus transparent) le hint indiquant qu'on peut faire un clic droit pour annuler
+     * "Cache" (rend plus transparent) le hint indiquant qu'on peut faire un
+     * clic droit pour annuler
      */
     public void hideRightClickHint() {
         mHudManager.getAnimator().animateFade(mRightClickToCancel, 0.5f);
@@ -62,10 +72,11 @@ public class GameHud {
 
     /**
      * Affiche les tiles d'action du joueur
+     *
      * @param actions Liste des tiles d'action
      */
     public void displayPlayerTiles(List<TileAction> actions) {
-        int x = 0;
+        int y = 0;
         final float scale = 0.5f;
 
         // On enlève les tiles précédentes
@@ -73,14 +84,17 @@ public class GameHud {
             mHudManager.removeFromDisplay(tad);
         }
         mPlayerTiles.clear();
+        
+        final int width = mHudManager.getScreenWidth();
+        final int height = mHudManager.getScreenHeight() - 200;
 
         // On affiche les nouvelles tiles
         for (TileAction action : actions) {
             TileActionDisplay tad = TileActionDisplay.getTileForAction(action, mHudManager.getAssetManager());
             tad.scale(scale);
-            mHudManager.displayAt(tad, x, 0);
+            mHudManager.displayAt(tad, width - (width / 10), height - y);
             tad.setAlpha(1.0f);
-            x += tad.getWidth();
+            y += tad.getHeight();
 
             mPlayerTiles.add(tad);
         }
@@ -96,7 +110,9 @@ public class GameHud {
     }
 
     /**
-     * Retourne la tile pickée aux ooordonnées souris indiquées, ou null si il n'y en a pas
+     * Retourne la tile pickée aux ooordonnées souris indiquées, ou null si il
+     * n'y en a pas
+     *
      * @param x Coordonnée X de la souris (de gauche)
      * @param y Coordonnée Y de la souris (du haut)
      * @return Une tileactiondisplay, ou null
@@ -116,5 +132,19 @@ public class GameHud {
         }
 
         return null;
+    }
+
+    /**
+     * Affiche une image indiquant à l'utilisateur qu'il peut annuler l'action qui va se passer
+     * (exemple un shark attaque un pion du joueur, et il a une tile permettant d'annuler l'action)
+     * en appuyant sur la touche espace avant les 3 prochaines secondes.
+     */
+    public void promptCancel() {
+        mSpaceToSkip.setAlpha(0.0f);
+        mHudManager.getAnimator().animateFade(mSpaceToSkip, 1.0f);
+    }
+
+    public void hidePromptCancel() {
+        mHudManager.getAnimator().animateFade(mSpaceToSkip, 0.0f);
     }
 }

@@ -23,6 +23,7 @@ import com.jme3.input.InputManager;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.AnalogListener;
+import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseAxisTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.material.MatParam;
@@ -34,6 +35,9 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
+import fr.miage.atlantis.audio.AudioConstants;
+import fr.miage.atlantis.audio.AudioManager;
 import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.entities.Boat;
 import fr.miage.atlantis.entities.GameEntity;
@@ -46,7 +50,6 @@ import fr.miage.atlantis.graphics.models.AnimatedModel;
 import fr.miage.atlantis.graphics.models.EmptyTileModel;
 import fr.miage.atlantis.graphics.models.TileModel;
 import fr.miage.atlantis.logic.GameLogic;
-import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -55,14 +58,12 @@ import java.util.logging.Logger;
 public class InputActionListener {
 
     private final static int REQUEST_NONE = -1;
-
     public final static int REQUEST_ENTITY_PICK = (1 << 0);
-    public final static int REQUEST_TILE_PICK   = (1 << 1);
-
+    public final static int REQUEST_TILE_PICK = (1 << 1);
     private final static String INPUTMAP_MOUSE_HOVER = "mouse_hover";
     private final static String INPUTMAP_MOUSE_CLICK = "mouse_click";
     private final static String INPUTMAP_MOUSE_RIGHT_CLICK = "mouse_right_click";
-
+    private final static String INPUTMAP_KEY_SPACE = "key_space";
     private InputManager mInputManager;
     private Game3DRenderer mRenderer;
     private PickingResult mPickingResult;
@@ -71,15 +72,21 @@ public class InputActionListener {
     private GameLogic.TilePickRequest mTileRequest;
 
     private class PickingResult {
+
         public final static int SOURCE_BOARD = 0;
         public final static int SOURCE_ENTITY = 1;
-
         public Geometry geometry;
         public int source;
     }
-
+    private ActionListener mKeyboardListener = new ActionListener() {
+        public void onAction(String name, boolean isPressed, float tpf) {
+            if (name.equals(INPUTMAP_KEY_SPACE)) {
+                // Touche espace, on notifie la logique
+                mRenderer.getLogic().onHitSpace();
+            }
+        }
+    };
     private AnalogListener mMouseHoverListener = new AnalogListener() {
-
         private Spatial mPreviousGeometry = null;
         private Material mOriginalMaterial = null;
 
@@ -124,7 +131,6 @@ public class InputActionListener {
             }
         }
     };
-
     private ActionListener mMouseRightClickListener = new ActionListener() {
         public void onAction(String name, boolean isPressed, float tpf) {
             // Si on clic droit et qu'on est en requête, on demande à annuler les requêtes
@@ -133,7 +139,6 @@ public class InputActionListener {
             }
         }
     };
-
     private ActionListener mMouseClickListener = new ActionListener() {
         public void onAction(String name, boolean isPressed, float tpf) {
             // Si on clique et qu'on a effectivement une requête de picking
@@ -187,7 +192,7 @@ public class InputActionListener {
                         mRenderer.getHud().getGameHud().hidePlayerTiles();
                     } else {
                         Logger.getGlobal().severe("Input: Can't use this tile");
-                        // TODO: Play a sound/animation to say "NOPE"
+                        AudioManager.getDefault().playSound(AudioConstants.Path.ERROR);
                     }
 
                 }
@@ -217,6 +222,11 @@ public class InputActionListener {
         inputManager.addMapping(INPUTMAP_MOUSE_RIGHT_CLICK,
                 new MouseButtonTrigger(MouseInput.BUTTON_RIGHT));
         inputManager.addListener(mMouseRightClickListener, INPUTMAP_MOUSE_RIGHT_CLICK);
+
+        // Espace pour annuler une action (shark, etc)
+        inputManager.addMapping(INPUTMAP_KEY_SPACE,
+                new KeyTrigger(KeyboardInputEvent.KEY_SPACE));
+        inputManager.addListener(mKeyboardListener, INPUTMAP_KEY_SPACE);
     }
 
     /**
@@ -245,8 +255,9 @@ public class InputActionListener {
     }
 
     /**
-     * Demande à ce listener d'effectuer un picking en particulier. Le résultat sera rapporté
-     * au GameLogic correspondant.
+     * Demande à ce listener d'effectuer un picking en particulier. Le résultat
+     * sera rapporté au GameLogic correspondant.
+     *
      * @param request Un ou des flags REQUEST_** de cette classe
      */
     private boolean requestPicking(int request) {
@@ -335,7 +346,9 @@ public class InputActionListener {
     }
 
     /**
-     * Vérifie que l'entité pickée correspond aux contraintes de la requête de picking
+     * Vérifie que l'entité pickée correspond aux contraintes de la requête de
+     * picking
+     *
      * @param request La requête
      * @param ent L'entité pickée
      * @return true si l'entité respecte au moins une condition, false sinon
@@ -344,12 +357,12 @@ public class InputActionListener {
         // On vérifie tout d'abord la contrainte de tile alentour, s'il y en a une.
         if (request.pickNearTile != null) {
             GameTile tile = ent.getTile();
-            if (tile.getLeftBottomTile() != request.pickNearTile &&
-                    tile.getLeftTile() != request.pickNearTile &&
-                    tile.getLeftUpperTile() != request.pickNearTile &&
-                    tile.getRightBottomTile() != request.pickNearTile &&
-                    tile.getRightTile() != request.pickNearTile &&
-                    tile.getRightUpperTile() != request.pickNearTile) {
+            if (tile.getLeftBottomTile() != request.pickNearTile
+                    && tile.getLeftTile() != request.pickNearTile
+                    && tile.getLeftUpperTile() != request.pickNearTile
+                    && tile.getRightBottomTile() != request.pickNearTile
+                    && tile.getRightTile() != request.pickNearTile
+                    && tile.getRightUpperTile() != request.pickNearTile) {
                 return false;
             }
         }
@@ -499,13 +512,35 @@ public class InputActionListener {
             }
         }
 
+        if (request.landEdgeOnly) {
+            boolean isAtEdge = false;
+
+            if (tile.getLeftBottomTile() != null && tile.getLeftBottomTile().getHeight() > 0) {
+                isAtEdge = true;
+            } else if (tile.getLeftUpperTile() != null && tile.getLeftUpperTile().getHeight() > 0) {
+                isAtEdge = true;
+            } else if (tile.getLeftTile() != null && tile.getLeftTile().getHeight() > 0) {
+                isAtEdge = true;
+            } else if (tile.getRightTile() != null && tile.getRightTile().getHeight() > 0) {
+                isAtEdge = true;
+            } else if (tile.getRightUpperTile() != null && tile.getRightUpperTile().getHeight() > 0) {
+                isAtEdge = true;
+            } else if (tile.getRightBottomTile() != null && tile.getRightBottomTile().getHeight() > 0) {
+                isAtEdge = true;
+            }
+
+            if (!isAtEdge) {
+                return false;
+            }
+        }
+
         if (request.pickNearTile != null) {
-            if (tile.getLeftBottomTile() != request.pickNearTile &&
-                    tile.getLeftTile() != request.pickNearTile &&
-                    tile.getLeftUpperTile() != request.pickNearTile &&
-                    tile.getRightBottomTile() != request.pickNearTile &&
-                    tile.getRightTile() != request.pickNearTile &&
-                    tile.getRightUpperTile() != request.pickNearTile) {
+            if (tile.getLeftBottomTile() != request.pickNearTile
+                    && tile.getLeftTile() != request.pickNearTile
+                    && tile.getLeftUpperTile() != request.pickNearTile
+                    && tile.getRightBottomTile() != request.pickNearTile
+                    && tile.getRightTile() != request.pickNearTile
+                    && tile.getRightUpperTile() != request.pickNearTile) {
                 return false;
             }
         }
@@ -515,6 +550,7 @@ public class InputActionListener {
 
     /**
      * Retrouve l'entité a partir d'une géometrie d'entité pickée
+     *
      * @param geometry
      * @return
      */
@@ -526,6 +562,7 @@ public class InputActionListener {
 
     /**
      * Retrouve une GameTile à partir d'une géométrie de tile pickée
+     *
      * @param geometry
      * @return
      */
