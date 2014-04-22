@@ -721,6 +721,8 @@ public class Game3DLogic extends GameLogic {
     @Override
     public void onEntityPicked(GameEntity ent) {
         logger.log(Level.FINE, "Game3DLogic: Entity picked ", new Object[]{ent});
+        
+        AudioManager.getDefault().playSound(AudioConstants.Path.SELECT);
 
         GameTurn currentTurn = mRenderer.getLogic().getCurrentTurn();
         mRenderer.getHud().getGameHud().hidePlayerTiles();
