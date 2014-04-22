@@ -131,7 +131,7 @@ public class GuiController implements ScreenController {
 
             this.updatePlayerName();
 
-            this.g3rdr.getLogic().prepareGame(players);
+            this.g3rdr.getLogic().prepareGame(players, true);
             this.g3rdr.getLogic().startGame();
 
             Camera cam = g3rdr.getCamera();
@@ -150,7 +150,7 @@ public class GuiController implements ScreenController {
         //On garde les mêmes nick donc pas besoin de redefinir.
 
 
-        this.g3rdr.getLogic().prepareGame(players);
+        this.g3rdr.getLogic().prepareGame(players, true);
         this.g3rdr.getLogic().startGame();
 
         this.nifty.gotoScreen("inGameHud");

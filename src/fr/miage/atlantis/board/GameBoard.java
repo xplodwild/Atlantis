@@ -71,22 +71,27 @@ public final class GameBoard {
     /**
      * Constructeur de GameBoard
      *
+     * @param prepareBoard Indique si oui ou non il faut générer un board
      */
-    public GameBoard() {
+    public GameBoard(boolean prepareBoard) {
         /*On vas creer et adresser ici les tiles en commencant par la haut gauche du plateau */
         mTileSet = new HashMap<String, GameTile>();
-
-        this.beachTilesRemaining = NB_BEACHTILES;
-        this.forestTilesRemaining = NB_FORESTTILES;
-        this.mountainTilesRemaining = NB_MOUNTAINTILES;
-
-
         this.randomiser = new ArrayList();
 
-        this.fillInRandomizerWithTiles();
-        this.generateDefaultBoard();
-        this.setDefaultBoardTileAttributes();
-        this.placeDefaultEntitiesOnBoard();
+        if (prepareBoard) {
+            this.beachTilesRemaining = NB_BEACHTILES;
+            this.forestTilesRemaining = NB_FORESTTILES;
+            this.mountainTilesRemaining = NB_MOUNTAINTILES;
+        
+            this.fillInRandomizerWithTiles();
+            this.generateDefaultBoard();
+            this.setDefaultBoardTileAttributes();
+            this.placeDefaultEntitiesOnBoard();
+        } else {
+            this.beachTilesRemaining = 0;
+            this.forestTilesRemaining = 0;
+            this.mountainTilesRemaining = 0;
+        }
 
 
     }
@@ -851,6 +856,10 @@ public final class GameBoard {
         //On update cette tile dans la hashmap
         mTileSet.put(newTile.getName(), newTile);
         return newTile;
+    }
+    
+    public void forcePutTile(GameTile tile) {
+        mTileSet.put(tile.getName(), tile);
     }
 
     public boolean canPlaceTile() {

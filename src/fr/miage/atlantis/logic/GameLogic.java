@@ -165,10 +165,11 @@ public abstract class GameLogic implements GameTurnListener {
      * Initialise les joueurs du jeu
      *
      * @param players Tableau des pseudo des joueurs
+     * @param prepareBoard Indique si il faut générer un board ou non
      */
-    public void prepareGame(String[] players) {
+    public void prepareGame(String[] players, boolean prepareBoard) {
         // Création du board
-        mBoard = new GameBoard();
+        mBoard = new GameBoard(prepareBoard);
         
         // On créé les joueurs
         mPlayers = new Player[players.length];

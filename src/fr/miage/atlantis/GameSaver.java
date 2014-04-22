@@ -17,8 +17,12 @@
  */
 package fr.miage.atlantis;
 
+import fr.miage.atlantis.board.BeachTile;
+import fr.miage.atlantis.board.ForestTile;
 import fr.miage.atlantis.board.GameTile;
+import fr.miage.atlantis.board.MountainTile;
 import fr.miage.atlantis.board.TileAction;
+import fr.miage.atlantis.board.WaterTile;
 import fr.miage.atlantis.entities.Boat;
 import fr.miage.atlantis.entities.GameEntity;
 import fr.miage.atlantis.entities.PlayerToken;
@@ -26,13 +30,18 @@ import fr.miage.atlantis.entities.SeaSerpent;
 import fr.miage.atlantis.entities.Shark;
 import fr.miage.atlantis.entities.Whale;
 import fr.miage.atlantis.logic.GameLogic;
+import fr.miage.atlantis.logic.GameTurn;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
 
 /**
  * Classe s'occupant de sauver et charger une partie en cours du jeu
@@ -61,6 +70,9 @@ import java.util.Set;
  *  -- - Si PlayerToken :
  *  -- -- - Numéro du joueur d'appartenance
  *  -- -- - Etat (bateau, nage, sauf)
+ *  -- -- - Points
+ *  -- -- - On est sur un bateau?
+ *  -- -- - Nom du bateau si oui ^
  *  - Nombre de tiles dans le board
  *  -- Pour chaque tile :
  *  -- - Type de la tile
@@ -68,6 +80,15 @@ import java.util.Set;
  *  - Serialisation de GameTurn
  */
 public class GameSaver {
+    
+    private static class PlayerBoatAffectation {
+        public PlayerToken player;
+        public String boatName;
+        public PlayerBoatAffectation(PlayerToken p, String s) {
+            player = p;
+            boatName = s;
+        }
+    }
     
     public GameSaver() {
         
@@ -134,9 +155,14 @@ public class GameSaver {
                 
                 // Etat
                 data.writeInt(pt.getState());
+                
+                // Points
+                data.writeInt(pt.getPoints());
+                
+                // Si on a un bateau
+                data.writeBoolean(pt.getBoat() != null);
+                if (pt.getBoat() != null) data.writeUTF(pt.getBoat().getName());
             }
-            
-            
         }
         
         // Nombre de tiles dans le board
@@ -144,25 +170,187 @@ public class GameSaver {
         data.writeInt(tiles.size());
         Iterator<String> keyIt = tiles.keySet().iterator();
         
+        // On écrit d'abord le nom de toutes les tiles, puis on les serialize. Ainsi, on peut
+        // créer les tiles et les remplir dans le TileSet. De ce fait, lorsqu'on associe les
+        // tiles adjacentes, on a les objets remplis, et non null.
+        List<GameTile> tilesToSerialize = new ArrayList<GameTile>();
+        
         // Pour chaque tile
         while (keyIt.hasNext()) {
             String tileName = keyIt.next();
             GameTile tile = tiles.get(tileName);
             
+            // Nom de la tile
+            data.writeUTF(tileName);
+            
             // Type de la tile
             data.writeInt(tile.getType());
             
             // Serialisation de la tile
+            tilesToSerialize.add(tile);
+        }
+        
+        // Ensuite on serialize les tiles seulement
+        for (GameTile tile : tilesToSerialize) {
             tile.serializeTo(data);
         }
 
         // Tour actuel
         logic.getCurrentTurn().serializeTo(data);
-        
+     
+        data.close();
     }
     
-    public void loadFromFile(final String path) {
+    public void loadFromFile(final GameLogic logic, final String path) throws IOException {
+        DataInputStream data = new DataInputStream(new FileInputStream(path));
         
+        // Nombre de joueurs
+        int playersCount = data.readInt();
+        String[] playerNames = new String[playersCount];
+        List<TileAction> playerTileAction[] = new ArrayList[playersCount];
+        
+        // Pour chaque joueur
+        for (int i = 0; i < playersCount; i++) {
+            // Nom du joueur
+            playerNames[i] = data.readUTF();
+            playerTileAction[i] = new ArrayList<TileAction>();
+            
+            // Nombre de tiles d'action
+            int tileActionCount = data.readInt();
+            
+            // Pour chaque tile d'action
+            for (int j = 0; j < tileActionCount; j++) {
+                TileAction ta = TileAction.Factory.createFromSerialized(data);
+                playerTileAction[i].add(ta);
+            }
+        }
+        
+        // On prépare le jeu avec nos joueurs mais sans board
+        logic.prepareGame(playerNames, false);
+        
+        // On ré-assigne les TileAction aux joueurs
+        Player[] players = logic.getPlayers();
+        for (int i = 0; i < playersCount; i++) {
+            for (TileAction ta : playerTileAction[i]) {
+                players[i].addActionTile(ta);
+            }
+        }
+        
+        // Numéro du joueur en train de jouer
+        int currentPlayerNumber = data.readInt();
+        
+        // Nombre d'entités
+        int entitiesCount = data.readInt();
+        
+        // On a besoin de pouvoir stocker les appartenance des joueurs aux bateaux, au cas où
+        // les joueurs sont régénérés avant les bateaux
+        List<PlayerBoatAffectation> playerBoatAffectations = new ArrayList<PlayerBoatAffectation>();
+        
+        // Pour chaque entité
+        for (int i = 0; i < entitiesCount; i++) {
+            GameEntity entity;
+            
+            // Type de l'entité
+            int entityType = data.readInt();
+            
+            // Nom de la tile d'appartenance
+            String belongTileName = data.readUTF();
+            
+            // Si PlayerToken
+            if (entityType == GameEntity.TYPE_PLAYERTOKEN) {
+                // Numéro du joueur d'appartenance
+                int belongPlayer = data.readInt();
+                
+                // Etat
+                int state = data.readInt();
+                
+                // Nombre de points
+                int points = data.readInt();
+                
+                PlayerToken pt = new PlayerToken(players[belongPlayer - 1], points);
+                pt.setState(state);
+                
+                // A un bateau?
+                boolean hasBoat = data.readBoolean();
+                if (hasBoat) {
+                    String boatName = data.readUTF();
+                    Boat boat = (Boat) logic.getBoard().getEntity(boatName);
+                    if (boat != null) {
+                        pt.setBoat(boat);
+                        boat.addPlayer(pt);
+                    } else {
+                        PlayerBoatAffectation pba = new PlayerBoatAffectation(pt, boatName);
+                        playerBoatAffectations.add(pba);
+                    }
+                }
+                
+                entity = pt;
+            } else if (entityType == GameEntity.TYPE_BOAT) {
+                entity = new Boat();
+            } else if (entityType == GameEntity.TYPE_SEASERPENT) {
+                entity = new SeaSerpent();
+            } else if (entityType == GameEntity.TYPE_SHARK) {
+                entity = new Shark();
+            } else if (entityType == GameEntity.TYPE_WHALE) {
+                entity = new Whale();
+            } else {
+                throw new IllegalStateException("Unknown entityType read: " + entityType);
+            }
+            
+            logic.getBoard().putEntity(entity);
+        }
+        
+        // On restaure les bateaux qui manquaient à la première itération
+        for (PlayerBoatAffectation pba : playerBoatAffectations) {
+            Boat boat = (Boat) logic.getBoard().getEntity(pba.boatName);
+            if (boat != null) {
+                pba.player.setBoat(boat);
+            } else {
+                Logger.getGlobal().severe("We still haven't found your boat when restoring!");
+            }
+        }
+        
+        // Nombre de tiles dans le board
+        int boardTilesCount = data.readInt();
+        
+        // On créé les tiles juste avec leur nom pour remplir le board et avoir les objets
+        List<GameTile> tilesToDeserialize = new ArrayList<GameTile>();
+        for (int i = 0; i < boardTilesCount; i++) {
+            String tileName = data.readUTF();
+            int tileType = data.readInt();
+            GameTile tile;
+            
+            switch (tileType) {
+                case GameTile.TILE_BEACH:
+                    tile = new BeachTile(logic.getBoard(), tileName);
+                    break;
+                case GameTile.TILE_FOREST:
+                    tile = new ForestTile(logic.getBoard(), tileName);
+                    break;
+                case GameTile.TILE_MOUNTAIN:
+                    tile = new MountainTile(logic.getBoard(), tileName);
+                    break;
+                case GameTile.TILE_WATER:
+                    tile = new WaterTile(logic.getBoard(), tileName);
+                    break;
+                default:
+                    throw new IllegalStateException("Unknown tile type: " + tileType);
+            }
+            
+            logic.getBoard().forcePutTile(tile);
+        }
+        
+        // Ensuite on déserialize
+        for (GameTile tile : tilesToDeserialize) {
+            tile.readSerialized(data);
+        }
+        
+        // On déserialize ensuite le tour en cours
+        GameTurn currentTurn = new GameTurn(logic, players[currentPlayerNumber - 1]);
+        currentTurn.readSerialized(data);
+        
+        // TODO: Relancer le dernier picking (serialiser le
+        // TilePickRequest/EntityPickRequest/mLastPickedEntity?)
     }
     
 }

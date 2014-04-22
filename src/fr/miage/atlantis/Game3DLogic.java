@@ -116,19 +116,21 @@ public class Game3DLogic extends GameLogic {
     }
 
     @Override
-    public void prepareGame(String[] players) {
-        super.prepareGame(players);
+    public void prepareGame(String[] players, boolean prepareBoard) {
+        super.prepareGame(players, prepareBoard);
 
         // On fait le rendu des tiles
         mRenderer.getBoardRenderer().clearBoard();
-        mRenderer.getBoardRenderer().renderBoard(getBoard());
+        if (prepareBoard) {
+            mRenderer.getBoardRenderer().renderBoard(getBoard());
 
-        // Rendu des entités déjà placées sur le plateau
-        mRenderer.getEntitiesRenderer().clearEntities();
-        Map<String, GameTile> tiles = getBoard().getTileSet();
-        for (GameTile tile : tiles.values()) {
-            for (GameEntity ent : tile.getEntities()) {
-                mRenderer.getEntitiesRenderer().addEntity(ent);
+            // Rendu des entités déjà placées sur le plateau
+            mRenderer.getEntitiesRenderer().clearEntities();
+            Map<String, GameTile> tiles = getBoard().getTileSet();
+            for (GameTile tile : tiles.values()) {
+                for (GameEntity ent : tile.getEntities()) {
+                    mRenderer.getEntitiesRenderer().addEntity(ent);
+                }
             }
         }
     }
