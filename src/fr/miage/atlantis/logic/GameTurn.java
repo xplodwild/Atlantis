@@ -29,6 +29,9 @@ import fr.miage.atlantis.entities.PlayerToken;
 import fr.miage.atlantis.entities.SeaSerpent;
 import fr.miage.atlantis.entities.Shark;
 import fr.miage.atlantis.entities.Whale;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -79,6 +82,47 @@ public class GameTurn implements GameRenderListener {
         mRemoteTiles = new ArrayList<TileAction>();
         mMoves = new ArrayList<EntityMove>();
         mSwimmersMoved = new ArrayList<PlayerToken>();
+    }
+    
+    public void serializeTo(DataOutputStream data) throws IOException {
+        data.writeBoolean(DBG_QUICKTEST);
+        data.writeBoolean(mTileAction != null);
+        if (mTileAction != null) mTileAction.serializeTo(data);
+      
+        // mRemoteTiles: Non utilisé a part pour du logging, donc pas sauvegardé
+        // mMoves:       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        data.writeBoolean(mSunkenTile != null);
+        if (mSunkenTile != null) data.writeUTF(mSunkenTile.getName());
+        
+        data.writeInt(mDiceAction);
+        data.writeBoolean(mDiceRolled);
+        data.writeBoolean(mTurnIsOver);
+        data.writeInt(mRemainingMoves);
+        data.writeInt(mRemainingDiceMoves);
+        data.writeBoolean(mDiceEntityPicked);
+        // mTokenToPlace: On ne laisse pas sauvegarder une partie qui n'a pas commencé
+        data.writeInt(mSwimmersMoved.size());
+        for (PlayerToken token : mSwimmersMoved) {
+            // TODO: Sauver les tokens nageurs (il faut donner un nom unique aux GameEntities...)
+        }
+    }
+    
+    public void readSerialized(DataInputStream data) throws IOException {
+        DBG_QUICKTEST = data.readBoolean();
+        if (data.readBoolean()) {
+            TileAction.Factory.createFromSerialized(data);
+        }
+        if (data.readBoolean()) {
+            mSunkenTile = mController.getBoard().getTileSet().get(data.readUTF());
+        }
+        mDiceAction = data.readInt();
+        mDiceRolled = data.readBoolean();
+        mTurnIsOver = data.readBoolean();
+        mRemainingMoves = data.readInt();
+        mRemainingDiceMoves = data.readInt();
+        mDiceEntityPicked = data.readBoolean();
+        // mTokenToPlace
+        // mSwimmersMoved
     }
 
     public TileAction getTileAction() {

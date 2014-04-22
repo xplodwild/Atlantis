@@ -44,6 +44,10 @@ public final class GameBoard {
      */
     private HashMap<String, GameTile> mTileSet;
     /**
+     * Stock les entités du board
+     */
+    private HashMap<String, GameEntity> mEntities;
+    /**
      * Tile de foret restante à placer
      */
     private int forestTilesRemaining;
@@ -1039,6 +1043,27 @@ public final class GameBoard {
         }
 
         return false;
+    }
+    
+    public Set<String> getAllEntities() {
+        return mEntities.keySet();
+    }
+    
+    /**
+     * Retourne l'entité ayant le nom indiqué, ou null
+     * @param name Nom de l'entité
+     * @return Le GameEntity associé
+     */
+    public GameEntity getEntity(final String name) {
+        return mEntities.get(name);
+    }
+    
+    /**
+     * Met une entité dans le hashmap d'entités
+     * @param ent L'entité à sauver
+     */
+    public void putEntity(GameEntity ent) {
+        mEntities.put(ent.getName(), ent);
     }
 
     //--------------------------------------------------------------------------

@@ -30,7 +30,7 @@ import fr.miage.atlantis.logic.GameLogic;
  * @date 02/03/2014
  */
 public class PlayerToken extends GameEntity {
-
+    
     public final static int STATE_UNDEFINED = -1;
     public final static int STATE_ON_LAND = 0;
     public final static int STATE_SWIMMING = 1;
