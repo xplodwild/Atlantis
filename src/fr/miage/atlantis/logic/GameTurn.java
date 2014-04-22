@@ -298,12 +298,14 @@ public class GameTurn implements GameRenderListener {
     public void putInitialToken(PlayerToken pt, GameTile tile) {
         pt.moveToTile(null, tile);
         pt.setState(PlayerToken.STATE_ON_LAND);
+        mController.getBoard().putEntity(pt);
         mController.onInitialTokenPut(pt);
     }
 
     public void putInitialBoat(GameTile tile) {
         Boat b = new Boat();
         b.moveToTile(null, tile);
+        mController.getBoard().putEntity(b);
         mController.onInitialBoatPut(b);
     }
 

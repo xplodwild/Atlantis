@@ -47,7 +47,15 @@ public class Boat extends GameEntity {
      * @param tile Tile sur lequel est placé le bateau.
      */
     public Boat() {
-        super("Boat");
+        this("Boat", true);
+    }
+    
+    public Boat(String name) {
+        this(name, false);
+    }
+    
+    public Boat(String name, boolean appendUniqueID) {
+        super(name, appendUniqueID);
         this.mOnboard = new ArrayList();
     }
 

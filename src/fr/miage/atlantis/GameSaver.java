@@ -18,6 +18,7 @@
 package fr.miage.atlantis;
 
 import fr.miage.atlantis.board.BeachTile;
+import fr.miage.atlantis.board.BorderTile;
 import fr.miage.atlantis.board.ForestTile;
 import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.board.MountainTile;
@@ -65,6 +66,7 @@ import java.util.logging.Logger;
  *  - Numéro du joueur qui est en train de jouer
  *  - Nombre d'entités 
  *  -- Pour chaque entité :
+ *  -- - Nom de l'entité
  *  -- - Type d'entité
  *  -- - Nom de la tile d'appartenance
  *  -- - Si PlayerToken :
@@ -78,6 +80,7 @@ import java.util.logging.Logger;
  *  -- - Type de la tile
  *  -- - Serialisation de la tile
  *  - Serialisation de GameTurn
+ *  - Serialisation GameLogic (données essentielles)
  */
 public class GameSaver {
     
@@ -141,6 +144,9 @@ public class GameSaver {
                 throw new IllegalStateException("Unknown entity type on board!");
             }
             
+            // Nom de l'entité
+            data.writeUTF(entName);
+            
             // Type d'entité
             data.writeInt(entType);
             
@@ -167,6 +173,7 @@ public class GameSaver {
         
         // Nombre de tiles dans le board
         Map<String, GameTile> tiles = logic.getBoard().getTileSet();
+        Logger.getGlobal().severe("Tiles count: " + tiles.size());
         data.writeInt(tiles.size());
         Iterator<String> keyIt = tiles.keySet().iterator();
         
@@ -197,6 +204,9 @@ public class GameSaver {
 
         // Tour actuel
         logic.getCurrentTurn().serializeTo(data);
+        
+        // GameLogic
+        logic.serializeEssentialData(data);
      
         data.close();
     }
@@ -245,10 +255,16 @@ public class GameSaver {
         // On a besoin de pouvoir stocker les appartenance des joueurs aux bateaux, au cas où
         // les joueurs sont régénérés avant les bateaux
         List<PlayerBoatAffectation> playerBoatAffectations = new ArrayList<PlayerBoatAffectation>();
+        List<GameEntity> restoredEntities = new ArrayList<GameEntity>();
         
         // Pour chaque entité
         for (int i = 0; i < entitiesCount; i++) {
             GameEntity entity;
+            
+            // Nom de l'entité
+            String entityName = data.readUTF();
+            
+            Logger.getGlobal().severe("GETTING ENTITY: " + entityName);
             
             // Type de l'entité
             int entityType = data.readInt();
@@ -267,7 +283,7 @@ public class GameSaver {
                 // Nombre de points
                 int points = data.readInt();
                 
-                PlayerToken pt = new PlayerToken(players[belongPlayer - 1], points);
+                PlayerToken pt = new PlayerToken(entityName, players[belongPlayer - 1], points);
                 pt.setState(state);
                 
                 // A un bateau?
@@ -275,6 +291,7 @@ public class GameSaver {
                 if (hasBoat) {
                     String boatName = data.readUTF();
                     Boat boat = (Boat) logic.getBoard().getEntity(boatName);
+                    Logger.getGlobal().severe("THIS GUY HAZ A BOAT: " + boatName);
                     if (boat != null) {
                         pt.setBoat(boat);
                         boat.addPlayer(pt);
@@ -284,20 +301,24 @@ public class GameSaver {
                     }
                 }
                 
+                // On le rassigne comme token du player
+                players[belongPlayer - 1].getTokens().add(pt);
+                
                 entity = pt;
             } else if (entityType == GameEntity.TYPE_BOAT) {
-                entity = new Boat();
+                entity = new Boat(entityName);
             } else if (entityType == GameEntity.TYPE_SEASERPENT) {
-                entity = new SeaSerpent();
+                entity = new SeaSerpent(entityName);
             } else if (entityType == GameEntity.TYPE_SHARK) {
-                entity = new Shark();
+                entity = new Shark(entityName);
             } else if (entityType == GameEntity.TYPE_WHALE) {
-                entity = new Whale();
+                entity = new Whale(entityName);
             } else {
                 throw new IllegalStateException("Unknown entityType read: " + entityType);
             }
             
             logic.getBoard().putEntity(entity);
+            restoredEntities.add(entity);
         }
         
         // On restaure les bateaux qui manquaient à la première itération
@@ -306,12 +327,13 @@ public class GameSaver {
             if (boat != null) {
                 pba.player.setBoat(boat);
             } else {
-                Logger.getGlobal().severe("We still haven't found your boat when restoring!");
+                Logger.getGlobal().severe("We still haven't found your boat when restoring: " + pba.boatName);
             }
         }
         
         // Nombre de tiles dans le board
         int boardTilesCount = data.readInt();
+        Logger.getGlobal().severe("We have this amount of tiles: " + boardTilesCount);
         
         // On créé les tiles juste avec leur nom pour remplir le board et avoir les objets
         List<GameTile> tilesToDeserialize = new ArrayList<GameTile>();
@@ -321,6 +343,9 @@ public class GameSaver {
             GameTile tile;
             
             switch (tileType) {
+                case GameTile.TILE_BORDER:
+                    tile = new BorderTile(logic.getBoard(), tileName);
+                    break;
                 case GameTile.TILE_BEACH:
                     tile = new BeachTile(logic.getBoard(), tileName);
                     break;
@@ -338,6 +363,7 @@ public class GameSaver {
             }
             
             logic.getBoard().forcePutTile(tile);
+            tilesToDeserialize.add(tile);
         }
         
         // Ensuite on déserialize
@@ -349,8 +375,23 @@ public class GameSaver {
         GameTurn currentTurn = new GameTurn(logic, players[currentPlayerNumber - 1]);
         currentTurn.readSerialized(data);
         
+        // On demande au jeu 3D de faire le rendu du board
+        if (logic instanceof Game3DLogic) {
+            Game3DLogic logic3d = (Game3DLogic) logic;
+            logic3d.getRenderer().getBoardRenderer().renderBoard(logic.getBoard());
+            
+            Logger.getGlobal().severe("Number of 3D entities to restore: " + restoredEntities.size());
+            for (GameEntity ent : restoredEntities) {
+                logic3d.getRenderer().getEntitiesRenderer().addEntity(ent);
+            }
+        }
+        
+        // Deserialisation des infos essentielles de GameLogic
+        logic.deserializeData(data);
+        
         // TODO: Relancer le dernier picking (serialiser le
         // TilePickRequest/EntityPickRequest/mLastPickedEntity?)
+        logic.restoreTurn(currentTurn);
     }
     
 }

@@ -48,7 +48,7 @@ public class GameEntity {
     public final static int TYPE_SHARK = 4;
     public final static int TYPE_WHALE = 5;
     
-    private int ENTITY_UNIQUE_ID = 0;
+    private static int ENTITY_UNIQUE_ID = 0;
     
     private static final Logger logger = Logger.getGlobal();
     /**
@@ -71,8 +71,18 @@ public class GameEntity {
      * @param tile Tile ou se place l'entité
      */
     public GameEntity(final String name) {
-        mName = name + "_" + Integer.toString(ENTITY_UNIQUE_ID++);
+        this(name, true);
+    }
+    
+    public GameEntity(final String name, final boolean appendUniqueID) {
+        if (appendUniqueID) {
+            mName = name + "_" + Integer.toString(ENTITY_UNIQUE_ID);
+        } else {
+            mName = name;
+        }
         mIsDead = false;
+        
+        ENTITY_UNIQUE_ID++;
     }
 
     /**
@@ -93,6 +103,11 @@ public class GameEntity {
         // On se déplace, dans un premier temps
         if (mTile != null) {
             mTile.removeEntity(this);
+        }
+        
+        // On s'assure qu'on soit bien enregistré sur le board
+        if (logic != null && logic.getBoard() != null) {
+            logic.getBoard().putEntity(this);
         }
 
         tile.addEntity(this);

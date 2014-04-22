@@ -23,6 +23,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Classe abstraite représentant les tiles que l'on place sur le plateau de jeu
@@ -215,7 +216,9 @@ public abstract class GameTile {
         
         int entCount = data.readInt();
         for (int i = 0; i < entCount; i++) {
-            mEntities.add(mBoard.getEntity(data.readUTF()));
+            GameEntity ent = mBoard.getEntity(data.readUTF());
+            mEntities.add(ent);
+            ent.moveToTile(null, this);
         }
     }
     

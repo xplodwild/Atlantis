@@ -61,7 +61,15 @@ public class PlayerToken extends GameEntity {
      * @param points Valeur du pion
      */
     public PlayerToken(Player p, int points) {
-        super("PlayerToken");
+        this("PlayerToken", true, p, points);
+    }
+    
+    public PlayerToken(String name, Player p, int points) {
+        this(name, false, p, points);
+    }
+    
+    public PlayerToken(String name, boolean appendUniqueID, Player p, int points) {
+        super(name, appendUniqueID);
         mState = STATE_UNDEFINED;
         mPoints = points;
         mPlayer = p;

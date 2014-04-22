@@ -77,6 +77,7 @@ public final class GameBoard {
         /*On vas creer et adresser ici les tiles en commencant par la haut gauche du plateau */
         mTileSet = new HashMap<String, GameTile>();
         this.randomiser = new ArrayList();
+        mEntities = new HashMap<String, GameEntity>();
 
         if (prepareBoard) {
             this.beachTilesRemaining = NB_BEACHTILES;
@@ -165,25 +166,30 @@ public final class GameBoard {
         temp = (WaterTile) this.mTileSet.get("Water #66");
         ss = new SeaSerpent();
         ss.moveToTile(null, temp);
+        putEntity(ss);
 
 
         temp = (WaterTile) this.mTileSet.get("Water #86");
         ss = new SeaSerpent();
         ss.moveToTile(null, temp);
+        putEntity(ss);
 
 
         temp = (WaterTile) this.mTileSet.get("Water #28");
         ss = new SeaSerpent();
         ss.moveToTile(null, temp);
+        putEntity(ss);
 
 
         temp = (WaterTile) this.mTileSet.get("Water #8");
         ss = new SeaSerpent();
         ss.moveToTile(null, temp);
+        putEntity(ss);
 
         temp = (WaterTile) this.mTileSet.get("Water #47");
         ss = new SeaSerpent();
         ss.moveToTile(null, temp);
+        putEntity(ss);
         //-----------------------------------------------------------------------
     }
 
