@@ -43,6 +43,7 @@ public class PlayerTokenTest {
 
     /**
      * Test of moveToTile method, of class PlayerToken.
+     * Test que l'entité se déplace bien sur les tiles
      */
     @Test
     public void testMoveToTile() {
@@ -65,8 +66,6 @@ public class PlayerTokenTest {
         
         //3ème test : on vérifie que le pion n'est plus sur la première tile
         assertFalse(tile.getEntities().contains(pt1));
-        
-        
 
     }
 
