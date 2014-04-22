@@ -89,15 +89,39 @@ public class BoatTest {
 
     /**
      * Test of addPlayer method, of class Boat.
-     *
+     */
     @Test
     public void testAddPlayer() {
         System.out.println("addPlayer");
-        PlayerToken token = null;
-        Boat instance = new Boat();
-        instance.addPlayer(token);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Boat b = new Boat();
+        
+        //On crée les bateaux vides
+        assertTrue(b.getOnboardTokens().isEmpty());
+        
+        PlayerToken pt1 = new PlayerToken(new Player("P1",0),10);
+        b.addPlayer(pt1);
+        
+        //Un ajout fonctionne
+        assertTrue(b.getOnboardTokens().contains(pt1));
+        
+        PlayerToken pt2 = new PlayerToken(new Player("P2",1),10);
+        b.addPlayer(pt2);
+        PlayerToken pt3 = new PlayerToken(new Player("P3",2),10);
+        b.addPlayer(pt3);
+        
+        //Un total de 3 ajouts fonctionne
+        assertTrue(b.getOnboardTokens().contains(pt2));
+        assertTrue(b.getOnboardTokens().contains(pt3));
+        
+        // On ne peut pas ajouter plus de 4 éléments.
+        try{
+            PlayerToken pt4 = new PlayerToken(new Player("P3",2),10);
+            b.addPlayer(pt4);
+            fail("On a pu mettre 4 items sur un bateau");
+        }catch(Exception e){
+            //tout s'est bien passé
+            assertTrue(true);
+        }
     }
 
     /**
