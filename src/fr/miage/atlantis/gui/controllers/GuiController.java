@@ -321,6 +321,9 @@ public class GuiController implements ScreenController {
          */
     }
 
+    
+    
+    
     /**
      * Charge le dernier fichier de sauvegarde existant
      */
@@ -329,9 +332,21 @@ public class GuiController implements ScreenController {
         //charge
         //sinon 
         //rien ou nouvelle partie ou disable le button(à debattre)
+        
+        
+        //@TODO : Verifier pourquoi ca ne clear pas le board ?!
+        this.g3rdr.getLogic().prepareGame(players, true);
+        
+        
         GameSaver loader = new GameSaver();
         try {
-            loader.loadFromFile(g3rdr.getLogic(), "C:\\Users\\Guigui\\test_save.atlantis");
+            
+            /**
+             * @TODO : Clear board & entities
+             */
+            
+            
+            loader.loadFromFile(g3rdr.getLogic(), "./save.atlantis");
             
             this.nifty.gotoScreen("inGameHud");
 
@@ -342,6 +357,9 @@ public class GuiController implements ScreenController {
                 players[i] = p.getName();
                 i++;
             }
+            
+            this.cleanPlayerName();
+            
             this.updatePlayerName();
 
             Camera cam = g3rdr.getCamera();
@@ -351,18 +369,22 @@ public class GuiController implements ScreenController {
         }
     }
 
+    
+    
     /**
      * Sauvegarde la partie en cours
      */
     public void save() {
         GameSaver saver = new GameSaver();
         try {
-            saver.saveToFile("C:\\Users\\Guigui\\test_save.atlantis", g3rdr.getLogic());
+            saver.saveToFile("./save.atlantis", g3rdr.getLogic());
         } catch (IOException ex) {
             Logger.getGlobal().log(Level.SEVERE, "Error while saving game!", ex);
         }
     }
 
+    
+    
     /**
      * Quitte le jeu et sauvegarde si la partie n'est pas terminée.
      *
@@ -379,8 +401,10 @@ public class GuiController implements ScreenController {
         System.exit(0);
     }
 
+    
+    
     /**
-     * Met à jour les pseudo joueurs sur le GUI
+     * Nettoye les pseudo joueurs sur le GUI
      *
      */
     public void cleanPlayerName() {
@@ -425,6 +449,8 @@ public class GuiController implements ScreenController {
 
     }
 
+    
+    
     /**
      * Met à jour les pseudo joueurs sur le GUI
      *
@@ -479,6 +505,8 @@ public class GuiController implements ScreenController {
         }
     }
 
+    
+    
     /**
      * Ajoute des pseudos dans le randomizer de pseudo.
      *
@@ -508,8 +536,13 @@ public class GuiController implements ScreenController {
         this.nameRandomizer.add("Po");
         this.nameRandomizer.add("Swaggy");
         this.nameRandomizer.add("Youlow");
+        this.nameRandomizer.add("Alpa-Tchino");
     }
 
+    
+    /**
+     * Remplis le champ pseudo pour joueur 1 avec un pseudo aléatoire     * 
+     */
     public void nickRandomJ1() {
         this.nifty.getScreen("start").findElementByName("btnRandom1").hide();
         TextField fieldJ1 = this.nifty.getScreen("start").findElementByName("inputJ1").getNiftyControl(TextField.class);
@@ -519,6 +552,9 @@ public class GuiController implements ScreenController {
         AudioManager.getDefault().playSound(AudioConstants.Path.WHOOSH);
     }
 
+    /**
+     * Remplis le champ pseudo pour joueur 2  avec un pseudo aléatoire     * 
+     */
     public void nickRandomJ2() {
         this.nifty.getScreen("start").findElementByName("btnRandom2").hide();
         TextField fieldJ2 = this.nifty.getScreen("start").findElementByName("inputJ2").getNiftyControl(TextField.class);
@@ -528,6 +564,9 @@ public class GuiController implements ScreenController {
         AudioManager.getDefault().playSound(AudioConstants.Path.WHOOSH);
     }
 
+    /**
+     * Remplis le champ pseudo pour joueur 3 avec un pseudo aléatoire     * 
+     */
     public void nickRandomJ3() {
         this.nifty.getScreen("start").findElementByName("btnRandom3").hide();
         TextField fieldJ3 = this.nifty.getScreen("start").findElementByName("inputJ3").getNiftyControl(TextField.class);
@@ -537,6 +576,10 @@ public class GuiController implements ScreenController {
         AudioManager.getDefault().playSound(AudioConstants.Path.WHOOSH);
     }
 
+    
+     /**
+     * Remplis le champ pseudo pour joueur 4 avec un pseudo aléatoire     * 
+     */
     public void nickRandomJ4() {
         this.nifty.getScreen("start").findElementByName("btnRandom4").hide();
         TextField fieldJ4 = this.nifty.getScreen("start").findElementByName("inputJ4").getNiftyControl(TextField.class);
@@ -546,7 +589,14 @@ public class GuiController implements ScreenController {
         AudioManager.getDefault().playSound(AudioConstants.Path.WHOOSH);
     }
     
-      public void nickRandomMulti() {
+    
+    
+    
+    
+    /**
+     * Remplis le champ pseudo pour le multijoueur LAN avec un pseudo aléatoire     * 
+     */
+    public void nickRandomMulti() {
         this.nifty.getScreen("start").findElementByName("btnRandom4").hide();
         TextField fieldMulti = this.nifty.getScreen("JoinLan").findElementByName("inputNick").getNiftyControl(TextField.class);
         String tmp = this.nameRandomizer.get(new Random().nextInt(this.nameRandomizer.size()));
@@ -554,6 +604,12 @@ public class GuiController implements ScreenController {
         fieldMulti.setText(tmp);
     }
 
+      
+      
+    /**
+     * Réorganise l'ordre des joueurs lors de la création d'une partie si des trous sont laissés au niveau des joueurs.
+     * @param nbPlayers nombre de joueurs
+     */
     private void reArrangePlayers(int nbPlayers) {
         switch (nbPlayers) {
             case 2:
@@ -619,9 +675,7 @@ public class GuiController implements ScreenController {
             this.players = tmp;
         }
     }
-    
-    
-    
+            
     
     /**
      * Changement d'ecran vers l'ecran "Rejoindre une partie réseau"
