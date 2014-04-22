@@ -27,6 +27,11 @@ import com.jme3.network.serializing.Serializable;
 @Serializable
 public class MessageOhai extends AbstractMessage {
     private String mNickname;
+    
+    public MessageOhai() {
+        
+    }
+    
     public MessageOhai(final String name) {
         mNickname = name;
     }

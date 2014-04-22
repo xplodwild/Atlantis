@@ -27,6 +27,11 @@ import com.jme3.network.serializing.Serializable;
 @Serializable
 public class MessageNextTurn extends AbstractMessage {
     private int mPlayerNumber;
+    
+    public MessageNextTurn() {
+        
+    }
+    
     public MessageNextTurn(int number) {
         mPlayerNumber = number;
     }

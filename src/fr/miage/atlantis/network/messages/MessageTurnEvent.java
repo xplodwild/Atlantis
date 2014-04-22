@@ -39,6 +39,10 @@ public class MessageTurnEvent extends AbstractMessage {
     private int mEvent;
     private List<Object> mParameters;
 
+    public MessageTurnEvent() {
+        
+    }
+    
     public MessageTurnEvent(int event) {
         mEvent = event;
         mParameters = new ArrayList<Object>();

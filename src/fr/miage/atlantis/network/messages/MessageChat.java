@@ -27,6 +27,10 @@ import com.jme3.network.serializing.Serializable;
 @Serializable
 public class MessageChat extends AbstractMessage {
     private String mMessage;
+    
+    public MessageChat() {
+    }
+    
     public MessageChat(final String message) {
         mMessage = message;
     }
