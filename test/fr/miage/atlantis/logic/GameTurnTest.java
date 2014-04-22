@@ -229,31 +229,6 @@ boat.addPlayer(pion);
     }
 
     /**
-     * Test of onPlayedTileAction method, of class GameTurn.
-     * Méthode non implémentée
-     *
-    @Test
-    public void testOnPlayedTileAction() {
-        System.out.println("onPlayedTileAction");
-        GameTurn instance = null;
-        instance.onPlayedTileAction();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of onUnitMoveFinished method, of class GameTurn.
-     *
-    @Test
-    public void testOnUnitMoveFinished() {
-        System.out.println("onUnitMoveFinished");
-        GameTurn instance = null;
-        instance.onUnitMoveFinished();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
      *  On vérifie que l'entité donné par le dé est présent sur la board
      */
     @Test
@@ -295,29 +270,5 @@ boat.addPlayer(pion);
                 
     
     }
-
-    /**
-     * Test of onSinkTileFinished method, of class GameTurn.
-     *
-    @Test
-    public void testOnSinkTileFinished() {
-        System.out.println("onSinkTileFinished");
-        GameTurn instance = null;
-        instance.onSinkTileFinished();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of onEntityActionFinished method, of class GameTurn.
-     *
-    @Test
-    public void testOnEntityActionFinished() {
-        System.out.println("onEntityActionFinished");
-        GameTurn instance = null;
-        instance.onEntityActionFinished();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }*/
 
 }
