@@ -106,19 +106,9 @@ public class Game3DRenderer extends SimpleApplication {
 
         // Rendu du plateau
         mBoardRenderer = new BoardRenderer(assetManager);
-        mBoardRenderer.renderBoard(mParent.getBoard());
         mSceneNode.attachChild(mBoardRenderer);
 
         mEntitiesRenderer = new EntitiesRenderer(assetManager, mBoardRenderer);
-
-        // Rendu des entités déjà placées sur le plateau
-        Map<String, GameTile> tiles = mParent.getBoard().getTileSet();
-        for (GameTile tile : tiles.values()) {
-            for (GameEntity ent : tile.getEntities()) {
-                mEntitiesRenderer.addEntity(ent);
-            }
-        }
-
         mSceneNode.attachChild(mEntitiesRenderer);
 
         // Configuration de l'input (picking souris, clavier)
