@@ -31,6 +31,7 @@ public class AudioConstants {
         public static final String ERROR = D + "Error" + E;
         public static final String DING = D + "Ding" + E;
         public static final String WHOOSH = D + "Whoosh" + E;
+        public static final String SELECT = D + "Select" + E;
         public static final String JUMP_WATER = D + "JumpWater" + E;
         public static final String MOVE_BOAT = D + "MoveBoat" + E;
         public static final String MOVE_SWIM = D + "MoveSwimmer" + E;
