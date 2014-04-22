@@ -80,6 +80,7 @@ public class SharkTest {
         //2ème test : le requin ne mange pas le pion puisqu'il est sur un bateau, on vérifie qu'il reste toujours le pion, le bateau et le requin
         requin.onEntityCross(logic, petitBateau);
         assertTrue(tile1.getEntities().contains(petitBateau));
+        assertTrue(tile1.getEntities().contains(pt1));
         assertTrue(tile1.getEntities().contains(requin));
         
    
