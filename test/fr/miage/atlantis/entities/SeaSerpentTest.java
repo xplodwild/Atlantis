@@ -43,6 +43,7 @@ public class SeaSerpentTest {
 
     /**
      * Test of onEntityCross method, of class SeaSerpent.
+     * AssertFalse, pb car utilise la GameLogic
      */
     @Test
     public void testOnEntityCross() {
@@ -67,7 +68,7 @@ public class SeaSerpentTest {
         assertTrue(tile.getEntities().contains(serpent));
         //assertFalse(tile.getEntities().contains(pt1));
         
-        //on teste la partie où le serpent retourne le bateau            
+        //Cas où le serpent retourne un bateau vide           
         //1er test : on ajoute les entités et on teste si les 2 entités sont sur la même tile
         petitBateau.moveToTile(logic, tile1);
         serpent.moveToTile(logic, tile1);
@@ -78,6 +79,8 @@ public class SeaSerpentTest {
         serpent.onEntityCross(logic, petitBateau);      
         assertTrue(tile1.getEntities().contains(serpent));
         //assertFalse(tile1.getEntities().contains(petitBateau));
+        
+        //Cas où le serpent retourne un bateau avec des pions
              
     }
 }
