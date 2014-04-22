@@ -36,6 +36,8 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
+import fr.miage.atlantis.audio.AudioConstants;
+import fr.miage.atlantis.audio.AudioManager;
 import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.entities.Boat;
 import fr.miage.atlantis.entities.GameEntity;
@@ -190,7 +192,7 @@ public class InputActionListener {
                         mRenderer.getHud().getGameHud().hidePlayerTiles();
                     } else {
                         Logger.getGlobal().severe("Input: Can't use this tile");
-                        // TODO: Play a sound/animation to say "NOPE"
+                        AudioManager.getDefault().playSound(AudioConstants.Path.ERROR);
                     }
 
                 }

@@ -23,6 +23,9 @@ import fr.miage.atlantis.entities.SeaSerpent;
 import fr.miage.atlantis.entities.Shark;
 import fr.miage.atlantis.entities.Whale;
 import fr.miage.atlantis.logic.GameLogic;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.logging.Level;
@@ -260,6 +263,32 @@ public class TileAction {
         mIsVolcano = isVolcano;
         mHasBeenUsed = false;
     }
+    
+    private TileAction(DataInputStream data) throws IOException {
+        readSerialized(data);
+    }
+    
+    public void serializeTo(DataOutputStream data) throws IOException {
+        data.writeBoolean(mIsImmediate);
+        data.writeBoolean(mIsTriggerable);
+        data.writeBoolean(mIsVolcano);
+        data.writeInt(mAction);
+        data.writeInt(mEntity);
+        data.writeBoolean(mHasBeenUsed);
+        data.writeInt(mMovesRemaining);
+        // TODO: mInitialEntity - pour le moment, on annule le picking complètement
+    }
+    
+    public final void readSerialized(DataInputStream data) throws IOException {
+        mIsImmediate = data.readBoolean();
+        mIsTriggerable = data.readBoolean();
+        mIsVolcano = data.readBoolean();
+        mAction = data.readInt();
+        mEntity = data.readInt();
+        mHasBeenUsed = data.readBoolean();
+        mMovesRemaining = data.readInt();
+        // TODO: mInitialEntity - pour le moment, on annule le picking complètement
+    }
 
     public void decreaseMovesRemaining() {
         mMovesRemaining--;
@@ -294,6 +323,10 @@ public class TileAction {
     }
 
     public final static class Factory {
+        
+        public static TileAction createFromSerialized(final DataInputStream data) throws IOException {
+            return new TileAction(data);
+        }
 
         public static TileAction createMoveAnimal(int entity) {
             return new TileAction(ACTION_MOVE_ANIMAL, entity, false, false, false);

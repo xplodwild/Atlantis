@@ -39,7 +39,15 @@ public class Whale extends Animal {
      * @param tile Tile sur lequel on place le SeaSerpent
      */
     public Whale() {
-        super("Whale", MAX_MOVES);
+        this("Whale", true);
+    }
+    
+    public Whale(String name) {
+        this(name, false);
+    }
+    
+    public Whale(String name, boolean appendUniqueID) {
+        super(name, MAX_MOVES, appendUniqueID);
     }
 
     /**

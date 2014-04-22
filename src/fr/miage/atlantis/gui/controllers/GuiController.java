@@ -4,7 +4,6 @@
  */
 package fr.miage.atlantis.gui.controllers;
 
-import com.jme3.audio.AudioRenderer;
 import com.jme3.renderer.Camera;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Button;
@@ -14,15 +13,23 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
+import fr.miage.atlantis.GameSaver;
+import fr.miage.atlantis.Player;
+import fr.miage.atlantis.audio.AudioConstants;
+import fr.miage.atlantis.audio.AudioManager;
+
+
 import fr.miage.atlantis.graphics.CamConstants;
 import fr.miage.atlantis.graphics.Game3DRenderer;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class GuiController implements ScreenController {
 
     private Game3DRenderer g3rdr;
-    private AudioRenderer maudioRenderer;
     private Nifty nifty;
     private Screen screen;
     private ArrayList<String> nameRandomizer;
@@ -31,10 +38,9 @@ public class GuiController implements ScreenController {
     private boolean musicState;
     private boolean soundState;
 
-    public GuiController(Game3DRenderer g3d, AudioRenderer ardr) {
+    public GuiController(Game3DRenderer g3d) {
         super();
         this.g3rdr = g3d;
-        this.maudioRenderer = ardr;
         this.nameRandomizer = new ArrayList();
         this.fillNameRandomizer();
         this.players = new String[4];
@@ -100,6 +106,7 @@ public class GuiController implements ScreenController {
             Label tips2 = this.nifty.getScreen("start").findElementByName("tips2").getNiftyControl(Label.class);
             tips1.setText("Deux joueurs minimum pour commencer");
             tips2.setText("veuillez entrez au minimum 2 noms de joueurs.");
+            AudioManager.getDefault().playSound(AudioConstants.Path.ERROR);
         } else {
 
             players[0] = fieldJ1.getRealText();
@@ -129,11 +136,12 @@ public class GuiController implements ScreenController {
 
             this.updatePlayerName();
 
-            this.g3rdr.getLogic().prepareGame(players);
+            this.g3rdr.getLogic().prepareGame(players, true);
             this.g3rdr.getLogic().startGame();
 
             Camera cam = g3rdr.getCamera();
             CamConstants.moveAboveBoard(g3rdr.getCameraNode(), cam);
+            AudioManager.getDefault().setMainMusic(false);
         }
 
     }
@@ -189,7 +197,7 @@ public class GuiController implements ScreenController {
         //On garde les mêmes nick donc pas besoin de redefinir.
 
 
-        this.g3rdr.getLogic().prepareGame(players);
+        this.g3rdr.getLogic().prepareGame(players, true);
         this.g3rdr.getLogic().startGame();
 
         this.nifty.gotoScreen("inGameHud");
@@ -305,6 +313,8 @@ public class GuiController implements ScreenController {
         this.fillNameRandomizer();
 
         this.nifty.gotoScreen("start");
+        AudioManager.getDefault().setMainMusic(true);
+        Logger.getGlobal().severe("BLAHH BACKTOMENU");
 
         /**
          * @TODO : Reinitialiser tout.
@@ -315,22 +325,42 @@ public class GuiController implements ScreenController {
      * Charge le dernier fichier de sauvegarde existant
      */
     public void load() {
-        /**
-         * @TODO : chargement du dernier jeu
-         */
         //Si le fichier existe
         //charge
         //sinon 
         //rien ou nouvelle partie ou disable le button(à debattre)
+        GameSaver loader = new GameSaver();
+        try {
+            loader.loadFromFile(g3rdr.getLogic(), "C:\\Users\\Guigui\\test_save.atlantis");
+            
+            this.nifty.gotoScreen("inGameHud");
+
+            Player[] logicPlayers = g3rdr.getLogic().getPlayers();
+            players = new String[logicPlayers.length];
+            int i = 0;
+            for (Player p : logicPlayers) {
+                players[i] = p.getName();
+                i++;
+            }
+            this.updatePlayerName();
+
+            Camera cam = g3rdr.getCamera();
+            CamConstants.moveAboveBoard(g3rdr.getCameraNode(), cam);
+        } catch (IOException ex) {
+            Logger.getGlobal().log(Level.SEVERE, "Error while loading game!", ex);
+        }
     }
 
     /**
      * Sauvegarde la partie en cours
      */
     public void save() {
-        /**
-         * @TODO : sauvegarde du jeu
-         */
+        GameSaver saver = new GameSaver();
+        try {
+            saver.saveToFile("C:\\Users\\Guigui\\test_save.atlantis", g3rdr.getLogic());
+        } catch (IOException ex) {
+            Logger.getGlobal().log(Level.SEVERE, "Error while saving game!", ex);
+        }
     }
 
     /**
@@ -486,6 +516,7 @@ public class GuiController implements ScreenController {
         String tmp = this.nameRandomizer.get(new Random().nextInt(this.nameRandomizer.size()));
         this.nameRandomizer.remove(tmp);
         fieldJ1.setText(tmp);
+        AudioManager.getDefault().playSound(AudioConstants.Path.WHOOSH);
     }
 
     public void nickRandomJ2() {
@@ -494,6 +525,7 @@ public class GuiController implements ScreenController {
         String tmp = this.nameRandomizer.get(new Random().nextInt(this.nameRandomizer.size()));
         this.nameRandomizer.remove(tmp);
         fieldJ2.setText(tmp);
+        AudioManager.getDefault().playSound(AudioConstants.Path.WHOOSH);
     }
 
     public void nickRandomJ3() {
@@ -502,6 +534,7 @@ public class GuiController implements ScreenController {
         String tmp = this.nameRandomizer.get(new Random().nextInt(this.nameRandomizer.size()));
         this.nameRandomizer.remove(tmp);
         fieldJ3.setText(tmp);
+        AudioManager.getDefault().playSound(AudioConstants.Path.WHOOSH);
     }
 
     public void nickRandomJ4() {
@@ -510,6 +543,7 @@ public class GuiController implements ScreenController {
         String tmp = this.nameRandomizer.get(new Random().nextInt(this.nameRandomizer.size()));
         this.nameRandomizer.remove(tmp);
         fieldJ4.setText(tmp);
+        AudioManager.getDefault().playSound(AudioConstants.Path.WHOOSH);
     }
     
       public void nickRandomMulti() {

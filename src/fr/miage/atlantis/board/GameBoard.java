@@ -44,6 +44,10 @@ public final class GameBoard {
      */
     private HashMap<String, GameTile> mTileSet;
     /**
+     * Stock les entités du board
+     */
+    private HashMap<String, GameEntity> mEntities;
+    /**
      * Tile de foret restante à placer
      */
     private int forestTilesRemaining;
@@ -67,22 +71,28 @@ public final class GameBoard {
     /**
      * Constructeur de GameBoard
      *
+     * @param prepareBoard Indique si oui ou non il faut générer un board
      */
-    public GameBoard() {
+    public GameBoard(boolean prepareBoard) {
         /*On vas creer et adresser ici les tiles en commencant par la haut gauche du plateau */
         mTileSet = new HashMap<String, GameTile>();
-
-        this.beachTilesRemaining = NB_BEACHTILES;
-        this.forestTilesRemaining = NB_FORESTTILES;
-        this.mountainTilesRemaining = NB_MOUNTAINTILES;
-
-
         this.randomiser = new ArrayList();
+        mEntities = new HashMap<String, GameEntity>();
 
-        this.fillInRandomizerWithTiles();
-        this.generateDefaultBoard();
-        this.setDefaultBoardTileAttributes();
-        this.placeDefaultEntitiesOnBoard();
+        if (prepareBoard) {
+            this.beachTilesRemaining = NB_BEACHTILES;
+            this.forestTilesRemaining = NB_FORESTTILES;
+            this.mountainTilesRemaining = NB_MOUNTAINTILES;
+        
+            this.fillInRandomizerWithTiles();
+            this.generateDefaultBoard();
+            this.setDefaultBoardTileAttributes();
+            this.placeDefaultEntitiesOnBoard();
+        } else {
+            this.beachTilesRemaining = 0;
+            this.forestTilesRemaining = 0;
+            this.mountainTilesRemaining = 0;
+        }
 
 
     }
@@ -156,25 +166,30 @@ public final class GameBoard {
         temp = (WaterTile) this.mTileSet.get("Water #66");
         ss = new SeaSerpent();
         ss.moveToTile(null, temp);
+        putEntity(ss);
 
 
         temp = (WaterTile) this.mTileSet.get("Water #86");
         ss = new SeaSerpent();
         ss.moveToTile(null, temp);
+        putEntity(ss);
 
 
         temp = (WaterTile) this.mTileSet.get("Water #28");
         ss = new SeaSerpent();
         ss.moveToTile(null, temp);
+        putEntity(ss);
 
 
         temp = (WaterTile) this.mTileSet.get("Water #8");
         ss = new SeaSerpent();
         ss.moveToTile(null, temp);
+        putEntity(ss);
 
         temp = (WaterTile) this.mTileSet.get("Water #47");
         ss = new SeaSerpent();
         ss.moveToTile(null, temp);
+        putEntity(ss);
         //-----------------------------------------------------------------------
     }
 
@@ -848,6 +863,10 @@ public final class GameBoard {
         mTileSet.put(newTile.getName(), newTile);
         return newTile;
     }
+    
+    public void forcePutTile(GameTile tile) {
+        mTileSet.put(tile.getName(), tile);
+    }
 
     public boolean canPlaceTile() {
         boolean canPlace = false;
@@ -1039,6 +1058,27 @@ public final class GameBoard {
         }
 
         return false;
+    }
+    
+    public Set<String> getAllEntities() {
+        return mEntities.keySet();
+    }
+    
+    /**
+     * Retourne l'entité ayant le nom indiqué, ou null
+     * @param name Nom de l'entité
+     * @return Le GameEntity associé
+     */
+    public GameEntity getEntity(final String name) {
+        return mEntities.get(name);
+    }
+    
+    /**
+     * Met une entité dans le hashmap d'entités
+     * @param ent L'entité à sauver
+     */
+    public void putEntity(GameEntity ent) {
+        mEntities.put(ent.getName(), ent);
     }
 
     //--------------------------------------------------------------------------

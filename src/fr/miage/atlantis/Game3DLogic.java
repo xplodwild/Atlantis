@@ -20,6 +20,7 @@ package fr.miage.atlantis;
 import com.jme3.animation.AnimChannel;
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.AnimEventListener;
+import com.jme3.audio.AudioNode;
 import com.jme3.cinematic.MotionPath;
 import com.jme3.cinematic.MotionPathListener;
 import com.jme3.cinematic.events.MotionEvent;
@@ -32,6 +33,8 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.PanelRenderer;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.tools.Color;
+import fr.miage.atlantis.audio.AudioConstants;
+import fr.miage.atlantis.audio.AudioManager;
 import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.board.TileAction;
 import fr.miage.atlantis.board.WaterTile;
@@ -57,6 +60,9 @@ import fr.miage.atlantis.graphics.models.StaticModel;
 import fr.miage.atlantis.gui.controllers.GuiController;
 import fr.miage.atlantis.logic.GameLogic;
 import fr.miage.atlantis.logic.GameTurn;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -103,7 +109,28 @@ public class Game3DLogic extends GameLogic {
         mTileRequestHistory = new ArrayList<TilePickRequest>();
         mCanCancelPickingAction = false;
     }
+    
+    public Game3DRenderer getRenderer() {
+        return mRenderer;
+    }
 
+    @Override
+    public void serializeEssentialData(DataOutputStream data) throws IOException {
+        super.serializeEssentialData(data);
+        data.writeBoolean(mPickedEntity != null);
+        if (mPickedEntity != null) data.writeUTF(mPickedEntity.getName());
+        
+    }
+
+    @Override
+    public void deserializeData(DataInputStream data) throws IOException {
+        super.deserializeData(data);
+        if (data.readBoolean()) {
+            mPickedEntity = getBoard().getEntity(data.readUTF());
+        }
+    }
+    
+    
     /**
      * Demarre le renderer graphique
      */
@@ -113,19 +140,21 @@ public class Game3DLogic extends GameLogic {
     }
 
     @Override
-    public void prepareGame(String[] players) {
-        super.prepareGame(players);
+    public void prepareGame(String[] players, boolean prepareBoard) {
+        super.prepareGame(players, prepareBoard);
 
         // On fait le rendu des tiles
         mRenderer.getBoardRenderer().clearBoard();
-        mRenderer.getBoardRenderer().renderBoard(getBoard());
+        if (prepareBoard) {
+            mRenderer.getBoardRenderer().renderBoard(getBoard());
 
-        // Rendu des entités déjà placées sur le plateau
-        mRenderer.getEntitiesRenderer().clearEntities();
-        Map<String, GameTile> tiles = getBoard().getTileSet();
-        for (GameTile tile : tiles.values()) {
-            for (GameEntity ent : tile.getEntities()) {
-                mRenderer.getEntitiesRenderer().addEntity(ent);
+            // Rendu des entités déjà placées sur le plateau
+            mRenderer.getEntitiesRenderer().clearEntities();
+            Map<String, GameTile> tiles = getBoard().getTileSet();
+            for (GameTile tile : tiles.values()) {
+                for (GameEntity ent : tile.getEntities()) {
+                    mRenderer.getEntitiesRenderer().addEntity(ent);
+                }
             }
         }
     }
@@ -138,6 +167,8 @@ public class Game3DLogic extends GameLogic {
     @Override
     public void startGame() {
 
+        // On joue la musique!
+        AudioManager.getDefault().setAmbience(true);
 
         if (DBG_AUTOPREPARE) {
             // TEST: On place des tokens
@@ -187,6 +218,7 @@ public class Game3DLogic extends GameLogic {
             mPickedEntity = null;
 
             mRenderer.getHud().getGameHud().hideRightClickHint();
+            AudioManager.getDefault().playSound(AudioConstants.Path.WHOOSH);
 
             return true;
         } else {
@@ -200,10 +232,10 @@ public class Game3DLogic extends GameLogic {
     }
 
     public void onTurnStart(Player p) {
-        // TODO: Animations
-
         logger.log(Level.FINE, "Game3DLogic: onTurnStart()", new Object[]{});
-
+        
+        AudioManager.getDefault().playSound(AudioConstants.Path.DING);
+        
         mRenderer.getHud().getGameHud().displayPlayerTiles(getCurrentTurn().getPlayer().getActionTiles());
 
         getCurrentTurn().onTurnStarted();
@@ -255,6 +287,15 @@ public class Game3DLogic extends GameLogic {
         } else {
             motionEvent = generateEntityOnTileMotion(entNode, tileNode);
         }
+        
+        // On gère l'effet sonore
+        AudioNode tmpAudioNode = null;
+        if (ent instanceof Boat) {
+            tmpAudioNode = AudioManager.getDefault().playSound(AudioConstants.Path.MOVE_BOAT, true);
+        } else if (dest instanceof WaterTile) {
+            tmpAudioNode = AudioManager.getDefault().playSound(AudioConstants.Path.MOVE_SWIM, true);
+        }
+        final AudioNode audioEvent = tmpAudioNode; 
 
         // Callback lorsque l'animation est terminée
         motionEvent.getPath().addListener(new MotionPathListener() {
@@ -278,10 +319,16 @@ public class Game3DLogic extends GameLogic {
                     if (entNode instanceof PlayerModel) {
                         PlayerToken pt = (PlayerToken) ent;
                         if (pt.getState() == PlayerToken.STATE_ON_BOAT) {
+                            // Tour de magie! On détache en fait le personnage du monde normal, et
+                            // on l'attache au bateau directement. Ainsi, le personnage bougera
+                            // automatiquement avec le bateau.
                             Boat b = pt.getBoat();
                             BoatModel bm = (BoatModel) mRenderer.getEntitiesRenderer().getNodeFromEntity(b);
                             entNode.getParent().detachChild(entNode);
                             bm.attachChild(entNode);
+
+                            // Du coup, on remet à zéro la position pour qu'elle soit relative cette
+                            // fois-ci au bateau et non à l'origine du monde 3D
                             entNode.setLocalTranslation(Vector3f.ZERO);
                             entNode.rotate(0, Utils.degreesToRad(90), 0);
 
@@ -294,6 +341,10 @@ public class Game3DLogic extends GameLogic {
                                     entNode.setLocalTranslation(-10, 0, 0);
                                     break;
                             }
+
+                            // Et on joue un son lié à cet événement
+                            final AudioManager audioMan = AudioManager.getDefault();
+                            audioMan.playSound(AudioConstants.Path.GO_IN_BOAT);
                         }
                     }
 
@@ -320,6 +371,11 @@ public class Game3DLogic extends GameLogic {
                             }
                         }
                     }
+                    
+                    // On arrête le son
+                    if (audioEvent != null) {
+                        AudioManager.getDefault().stopSound(audioEvent);
+                    }
 
 
                     // On notifie le jeu, toutes les actions nécessaires sont faites (si on
@@ -338,15 +394,20 @@ public class Game3DLogic extends GameLogic {
 
         // On lance le mouvement
         motionEvent.play();
+
+        // On lis un son
     }
 
     public void onDiceRoll(int face) {
         // On a besoin de lancer le dé
         logger.log(Level.FINE, "Game3DLogic: onDiceRoll", new Object[]{});
+        AudioManager.getDefault().playSound(AudioConstants.Path.DICE_ROLL);
         mRenderer.rollDiceAnimation(face);
     }
 
     public void onSinkTile(final GameTile tile) {
+        AudioManager.getDefault().playSound(AudioConstants.Path.TILE_SPLASH);
+        
         doTileSinkAnimation(tile, new MotionPathListener() {
             public void onWayPointReach(MotionEvent control, int wayPointIndex) {
                 if (control.getPath().getNbWayPoints() == wayPointIndex + 1) {
@@ -704,6 +765,8 @@ public class Game3DLogic extends GameLogic {
     @Override
     public void onEntityPicked(GameEntity ent) {
         logger.log(Level.FINE, "Game3DLogic: Entity picked ", new Object[]{ent});
+        
+        AudioManager.getDefault().playSound(AudioConstants.Path.SELECT);
 
         GameTurn currentTurn = mRenderer.getLogic().getCurrentTurn();
         mRenderer.getHud().getGameHud().hidePlayerTiles();

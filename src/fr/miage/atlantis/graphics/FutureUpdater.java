@@ -26,11 +26,9 @@ import java.util.List;
 public class FutureUpdater {
 
     private List<FutureCallback> mFutureCallbacks;
-    private List<FutureCallback> mFutureCallbacksDeletion;
 
     public FutureUpdater() {
         mFutureCallbacks = new ArrayList<FutureCallback>();
-        mFutureCallbacksDeletion = new ArrayList<FutureCallback>();
     }
 
     /**
@@ -50,16 +48,12 @@ public class FutureUpdater {
         // Traitement de la file de FutureCallbacks. On traite d'abord les callbacks, puis on
         // supprime les callbacks qui sont terminés/survenus.
         synchronized (this) {
-            for (FutureCallback cb : mFutureCallbacks) {
+            List<FutureCallback> callbacks = new ArrayList<FutureCallback>(mFutureCallbacks);
+            for (FutureCallback cb : callbacks) {
                 if (cb.decreaseTime(tpf)) {
-                    mFutureCallbacksDeletion.add(cb);
+                    mFutureCallbacks.remove(cb);
                 }
             }
-
-            for (FutureCallback cb : mFutureCallbacksDeletion) {
-                mFutureCallbacks.remove(cb);
-            }
-            mFutureCallbacksDeletion.clear();
         }
     }
 }

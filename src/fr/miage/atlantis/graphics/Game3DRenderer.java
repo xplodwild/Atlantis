@@ -34,6 +34,7 @@ import com.jme3.scene.plugins.blender.BlenderModelLoader;
 import de.lessvoid.nifty.Nifty;
 import fr.miage.atlantis.Game3DLogic;
 import fr.miage.atlantis.GameDice;
+import fr.miage.atlantis.audio.AudioManager;
 import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.entities.GameEntity;
 import fr.miage.atlantis.graphics.hud.AbstractDisplay;
@@ -75,6 +76,8 @@ public class Game3DRenderer extends SimpleApplication {
     public void simpleInitApp() {
         // Pré-configuration
         assetManager.registerLoader(BlenderModelLoader.class, "blend");
+        AudioManager.getDefault().initialize(assetManager, rootNode);
+        AudioManager.getDefault().setMainMusic(true);
 
         inputManager.clearMappings();
 
