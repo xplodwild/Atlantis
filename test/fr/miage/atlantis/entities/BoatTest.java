@@ -157,17 +157,28 @@ public class BoatTest {
 
     /**
      * Test of getPlayerSlot method, of class Boat.
-     *
+     */
     @Test
     public void testGetPlayerSlot() {
         System.out.println("getPlayerSlot");
-        PlayerToken token = null;
-        Boat instance = new Boat();
-        int expResult = 0;
-        int result = instance.getPlayerSlot(token);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Boat b = new Boat();
+        PlayerToken pt1 = new PlayerToken(new Player("Leonardo Di Caprio",0), 5);
+        PlayerToken pt2 = new PlayerToken(new Player("Lara Fabian",0), 5);
+        PlayerToken pt3 = new PlayerToken(new Player("Le capitaine crochet",0), 10);
+        b.addPlayer(pt1);
+        b.addPlayer(pt2);
+        b.addPlayer(pt3);
+        
+        assertEquals(0,b.getPlayerSlot(pt1));
+        assertEquals(1,b.getPlayerSlot(pt2));
+        assertEquals(2,b.getPlayerSlot(pt3));
+        
+        try{
+            b.getPlayerSlot(new PlayerToken(new Player("P",0), 90));
+            fail("On get un player sur un bateau alors qu'il y est pas, étonnant");
+        }catch(Exception e){
+            assertTrue(true);
+        }
     }
 
     /**
