@@ -177,15 +177,31 @@ boat.addPlayer(pion);
 
     /**
      * Test of useRemoteTile method, of class GameTurn.
-     *
+     */
     @Test
     public void testUseRemoteTile() {
         System.out.println("useRemoteTile");
-        TileAction action = null;
-        GameTurn instance = null;
+        GameBoard gb = new GameBoard();
+        TileAction action = TileAction.Factory.createCancelAnimal(TileAction.ENTITY_SHARK);
+        Player p = new Player("P1", 0);
+        GameLogic gl = new NullGameLogic();
+        GameTurn instance = new GameTurn(gl, p);
+        Player p2 = new Player("P2", 1);
+        p2.addActionTile(action);
+        
+        // Le joueur use son action pas pdt son tour
         instance.useRemoteTile(action);
-        // TODO Méthode non implémentée
-        fail("The test case is a prototype.");
+        
+        assertFalse(p2.getActionTiles().contains(action));
+        
+        try{
+            // Le joueur utilise encore son actiontile
+            instance.useRemoteTile(action);
+            fail("L'exception ne s'est pas déclenchée, "
+                + "on a utilisé deux fois une tileaction en un tour");
+        }catch (Exception e){
+            assertTrue(true);
+        }
     }
 
     /**
@@ -195,7 +211,7 @@ boat.addPlayer(pion);
     public void testUseLocalTile() {
         System.out.println("useLocalTile");
         GameBoard gb = new GameBoard();
-        TileAction action = gb.getTileSet().get("Beach #1").getAction();
+        TileAction action = TileAction.Factory.createMoveAnimal(TileAction.ENTITY_SEASERPENT);
         Player p = new Player("P1", 0);
         p.addActionTile(action);
         GameLogic gl = new NullGameLogic();
@@ -216,59 +232,4 @@ boat.addPlayer(pion);
         }
     }
 
-    /**
-     * Test of onTurnStarted method, of class GameTurn.
-     */
-    @Test
-    public void testOnTurnStarted() {
-        System.out.println("onTurnStarted");
-        GameTurn instance = null;
-        instance.onTurnStarted();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     *  On vérifie que l'entité donné par le dé est présent sur la board
-     */
-    @Test
-    public void testOnDiceRollFinished() {
-        System.out.println("onDiceRollFinished");
-        NullGameLogic gl = new NullGameLogic();
-        GameBoard board = new GameBoard();
-        GameTurn instance = new GameTurn(gl, new Player("P1",0)); 
-        GameEntity req = new Shark();
-        GameEntity ser = new SeaSerpent();
-        GameEntity bal = new Whale();
-       
-    
-        GameTile tile = board.getTileSet().get("Water #37");
-        GameTile tile1 = board.getTileSet().get("Water #23");
-        GameTile tile2 = board.getTileSet().get("Water #40");
-        
-        //on ajoute les entités sur une tile du jeu
-        req.moveToTile(gl, tile);
-        //bal.moveToTile(gl, tile1);
-        ser.moveToTile(gl, tile2);
-       
-        
-        //int result = gl.getDice().roll();
-        int result = 2;
-        //on compare que le résultat du dé correspond à une entité déjà présente sur le jeu
-        switch(result){
-            case 0:
-                assertTrue(tile1.getEntities().contains(ser));
-                break;
-            case 1:
-                 assertTrue(tile.getEntities().contains(req));
-                break;
-            case 2:
-                 assertTrue(tile2.getEntities().contains(bal));
-                break;
-        }
-       
-                
-    
-    }
-
-}
+ }
