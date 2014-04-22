@@ -52,11 +52,15 @@ public class SeaSerpentTest {
         GameBoard board = new GameBoard();
         GameTile tile = board.getTileSet().get("Water #37");
         GameTile tile1 = board.getTileSet().get("Water #36");
+        GameTile tile2 = board.getTileSet().get("Water #35");
+        
         Player mario = new Player("Mario",1);
         PlayerToken pt1 = new PlayerToken(mario, 3);
+        PlayerToken pt2 = new PlayerToken(new Player("lu", 1), 2);
         SeaSerpent serpent = new SeaSerpent();
         Boat petitBateau = new Boat();
         
+        //Cas où le pion n'est pas sur un bateau
         //1er test : on ajoute les entités à la tile et on vérifie qu'elles sont dessus
         pt1.moveToTile(logic, tile);
         serpent.moveToTile(logic, tile);
@@ -81,6 +85,22 @@ public class SeaSerpentTest {
         //assertFalse(tile1.getEntities().contains(petitBateau));
         
         //Cas où le serpent retourne un bateau avec des pions
+        //1er test : on vérifie que toutes les entités sont sur la tile
+        petitBateau.addPlayer(pt1);
+        petitBateau.addPlayer(pt2);
+        petitBateau.moveToTile(logic, tile2);
+        serpent.moveToTile(logic, tile2);
+        assertTrue(tile2.getEntities().contains(petitBateau));
+        assertTrue(tile2.getEntities().contains(serpent));
+        
+        //2ème test : on vérifie que le serpent a bien tout mangé (bateau + pion)
+        serpent.onEntityCross(logic, petitBateau);
+        assertTrue(tile2.getEntities().contains(serpent));
+        //assertFalse(tile2.getEntities().contains(petitBateau));
+        //assertFalse(tile2.getEntities().contains(pt1));
+        //assertFalse(tile2.getEntities().contains(pt2));
+        
+        
              
     }
 }

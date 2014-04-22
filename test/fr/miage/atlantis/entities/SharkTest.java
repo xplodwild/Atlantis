@@ -54,8 +54,8 @@ public class SharkTest {
         PlayerToken pt1 = new PlayerToken(winnie, 3);
         Shark requin = new Shark();
         
-        //Cas d'un pion seul
-        //1er test: on ajoute les entités sur la tile et on vérifie qu'ils sont tous les 2 dessus
+        //Cas d'un pion n'étant pas sur un bateau 
+        //1er test: on ajoute les entités sur la tile et on vérifie qu'ils sont tous dessus
         pt1.moveToTile(logic, tile);
         requin.moveToTile(logic, tile);
         assertTrue(tile.getEntities().contains(pt1));
@@ -70,20 +70,18 @@ public class SharkTest {
         //Cas d'un pion sur un bateau
         GameTile tile1 = board.getTileSet().get("Water #35");
         Boat petitBateau = new Boat();
-        //1er test : on ajoute les entités sur la tile et on vérifie
+        //1er test : on ajoute les entités sur la tile et on vérifie qu'ils sont dessus
         petitBateau.addPlayer(pt1);
         petitBateau.moveToTile(logic, tile1);
         requin.moveToTile(logic, tile1);
         assertTrue(tile1.getEntities().contains(petitBateau));
         assertTrue(tile1.getEntities().contains(requin));
         
-        //2ème test : le requin retourne le bateau, on vérifie qu'il reste toujours le pion et le bateau
+        //2ème test : le requin ne mange pas le pion puisqu'il est sur un bateau, on vérifie qu'il reste toujours le pion, le bateau et le requin
         requin.onEntityCross(logic, petitBateau);
         assertTrue(tile1.getEntities().contains(petitBateau));
         assertTrue(tile1.getEntities().contains(requin));
         
-        
-        
-      
+   
     }
 }
