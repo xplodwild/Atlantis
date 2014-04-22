@@ -20,8 +20,11 @@ import fr.miage.atlantis.audio.AudioManager;
 
 import fr.miage.atlantis.graphics.CamConstants;
 import fr.miage.atlantis.graphics.Game3DRenderer;
+import fr.miage.atlantis.network.GameHost;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class GuiController implements ScreenController {
@@ -144,16 +147,15 @@ public class GuiController implements ScreenController {
     }
 
     public void lanHost(){
-        /**
-         * INIT UN SERVEUR ICI
-         */
+        // Hébergement du serveur: On devient l'host et on se connecte à nous même
+        GameHost host = new GameHost(g3rdr.getLogic());
+        try {
+            host.startListening();
+        } catch (IOException ex) {
+            Logger.getGlobal().log(Level.SEVERE, "Cannot start listening on the game server", ex);
+        }
         
-        /**
-         * Se connecte a son propre serveur
-         */
-        
-        
-        
+        lanConnectImpl("127.0.0.1");
     }  
     
      public void lanJoin(){
@@ -170,11 +172,14 @@ public class GuiController implements ScreenController {
      
      
     public void lanConnect(){
-        
-        
-        
-        
         this.nifty.gotoScreen("ErrorConnect");
+    }
+    
+    /**
+     * Connexion effective a un serveur de jeu en local
+     */
+    private void lanConnectImpl(final String ipAddress) {
+        
     }
      
     
