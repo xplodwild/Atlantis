@@ -82,10 +82,6 @@ public class GameEntityTest {
         serpent.moveToTile(logic, tile1);
         assertTrue(tile1.getEntities().contains(serpent));
         //assertFalse(tile1.getEntities().contains(serpent));
-        
-        
-        
-      
     }
 
     /**
