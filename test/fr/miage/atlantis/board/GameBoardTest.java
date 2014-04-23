@@ -225,45 +225,30 @@ public class GameBoardTest {
 
         GameTile newtile = new WaterTile(instance, "Water #yolo");
         instance.placeTileAtTheRightOf(tile, newtile);
-        
-        System.out.println(tile);
-        System.out.println(newtile);
-        /*
-        
+            
         assertEquals(tile.getRightTile(), newtile);
         assertEquals(newtile.getLeftTile(),tile);
         
+        
         tile = tile.getRightBottomTile();
         assertEquals(tile.getRightUpperTile(), newtile);
-        assertEquals(newtile.getLeftBottomTile(),tile);
+        assertEquals(newtile.getLeftBottomTile(), tile );
         
         tile = tile.getLeftUpperTile();
         tile = tile.getRightUpperTile();
         assertEquals(tile.getRightBottomTile(), newtile);
-        assertEquals(newtile.getLeftUpperTile(),tile);
+        assertEquals(newtile.getLeftUpperTile(), tile);
         
         tile = tile.getRightTile();
         assertEquals(tile.getLeftBottomTile(), newtile);
-        assertEquals(newtile.getRightUpperTile(),tile);
-        
-        tile = tile.getRightBottomTile();
-        assertEquals(tile.getLeftTile(), newtile);
-        assertEquals(newtile.getRightTile(),tile);
-        
-        tile = tile.getLeftBottomTile();
-        assertEquals(tile.getLeftUpperTile(), newtile);
-        assertEquals(newtile.getRightBottomTile(),tile);
-        
-        tile = tile.getLeftTile();
-        assertEquals(tile.getRightUpperTile(), newtile);
-        assertEquals(newtile.getLeftBottomTile(),tile);
-        */
+        assertEquals(newtile.getRightUpperTile(), tile);
+             
     }
 
 
     /**
      * Test of placeTileAtTheLeftOf method, of class GameBoard.
-     *
+     */
     @Test
     public void testPlaceTileAtTheLeftOf() {
         System.out.println("placeTileAtTheLeftOf");
@@ -272,8 +257,6 @@ public class GameBoardTest {
         GameTile newtile = new WaterTile(instance, "Water #yolo");
         instance.placeTileAtTheLeftOf(tile, newtile);
         
-        System.out.println("La newtile\n"+newtile);
-
         assertEquals(tile.getLeftTile(), newtile);
         assertEquals(newtile.getRightTile(),tile);
         
