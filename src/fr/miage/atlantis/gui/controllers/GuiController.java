@@ -17,6 +17,7 @@ import fr.miage.atlantis.audio.AudioConstants;
 import fr.miage.atlantis.audio.AudioManager;
 import fr.miage.atlantis.graphics.CamConstants;
 import fr.miage.atlantis.graphics.Game3DRenderer;
+import fr.miage.atlantis.network.GameHost;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -195,28 +196,31 @@ public class GuiController implements ScreenController {
 
     }
 
+
     /**
      * Fonction appelée lorsqu'on hoste une nouvelle partie sur le réseau local
      */
-    public void lanHost() {
-        /**
-         * @TODO : INIT UN SERVEUR ICI
-         */
-        /**
-         * @TODO : Se connecte a son propre serveur
-         */
-        /**
-         * @TODO : Faire un écran spécifique
-         */
-        this.nifty.gotoScreen("HostLan");
-    }
-
-    /**
+    public void lanHost(){
+        // Hébergement du serveur: On devient l'host et on se connecte à nous même
+        GameHost host = new GameHost(g3rdr.getLogic());
+        try {
+            host.startListening();
+        } catch (IOException ex) {
+            Logger.getGlobal().log(Level.SEVERE, "Cannot start listening on the game server", ex);
+        }
+        
+        lanConnectImpl("127.0.0.1");
+    }  
+    
+    
+     
+     /**
      * Fonction appelée une fois que les champs de l'ecran pour rejoindre une
      * partie lan sont remplis.
      */
-    public void lanConnect() {
 
+    public void lanConnect(){
+        
         TextField ip = this.nifty.getScreen("JoinLan").findElementByName("IPServeur").getNiftyControl(TextField.class);
         TextField nick = this.nifty.getScreen("JoinLan").findElementByName("Nick").getNiftyControl(TextField.class);
 
@@ -228,6 +232,15 @@ public class GuiController implements ScreenController {
          */
         this.nifty.gotoScreen("ErrorConnect");
     }
+    
+    /**
+     * Connexion effective a un serveur de jeu en local
+     */
+    private void lanConnectImpl(final String ipAddress) {
+        
+    }
+     
+    
 
     /**
      * Redemarre le jeu en cours (avec les memes joueurs
