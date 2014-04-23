@@ -210,15 +210,16 @@ public class GuiController implements ScreenController {
         }
         
         lanConnectImpl("127.0.0.1");
+        
+        this.nifty.gotoScreen("HostLan");
     }  
     
     
      
-     /**
+    /**
      * Fonction appelée une fois que les champs de l'ecran pour rejoindre une
      * partie lan sont remplis.
      */
-
     public void lanConnect(){
         
         TextField ip = this.nifty.getScreen("JoinLan").findElementByName("IPServeur").getNiftyControl(TextField.class);
@@ -227,11 +228,14 @@ public class GuiController implements ScreenController {
         String ipServ = ip.getRealText();
         String nickname = nick.getRealText();
 
+        this.lanConnectImpl(ipServ);
+        
         /**
          * @TODO : Traitement de la connection réseau ici.
          */
         this.nifty.gotoScreen("ErrorConnect");
     }
+    
     
     /**
      * Connexion effective a un serveur de jeu en local
