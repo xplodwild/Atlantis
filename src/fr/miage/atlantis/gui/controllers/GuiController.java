@@ -225,8 +225,8 @@ public class GuiController implements ScreenController {
      */
     public void lanConnect(){
         
-        TextField ip = this.nifty.getScreen("JoinLan").findElementByName("IPServeur").getNiftyControl(TextField.class);
-        TextField nick = this.nifty.getScreen("JoinLan").findElementByName("Nick").getNiftyControl(TextField.class);
+        TextField ip = this.nifty.getScreen("JoinLan").findElementByName("inputIP").getNiftyControl(TextField.class);
+        TextField nick = this.nifty.getScreen("JoinLan").findElementByName("inputNick").getNiftyControl(TextField.class);
 
         String ipServ = ip.getRealText();
         String nickname = nick.getRealText();
