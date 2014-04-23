@@ -203,7 +203,7 @@ public class BoatTest {
         b.addPlayer(pt2);
         assertTrue(b.hasRoom());
         
-        //Trois passagers
+        //Trois passagers - plus de place
         b.addPlayer(pt3);
         assertFalse(b.hasRoom());
         
@@ -214,46 +214,44 @@ public class BoatTest {
 
     /**
      * Test of belongsToPlayer method, of class Boat.
-     *
+     */
     @Test
     public void testBelongsToPlayer() {
         System.out.println("belongsToPlayer");
-        Player p = null;
-        Boat instance = new Boat();
-        boolean expResult = false;
-        boolean result = instance.belongsToPlayer(p);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Boat b = new Boat();
+        
+        // Joueur 1 et son token
+        Player p1 = new Player("P1",0);
+        PlayerToken pt1 = new PlayerToken(p1, 10);
+        
+        // Joueur 2 et ses token
+        Player p2 = new Player("P2",0);
+        PlayerToken pt2 = new PlayerToken(p2, 8);
+        PlayerToken pt3 = new PlayerToken(p2, 2);
+        
+        // Personne sur le bateau - Tout le mode peut le déplacer
+        assertTrue(b.belongsToPlayer(p1));
+        assertTrue(b.belongsToPlayer(p2));
+        
+        // Un pion sur le bateau - Joueur 1 a le controle
+        b.addPlayer(pt2);
+        assertFalse(b.belongsToPlayer(p1));
+        assertTrue(b.belongsToPlayer(p2));
+        
+        // Un pion de chaque sur le bateau - J1 et J2 ont le controle
+        b.addPlayer(pt1);
+        assertTrue(b.belongsToPlayer(p1));
+        assertTrue(b.belongsToPlayer(p2));
+        
+        // Joueur 2 a deux pions sur le bateau - J2 a le controle
+        b.addPlayer(pt3);
+        assertFalse(b.belongsToPlayer(p1));
+        assertTrue(b.belongsToPlayer(p2));
+        
+        // On retire les pions du joueur 2 - J1 a le controle
+        b.removePlayer(pt2);
+        b.removePlayer(pt3);
+        assertTrue(b.belongsToPlayer(p1));
+        assertFalse(b.belongsToPlayer(p2));
     }
-
-    /**
-     * Test of onEntityCross method, of class Boat.
-     *
-    @Test
-    public void testOnEntityCross() {
-        System.out.println("onEntityCross");
-        GameLogic logic = null;
-        GameEntity ent = null;
-        Boat instance = new Boat();
-        boolean expResult = false;
-        boolean result = instance.onEntityCross(logic, ent);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getOnboardTokens method, of class Boat.
-     *
-    @Test
-    public void testGetOnboardTokens() {
-        System.out.println("getOnboardTokens");
-        Boat instance = new Boat();
-        List expResult = null;
-        List result = instance.getOnboardTokens();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }*/
 }

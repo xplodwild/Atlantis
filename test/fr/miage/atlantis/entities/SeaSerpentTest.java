@@ -43,7 +43,7 @@ public class SeaSerpentTest {
 
     /**
      * Test of onEntityCross method, of class SeaSerpent.
-     * AssertFalse, pb car utilise la GameLogic
+     * Test imcomplet car notre GameLogic de test (NullGameLogic) est vide
      */
     @Test
     public void testOnEntityCross() {

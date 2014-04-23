@@ -43,6 +43,7 @@ public class SharkTest {
 
     /**
      * Test of onEntityCross method, of class Shark.
+     * Test imcomplet car notre GameLogic de test (NullGameLogic) est vide
      */
     @Test
     public void testOnEntityCross() {
