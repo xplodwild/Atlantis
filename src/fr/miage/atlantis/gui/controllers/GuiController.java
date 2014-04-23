@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package fr.miage.atlantis.gui.controllers;
 
 import com.jme3.renderer.Camera;
@@ -19,8 +15,6 @@ import fr.miage.atlantis.GameSaver;
 import fr.miage.atlantis.Player;
 import fr.miage.atlantis.audio.AudioConstants;
 import fr.miage.atlantis.audio.AudioManager;
-
-
 import fr.miage.atlantis.graphics.CamConstants;
 import fr.miage.atlantis.graphics.Game3DRenderer;
 import java.io.IOException;
@@ -31,17 +25,60 @@ import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
+/**
+ * Controlleur implémentant les fonction appelées par les éléments du GUI
+ * 
+ * @author Atlantis Team
+ */
 public class GuiController implements ScreenController {
 
+    /**
+     * Renderer du jeu
+     */
     private Game3DRenderer g3rdr;
+    
+    /**
+     * Objet NiftyGui
+     */
     private Nifty nifty;
+    
+    /**
+     * Ecran courant
+     */
     private Screen screen;
+    
+    /**
+     * Liste de Pseudo aléatoire
+     */
     private ArrayList<String> nameRandomizer;
+    
+    /**
+     * Liste des joueurs
+     */
     private String[] players;
+    
+    /**
+     * Type de screen pour la partie en cours (2 / 3 / 4 joueurs)
+     */
     private static int mScreenType;
+    
+    /**
+     * Etat de la musique
+     */
     private boolean musicState;
+    
+    /**
+     * Etat des autres sons
+     */
     private boolean soundState;
 
+    
+    /**
+     * Constructeur du Controlleur
+     * 
+     * @param g3d Renderer du jeu
+     */
     public GuiController(Game3DRenderer g3d) {
         super();
         this.g3rdr = g3d;
@@ -77,17 +114,14 @@ public class GuiController implements ScreenController {
         this.g3rdr = g3d;
     }
 
-    
     /**
-     * Arrete l'action en cours lors d'une partie 
+     * Arrete l'action en cours lors d'une partie
      */
-    public void stopCurrentAction(){
+    public void stopCurrentAction() {
         //@TODO : Gerer les differents cas ou l'on peut arreter une action
         //Ne rien faire si on ne peut pas
     }
-    
-    
-    
+
     /**
      * Demarre une nouvelle partie avec les pseudos données ou des pseudos
      * aléatoires si non renseigné.
@@ -161,48 +195,40 @@ public class GuiController implements ScreenController {
 
     }
 
-    
     /**
      * Fonction appelée lorsqu'on hoste une nouvelle partie sur le réseau local
      */
-    public void lanHost(){
+    public void lanHost() {
         /**
          * @TODO : INIT UN SERVEUR ICI
          */
-        
         /**
          * @TODO : Se connecte a son propre serveur
          */
-        
-        
-        
         /**
          * @TODO : Faire un écran spécifique
-         */ 
+         */
         this.nifty.gotoScreen("HostLan");
-    }  
-    
-    
-     
+    }
+
     /**
-     * Fonction appelée une fois que les champs de l'ecran pour rejoindre une partie lan sont remplis.
+     * Fonction appelée une fois que les champs de l'ecran pour rejoindre une
+     * partie lan sont remplis.
      */
-    public void lanConnect(){
-        
+    public void lanConnect() {
+
         TextField ip = this.nifty.getScreen("JoinLan").findElementByName("IPServeur").getNiftyControl(TextField.class);
         TextField nick = this.nifty.getScreen("JoinLan").findElementByName("Nick").getNiftyControl(TextField.class);
-        
-        String ipServ=ip.getRealText();
-        String nickname=nick.getRealText();
-        
+
+        String ipServ = ip.getRealText();
+        String nickname = nick.getRealText();
+
         /**
          * @TODO : Traitement de la connection réseau ici.
          */
-                
         this.nifty.gotoScreen("ErrorConnect");
     }
-     
-    
+
     /**
      * Redemarre le jeu en cours (avec les memes joueurs
      *
@@ -254,13 +280,12 @@ public class GuiController implements ScreenController {
              * Renseigner la source audio a pause à la place de null
              */
             // this.maudioRenderer.pauseSource(null);
-           
             this.nifty.getScreen("inGameMenu").findElementByName("btnOptions").getNiftyControl(Button.class).setText("Sons on");
             this.soundState = false;
         } else {
             // this.maudioRenderer.playSource(null);
 
-           
+
             this.nifty.getScreen("inGameMenu").findElementByName("btnOptions").getNiftyControl(Button.class).setText("Sons off");
             this.soundState = true;
         }
@@ -278,15 +303,13 @@ public class GuiController implements ScreenController {
             /**
              * Renseigner la source audio a pause à la place de null
              */
-            
             // this.maudioRenderer.pauseSource(null);
-           
             this.nifty.getScreen("inGameMenu").findElementByName("btnOptions2").getNiftyControl(Button.class).setText("Musique on");
             this.musicState = false;
         } else {
             // this.maudioRenderer.playSource(null);
 
-          
+
             this.nifty.getScreen("inGameMenu").findElementByName("btnOptions2").getNiftyControl(Button.class).setText("Musique off");
             this.musicState = true;
         }
@@ -299,13 +322,13 @@ public class GuiController implements ScreenController {
 
         //Si le jeu n'est pas finis on sauvegarde par defaut.
         /*
-        boolean gameOver = this.g3rdr.getLogic().isFinished();
-        if (!gameOver) {
-            this.save();
-        }
-        */
-        
-        
+         boolean gameOver = this.g3rdr.getLogic().isFinished();
+         if (!gameOver) {
+         this.save();
+         }
+         */
+
+
         TextField fieldJ1 = this.nifty.getScreen("start").findElementByName("inputJ1").getNiftyControl(TextField.class);
         TextField fieldJ2 = this.nifty.getScreen("start").findElementByName("inputJ2").getNiftyControl(TextField.class);
         TextField fieldJ3 = this.nifty.getScreen("start").findElementByName("inputJ3").getNiftyControl(TextField.class);
@@ -337,9 +360,6 @@ public class GuiController implements ScreenController {
          */
     }
 
-    
-    
-    
     /**
      * Charge le dernier fichier de sauvegarde existant
      */
@@ -348,22 +368,20 @@ public class GuiController implements ScreenController {
         //charge
         //sinon 
         //rien ou nouvelle partie ou disable le button(à debattre)
-        
-        
+
+
         //@TODO : Verifier pourquoi ca ne clear pas le board ?!
         this.g3rdr.getLogic().prepareGame(players, true);
-        
-        
+
+
         GameSaver loader = new GameSaver();
         try {
-            
+
             /**
              * @TODO : Clear board & entities
              */
-            
-            
             loader.loadFromFile(g3rdr.getLogic(), "./save.atlantis");
-            
+
             this.nifty.gotoScreen("inGameHud");
 
             Player[] logicPlayers = g3rdr.getLogic().getPlayers();
@@ -373,9 +391,9 @@ public class GuiController implements ScreenController {
                 players[i] = p.getName();
                 i++;
             }
-            
+
             this.cleanPlayerName();
-            
+
             this.updatePlayerName();
 
             this.initHudAfterGameLoad();
@@ -386,8 +404,6 @@ public class GuiController implements ScreenController {
         }
     }
 
-    
-    
     /**
      * Sauvegarde la partie en cours
      */
@@ -400,26 +416,22 @@ public class GuiController implements ScreenController {
         }
     }
 
-    
-    
     /**
      * Quitte le jeu et sauvegarde si la partie n'est pas terminée.
      *
      */
     public void exit() {
-       /*
-        boolean gameOver = this.g3rdr.getLogic().isFinished();
-        if (!gameOver) {
+        /*
+         boolean gameOver = this.g3rdr.getLogic().isFinished();
+         if (!gameOver) {
            
-            this.save();
-        }        
-        */ 
-        
+         this.save();
+         }        
+         */
+
         System.exit(0);
     }
 
-    
-    
     /**
      * Nettoye les pseudo joueurs sur le GUI
      *
@@ -466,8 +478,6 @@ public class GuiController implements ScreenController {
 
     }
 
-    
-    
     /**
      * Met à jour les pseudo joueurs sur le GUI
      *
@@ -522,8 +532,6 @@ public class GuiController implements ScreenController {
         }
     }
 
-    
-    
     /**
      * Ajoute des pseudos dans le randomizer de pseudo.
      *
@@ -556,9 +564,8 @@ public class GuiController implements ScreenController {
         this.nameRandomizer.add("Alpa-Tchino");
     }
 
-    
     /**
-     * Remplis le champ pseudo pour joueur 1 avec un pseudo aléatoire     * 
+     * Remplis le champ pseudo pour joueur 1 avec un pseudo aléatoire *
      */
     public void nickRandomJ1() {
         this.nifty.getScreen("start").findElementByName("btnRandom1").hide();
@@ -570,7 +577,7 @@ public class GuiController implements ScreenController {
     }
 
     /**
-     * Remplis le champ pseudo pour joueur 2  avec un pseudo aléatoire     * 
+     * Remplis le champ pseudo pour joueur 2 avec un pseudo aléatoire *
      */
     public void nickRandomJ2() {
         this.nifty.getScreen("start").findElementByName("btnRandom2").hide();
@@ -582,7 +589,7 @@ public class GuiController implements ScreenController {
     }
 
     /**
-     * Remplis le champ pseudo pour joueur 3 avec un pseudo aléatoire     * 
+     * Remplis le champ pseudo pour joueur 3 avec un pseudo aléatoire *
      */
     public void nickRandomJ3() {
         this.nifty.getScreen("start").findElementByName("btnRandom3").hide();
@@ -593,9 +600,8 @@ public class GuiController implements ScreenController {
         AudioManager.getDefault().playSound(AudioConstants.Path.WHOOSH);
     }
 
-    
-     /**
-     * Remplis le champ pseudo pour joueur 4 avec un pseudo aléatoire     * 
+    /**
+     * Remplis le champ pseudo pour joueur 4 avec un pseudo aléatoire *
      */
     public void nickRandomJ4() {
         this.nifty.getScreen("start").findElementByName("btnRandom4").hide();
@@ -605,13 +611,10 @@ public class GuiController implements ScreenController {
         fieldJ4.setText(tmp);
         AudioManager.getDefault().playSound(AudioConstants.Path.WHOOSH);
     }
-    
-    
-    
-    
-    
+
     /**
-     * Remplis le champ pseudo pour le multijoueur LAN avec un pseudo aléatoire     * 
+     * Remplis le champ pseudo pour le multijoueur LAN avec un pseudo aléatoire
+     * *
      */
     public void nickRandomMulti() {
         this.nifty.getScreen("start").findElementByName("btnRandom4").hide();
@@ -621,10 +624,10 @@ public class GuiController implements ScreenController {
         fieldMulti.setText(tmp);
     }
 
-      
-      
     /**
-     * Réorganise l'ordre des joueurs lors de la création d'une partie si des trous sont laissés au niveau des joueurs.
+     * Réorganise l'ordre des joueurs lors de la création d'une partie si des
+     * trous sont laissés au niveau des joueurs.
+     *
      * @param nbPlayers nombre de joueurs
      */
     private void reArrangePlayers(int nbPlayers) {
@@ -692,22 +695,21 @@ public class GuiController implements ScreenController {
             this.players = tmp;
         }
     }
-            
-    
+
     /**
      * Changement d'ecran vers l'ecran "Rejoindre une partie réseau"
      */
-    public void lanJoin(){      
-         this.nifty.gotoScreen("JoinLan");
-    } 
-    
-    
+    public void lanJoin() {
+        this.nifty.gotoScreen("JoinLan");
+    }
+
     /**
-     * Initialise le hud du jeu au joueur courant (utile après le chargement d'une sauvegarde)
+     * Initialise le hud du jeu au joueur courant (utile après le chargement
+     * d'une sauvegarde)
      *
      */
-    public void initHudAfterGameLoad(){
-        Player p =this.g3rdr.getLogic().getCurrentTurn().getPlayer();
+    public void initHudAfterGameLoad() {
+        Player p = this.g3rdr.getLogic().getCurrentTurn().getPlayer();
 
         String joueurCourant = p.getName();
 
@@ -734,7 +736,7 @@ public class GuiController implements ScreenController {
 
 
         Element text, panel;
-        
+
         switch (lg) {
 
 
