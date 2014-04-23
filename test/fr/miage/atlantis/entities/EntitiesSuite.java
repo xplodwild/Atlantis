@@ -16,7 +16,7 @@ import org.junit.runners.Suite;
  * @author Loris
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({fr.miage.atlantis.entities.WhaleTest.class, fr.miage.atlantis.entities.SeaSerpentTest.class, fr.miage.atlantis.entities.PlayerTokenTest.class, fr.miage.atlantis.entities.GameEntityTest.class, fr.miage.atlantis.entities.EntityMoveTest.class, fr.miage.atlantis.entities.SharkTest.class, fr.miage.atlantis.entities.BoatTest.class})
+@Suite.SuiteClasses({fr.miage.atlantis.entities.WhaleTest.class, fr.miage.atlantis.entities.SeaSerpentTest.class, fr.miage.atlantis.entities.PlayerTokenTest.class, fr.miage.atlantis.entities.GameEntityTest.class, fr.miage.atlantis.entities.SharkTest.class, fr.miage.atlantis.entities.BoatTest.class})
 public class EntitiesSuite {
 
     @BeforeClass

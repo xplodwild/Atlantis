@@ -43,6 +43,7 @@ public class WhaleTest {
 
     /**
      * Test of onEntityCross method, of class Whale.
+     * Test imcomplet car notre GameLogic de test (NullGameLogic) est vide
      */
     @Test
     public void testOnEntityCross() {
