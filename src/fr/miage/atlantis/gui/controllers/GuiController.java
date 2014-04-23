@@ -17,6 +17,7 @@ import fr.miage.atlantis.audio.AudioConstants;
 import fr.miage.atlantis.audio.AudioManager;
 import fr.miage.atlantis.graphics.CamConstants;
 import fr.miage.atlantis.graphics.Game3DRenderer;
+import fr.miage.atlantis.network.GameClient;
 import fr.miage.atlantis.network.GameHost;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -209,8 +210,10 @@ public class GuiController implements ScreenController {
             Logger.getGlobal().log(Level.SEVERE, "Cannot start listening on the game server", ex);
         }
         
+        //Se connecte sur le serveur crée en local
         lanConnectImpl("127.0.0.1");
         
+        //Bouge sur l'ecran lobby multijoueur    @TODO : Réaliser l'ecran
         this.nifty.gotoScreen("HostLan");
     }  
     
@@ -228,20 +231,35 @@ public class GuiController implements ScreenController {
         String ipServ = ip.getRealText();
         String nickname = nick.getRealText();
 
-        this.lanConnectImpl(ipServ);
+        boolean connected=this.lanConnectImpl(ipServ);
         
-        /**
-         * @TODO : Traitement de la connection réseau ici.
-         */
-        this.nifty.gotoScreen("ErrorConnect");
+        if(connected){
+             this.nifty.gotoScreen("LobbyMultijoueur");
+        }else{
+            this.nifty.gotoScreen("ErrorConnect");
+        }
     }
     
     
     /**
      * Connexion effective a un serveur de jeu en local
+     * @param ipAddress IP au serveur a laquelle se connecter
+     * @return True or false si la connexion est opérationnelle 
      */
-    private void lanConnectImpl(final String ipAddress) {
+    private boolean lanConnectImpl(final String ipAddress) {
         
+        boolean retour = false;
+        
+        GameClient gameClient = new GameClient(g3rdr.getLogic());
+        try {
+            gameClient.connect(ipAddress);
+            retour = true;
+        } catch (IOException ex) {
+            
+            Logger.getLogger(GuiController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return retour;
     }
      
     
@@ -284,6 +302,8 @@ public class GuiController implements ScreenController {
         }
     }
 
+    
+    
     /**
      * Désactive tout les sons du jeu
      *
@@ -388,6 +408,8 @@ public class GuiController implements ScreenController {
 
 
         //@TODO : Verifier pourquoi ca ne clear pas le board ?!
+        
+        Camera cam = g3rdr.getCamera();
         this.g3rdr.getLogic().prepareGame(players, true);
 
 
@@ -399,8 +421,10 @@ public class GuiController implements ScreenController {
              */
             loader.loadFromFile(g3rdr.getLogic(), "./save.atlantis");
 
-            this.nifty.gotoScreen("inGameHud");
+            
 
+            
+            
             Player[] logicPlayers = g3rdr.getLogic().getPlayers();
             players = new String[logicPlayers.length];
             int i = 0;
@@ -408,17 +432,37 @@ public class GuiController implements ScreenController {
                 players[i] = p.getName();
                 i++;
             }
+            
+            switch(logicPlayers.length){
+                case 2:
+                    GuiController.mScreenType=2;
+                    this.nifty.gotoScreen("inGameHud2J");
+                    
+                    break;
+                case 3:
+                    GuiController.mScreenType=3;
+                    this.nifty.gotoScreen("inGameHud3J");
+                    break;
+                case 4:
+                    GuiController.mScreenType=4;
+                    this.nifty.gotoScreen("inGameHud");
+                    break;
+            }
 
             this.cleanPlayerName();
-
+            
             this.updatePlayerName();
 
             this.initHudAfterGameLoad();
-            Camera cam = g3rdr.getCamera();
+            
+            
             CamConstants.moveAboveBoard(g3rdr.getCameraNode(), cam);
+            
         } catch (IOException ex) {
             Logger.getGlobal().log(Level.SEVERE, "Error while loading game!", ex);
         }
+        
+        CamConstants.moveAboveBoard(g3rdr.getCameraNode(), cam);
     }
 
     /**

@@ -63,6 +63,12 @@ public class GameClient implements ClientStateListener, MessageListener {
             // TODO: Le jeu commence, il faut passer vers le board
         }
     }
+
+    public Client getClient() {
+        return this.mClient;
+    }
+    
+    
     
     
 }
