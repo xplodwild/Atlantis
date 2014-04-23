@@ -183,16 +183,33 @@ public class BoatTest {
 
     /**
      * Test of hasRoom method, of class Boat.
-     *
+     */
     @Test
     public void testHasRoom() {
         System.out.println("hasRoom");
-        Boat instance = new Boat();
-        boolean expResult = false;
-        boolean result = instance.hasRoom();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Boat b = new Boat();
+        PlayerToken pt1 = new PlayerToken(new Player("Leonardo Di Caprio",0), 5);
+        PlayerToken pt2 = new PlayerToken(new Player("Lara Fabian",0), 5);
+        PlayerToken pt3 = new PlayerToken(new Player("Le capitaine crochet",0), 10);
+        
+        //Bateau vide
+        assertTrue(b.hasRoom());
+        
+        //Un passager
+        b.addPlayer(pt1);
+        assertTrue(b.hasRoom());
+        
+        //Deux passagers
+        b.addPlayer(pt2);
+        assertTrue(b.hasRoom());
+        
+        //Trois passagers
+        b.addPlayer(pt3);
+        assertFalse(b.hasRoom());
+        
+        //Il reste de nouveau une place
+        b.removePlayer(pt2);
+        assertTrue(b.hasRoom());
     }
 
     /**
