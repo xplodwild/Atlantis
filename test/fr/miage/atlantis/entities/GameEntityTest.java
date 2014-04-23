@@ -4,7 +4,9 @@
  */
 package fr.miage.atlantis.entities;
 
+import fr.miage.atlantis.board.GameBoard;
 import fr.miage.atlantis.board.GameTile;
+import fr.miage.atlantis.board.NullGameLogic;
 import fr.miage.atlantis.logic.GameLogic;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -40,21 +42,28 @@ public class GameEntityTest {
 
     /**
      * Test of isDead method, of class GameEntity.
+     * On teste que l'entité est bien tuée
      */
     @Test
     public void testIsDead() {
         System.out.println("isDead");
-        GameEntity instance = null;
-        boolean expResult = false;
-        boolean result = instance.isDead();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        GameLogic lg = new NullGameLogic();
+        GameBoard board = new GameBoard();
+        GameTile tile = board.getTileSet().get("Water #37");
+        Shark requin = new Shark();
+        
+        //Cas où l'on tue une entité
+        requin.moveToTile(lg, tile);
+        assertTrue(tile.getEntities().contains(requin));
+        
+        requin.die(lg);
+        assertTrue(requin.isDead());      
+    
     }
 
     /**
      * Test of moveToTile method, of class GameEntity.
-     */
+     *
     @Test
     public void testMoveToTile() {
         System.out.println("moveToTile");
@@ -70,7 +79,7 @@ public class GameEntityTest {
 
     /**
      * Test of die method, of class GameEntity.
-     */
+     *
     @Test
     public void testDie() {
         System.out.println("die");
@@ -83,7 +92,7 @@ public class GameEntityTest {
 
     /**
      * Test of spawn method, of class GameEntity.
-     */
+     *
     @Test
     public void testSpawn() {
         System.out.println("spawn");
@@ -96,7 +105,7 @@ public class GameEntityTest {
 
     /**
      * Test of onEntityCross method, of class GameEntity.
-     */
+     *
     @Test
     public void testOnEntityCross() {
         System.out.println("onEntityCross");
@@ -108,19 +117,7 @@ public class GameEntityTest {
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
-    }
+    }*/
 
-    /**
-     * Test of getTile method, of class GameEntity.
-     */
-    @Test
-    public void testGetTile() {
-        System.out.println("getTile");
-        GameEntity instance = null;
-        GameTile expResult = null;
-        GameTile result = instance.getTile();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
+  
 }
