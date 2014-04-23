@@ -63,18 +63,29 @@ public class GameEntityTest {
 
     /**
      * Test of moveToTile method, of class GameEntity.
-     *
+     * Test imcomplet car notre GameLogic de test (NullGameLogic) est vide
+     * Le test effectué est donc mis en commentaire, afin de poursuivre le test
+     */
     @Test
     public void testMoveToTile() {
         System.out.println("moveToTile");
-        GameLogic logic = null;
-        GameTile tile = null;
-        GameEntity instance = null;
-        boolean expResult = false;
-        boolean result = instance.moveToTile(logic, tile);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        GameLogic logic = new NullGameLogic();
+        GameBoard board = new GameBoard();
+        GameTile tile = board.getTileSet().get("Water #37");
+        GameTile tile1 = board.getTileSet().get("Water #36");
+        SeaSerpent serpent = new SeaSerpent();
+        
+        //on met l'entité sur une tile. Puis on la déplace et on vérifie qu'elle s'est déplacé
+        serpent.moveToTile(logic, tile);
+        assertTrue(tile.getEntities().contains(serpent));
+        
+        serpent.moveToTile(logic, tile1);
+        assertTrue(tile1.getEntities().contains(serpent));
+        //assertFalse(tile1.getEntities().contains(serpent));
+        
+        
+        
+      
     }
 
     /**
