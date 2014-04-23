@@ -254,35 +254,4 @@ public class BoatTest {
         assertTrue(b.belongsToPlayer(p1));
         assertFalse(b.belongsToPlayer(p2));
     }
-
-    /**
-     * Test of onEntityCross method, of class Boat.
-     * On ne teste pas car on n'a pas de logic pour simuler
-     *
-    @Test
-    public void testOnEntityCross() {
-        System.out.println("onEntityCross");
-        GameLogic logic = null;
-        GameEntity ent = null;
-        Boat instance = new Boat();
-        boolean expResult = false;
-        boolean result = instance.onEntityCross(logic, ent);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getOnboardTokens method, of class Boat.
-     *
-    @Test
-    public void testGetOnboardTokens() {
-        System.out.println("getOnboardTokens");
-        Boat instance = new Boat();
-        List expResult = null;
-        List result = instance.getOnboardTokens();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }*/
 }
