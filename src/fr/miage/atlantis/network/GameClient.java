@@ -31,29 +31,43 @@ import java.io.IOException;
  * Client pour le jeu en réseau
  */
 public class GameClient implements ClientStateListener, MessageListener {
-    
+
     private GameLogic mLogic;
+    private String mPlayerName;
     private Client mClient;
-    
+
     public GameClient(GameLogic logic) {
         mLogic = logic;
     }
-    
-    public void connect(final String ipAddress) throws IOException {
+
+    public void connect(final String ipAddress, final String name) throws IOException {
+        mPlayerName = name;
         mClient = Network.connectToServer(ipAddress, GameHost.DEFAULT_PORT);
-        
+
         mClient.addClientStateListener(this);
         mClient.addMessageListener(this);
-        
+
         mClient.start();
+
+        NetworkObserverProxy.getDefault().setClient(this);
+    }
+
+    public void send(Message msg) {
+        mClient.send(msg);
+    }
+
+    public void close() {
+        mClient.close();
     }
 
     public void clientConnected(Client c) {
-        
+        // On envoie le nom
+        MessageOhai ohai = new MessageOhai(mPlayerName);
+        mClient.send(ohai);
     }
 
     public void clientDisconnected(Client c, DisconnectInfo info) {
-        
+
     }
 
     public void messageReceived(Object source, Message m) {
@@ -67,8 +81,8 @@ public class GameClient implements ClientStateListener, MessageListener {
     public Client getClient() {
         return this.mClient;
     }
-    
-    
-    
-    
+
+
+
+
 }

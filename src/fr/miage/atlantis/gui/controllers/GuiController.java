@@ -132,7 +132,7 @@ public class GuiController implements ScreenController {
         this.g3rdr.getLogic().finishCurrentAction();
     }
 
-    
+
     /**
      * Demmarre une nouvellle partie en reseau et accede au lobby
      */
@@ -140,25 +140,25 @@ public class GuiController implements ScreenController {
         /*
          TextField fieldJ1 = this.nifty.getScreen("HostLan").findElementByName("inputJ1").getNiftyControl(TextField.class);
          String nick;
-         
+
          if(fieldJ1.getRealText().isEmpty()){
              nick=this.nameRandomizer.get(0);
          }else{
              nick=fieldJ1.getRealText();
          }
-                  
-         players=new String[1];         
-         players[0] = nick;         
-         
+
+         players=new String[1];
+         players[0] = nick;
+
          fieldJ1 = this.nifty.getScreen("lobbyMulti").findElementByName("nomJ1").getNiftyControl(TextField.class);
          fieldJ1.setText(nick);
-         
+
          this.g3rdr.getLogic().prepareGame(players, true);
          */
          this.nifty.gotoScreen("lobbyMulti");
     }
-    
-    
+
+
     /**
      * Demarre une nouvelle partie avec les pseudos données ou des pseudos
      * aléatoires si non renseigné.
@@ -246,7 +246,7 @@ public class GuiController implements ScreenController {
         }
 
         //Se connecte sur le serveur crée en local
-        lanConnectImpl("127.0.0.1");
+        lanConnectImpl("127.0.0.1", "NOM DE L'HOST");
 
         //Bouge sur l'ecran lobby multijoueur    @TODO : Réaliser l'ecran
         this.nifty.gotoScreen("HostLan");
@@ -266,7 +266,7 @@ public class GuiController implements ScreenController {
         String ipServ = ip.getRealText();
         String nickname = nick.getRealText();
 
-        boolean connected=this.lanConnectImpl(ipServ);
+        boolean connected=this.lanConnectImpl(ipServ, nickname);
 
         if(connected){
              this.nifty.gotoScreen("LobbyMultijoueur");
@@ -279,18 +279,18 @@ public class GuiController implements ScreenController {
     /**
      * Connexion effective a un serveur de jeu en local
      * @param ipAddress IP au serveur a laquelle se connecter
+     * @param nickName Notre pseudo
      * @return True or false si la connexion est opérationnelle
      */
-    private boolean lanConnectImpl(final String ipAddress) {
+    private boolean lanConnectImpl(final String ipAddress, final String nickName) {
 
         boolean retour = false;
 
         GameClient gameClient = new GameClient(g3rdr.getLogic());
         try {
-            gameClient.connect(ipAddress);
+            gameClient.connect(ipAddress, nickName);
             retour = true;
         } catch (IOException ex) {
-
             Logger.getLogger(GuiController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -719,7 +719,7 @@ public class GuiController implements ScreenController {
         this.nameRandomizer.remove(tmp);
         fieldMulti.setText(tmp);
     }
-    
+
     /**
      * Remplis le champ pseudo pour le multijoueur LAN avec un pseudo aléatoire
      * *

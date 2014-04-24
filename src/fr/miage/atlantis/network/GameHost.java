@@ -76,10 +76,16 @@ public class GameHost implements ConnectionListener, MessageListener<HostedConne
         mServer.addMessageListener(this);
 
         mServer.start();
+
+        NetworkObserverProxy.getDefault().setHost(this);
     }
 
     public void stop() {
         mServer.close();
+    }
+
+    public void broadcast(Message msg) {
+        mServer.broadcast(msg);
     }
 
     public void connectionAdded(Server server, HostedConnection conn) {

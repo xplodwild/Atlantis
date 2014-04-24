@@ -17,9 +17,83 @@
  */
 package fr.miage.atlantis.network;
 
+import fr.miage.atlantis.board.GameBoard;
+import fr.miage.atlantis.network.messages.MessageGameStart;
+import fr.miage.atlantis.network.messages.MessageSyncBoard;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  * Observateur d'événements pour les parties réseau
  */
 public class NetworkObserverProxy {
 
+    private static final NetworkObserverProxy INSTANCE = new NetworkObserverProxy();
+
+    private GameHost mHost;
+    private GameClient mClient;
+
+    private NetworkObserverProxy() {
+
+    }
+
+    public static NetworkObserverProxy getDefault() {
+        return INSTANCE;
+    }
+
+    /**
+     * Renvoie si oui ou non la partie en cours est une partie réseau
+     * @return true si la partie est en réseau
+     */
+    public boolean isNetworkGame() {
+        return (mHost != null) || (mClient != null);
+    }
+
+    public void setHost(GameHost host) {
+        mHost = host;
+    }
+
+    public GameHost getHost() {
+        return mHost;
+    }
+
+    public void setClient(GameClient client) {
+        mClient = client;
+    }
+
+    public GameClient getClient() {
+        return mClient;
+    }
+
+    /**
+     * Ferme le client et le serveur, si existe
+     */
+    public void tearDown() {
+        if (mClient != null) {
+            mClient.close();
+            mClient = null;
+        }
+
+        if (mHost != null) {
+            mHost.stop();
+            mHost = null;
+        }
+    }
+
+    public void onHostBoardSync(GameBoard board) {
+        MessageSyncBoard msg = new MessageSyncBoard();
+        try {
+            msg.writeBoard(board);
+        } catch (IOException ex) {
+            Logger.getGlobal().log(Level.SEVERE, "Cannot write board to network message", ex);
+        }
+
+        mHost.broadcast(msg);
+    }
+
+    public void onHostGameStart() {
+        MessageGameStart msg = new MessageGameStart();
+        mHost.broadcast(msg);
+    }
 }
