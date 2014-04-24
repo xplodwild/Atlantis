@@ -109,7 +109,7 @@ public class Game3DLogic extends GameLogic {
         mTileRequestHistory = new ArrayList<TilePickRequest>();
         mCanCancelPickingAction = false;
     }
-    
+
     public Game3DRenderer getRenderer() {
         return mRenderer;
     }
@@ -119,7 +119,7 @@ public class Game3DLogic extends GameLogic {
         super.serializeEssentialData(data);
         data.writeBoolean(mPickedEntity != null);
         if (mPickedEntity != null) data.writeUTF(mPickedEntity.getName());
-        
+
     }
 
     @Override
@@ -129,8 +129,8 @@ public class Game3DLogic extends GameLogic {
             mPickedEntity = getBoard().getEntity(data.readUTF());
         }
     }
-    
-    
+
+
     /**
      * Demarre le renderer graphique
      */
@@ -145,11 +145,12 @@ public class Game3DLogic extends GameLogic {
 
         // On fait le rendu des tiles
         mRenderer.getBoardRenderer().clearBoard();
+        mRenderer.getEntitiesRenderer().clearEntities();
+
         if (prepareBoard) {
             mRenderer.getBoardRenderer().renderBoard(getBoard());
 
             // Rendu des entités déjà placées sur le plateau
-            mRenderer.getEntitiesRenderer().clearEntities();
             Map<String, GameTile> tiles = getBoard().getTileSet();
             for (GameTile tile : tiles.values()) {
                 for (GameEntity ent : tile.getEntities()) {
@@ -233,9 +234,9 @@ public class Game3DLogic extends GameLogic {
 
     public void onTurnStart(Player p) {
         logger.log(Level.FINE, "Game3DLogic: onTurnStart()", new Object[]{});
-        
+
         AudioManager.getDefault().playSound(AudioConstants.Path.DING);
-        
+
         mRenderer.getHud().getGameHud().displayPlayerTiles(getCurrentTurn().getPlayer().getActionTiles());
 
         getCurrentTurn().onTurnStarted();
@@ -287,7 +288,7 @@ public class Game3DLogic extends GameLogic {
         } else {
             motionEvent = generateEntityOnTileMotion(entNode, tileNode);
         }
-        
+
         // On gère l'effet sonore
         AudioNode tmpAudioNode = null;
         if (ent instanceof Boat) {
@@ -295,7 +296,7 @@ public class Game3DLogic extends GameLogic {
         } else if (dest instanceof WaterTile) {
             tmpAudioNode = AudioManager.getDefault().playSound(AudioConstants.Path.MOVE_SWIM, true);
         }
-        final AudioNode audioEvent = tmpAudioNode; 
+        final AudioNode audioEvent = tmpAudioNode;
 
         // Callback lorsque l'animation est terminée
         motionEvent.getPath().addListener(new MotionPathListener() {
@@ -371,7 +372,7 @@ public class Game3DLogic extends GameLogic {
                             }
                         }
                     }
-                    
+
                     // On arrête le son
                     if (audioEvent != null) {
                         AudioManager.getDefault().stopSound(audioEvent);
@@ -407,7 +408,7 @@ public class Game3DLogic extends GameLogic {
 
     public void onSinkTile(final GameTile tile) {
         AudioManager.getDefault().playSound(AudioConstants.Path.TILE_SPLASH);
-        
+
         doTileSinkAnimation(tile, new MotionPathListener() {
             public void onWayPointReach(MotionEvent control, int wayPointIndex) {
                 if (control.getPath().getNbWayPoints() == wayPointIndex + 1) {
@@ -765,7 +766,7 @@ public class Game3DLogic extends GameLogic {
     @Override
     public void onEntityPicked(GameEntity ent) {
         logger.log(Level.FINE, "Game3DLogic: Entity picked ", new Object[]{ent});
-        
+
         AudioManager.getDefault().playSound(AudioConstants.Path.SELECT);
 
         GameTurn currentTurn = mRenderer.getLogic().getCurrentTurn();
@@ -1069,7 +1070,7 @@ public class Game3DLogic extends GameLogic {
 
 
 
-            //PARTIE A 2 JOUEURS***********************************************/ 
+            //PARTIE A 2 JOUEURS***********************************************/
 
             case 2:
                 //Lie les pseudos a leurs couleurs.
@@ -1101,7 +1102,7 @@ public class Game3DLogic extends GameLogic {
 
 
 
-            //PARTIE A 3 JOUEURS***********************************************/    
+            //PARTIE A 3 JOUEURS***********************************************/
 
             case 3:
                 playerAndColor.put(plr[0].getName(), colorP1);
@@ -1162,7 +1163,7 @@ public class Game3DLogic extends GameLogic {
 
 
 
-            //PARTIE A 4 JOUEURS***********************************************/ 
+            //PARTIE A 4 JOUEURS***********************************************/
 
             //PARTIE A 4 JOUEURS***********************************************/
 
