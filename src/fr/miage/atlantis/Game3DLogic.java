@@ -208,9 +208,9 @@ public class Game3DLogic extends GameLogic {
 
     public void onTurnStart(Player p) {
         logger.log(Level.FINE, "Game3DLogic: onTurnStart()", new Object[]{});
-        
+
         AudioManager.getDefault().playSound(AudioConstants.Path.DING);
-        
+
         mRenderer.getHud().getGameHud().displayPlayerTiles(getCurrentTurn().getPlayer().getActionTiles());
 
         getCurrentTurn().onTurnStarted();
@@ -262,7 +262,7 @@ public class Game3DLogic extends GameLogic {
         } else {
             motionEvent = generateEntityOnTileMotion(entNode, tileNode);
         }
-        
+
         // On gère l'effet sonore
         AudioNode tmpAudioNode = null;
         if (ent instanceof Boat) {
@@ -270,7 +270,7 @@ public class Game3DLogic extends GameLogic {
         } else if (dest instanceof WaterTile) {
             tmpAudioNode = AudioManager.getDefault().playSound(AudioConstants.Path.MOVE_SWIM, true);
         }
-        final AudioNode audioEvent = tmpAudioNode; 
+        final AudioNode audioEvent = tmpAudioNode;
 
         // Callback lorsque l'animation est terminée
         motionEvent.getPath().addListener(new MotionPathListener() {
@@ -346,7 +346,7 @@ public class Game3DLogic extends GameLogic {
                             }
                         }
                     }
-                    
+
                     // On arrête le son
                     if (audioEvent != null) {
                         AudioManager.getDefault().stopSound(audioEvent);
@@ -382,7 +382,7 @@ public class Game3DLogic extends GameLogic {
 
     public void onSinkTile(final GameTile tile) {
         AudioManager.getDefault().playSound(AudioConstants.Path.TILE_SPLASH);
-        
+
         doTileSinkAnimation(tile, new MotionPathListener() {
             public void onWayPointReach(MotionEvent control, int wayPointIndex) {
                 if (control.getPath().getNbWayPoints() == wayPointIndex + 1) {
@@ -417,11 +417,6 @@ public class Game3DLogic extends GameLogic {
                             if (action.isImmediate()) {
                                 onPlayTileAction(newTile, action);
                             } else {
-
-
-                                logger.log(Level.WARNING, "TODO: Tile is not immediate: " + action.toString(), new Object[]{});
-                                // TODO: Stocker la tile dans les tiles du joueur
-
                                 // L'action est pas immédiate, on stock la tile dans la pile du
                                 // joueur.
                                 Player player = getCurrentTurn().getPlayer();
@@ -741,7 +736,7 @@ public class Game3DLogic extends GameLogic {
     @Override
     public void onEntityPicked(GameEntity ent) {
         logger.log(Level.FINE, "Game3DLogic: Entity picked ", new Object[]{ent});
-        
+
         AudioManager.getDefault().playSound(AudioConstants.Path.SELECT);
 
         GameTurn currentTurn = mRenderer.getLogic().getCurrentTurn();
@@ -1045,7 +1040,7 @@ public class Game3DLogic extends GameLogic {
 
 
 
-            //PARTIE A 2 JOUEURS***********************************************/ 
+            //PARTIE A 2 JOUEURS***********************************************/
 
             case 2:
                 //Lie les pseudos a leurs couleurs.
@@ -1077,7 +1072,7 @@ public class Game3DLogic extends GameLogic {
 
 
 
-            //PARTIE A 3 JOUEURS***********************************************/    
+            //PARTIE A 3 JOUEURS***********************************************/
 
             case 3:
                 playerAndColor.put(plr[0].getName(), colorP1);
@@ -1138,7 +1133,7 @@ public class Game3DLogic extends GameLogic {
 
 
 
-            //PARTIE A 4 JOUEURS***********************************************/ 
+            //PARTIE A 4 JOUEURS***********************************************/
 
             //PARTIE A 4 JOUEURS***********************************************/
 
