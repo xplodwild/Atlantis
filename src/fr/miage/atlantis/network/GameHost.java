@@ -45,7 +45,7 @@ import java.util.logging.Logger;
  */
 public class GameHost implements ConnectionListener, MessageListener<HostedConnection> {
 
-    public static final int DEFAULT_PORT = 8192;
+    public static final int DEFAULT_PORT = 8196;
 
     private Server mServer;
     private List<HostedConnection> mConnections;
