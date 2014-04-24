@@ -47,7 +47,23 @@ public class NetworkObserverProxy {
      * @return true si la partie est en réseau
      */
     public boolean isNetworkGame() {
-        return (mHost != null) || (mClient != null);
+        return isHost() || isClient();
+    }
+    
+    /**
+     * Renvoie true si cet ordinateur est hôte d'une partie réseau
+     * @return boolean
+     */
+    public boolean isHost() {
+        return mHost != null;
+    }
+    
+    /**
+     * Renvoie true si cet ordinateur est client d'une partie réseau
+     * @return 
+     */
+    public boolean isClient() {
+        return mClient != null;
     }
 
     public void setHost(GameHost host) {
