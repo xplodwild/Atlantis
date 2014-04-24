@@ -272,7 +272,7 @@ public class GuiController implements ScreenController {
         boolean connected=this.lanConnectImpl(ipServ, nickname);
 
         if(connected){
-             this.nifty.gotoScreen("LobbyMultijoueur");
+             this.nifty.gotoScreen("lobbyMulti");
         }else{
             this.nifty.gotoScreen("ErrorConnect");
         }

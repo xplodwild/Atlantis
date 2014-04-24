@@ -22,9 +22,15 @@ import com.jme3.network.ClientStateListener;
 import com.jme3.network.Message;
 import com.jme3.network.MessageListener;
 import com.jme3.network.Network;
+import com.jme3.network.serializing.Serializer;
 import fr.miage.atlantis.logic.GameLogic;
+import fr.miage.atlantis.network.messages.MessageChat;
 import fr.miage.atlantis.network.messages.MessageGameStart;
+import fr.miage.atlantis.network.messages.MessageKthxbye;
+import fr.miage.atlantis.network.messages.MessageNextTurn;
 import fr.miage.atlantis.network.messages.MessageOhai;
+import fr.miage.atlantis.network.messages.MessageSyncBoard;
+import fr.miage.atlantis.network.messages.MessageTurnEvent;
 import java.io.IOException;
 
 /**
@@ -35,6 +41,16 @@ public class GameClient implements ClientStateListener, MessageListener {
     private GameLogic mLogic;
     private String mPlayerName;
     private Client mClient;
+
+    static {
+        Serializer.registerClass(MessageOhai.class);
+        Serializer.registerClass(MessageKthxbye.class);
+        Serializer.registerClass(MessageChat.class);
+        Serializer.registerClass(MessageNextTurn.class);
+        Serializer.registerClass(MessageGameStart.class);
+        Serializer.registerClass(MessageSyncBoard.class);
+        Serializer.registerClass(MessageTurnEvent.class);
+    }
 
     public GameClient(GameLogic logic) {
         mLogic = logic;
