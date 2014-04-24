@@ -24,10 +24,14 @@ import com.jme3.network.MessageListener;
 import com.jme3.network.Network;
 import com.jme3.network.Server;
 import com.jme3.network.serializing.Serializer;
+import fr.miage.atlantis.gui.controllers.GuiController;
 import fr.miage.atlantis.logic.GameLogic;
 import fr.miage.atlantis.network.messages.MessageChat;
+import fr.miage.atlantis.network.messages.MessageGameStart;
 import fr.miage.atlantis.network.messages.MessageKthxbye;
+import fr.miage.atlantis.network.messages.MessageNextTurn;
 import fr.miage.atlantis.network.messages.MessageOhai;
+import fr.miage.atlantis.network.messages.MessageSyncBoard;
 import fr.miage.atlantis.network.messages.MessageTurnEvent;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -47,16 +51,23 @@ public class GameHost implements ConnectionListener, MessageListener<HostedConne
     private List<HostedConnection> mConnections;
     private Map<Integer, String> mConnectionToName;
     private GameLogic mLogic;
+    private GuiController mGuiController;
 
     static {
         Serializer.registerClass(MessageOhai.class);
         Serializer.registerClass(MessageKthxbye.class);
+        Serializer.registerClass(MessageChat.class);
+        Serializer.registerClass(MessageNextTurn.class);
+        Serializer.registerClass(MessageGameStart.class);
+        Serializer.registerClass(MessageSyncBoard.class);
+        Serializer.registerClass(MessageTurnEvent.class);
     }
 
-    public GameHost(GameLogic logic) {
+    public GameHost(GameLogic logic, GuiController guiController) {
         mConnections = new ArrayList<HostedConnection>();
         mConnectionToName = new HashMap<Integer, String>();
         mLogic = logic;
+        mGuiController = guiController;
     }
 
     public void startListening() throws IOException {
@@ -65,11 +76,21 @@ public class GameHost implements ConnectionListener, MessageListener<HostedConne
         mServer.addMessageListener(this);
 
         mServer.start();
+
+        NetworkObserverProxy.getDefault().setHost(this);
+    }
+
+    public void stop() {
+        mServer.close();
+    }
+
+    public void broadcast(Message msg) {
+        mServer.broadcast(msg);
     }
 
     public void connectionAdded(Server server, HostedConnection conn) {
-        if (mConnections.size() == 3) {
-            // Maximum 3 joueurs!
+        if (mConnections.size() == 4) {
+            // Maximum 4 joueurs!
             conn.close("This server is full, sorry!");
         }
         mConnections.add(conn);
@@ -101,6 +122,7 @@ public class GameHost implements ConnectionListener, MessageListener<HostedConne
 
         // TODO: Notifier le GUI qu'un joueur s'est connecté
         // Insérer le nom du joueur dans la logique
+        mGuiController.onPlayerConnected(m.getName());
     }
 
     private void handleMessageKthxbye(int sourceId, MessageKthxbye m) {
@@ -117,4 +139,6 @@ public class GameHost implements ConnectionListener, MessageListener<HostedConne
     private void handleMessageTurnEvent(int sourceId, MessageTurnEvent m) {
         // TODO
     }
+
+
 }

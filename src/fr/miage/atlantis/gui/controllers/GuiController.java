@@ -124,7 +124,7 @@ public class GuiController implements ScreenController {
             Logger.getGlobal().severe("Game3DRenderer is null!");
             return;
         }
-        
+
         if (this.g3rdr.getLogic() == null) {
             Logger.getGlobal().severe("Game3DRenderer's logic is null!");
             return;
@@ -132,19 +132,17 @@ public class GuiController implements ScreenController {
         this.g3rdr.getLogic().finishCurrentAction();
     }
 
-    
+
     public void startGameMulti(){
-        
+
     }
-    
-    
-    
+
     /**
      * Demmarre une nouvellle partie en reseau et accede au lobby
      */
     public void goToLobby(){
         // Hébergement du serveur: On devient l'host et on se connecte à nous même
-        GameHost host = new GameHost(g3rdr.getLogic());
+        GameHost host = new GameHost(g3rdr.getLogic(), this);
         try {
             host.startListening();
         } catch (IOException ex) {
@@ -152,30 +150,30 @@ public class GuiController implements ScreenController {
         }
 
         //Se connecte sur le serveur crée en local
-        lanConnectImpl("127.0.0.1");
-                
-        
+        lanConnectImpl("127.0.0.1", "MY NAME?");
+
+
          TextField fieldJ1 = this.nifty.getScreen("HostLan").findElementByName("inputJ1").getNiftyControl(TextField.class);
          String nick;
-         
+
          if(fieldJ1.getRealText().isEmpty()){
              nick=this.nameRandomizer.get(0);
          }else{
              nick=fieldJ1.getRealText();
          }
-                  
-         players=new String[1];         
-         players[0] = nick;         
-         
+
+         players=new String[1];
+         players[0] = nick;
+
          TextField j = this.nifty.getScreen("lobbyMulti").findElementByName("nom").getNiftyControl(TextField.class);
          j.setText(nick);
-         
+
          this.g3rdr.getLogic().prepareGame(players, true);
-         
+
          this.nifty.gotoScreen("lobbyMulti");
     }
-    
-    
+
+
     /**
      * Demarre une nouvelle partie avec les pseudos données ou des pseudos
      * aléatoires si non renseigné.
@@ -253,7 +251,7 @@ public class GuiController implements ScreenController {
     /**
      * Fonction appelée lorsqu'on hoste une nouvelle partie sur le réseau local
      */
-    public void lanHost(){              
+    public void lanHost(){
         this.nifty.gotoScreen("HostLan");
     }
 
@@ -271,10 +269,12 @@ public class GuiController implements ScreenController {
         String ipServ = ip.getRealText();
         String nickname = nick.getRealText();
 
-        boolean connected=this.lanConnectImpl(ipServ);
+        boolean connected=this.lanConnectImpl(ipServ, nickname);
 
         if(connected){
-            this.nifty.gotoScreen("LobbyMultijoueur");
+
+             this.nifty.gotoScreen("lobbyMulti");
+
         }else{
             this.nifty.gotoScreen("ErrorConnect");
         }
@@ -284,18 +284,18 @@ public class GuiController implements ScreenController {
     /**
      * Connexion effective a un serveur de jeu en local
      * @param ipAddress IP au serveur a laquelle se connecter
+     * @param nickName Notre pseudo
      * @return True or false si la connexion est opérationnelle
      */
-    private boolean lanConnectImpl(final String ipAddress) {
+    private boolean lanConnectImpl(final String ipAddress, final String nickName) {
 
         boolean retour = false;
 
         GameClient gameClient = new GameClient(g3rdr.getLogic());
         try {
-            gameClient.connect(ipAddress);
+            gameClient.connect(ipAddress, nickName);
             retour = true;
         } catch (IOException ex) {
-
             Logger.getLogger(GuiController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -351,12 +351,16 @@ public class GuiController implements ScreenController {
      */
     public void backToMenu() {
 
+
         /*
+
          boolean gameOver = this.g3rdr.getLogic().isFinished();
          if (!gameOver) {
             this.save();
          }
+
          */
+
 
 
         TextField fieldJ1 = this.nifty.getScreen("start").findElementByName("inputJ1").getNiftyControl(TextField.class);
@@ -475,13 +479,14 @@ public class GuiController implements ScreenController {
      *
      */
     public void exit() {
+
          /*
          boolean gameOver = this.g3rdr.getLogic().isFinished();         
          if (!gameOver) {
             this.save();
          }
          */
-         
+  
          System.exit(0);
     }
 
@@ -676,7 +681,7 @@ public class GuiController implements ScreenController {
         this.nameRandomizer.remove(tmp);
         fieldMulti.setText(tmp);
     }
-    
+
     /**
      * Remplis le champ pseudo pour le multijoueur LAN avec un pseudo aléatoire
      * *
@@ -992,5 +997,24 @@ public class GuiController implements ScreenController {
 
                 break;
         }
+    }
+
+    public void onPlayerConnected(final String name) {
+        String[] newPlayers = new String[players == null ? 1 : players.length + 1];
+        if (players != null) {
+            int i = 0;
+            for (String s : players) {
+                newPlayers[i] = players[i];
+                i++;
+            }
+        }
+        newPlayers[newPlayers.length - 1] = name;
+
+        players = newPlayers;
+        updatePlayerName();
+    }
+
+    public void startNetworkGame() {
+        // TODO
     }
 }
