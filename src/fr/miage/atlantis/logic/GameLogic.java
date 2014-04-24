@@ -173,7 +173,7 @@ public abstract class GameLogic implements GameTurnListener {
     public void prepareGame(String[] players, boolean prepareBoard) {
         // Création du board
         mBoard = new GameBoard(prepareBoard);
-        
+
         // On créé les joueurs
         mPlayers = new Player[players.length];
         for (int i = 0; i < mPlayers.length; i++) {
@@ -190,21 +190,21 @@ public abstract class GameLogic implements GameTurnListener {
 
         mVolcanized = false;
     }
-    
+
     /**
      * Restaure un GameTurn (sauvegardé par exemple)
-     * @param turn 
+     * @param turn
      */
     public void restoreTurn(GameTurn turn) {
         mCurrentTurn = turn;
         mCurrentTurn.startTurn();
     }
-    
+
     public void serializeEssentialData(DataOutputStream data) throws IOException {
         data.writeInt(mBoatsPlaced);
         data.writeBoolean(mVolcanized);
     }
-    
+
     public void deserializeData(DataInputStream data) throws IOException {
         mBoatsPlaced = data.readInt();
         mVolcanized = data.readBoolean();
@@ -228,11 +228,14 @@ public abstract class GameLogic implements GameTurnListener {
         mLog.logTurn(mCurrentTurn);
         Player p = mCurrentTurn.getPlayer();
 
+        if (isFinished()) {
+            onGameFinished();
+        } else {
+            mCurrentTurn = new GameTurn(this, this.nextPlayer(p));
 
-        mCurrentTurn = new GameTurn(this, this.nextPlayer(p));
-
-        // Lance le nouveau tour
-        mCurrentTurn.startTurn();
+            // Lance le nouveau tour
+            mCurrentTurn.startTurn();
+        }
     }
 
     /**
@@ -381,6 +384,14 @@ public abstract class GameLogic implements GameTurnListener {
      */
     public abstract void onTileWhirl(final GameTile tile);
 
+    /**
+     * Quand la touche espace a été appuyée
+     */
     public abstract void onHitSpace();
+
+    /**
+     * Quand la partie est terminée
+     */
+    public abstract void onGameFinished();
     //--------------------------------------------------------------------------
 }

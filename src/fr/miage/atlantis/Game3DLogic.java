@@ -57,7 +57,6 @@ import fr.miage.atlantis.graphics.models.PlayerModel;
 import fr.miage.atlantis.graphics.models.SeaSerpentModel;
 import fr.miage.atlantis.graphics.models.SharkModel;
 import fr.miage.atlantis.graphics.models.StaticModel;
-import fr.miage.atlantis.gui.controllers.GuiController;
 import fr.miage.atlantis.logic.GameLogic;
 import fr.miage.atlantis.logic.GameTurn;
 import java.io.DataInputStream;
@@ -1257,5 +1256,10 @@ public class Game3DLogic extends GameLogic {
         }
 
 
+    }
+
+    @Override
+    public void onGameFinished() {
+        // Cristian, affiche les scores!
     }
 }
