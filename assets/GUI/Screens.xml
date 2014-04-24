@@ -819,7 +819,9 @@
         <!-- Layer principal -->
         <!-- +++++++++++++++++++++++++++++++++++++++ -->
         <layer id="background" childLayout="horizontal">
+           
             
+             
             <!-- +++++++++++++++++++++++++++++++++++++++ -->
             <!-- Panel de gauche de l'ecran ou l'on place les boutons   -->
             <!-- +++++++++++++++++++++++++++++++++++++++ -->
@@ -846,7 +848,9 @@
             </panel>
             <!-- +++++++++++++++++++++++++++++++++++++++ -->
       
-      
+      <panel id="panelDroit" height="100%" width="80%" align="right" valign="top" childLayout="center" visibleToMouse="true">
+                
+            
             <panel id="bas" height="80%" width="100%" align="left" valign="top" paddingTop="3.7%"  childLayout="horizontal" visibleToMouse="true"> 
                    
                 <panel id="bas_1" height="100%" width="24%" backgroundColor="#0060ab4d" align="right" valign="top" childLayout="vertical" visibleToMouse="true">
@@ -906,13 +910,15 @@
                     
                 <panel id="spacer_4" height="100%" width="2%"  backgroundColor="#00000080" align="right" valign="top" childLayout="vertical" visibleToMouse="true">
                 </panel> 
-                <panel id="barreDuBas" height="20%" width="100%" align="left" valign="bottom" backgroundColor="#00000080" childLayout="vertical" visibleToMouse="true">                
-                    <text align="left" valign="bottom" text="Bravo ! La partie est terminée" font="Fonts/sansitc.fnt"  color="#ffffffff" /> 
-                    <text align="left" valign="bottom" text="L'important c'est de participer :)" font="Fonts/sansitc.fnt"  color="#ffffffff" />                 
-                </panel>  
+               
             </panel>   
                 
                 
+                 <panel id="barreDuBas" height="20%" width="100%" align="left" valign="bottom" backgroundColor="#00000080" childLayout="vertical" visibleToMouse="true">                
+                    <text align="left" valign="bottom" text="Bravo ! La partie est terminée" font="Fonts/sansitc.fnt"  color="#ffffffff" /> 
+                    <text align="left" valign="bottom" text="L'important c'est de participer :)" font="Fonts/sansitc.fnt"  color="#ffffffff" />                 
+                </panel>  
+          </panel>       
              
         </layer>
         <!-- +++++++++++++++++++++++++++++++++++++++ -->
