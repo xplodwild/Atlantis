@@ -57,7 +57,6 @@ import fr.miage.atlantis.graphics.models.PlayerModel;
 import fr.miage.atlantis.graphics.models.SeaSerpentModel;
 import fr.miage.atlantis.graphics.models.SharkModel;
 import fr.miage.atlantis.graphics.models.StaticModel;
-import fr.miage.atlantis.gui.controllers.GuiController;
 import fr.miage.atlantis.logic.GameLogic;
 import fr.miage.atlantis.logic.GameTurn;
 import java.io.DataInputStream;
@@ -1257,5 +1256,39 @@ public class Game3DLogic extends GameLogic {
         }
 
 
+    }
+
+    
+    /**
+     * Affichage des scores
+     */
+    @Override
+    public void onGameFinished() {
+        Nifty nifty = mRenderer.getNifty();       
+        
+        Element element;
+        Player[] p = this.getPlayers();
+        element = nifty.getScreen("endGame").findElementByName("nomJ1");
+        element = nifty.getScreen("endGame").findElementByName("nomJ2");
+        
+        element = nifty.getScreen("endGame").findElementByName("pointsJ1");
+        element = nifty.getScreen("endGame").findElementByName("pointsJ2");
+        
+        if(p.length==3){
+            element = nifty.getScreen("endGame").findElementByName("nomJ3");
+            
+            element = nifty.getScreen("endGame").findElementByName("pointsJ3");
+        }
+        
+        if(p.length==4){
+            element = nifty.getScreen("endGame").findElementByName("nomJ3");
+            element = nifty.getScreen("endGame").findElementByName("nomJ4");
+            
+            element = nifty.getScreen("endGame").findElementByName("pointsJ3");
+            element = nifty.getScreen("endGame").findElementByName("pointsJ4");
+        }        
+        
+        
+        nifty.gotoScreen("endGame");
     }
 }
