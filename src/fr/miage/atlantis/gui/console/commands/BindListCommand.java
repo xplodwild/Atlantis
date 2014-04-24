@@ -51,6 +51,7 @@ public class BindListCommand implements ConsoleCommands.ConsoleCommand {
         csl.output("| Keyboard bind list                                |");
         csl.output("____________________________________________________");
         csl.output("|                                                   |");
+        csl.output("| F4            :   End the game at next turn       |");
         csl.output("| F10           :   Toggle FPS & Graphics info      |");
         csl.output("| F11           :   Toggle QuickTest mod            |");
         csl.output("| F12           :   Toggle console                  |");
