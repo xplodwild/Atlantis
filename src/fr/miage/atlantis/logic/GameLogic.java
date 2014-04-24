@@ -24,6 +24,7 @@ import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.entities.Boat;
 import fr.miage.atlantis.entities.GameEntity;
 import fr.miage.atlantis.entities.PlayerToken;
+import fr.miage.atlantis.network.NetworkObserverProxy;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -189,6 +190,12 @@ public abstract class GameLogic implements GameTurnListener {
         }
 
         mVolcanized = false;
+        
+        // Propagation du board si on est en réseau et qu'on est hôte
+        NetworkObserverProxy nop = NetworkObserverProxy.getDefault();
+        if (nop.isHost()) {
+            nop.onHostBoardSync(mBoard);
+        }
     }
 
     /**
@@ -215,6 +222,11 @@ public abstract class GameLogic implements GameTurnListener {
      *
      */
     public void startGame() {
+        // Propagation du lancement si on est en réseau
+        NetworkObserverProxy nop = NetworkObserverProxy.getDefault();
+        if (nop.isHost()) {
+            nop.onHostGameStart();
+        }
         Player p = mPlayers[0];
         mCurrentTurn = new GameTurn(this, p);
         mCurrentTurn.startTurn();

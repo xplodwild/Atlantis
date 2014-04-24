@@ -106,7 +106,7 @@ public class GameHost implements ConnectionListener, MessageListener<HostedConne
     public void broadcast(Message msg, final HostedConnection avoid) {
         mServer.broadcast(new Filter<HostedConnection>() {
             public boolean apply(HostedConnection input) {
-                return avoid.equals(input);
+                return !avoid.equals(input);
             }
         }, msg);
     }
