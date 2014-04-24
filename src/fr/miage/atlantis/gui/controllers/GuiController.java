@@ -274,7 +274,7 @@ public class GuiController implements ScreenController {
         boolean connected=this.lanConnectImpl(ipServ);
 
         if(connected){
-             this.nifty.gotoScreen("LobbyMultijoueur");
+            this.nifty.gotoScreen("LobbyMultijoueur");
         }else{
             this.nifty.gotoScreen("ErrorConnect");
         }
@@ -324,6 +324,8 @@ public class GuiController implements ScreenController {
         CamConstants.moveAboveBoard(g3rdr.getCameraNode(), cam);
 
     }
+    
+    
 
     public void returnToGame() {
         Camera cam = g3rdr.getCamera();
@@ -345,64 +347,16 @@ public class GuiController implements ScreenController {
 
 
     /**
-     * Désactive tout les sons du jeu
-     *
-     */
-    public void soundToggle() {
-        /**
-         * TODO : toggle les sons FX ingame
-         */
-        if (this.soundState) {
-            /**
-             * Renseigner la source audio a pause à la place de null
-             */
-            // this.maudioRenderer.pauseSource(null);
-            this.nifty.getScreen("inGameMenu").findElementByName("btnOptions").getNiftyControl(Button.class).setText("Sons on");
-            this.soundState = false;
-        } else {
-            // this.maudioRenderer.playSource(null);
-
-
-            this.nifty.getScreen("inGameMenu").findElementByName("btnOptions").getNiftyControl(Button.class).setText("Sons off");
-            this.soundState = true;
-        }
-    }
-
-    /**
-     * Met en pause la musique du jeu
-     *
-     */
-    public void musicToggle() {
-        /**
-         * TODO : toggle la musique du jeu
-         */
-        if (this.musicState) {
-            /**
-             * Renseigner la source audio a pause à la place de null
-             */
-            // this.maudioRenderer.pauseSource(null);
-            this.nifty.getScreen("inGameMenu").findElementByName("btnOptions2").getNiftyControl(Button.class).setText("Musique on");
-            this.musicState = false;
-        } else {
-            // this.maudioRenderer.playSource(null);
-
-
-            this.nifty.getScreen("inGameMenu").findElementByName("btnOptions2").getNiftyControl(Button.class).setText("Musique off");
-            this.musicState = true;
-        }
-    }
-
-    /**
      * Retourne au menu initial du jeu .
      */
     public void backToMenu() {
 
-        
+        /*
          boolean gameOver = this.g3rdr.getLogic().isFinished();
          if (!gameOver) {
             this.save();
          }
-         
+         */
 
 
         TextField fieldJ1 = this.nifty.getScreen("start").findElementByName("inputJ1").getNiftyControl(TextField.class);
@@ -521,11 +475,12 @@ public class GuiController implements ScreenController {
      *
      */
     public void exit() {
-        
+         /*
          boolean gameOver = this.g3rdr.getLogic().isFinished();         
          if (!gameOver) {
             this.save();
          }
+         */
          
          System.exit(0);
     }

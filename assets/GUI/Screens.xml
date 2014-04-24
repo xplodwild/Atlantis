@@ -624,7 +624,7 @@
             <panel id="panelGauche" height="100%" width="20%" align="left" valign="top" backgroundColor="#00000080" childLayout="vertical" visibleToMouse="true">                
                 
                 <panel id="startgamezone" paddingTop="20%" align="center" height="8%" width="60%"  childLayout="vertical" visibleToMouse="true">                
-                    <control  id="btnNouvPartie"   height="100%" width="100%" name="button" label="Lancer la partie">
+                    <control  id="btnNouvPartie"   height="100%" width="100%" name="button" label="Acceder au lobby">
                         <interact onClick="goToLobby()" />
                     </control>
                 </panel>
@@ -742,7 +742,7 @@
                         </effect>
                     </text> 
 
-                    <control id="inputIP" name="textfield" width="33%" text="192.168.x.x"/>
+                    <control id="inputIP" name="textfield" width="33%" text="127.0.0.1"/>
 
 
                     <text id="Nick"  textHAlign="left" textVAlign="center" align="left" valign="center" text="Pseudo Joueur" font="Fonts/sansitc.fnt"  color="#eeeeeeff" >
