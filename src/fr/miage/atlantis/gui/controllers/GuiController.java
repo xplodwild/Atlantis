@@ -120,8 +120,16 @@ public class GuiController implements ScreenController {
      * Arrete l'action en cours lors d'une partie
      */
     public void stopCurrentAction() {
-        //@TODO : Gerer les differents cas ou l'on peut arreter une action
-        //Ne rien faire si on ne peut pas
+        if (this.g3rdr == null) {
+            Logger.getGlobal().severe("Game3DRenderer is null!");
+            return;
+        }
+        if (this.g3rdr.getLogic() == null) {
+            Logger.getGlobal().severe("Game3DRenderer's logic is null!");
+            return;
+        }
+
+        this.g3rdr.getLogic().finishCurrentAction();
     }
 
     /**

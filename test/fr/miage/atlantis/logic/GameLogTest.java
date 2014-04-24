@@ -4,6 +4,8 @@
  */
 package fr.miage.atlantis.logic;
 
+import fr.miage.atlantis.Player;
+import fr.miage.atlantis.board.NullGameLogic;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -42,11 +44,12 @@ public class GameLogTest {
     @Test
     public void testLogTurn() {
         System.out.println("logTurn");
-        GameTurn i = null;
+        GameTurn gt = new GameTurn(new NullGameLogic(), new Player("P1",0));
         GameLog instance = new GameLog();
-        instance.logTurn(i);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        instance.logTurn(gt);
+        
+        assertEquals(gt,instance.getTurn(0));
+        
     }
 
     /**
@@ -55,12 +58,18 @@ public class GameLogTest {
     @Test
     public void testGetTurn() {
         System.out.println("getTurn");
-        int i = 0;
+        GameTurn gt = new GameTurn(new NullGameLogic(), new Player("P1",0));
         GameLog instance = new GameLog();
-        GameTurn expResult = null;
-        GameTurn result = instance.getTurn(i);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        instance.logTurn(gt);
+        
+        assertEquals(gt,instance.getTurn(0));
+        
+        try{
+            GameTurn gtu = instance.getTurn(1);
+            if(gtu==null) throw new Exception();
+            fail("On peut getter un tour qui n'existe pas, c'est étrange.");
+        }catch(Exception e){
+            assertTrue(true);
+        }
     }
 }

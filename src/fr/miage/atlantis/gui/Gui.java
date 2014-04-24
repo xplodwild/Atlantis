@@ -76,7 +76,7 @@ public class Gui {
 
 
         this.instanciateScreens();
-       
+
 
 
     }
@@ -85,9 +85,12 @@ public class Gui {
 
         this.mNifty.fromXmlWithoutStartScreen("GUI/Screens.xml");
 
-        this.mNifty.registerScreenController(new GuiController(this.mGame3DRenderer));       
+        this.mNifty.registerScreenController(new GuiController(this.mGame3DRenderer));
 
         ((GuiController) this.mNifty.getScreen("start").getScreenController()).set3DRenderer(this.mGame3DRenderer);
+        ((GuiController) this.mNifty.getScreen("inGameHud").getScreenController()).set3DRenderer(this.mGame3DRenderer);
+        ((GuiController) this.mNifty.getScreen("inGameHud2J").getScreenController()).set3DRenderer(this.mGame3DRenderer);
+        ((GuiController) this.mNifty.getScreen("inGameHud3J").getScreenController()).set3DRenderer(this.mGame3DRenderer);
 
         this.mNifty.gotoScreen("inGameHud");
 

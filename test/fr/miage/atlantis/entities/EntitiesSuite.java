@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package fr.miage.atlantis.logic;
+package fr.miage.atlantis.entities;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -13,11 +13,11 @@ import org.junit.runners.Suite;
 
 /**
  *
- * @author Lucie
+ * @author Loris
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({fr.miage.atlantis.logic.GameTurnTest.class, fr.miage.atlantis.logic.GameLogTest.class})
-public class LogicSuite {
+@Suite.SuiteClasses({fr.miage.atlantis.entities.WhaleTest.class, fr.miage.atlantis.entities.SeaSerpentTest.class, fr.miage.atlantis.entities.PlayerTokenTest.class, fr.miage.atlantis.entities.GameEntityTest.class, fr.miage.atlantis.entities.SharkTest.class, fr.miage.atlantis.entities.BoatTest.class})
+public class EntitiesSuite {
 
     @BeforeClass
     public static void setUpClass() throws Exception {

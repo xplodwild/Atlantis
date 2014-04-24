@@ -241,7 +241,7 @@ public class BoardRenderer extends Node {
 
         addTileToRender(dest, x, y);
     }
-    
+
     /**
      * Enlève tous les éléments en rendu du board
      */
@@ -250,7 +250,9 @@ public class BoardRenderer extends Node {
         for (Node node : nodes) {
             detachChild(node);
         }
-        
+
+        mTileOffset = 0.0f;
+
         mTiles.clear();
         mNodeToGameTiles.clear();
         mGameTileToModel.clear();
