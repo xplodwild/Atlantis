@@ -164,8 +164,21 @@ public class Gui {
         //Bind la touche d'activation des stats
         this.getInputManager().addMapping("menu", new KeyTrigger(KeyInput.KEY_ESCAPE));
         this.getInputManager().addListener(this.toggleMenu(), "menu");
+        
+        //Bind la touche de fin rapide du jeu
+        this.getInputManager().addMapping("endgame", new KeyTrigger(KeyInput.KEY_F4));
+        this.getInputManager().addListener(this.endGame(), "endgame");
     }
 
+     private ActionListener endGame() {
+        return new ActionListener() {
+            public void onAction(String name, boolean isPressed, float tpf) {
+                Gui.this.getGame3DRenderer().getLogic().onTileVolcano();
+            }
+        };
+    }
+    
+    
     private ActionListener toggleMenu() {
         return new ActionListener() {
             public void onAction(String name, boolean isPressed, float tpf) {
