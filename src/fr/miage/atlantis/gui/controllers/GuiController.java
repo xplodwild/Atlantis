@@ -142,7 +142,7 @@ public class GuiController implements ScreenController {
      */
     public void goToLobby(){
         // Hébergement du serveur: On devient l'host et on se connecte à nous même
-        GameHost host = new GameHost(g3rdr.getLogic(), this);
+        GameHost host = new GameHost(g3rdr.getLogic(), this, this.players[0]);
         try {
             host.startListening();
         } catch (IOException ex) {
@@ -150,7 +150,7 @@ public class GuiController implements ScreenController {
         }
 
         //Se connecte sur le serveur crée en local
-        lanConnectImpl("127.0.0.1", "MY NAME?");
+        lanConnectImpl("127.0.0.1", this.players[0]);
 
 
          TextField fieldJ1 = this.nifty.getScreen("HostLan").findElementByName("inputJ1").getNiftyControl(TextField.class);
@@ -289,7 +289,7 @@ public class GuiController implements ScreenController {
 
         boolean retour = false;
 
-        GameClient gameClient = new GameClient(g3rdr.getLogic());
+        GameClient gameClient = new GameClient(g3rdr.getLogic(), this);
         try {
             gameClient.connect(ipAddress, nickName);
             retour = true;
