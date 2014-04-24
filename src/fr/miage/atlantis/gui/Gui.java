@@ -91,7 +91,12 @@ public class Gui {
         ((GuiController) this.mNifty.getScreen("inGameHud").getScreenController()).set3DRenderer(this.mGame3DRenderer);
         ((GuiController) this.mNifty.getScreen("inGameHud2J").getScreenController()).set3DRenderer(this.mGame3DRenderer);
         ((GuiController) this.mNifty.getScreen("inGameHud3J").getScreenController()).set3DRenderer(this.mGame3DRenderer);
-
+        ((GuiController) this.mNifty.getScreen("lobbyMulti").getScreenController()).set3DRenderer(this.mGame3DRenderer);
+        ((GuiController) this.mNifty.getScreen("HostLan").getScreenController()).set3DRenderer(this.mGame3DRenderer);
+        ((GuiController) this.mNifty.getScreen("JoinLan").getScreenController()).set3DRenderer(this.mGame3DRenderer);
+        
+        
+        
         this.mNifty.gotoScreen("inGameHud");
 
 

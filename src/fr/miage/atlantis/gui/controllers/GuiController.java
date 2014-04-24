@@ -124,20 +124,37 @@ public class GuiController implements ScreenController {
             Logger.getGlobal().severe("Game3DRenderer is null!");
             return;
         }
+        
         if (this.g3rdr.getLogic() == null) {
             Logger.getGlobal().severe("Game3DRenderer's logic is null!");
             return;
         }
-
         this.g3rdr.getLogic().finishCurrentAction();
     }
 
     
+    public void startGameMulti(){
+        
+    }
+    
+    
+    
     /**
      * Demmarre une nouvellle partie en reseau et accede au lobby
      */
-    public void startGameMulti(){
-        /*
+    public void goToLobby(){
+        // Hébergement du serveur: On devient l'host et on se connecte à nous même
+        GameHost host = new GameHost(g3rdr.getLogic());
+        try {
+            host.startListening();
+        } catch (IOException ex) {
+            Logger.getGlobal().log(Level.SEVERE, "Cannot start listening on the game server", ex);
+        }
+
+        //Se connecte sur le serveur crée en local
+        lanConnectImpl("127.0.0.1");
+                
+        
          TextField fieldJ1 = this.nifty.getScreen("HostLan").findElementByName("inputJ1").getNiftyControl(TextField.class);
          String nick;
          
@@ -150,11 +167,11 @@ public class GuiController implements ScreenController {
          players=new String[1];         
          players[0] = nick;         
          
-         fieldJ1 = this.nifty.getScreen("lobbyMulti").findElementByName("nomJ1").getNiftyControl(TextField.class);
-         fieldJ1.setText(nick);
+         TextField j = this.nifty.getScreen("lobbyMulti").findElementByName("nom").getNiftyControl(TextField.class);
+         j.setText(nick);
          
          this.g3rdr.getLogic().prepareGame(players, true);
-         */
+         
          this.nifty.gotoScreen("lobbyMulti");
     }
     
@@ -236,19 +253,7 @@ public class GuiController implements ScreenController {
     /**
      * Fonction appelée lorsqu'on hoste une nouvelle partie sur le réseau local
      */
-    public void lanHost(){
-        // Hébergement du serveur: On devient l'host et on se connecte à nous même
-        GameHost host = new GameHost(g3rdr.getLogic());
-        try {
-            host.startListening();
-        } catch (IOException ex) {
-            Logger.getGlobal().log(Level.SEVERE, "Cannot start listening on the game server", ex);
-        }
-
-        //Se connecte sur le serveur crée en local
-        lanConnectImpl("127.0.0.1");
-
-        //Bouge sur l'ecran lobby multijoueur    @TODO : Réaliser l'ecran
+    public void lanHost(){              
         this.nifty.gotoScreen("HostLan");
     }
 
@@ -392,13 +397,12 @@ public class GuiController implements ScreenController {
      */
     public void backToMenu() {
 
-        //Si le jeu n'est pas finis on sauvegarde par defaut.
-        /*
+        
          boolean gameOver = this.g3rdr.getLogic().isFinished();
          if (!gameOver) {
-         this.save();
+            this.save();
          }
-         */
+         
 
 
         TextField fieldJ1 = this.nifty.getScreen("start").findElementByName("inputJ1").getNiftyControl(TextField.class);
@@ -517,15 +521,13 @@ public class GuiController implements ScreenController {
      *
      */
     public void exit() {
-        /*
-         boolean gameOver = this.g3rdr.getLogic().isFinished();
+        
+         boolean gameOver = this.g3rdr.getLogic().isFinished();         
          if (!gameOver) {
-
-         this.save();
+            this.save();
          }
-         */
-
-        System.exit(0);
+         
+         System.exit(0);
     }
 
     /**

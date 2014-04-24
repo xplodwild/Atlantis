@@ -205,19 +205,7 @@
                         <interact onClick="load()" />
                     </control>
                 </panel>
-                
-                <panel  paddingTop="20%" align="center" height="8%" width="60%"  childLayout="vertical" visibleToMouse="true">                
-                    <control paddingTop="10%" id="btnOptions"   height="100%" width="100%" name="button" label="Sons off">
-                        <interact onClick="soundToggle()" />
-                    </control>
-                </panel>
-                
-                <panel paddingTop="20%" align="center" height="8%" width="60%"  childLayout="vertical" visibleToMouse="true">                
-                    <control paddingTop="10%" id="btnOptions2"   height="100%" width="100%" name="button" label="Musique off">
-                        <interact onClick="musicToggle()" />
-                    </control>
-                </panel>
-                
+                                              
                 <panel id="menu" paddingTop="20%" align="center" height="8%" width="60%" childLayout="vertical" visibleToMouse="true">                
                     <control  id="btnMenu"   height="100%" width="100%" name="button" label="Retour à l'accueil">
                         <interact onClick="backToMenu()" />
@@ -522,36 +510,19 @@
                 
                 <!-- Zone bouton Nouvelle Partie  -->
                 <panel id="startgamezone" paddingTop="20%" align="center" height="8%" width="60%"  childLayout="vertical" visibleToMouse="true">                
-                    <control  id="btnNouvPartie"   height="100%" width="100%" name="button" label="Nouvelle partie">
-                        <interact onClick="startGame()" />
+                    <control  id="btnNouvPartie"   height="100%" width="100%" name="button" label="Démarrer la partie">
+                        <interact onClick="startGameMulti()" />
                     </control>
                 </panel>
                 <!-- +++++++++++++++++++++++++++++++++++++++ -->
                 
-                
-                <!-- Zone bouton Charger Partie  -->
-                <panel id="load" paddingTop="20%" align="center" height="8%" width="60%"  childLayout="vertical" visibleToMouse="true">                
-                    <control paddingTop="10%" id="loadBtn"   height="100%" width="100%" name="button" label="Charger dern. sauvegarde">
-                        <interact onClick="load()" />
+               
+               <panel id="HudPanelTop4" paddingTop="20%"    height="8%"     width="60%" align="center"  valign="bottom"    childLayout="vertical">                   
+                    <control  id="btnMenu"   height="100%" width="100%" name="button" label="Retour à l'accueil">
+                        <interact onClick="backToMenu()" />
                     </control>
-                </panel>
-                <!-- +++++++++++++++++++++++++++++++++++++++ -->
-                
-                <!-- Zone bouton Hoster Partie LAN -->
-                <panel id="multi" paddingTop="20%" align="center" height="8%" width="60%"  childLayout="vertical" visibleToMouse="true">                
-                    <control paddingTop="10%" id="loadBtn"   height="100%" width="100%" name="button" label="Hoster partie LAN">
-                        <interact onClick="lanHost()" />
-                    </control>
-                </panel>
-                <!-- +++++++++++++++++++++++++++++++++++++++ -->
-                
-                <!-- Zone bouton Rejoindre Partie LAN -->
-                <panel id="multi2" paddingTop="20%" align="center" height="8%" width="60%"  childLayout="vertical" visibleToMouse="true">                
-                    <control paddingTop="10%" id="loadBtn"   height="100%" width="100%" name="button" label="Rejoindre partie LAN">
-                        <interact onClick="lanJoin()" />
-                    </control>
-                </panel>
-                <!-- +++++++++++++++++++++++++++++++++++++++ -->
+                </panel>     
+                                            
                 
                 <!-- Padding Bottom de 20% -->
                 <panel id="padding" paddingTop="20%" align="center" height="8%" width="60%"  childLayout="vertical" visibleToMouse="true"></panel>
@@ -576,13 +547,12 @@
                 </panel> 
                         
                 
-                <panel id="bas" height="60%" width="100%" align="left" valign="top" paddingTop="3.7%"  childLayout="horizontal" visibleToMouse="true"> 
+                <panel id="bas" height="50%" width="100%" align="left" valign="top" paddingTop="3.7%"  childLayout="horizontal" visibleToMouse="true"> 
                    
                     <panel id="bas_1" height="100%" width="24%" backgroundColor="#0060ab4d" align="right" valign="top" childLayout="vertical" visibleToMouse="true">
                         <panel id="haut_1"  height="25%" width="80%" align="right" valign="top" childLayout="vertical" visibleToMouse="true">
                             <text align="center" text="Joueur 1" font="Fonts/sansitc.fnt"  color="#0060abff" /> 
-                            <text id="nomJ1" align="left" textHAlign="left" textVAlign="center" valign="center" text="" font="Fonts/sansitc.fnt"  color="#eeeeeeff" />                             
-                            <!-- Ajouter une checkbox qui valide si un pseudo a été entré. -->
+                            <text id="nom" align="left" textHAlign="left" textVAlign="center" valign="center" text="" font="Fonts/sansitc.fnt"  color="#eeeeeeff" />                             
                         </panel> 
                     
                     </panel>                    
@@ -624,7 +594,7 @@
                     </panel> 
                 </panel> 
                   
-                <panel id="barreDuBas" height="40%" width="100%" align="left" valign="bottom" backgroundColor="#00000080" childLayout="vertical" visibleToMouse="true">                
+                <panel id="barreDuBas" height="50%" width="100%" align="left" valign="bottom" backgroundColor="#00000080" childLayout="vertical" visibleToMouse="true">                
                     
                     <!-- +++++++++++++++++++++++++++++++++++++++ -->   
                     <!-- INTEGRER LE CHAT -->   
@@ -655,7 +625,7 @@
                 
                 <panel id="startgamezone" paddingTop="20%" align="center" height="8%" width="60%"  childLayout="vertical" visibleToMouse="true">                
                     <control  id="btnNouvPartie"   height="100%" width="100%" name="button" label="Lancer la partie">
-                        <interact onClick="startGameMulti()" />
+                        <interact onClick="goToLobby()" />
                     </control>
                 </panel>
                       
