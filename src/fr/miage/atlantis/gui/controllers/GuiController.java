@@ -533,6 +533,16 @@ public class GuiController implements ScreenController {
             niftyElement.getRenderer(TextRenderer.class).setText(players[2]);
             niftyElement = nifty.getScreen("inGameHud").findElementByName("nomJ4");
             niftyElement.getRenderer(TextRenderer.class).setText(players[3]);
+
+            //Lobby Multi
+            niftyElement = nifty.getScreen("lobbyMulti").findElementByName("nom");
+            niftyElement.getRenderer(TextRenderer.class).setText(players[0]);
+            niftyElement = nifty.getScreen("lobbyMulti").findElementByName("nomJ2");
+            niftyElement.getRenderer(TextRenderer.class).setText(players[1]);
+            niftyElement = nifty.getScreen("lobbyMulti").findElementByName("nomJ3");
+            niftyElement.getRenderer(TextRenderer.class).setText(players[2]);
+            niftyElement = nifty.getScreen("lobbyMulti").findElementByName("nomJ4");
+            niftyElement.getRenderer(TextRenderer.class).setText(players[3]);
         }
 
 
@@ -544,6 +554,14 @@ public class GuiController implements ScreenController {
             niftyElement.getRenderer(TextRenderer.class).setText(players[1]);
             niftyElement = nifty.getScreen("inGameHud3J").findElementByName("nomJ3");
             niftyElement.getRenderer(TextRenderer.class).setText(players[2]);
+
+            //Lobby Multi
+            niftyElement = nifty.getScreen("lobbyMulti").findElementByName("nom");
+            niftyElement.getRenderer(TextRenderer.class).setText(players[0]);
+            niftyElement = nifty.getScreen("lobbyMulti").findElementByName("nomJ2");
+            niftyElement.getRenderer(TextRenderer.class).setText(players[1]);
+            niftyElement = nifty.getScreen("lobbyMulti").findElementByName("nomJ3");
+            niftyElement.getRenderer(TextRenderer.class).setText(players[2]);
         }
 
         if (players.length == 2) {
@@ -551,6 +569,12 @@ public class GuiController implements ScreenController {
             niftyElement = nifty.getScreen("inGameHud2J").findElementByName("nomJ1");
             niftyElement.getRenderer(TextRenderer.class).setText(players[0]);
             niftyElement = nifty.getScreen("inGameHud2J").findElementByName("nomJ2");
+            niftyElement.getRenderer(TextRenderer.class).setText(players[1]);
+
+            //Lobby Multi
+            niftyElement = nifty.getScreen("lobbyMulti").findElementByName("nom");
+            niftyElement.getRenderer(TextRenderer.class).setText(players[0]);
+            niftyElement = nifty.getScreen("lobbyMulti").findElementByName("nomJ2");
             niftyElement.getRenderer(TextRenderer.class).setText(players[1]);
         }
 
