@@ -57,9 +57,11 @@ import fr.miage.atlantis.graphics.models.PlayerModel;
 import fr.miage.atlantis.graphics.models.SeaSerpentModel;
 import fr.miage.atlantis.graphics.models.SharkModel;
 import fr.miage.atlantis.graphics.models.StaticModel;
-import fr.miage.atlantis.gui.controllers.GuiController;
 import fr.miage.atlantis.logic.GameLogic;
 import fr.miage.atlantis.logic.GameTurn;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -107,7 +109,28 @@ public class Game3DLogic extends GameLogic {
         mTileRequestHistory = new ArrayList<TilePickRequest>();
         mCanCancelPickingAction = false;
     }
+    
+    public Game3DRenderer getRenderer() {
+        return mRenderer;
+    }
 
+    @Override
+    public void serializeEssentialData(DataOutputStream data) throws IOException {
+        super.serializeEssentialData(data);
+        data.writeBoolean(mPickedEntity != null);
+        if (mPickedEntity != null) data.writeUTF(mPickedEntity.getName());
+        
+    }
+
+    @Override
+    public void deserializeData(DataInputStream data) throws IOException {
+        super.deserializeData(data);
+        if (data.readBoolean()) {
+            mPickedEntity = getBoard().getEntity(data.readUTF());
+        }
+    }
+    
+    
     /**
      * Demarre le renderer graphique
      */
@@ -117,19 +140,21 @@ public class Game3DLogic extends GameLogic {
     }
 
     @Override
-    public void prepareGame(String[] players) {
-        super.prepareGame(players);
+    public void prepareGame(String[] players, boolean prepareBoard) {
+        super.prepareGame(players, prepareBoard);
 
         // On fait le rendu des tiles
         mRenderer.getBoardRenderer().clearBoard();
-        mRenderer.getBoardRenderer().renderBoard(getBoard());
+        if (prepareBoard) {
+            mRenderer.getBoardRenderer().renderBoard(getBoard());
 
-        // Rendu des entités déjà placées sur le plateau
-        mRenderer.getEntitiesRenderer().clearEntities();
-        Map<String, GameTile> tiles = getBoard().getTileSet();
-        for (GameTile tile : tiles.values()) {
-            for (GameEntity ent : tile.getEntities()) {
-                mRenderer.getEntitiesRenderer().addEntity(ent);
+            // Rendu des entités déjà placées sur le plateau
+            mRenderer.getEntitiesRenderer().clearEntities();
+            Map<String, GameTile> tiles = getBoard().getTileSet();
+            for (GameTile tile : tiles.values()) {
+                for (GameEntity ent : tile.getEntities()) {
+                    mRenderer.getEntitiesRenderer().addEntity(ent);
+                }
             }
         }
     }
@@ -1228,5 +1253,10 @@ public class Game3DLogic extends GameLogic {
         }
 
 
+    }
+
+    @Override
+    public void onGameFinished() {
+        // Cristian, affiche les scores!
     }
 }

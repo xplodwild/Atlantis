@@ -1,67 +1,84 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nifty xmlns="http://nifty-gui.sourceforge.net/nifty-1.3.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://nifty-gui.sourceforge.net/nifty-1.3.xsd http://nifty-gui.sourceforge.net/nifty-1.3.xsd">
+    
     <!-- +++++++++++++++++++++++++++++++++++++++ -->
     <!-- start screen -->
     <!-- +++++++++++++++++++++++++++++++++++++++ -->
     <screen id="start" controller="fr.miage.atlantis.gui.controllers.GuiController">
+        
         <!-- +++++++++++++++++++++++++++++++++++++++ -->
         <!-- Layer principal -->
         <!-- +++++++++++++++++++++++++++++++++++++++ -->
         <layer id="background" childLayout="horizontal">
+            
             <!-- +++++++++++++++++++++++++++++++++++++++ -->
             <!-- Panel de gauche de l'ecran ou l'on place les boutons   -->
             <!-- +++++++++++++++++++++++++++++++++++++++ -->
             <panel id="panelGauche" height="100%" width="20%" align="left" valign="top" backgroundColor="#00000080" childLayout="vertical" visibleToMouse="true">                
                 
+                
+                <!-- Zone bouton Nouvelle Partie  -->
                 <panel id="startgamezone" paddingTop="20%" align="center" height="8%" width="60%"  childLayout="vertical" visibleToMouse="true">                
                     <control  id="btnNouvPartie"   height="100%" width="100%" name="button" label="Nouvelle partie">
                         <interact onClick="startGame()" />
                     </control>
                 </panel>
+                <!-- +++++++++++++++++++++++++++++++++++++++ -->
                 
+                
+                <!-- Zone bouton Charger Partie  -->
                 <panel id="load" paddingTop="20%" align="center" height="8%" width="60%"  childLayout="vertical" visibleToMouse="true">                
                     <control paddingTop="10%" id="loadBtn"   height="100%" width="100%" name="button" label="Charger dern. sauvegarde">
                         <interact onClick="load()" />
                     </control>
                 </panel>
+                <!-- +++++++++++++++++++++++++++++++++++++++ -->
                 
-                
+                <!-- Zone bouton Hoster Partie LAN -->
                 <panel id="multi" paddingTop="20%" align="center" height="8%" width="60%"  childLayout="vertical" visibleToMouse="true">                
                     <control paddingTop="10%" id="loadBtn"   height="100%" width="100%" name="button" label="Hoster partie LAN">
                         <interact onClick="lanHost()" />
                     </control>
                 </panel>
+                <!-- +++++++++++++++++++++++++++++++++++++++ -->
                 
+                <!-- Zone bouton Rejoindre Partie LAN -->
                 <panel id="multi2" paddingTop="20%" align="center" height="8%" width="60%"  childLayout="vertical" visibleToMouse="true">                
                     <control paddingTop="10%" id="loadBtn"   height="100%" width="100%" name="button" label="Rejoindre partie LAN">
                         <interact onClick="lanJoin()" />
                     </control>
                 </panel>
+                <!-- +++++++++++++++++++++++++++++++++++++++ -->
                 
+                <!-- Padding Bottom de 20% -->
+                <panel id="padding" paddingTop="20%" align="center" height="8%" width="60%"  childLayout="vertical" visibleToMouse="true"></panel>
+                <!-- +++++++++++++++++++++++++++++++++++++++ -->
                 
-                
-                <panel id="padding" paddingTop="20%" align="center" height="8%" width="60%"  childLayout="vertical" visibleToMouse="true">                
-                    
-                </panel>
-                
+                <!-- Zone de bouton Quitter la partie -->
                 <panel id="exitgamezone" paddingTop="20%" align="center" height="8%" width="60%" childLayout="vertical" visibleToMouse="true">                
                     <control paddingTop="10%" id="btnExit"   height="100%" width="100%" name="button" label="Quitter">
                         <interact onClick="exit()" />
                     </control>
                 </panel>
-                
-                
+                <!-- +++++++++++++++++++++++++++++++++++++++ -->
+                                
             </panel>
+            <!-- +++++++++++++++++++++++++++++++++++++++ -->
       
+      
+            <!-- +++++++++++++++++++++++++++++++++++++++ -->
+            <!-- Panel de droite de l'ecran zone joueurs -->
+            <!-- +++++++++++++++++++++++++++++++++++++++ -->
             <panel id="panelDroit" height="100%" width="80%" align="right" valign="top" childLayout="center" visibleToMouse="true">
                 
-                <panel id="haut" height="3%" width="100%" align="right" valign="top" backgroundColor="#00000080" childLayout="horizontal" visibleToMouse="true">
-                    
-                </panel> 
-                        
+                <!-- Padding Bottom de 3% -->
+                <panel id="haut" height="3%" width="100%" align="right" valign="top" backgroundColor="#00000080" childLayout="horizontal" visibleToMouse="true"></panel> 
+                <!-- +++++++++++++++++++++++++++++++++++++++ -->        
                 
+                <!-- Zone du bas de l'ecran droit ou l'on place nos 4 zones joueurs -->
                 <panel id="bas" height="80%" width="100%" align="left" valign="top" paddingTop="3.7%"  childLayout="horizontal" visibleToMouse="true"> 
                    
+                    <!-- Zone J1 -->
                     <panel id="bas_1" height="100%" width="24%" backgroundColor="#0060ab4d" align="right" valign="top" childLayout="vertical" visibleToMouse="true">
                         <panel id="haut_1"  height="25%" width="80%" align="right" valign="top" childLayout="vertical" visibleToMouse="true">
                             <text align="center" text="Joueur 1" font="Fonts/sansitc.fnt"  color="#0060abff" /> 
@@ -70,13 +87,14 @@
                             <control paddingTop="5%" id="btnRandom1"   height="25%" width="80%" name="button" label="Aléatoire">
                                 <interact onClick="nickRandomJ1()" />
                             </control>
-                            
-                        </panel> 
-                    
-                    </panel>                    
-                    
-                    <panel id="spacer_1" height="100%" width="1%"  backgroundColor="#00000080" align="right" valign="top" childLayout="vertical" visibleToMouse="true">
+                        </panel>
                     </panel> 
+                    <!-- +++++++++++++++++++++++++++++++++++++++ --> 
+                                              
+                    <!-- Padding left de 1% -->
+                    <panel id="spacer_1" height="100%" width="1%"  backgroundColor="#00000080" align="right" valign="top" childLayout="vertical" visibleToMouse="true"></panel> 
+                    <!-- +++++++++++++++++++++++++++++++++++++++ -->
+                    
                     
                     <panel id="bas_2" height="100%" width="24%"  backgroundColor="#349b144d" align="right" valign="top" childLayout="vertical" visibleToMouse="true">
                         <panel id="haut_2"  height="25%" width="80%" align="right" valign="top" childLayout="vertical" visibleToMouse="true">
@@ -87,9 +105,13 @@
                             </control>
                         </panel> 
                     </panel> 
+                    <!-- +++++++++++++++++++++++++++++++++++++++ -->
                     
-                    <panel id="spacer_2" height="100%" width="1%"  backgroundColor="#00000080" align="right" valign="top" childLayout="vertical" visibleToMouse="true">
-                    </panel> 
+                    
+                    <!-- Padding left de 1% -->
+                    <panel id="spacer_2" height="100%" width="1%"  backgroundColor="#00000080" align="right" valign="top" childLayout="vertical" visibleToMouse="true"></panel> 
+                    <!-- +++++++++++++++++++++++++++++++++++++++ -->
+                    
                     
                     <panel id="bas_3" height="100%" width="24%"  backgroundColor="#eda0004d" align="right" valign="top" childLayout="vertical" visibleToMouse="true">
                         <panel id="haut_3" height="25%" width="80%" align="right" valign="top" childLayout="vertical" visibleToMouse="true">
@@ -99,10 +121,14 @@
                                 <interact onClick="nickRandomJ3()" />
                             </control>
                         </panel> 
-                    </panel> 
-                                        
-                    <panel id="spacer_3" height="100%" width="1%"  backgroundColor="#00000080" align="right" valign="top" childLayout="vertical" visibleToMouse="true">
-                    </panel> 
+                    </panel>
+                    <!-- +++++++++++++++++++++++++++++++++++++++ -->
+                     
+                          
+                    <!-- Padding left de 1% -->                                  
+                    <panel id="spacer_3" height="100%" width="1%"  backgroundColor="#00000080" align="right" valign="top" childLayout="vertical" visibleToMouse="true"></panel> 
+                    <!-- +++++++++++++++++++++++++++++++++++++++ -->
+                    
                     
                     <panel id="bas_4" height="100%" width="24%" align="right" backgroundColor="#c6000b4d" valign="top" childLayout="vertical" visibleToMouse="true">
                         <panel id="haut_4" height="25%" width="80%" align="right" valign="top" childLayout="vertical" visibleToMouse="true">
@@ -113,18 +139,32 @@
                             </control>
                         </panel> 
                     </panel> 
+                    <!-- +++++++++++++++++++++++++++++++++++++++ -->
                     
-                    <panel id="spacer_4" height="100%" width="2%"  backgroundColor="#00000080" align="right" valign="top" childLayout="vertical" visibleToMouse="true">
-                    </panel> 
-                </panel>   
+                    
+                    <!-- Padding left de 1% -->
+                    <panel id="spacer_4" height="100%" width="2%"  backgroundColor="#00000080" align="right" valign="top" childLayout="vertical" visibleToMouse="true"></panel> 
+                    <!-- +++++++++++++++++++++++++++++++++++++++ -->
+                    
+                    
+                </panel> 
+                <!-- +++++++++++++++++++++++++++++++++++++++ -->
+                
+                    
                 <panel id="barreDuBas" height="20%" width="100%" align="left" valign="bottom" backgroundColor="#00000080" childLayout="vertical" visibleToMouse="true">                
                     <control name="label" id="tips1" align="left" valign="bottom" text="Parfois quand je m'ennuie je vais dans le jardin, " font="Fonts/sansitc.fnt"  color="#ffffffff" /> 
                     <control name="label" id="tips2" align="left" valign="bottom" text="me couvre de terre et je me prends pour une carotte." font="Fonts/sansitc.fnt"  color="#ffffffff" />                 
                 </panel>  
-            </panel>            
+                <!-- +++++++++++++++++++++++++++++++++++++++ -->
+                
+            </panel> 
+            <!-- +++++++++++++++++++++++++++++++++++++++ -->          
              
         </layer>
+        <!-- +++++++++++++++++++++++++++++++++++++++ -->
+        
     </screen>
+    <!-- +++++++++++++++++++++++++++++++++++++++ -->
     
     
     
@@ -315,7 +355,17 @@
                     <effect>
                         <onActive name="textSize" startSize="1" endSize="1" oneShot="true"/>
                     </effect>
-                </text>                             
+                </text>  
+                
+                <panel width="86%"> 
+                </panel>
+            
+                <panel width="10%" height="80%" align="right"  valign="center" childLayout="center"> 
+                    <control  id="btnStop"   height="100%" width="100%" name="button" label="Finir l'action">
+                        <interact onClick="stopCurrentAction()" />
+                    </control>                      
+                </panel>                                
+                                                                                              
             </panel>
             
           
@@ -375,6 +425,15 @@
                         <onActive name="textSize" startSize="1" endSize="1" oneShot="true"/>
                     </effect>
                 </text>
+                
+                <panel width="86%"> 
+                </panel>
+            
+                <panel width="10%" height="80%" align="right"  valign="center"  childLayout="center"> 
+                    <control  id="btnStop"   height="100%" width="100%" name="button" label="Finir l'action">
+                        <interact onClick="stopCurrentAction()" />
+                    </control>                      
+                </panel>   
             </panel>
             
           
@@ -418,16 +477,24 @@
             
             <panel id="HudPanelBottom"  height="10%"    width="90%"    backgroundColor="#0060ab4d" align="left"  valign="bottom" childLayout="horizontal">
                 <panel width="2%"> </panel>
+                
                 <text id="nomJ1" align="left" textHAlign="left" textVAlign="center" valign="center" text="" font="Fonts/sansitc.fnt"  color="#eeeeeeff" >  
                     <effect>
                         <onActive name="textSize" startSize="1" endSize="1" oneShot="true"/>
                     </effect>
-                </text>                           
+                </text>    
+                 
+                <panel width="86%"> 
+                </panel>
+            
+                <panel width="10%" height="80%" align="right"  valign="center"  childLayout="center"> 
+                    <control  id="btnStop"   height="100%" width="100%" name="button" label="Finir l'action">
+                        <interact onClick="stopCurrentAction()" />
+                    </control>                      
+                </panel>                                          
+                                                                                                        
             </panel>
-            
-          
-            
-           
+                       
             <!-- Panel transparent de la console -->
             <panel id="HudPanel" height="33%" width="50%" align="left" valign="top" childLayout="vertical">                
                 <control id="console" name="nifty-console" width="100%" align="left" valign="top" visible="false" lines="15">
@@ -518,60 +585,106 @@
             <!-- Zones HUD des joueurs   -->
             <!-- +++++++++++++++++++++++++++++++++++++++ -->
            
-            <panel id="HudPanelTop"     height="5%"     width="100%"     align="center"  valign="top"    childLayout="horizontal"> 
-                <panel id="HudPanelTop4"     height="100%"     width="33.3%"     backgroundColor="#c6000b4d" align="left"  valign="center"    childLayout="horizontal"> 
-                    <panel width="5%"> </panel>
-                    <text id="nomJ4"  textHAlign="left" textVAlign="center" align="left" valign="center" text="" font="Fonts/sansitc.fnt"  color="#eeeeeeff" >
-                        <effect>
-                            <onActive name="textSize" startSize="1" endSize="0.7" oneShot="true"/>
-                        </effect>
-                    </text> 
+            <panel id="panelGauche" height="100%" width="20%" align="left" valign="top" backgroundColor="#00000080" childLayout="vertical" visibleToMouse="true">                
+                
+                <panel id="startgamezone" paddingTop="20%" align="center" height="8%" width="60%"  childLayout="vertical" visibleToMouse="true">                
+                    <control  id="btnNouvPartie"   height="100%" width="100%" name="button" label="Lancer la partie">
+                        <interact onClick="startGameMulti()" />
+                    </control>
+                </panel>
+                      
+                <panel id="HudPanelTop4"     height="24%"     width="25%" align="left"  valign="bottom"    childLayout="center">                   
+                    <control  id="btnMenu"   height="25%" width="80%" name="button" label="Retour à l'accueil">
+                        <interact onClick="backToMenu()" />
+                    </control>
+                </panel>                         
+                                                                         
+                <panel id="padding" paddingTop="20%" align="center" height="8%" width="60%"  childLayout="vertical" visibleToMouse="true">                
+                    
                 </panel>
                 
-                <panel id="HudPanelTop3"     height="100%"     width="33.3%"     backgroundColor="#eda0004d" align="left"  valign="center"    childLayout="horizontal"> 
-                    <panel width="5%"> </panel>
-                    <text id="nomJ3"   textHAlign="left" textVAlign="center" align="left" valign="center" text="" font="Fonts/sansitc.fnt"  color="#eeeeeeff" >
-                        <effect>
-                            <onActive name="textSize" startSize="1" endSize="0.7" oneShot="true"/>
-                        </effect>
-                    </text>
+                <panel id="exitgamezone" paddingTop="20%" align="center" height="8%" width="60%" childLayout="vertical" visibleToMouse="true">                
+                    <control paddingTop="10%" id="btnExit"   height="100%" width="100%" name="button" label="Quitter">
+                        <interact onClick="exit()" />
+                    </control>
+                </panel>
+                
+                
+            </panel>
+      
+            <panel id="panelDroit" height="100%" width="80%" align="right" valign="top" childLayout="center" visibleToMouse="true">
+                
+                <panel id="haut" height="3%" width="100%" align="right" valign="top" backgroundColor="#00000080" childLayout="horizontal" visibleToMouse="true">
+                    
+                </panel> 
+                        
+                
+                <panel id="bas" height="80%" width="100%" align="left" valign="top" paddingTop="3.7%"  childLayout="horizontal" visibleToMouse="true"> 
+                   
+                    <panel id="bas_1" height="100%" width="24%" backgroundColor="#0060ab4d" align="right" valign="top" childLayout="vertical" visibleToMouse="true">
+                        <panel id="haut_1"  height="25%" width="80%" align="right" valign="top" childLayout="vertical" visibleToMouse="true">
+                            <text align="center" text="Joueur 1" font="Fonts/sansitc.fnt"  color="#0060abff" /> 
+                            <control id="inputJ1" name="textfield" width="80%" text=""/>
+                            
+                            <control paddingTop="5%" id="btnRandom1"   height="25%" width="80%" name="button" label="Aléatoire">
+                                <interact onClick="nickRandomJ1()" />
+                            </control>
+                            
+                        </panel> 
+                    
+                    </panel>                    
+                    
+                    <panel id="spacer_1" height="100%" width="1%"  backgroundColor="#00000080" align="right" valign="top" childLayout="vertical" visibleToMouse="true">
+                    </panel> 
+                    
+                    <panel id="bas_2" height="100%" width="24%"  backgroundColor="#349b144d" align="right" valign="top" childLayout="vertical" visibleToMouse="true">
+                        <panel id="haut_2"  height="25%" width="80%" align="right" valign="top" childLayout="vertical" visibleToMouse="true">
+                            <text align="center"  text="Joueur 2" font="Fonts/sansitc.fnt"  color="#349b14ff" /> 
+                            <control id="inputJ2" name="textfield" width="80%" text=""/>
+                            <control paddingTop="5%" id="btnRandom2"   height="25%" width="80%" name="button" label="Aléatoire">
+                                <interact onClick="nickRandomJ2()" />
+                            </control>
+                        </panel> 
+                    </panel> 
+                    
+                    <panel id="spacer_2" height="100%" width="1%"  backgroundColor="#00000080" align="right" valign="top" childLayout="vertical" visibleToMouse="true">
+                    </panel> 
+                    
+                    <panel id="bas_3" height="100%" width="24%"  backgroundColor="#eda0004d" align="right" valign="top" childLayout="vertical" visibleToMouse="true">
+                        <panel id="haut_3" height="25%" width="80%" align="right" valign="top" childLayout="vertical" visibleToMouse="true">
+                            <text  align="center" text="Joueur 3" font="Fonts/sansitc.fnt"  color="#eda000ff" /> 
+                            <control id="inputJ3" name="textfield" width="80%" text=""/>
+                            <control paddingTop="5%" id="btnRandom3"   height="25%" width="80%" name="button" label="Aléatoire">
+                                <interact onClick="nickRandomJ3()" />
+                            </control>
+                        </panel> 
+                    </panel> 
+                                        
+                    <panel id="spacer_3" height="100%" width="1%"  backgroundColor="#00000080" align="right" valign="top" childLayout="vertical" visibleToMouse="true">
+                    </panel> 
+                    
+                    <panel id="bas_4" height="100%" width="24%" align="right" backgroundColor="#c6000b4d" valign="top" childLayout="vertical" visibleToMouse="true">
+                        <panel id="haut_4" height="25%" width="80%" align="right" valign="top" childLayout="vertical" visibleToMouse="true">
+                            <text  align="center" text="Joueur 4" font="Fonts/sansitc.fnt"  color="#ff2222ff" /> 
+                            <control id="inputJ4" name="textfield" width="80%" text=""/>
+                            <control paddingTop="5%" id="btnRandom4"   height="25%" width="80%" name="button" label="Aléatoire">
+                                <interact onClick="nickRandomJ4()" />
+                            </control>
+                        </panel> 
+                    </panel> 
+                    
+                    <panel id="spacer_4" height="100%" width="2%"  backgroundColor="#00000080" align="right" valign="top" childLayout="vertical" visibleToMouse="true">
+                    </panel> 
+                </panel>   
+                <panel id="barreDuBas" height="20%" width="100%" align="left" valign="bottom" backgroundColor="#00000080" childLayout="vertical" visibleToMouse="true">                
+                    <control name="label" id="tips1" align="left" valign="bottom" text="Parfois quand je m'ennuie je vais dans le jardin, " font="Fonts/sansitc.fnt"  color="#ffffffff" /> 
+                    <control name="label" id="tips2" align="left" valign="bottom" text="me couvre de terre et je me prends pour une carotte." font="Fonts/sansitc.fnt"  color="#ffffffff" />                 
                 </panel>  
-                
-                <panel id="HudPanelTop2"     height="100%"     width="33.3%"     backgroundColor="#349b144d" align="left"  valign="center"    childLayout="horizontal"> 
-                    <panel width="5%"> </panel>
-                    <text id="nomJ2"  textHAlign="left" textVAlign="center"   valign="center" align="left" text="" font="Fonts/sansitc.fnt"  color="#eeeeeeff" >
-                        <effect>
-                            <onActive name="textSize" startSize="1" endSize="0.7" oneShot="true"/>
-                        </effect>
-                    </text> 
-                </panel>                
-                              
-                
-            </panel>  
-                      
-            <panel id="HudPanelRight"   height="95%"    width="10%"      backgroundColor="#0060ab4d" align="right"   valign="bottom"    childLayout="horizontal"> 
-                
-            </panel>
-            
-            <panel id="HudPanelBottom"  height="10%"    width="90%"    backgroundColor="#0060ab4d" align="left"  valign="bottom" childLayout="horizontal">
-                <panel width="2%"> </panel>
-                <text id="nomJ1" align="left" textHAlign="left" textVAlign="center" valign="center" text="" font="Fonts/sansitc.fnt"  color="#eeeeeeff" >
-                    <effect>
-                        <onActive name="textSize" startSize="1" endSize="1" oneShot="true"/>
-                    </effect>
-                </text>                             
-            </panel>
-            
-          
-            
-           
-            <!-- Panel transparent de la console -->
-            <panel id="HudPanel" height="33%" width="50%" align="left" valign="top" childLayout="vertical">                
-                <control id="console" name="nifty-console" width="100%" align="left" valign="top" visible="false" lines="15">
-                </control>  
-            </panel>
+            </panel>   
         </layer>
     </screen>
+    
+    
     
     
     <!-- +++++++++++++++++++++++++++++++++++++++ -->
@@ -635,18 +748,14 @@
                         <interact onClick="LanConnect()" />
                     </control>
                     
-                    
                     <panel id="HudPanelTop4"     height="10%"     width="100%" align="left"  valign="center"    childLayout="vertical"> </panel>
-
                 </panel>
                 
-                 <panel id="HudPanelTop4"     height="24%"     width="25%" align="left"  valign="bottom"    childLayout="center">                   
+                <panel id="HudPanelTop4"     height="24%"     width="25%" align="left"  valign="bottom"    childLayout="center">                   
                     <control  id="btnMenu"   height="25%" width="80%" name="button" label="Retour à l'accueil">
                         <interact onClick="backToMenu()" />
                     </control>
                 </panel> 
-                
-                
             </panel> 
         </layer>
     </screen>

@@ -40,6 +40,16 @@ public class GameEntity {
     public final static int ACTION_WHALE_NUKE = 1;
     public final static int ACTION_SEASERPENT_CRUSH = 2;
     public final static int ACTION_PLAYER_ESCAPE = 3;
+    
+    public final static int TYPE_NULL = 0;
+    public final static int TYPE_PLAYERTOKEN = 1;
+    public final static int TYPE_BOAT = 2;
+    public final static int TYPE_SEASERPENT = 3;
+    public final static int TYPE_SHARK = 4;
+    public final static int TYPE_WHALE = 5;
+    
+    private static int ENTITY_UNIQUE_ID = 0;
+    
     private static final Logger logger = Logger.getGlobal();
     /**
      * Nom de l'entité
@@ -61,8 +71,18 @@ public class GameEntity {
      * @param tile Tile ou se place l'entité
      */
     public GameEntity(final String name) {
-        mName = name;
+        this(name, true);
+    }
+    
+    public GameEntity(final String name, final boolean appendUniqueID) {
+        if (appendUniqueID) {
+            mName = name + "_" + Integer.toString(ENTITY_UNIQUE_ID);
+        } else {
+            mName = name;
+        }
         mIsDead = false;
+        
+        ENTITY_UNIQUE_ID++;
     }
 
     /**
@@ -83,6 +103,11 @@ public class GameEntity {
         // On se déplace, dans un premier temps
         if (mTile != null) {
             mTile.removeEntity(this);
+        }
+        
+        // On s'assure qu'on soit bien enregistré sur le board
+        if (logic != null && logic.getBoard() != null) {
+            logic.getBoard().putEntity(this);
         }
 
         tile.addEntity(this);
@@ -143,6 +168,10 @@ public class GameEntity {
     //--------------------------------------------------------------------------
     public GameTile getTile() {
         return mTile;
+    }
+    
+    public String getName() {
+        return mName;
     }
     //--------------------------------------------------------------------------
 }

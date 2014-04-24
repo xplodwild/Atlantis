@@ -55,23 +55,25 @@ public class Player {
      * @param name Pseudo
      * @param number Numéro
      */
-    public Player(final String name, final int number) {
+    public Player(final String name, final int number, final boolean createTokens) {
         mName = name;
         mTokens = new ArrayList<PlayerToken>();
         mActionTiles = new ArrayList<TileAction>();
         mNumber = number;
 
-        // On génère les 10 tokens par joueur
-        mTokens.add(new PlayerToken(this, 6));
-        mTokens.add(new PlayerToken(this, 5));
-        mTokens.add(new PlayerToken(this, 4));
-        mTokens.add(new PlayerToken(this, 3));
-        mTokens.add(new PlayerToken(this, 3));
-        mTokens.add(new PlayerToken(this, 2));
-        mTokens.add(new PlayerToken(this, 2));
-        mTokens.add(new PlayerToken(this, 1));
-        mTokens.add(new PlayerToken(this, 1));
-        mTokens.add(new PlayerToken(this, 1));
+        if (createTokens) {
+            // On génère les 10 tokens par joueur
+            mTokens.add(new PlayerToken(this, 6));
+            mTokens.add(new PlayerToken(this, 5));
+            mTokens.add(new PlayerToken(this, 4));
+            mTokens.add(new PlayerToken(this, 3));
+            mTokens.add(new PlayerToken(this, 3));
+            mTokens.add(new PlayerToken(this, 2));
+            mTokens.add(new PlayerToken(this, 2));
+            mTokens.add(new PlayerToken(this, 1));
+            mTokens.add(new PlayerToken(this, 1));
+            mTokens.add(new PlayerToken(this, 1));
+        }
     }
 
     /**
