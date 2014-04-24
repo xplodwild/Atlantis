@@ -109,7 +109,7 @@ public class Game3DLogic extends GameLogic {
         mTileRequestHistory = new ArrayList<TilePickRequest>();
         mCanCancelPickingAction = false;
     }
-    
+
     public Game3DRenderer getRenderer() {
         return mRenderer;
     }
@@ -119,7 +119,7 @@ public class Game3DLogic extends GameLogic {
         super.serializeEssentialData(data);
         data.writeBoolean(mPickedEntity != null);
         if (mPickedEntity != null) data.writeUTF(mPickedEntity.getName());
-        
+
     }
 
     @Override
@@ -129,8 +129,8 @@ public class Game3DLogic extends GameLogic {
             mPickedEntity = getBoard().getEntity(data.readUTF());
         }
     }
-    
-    
+
+
     /**
      * Demarre le renderer graphique
      */
@@ -1258,5 +1258,20 @@ public class Game3DLogic extends GameLogic {
     @Override
     public void onGameFinished() {
         // Cristian, affiche les scores!
+    }
+
+    @Override
+    public void finishCurrentAction() {
+        // On indique au tour de continuer
+        if (getCurrentTurn() != null && getCurrentTurn().canFinishCurrentAction()) {
+            // On reset le picking
+            mPickedEntity = null;
+            mCanCancelPickingAction = false;
+            mRenderer.getInputListener().forceResetRequest();
+
+            getCurrentTurn().finishCurrentAction();
+        } else {
+            AudioManager.getDefault().playSound(AudioConstants.Path.ERROR);
+        }
     }
 }

@@ -393,5 +393,10 @@ public abstract class GameLogic implements GameTurnListener {
      * Quand la partie est terminée
      */
     public abstract void onGameFinished();
+
+    /**
+     * Termine l'action en cours du tour
+     */
+    public abstract void finishCurrentAction();
     //--------------------------------------------------------------------------
 }
