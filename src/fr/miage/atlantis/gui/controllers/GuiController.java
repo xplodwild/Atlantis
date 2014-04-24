@@ -124,6 +124,33 @@ public class GuiController implements ScreenController {
         //Ne rien faire si on ne peut pas
     }
 
+    
+    /**
+     * Demmarre une nouvellle partie en reseau et accede au lobby
+     */
+    public void startGameMulti(){
+        /*
+         TextField fieldJ1 = this.nifty.getScreen("HostLan").findElementByName("inputJ1").getNiftyControl(TextField.class);
+         String nick;
+         
+         if(fieldJ1.getRealText().isEmpty()){
+             nick=this.nameRandomizer.get(0);
+         }else{
+             nick=fieldJ1.getRealText();
+         }
+                  
+         players=new String[1];         
+         players[0] = nick;         
+         
+         fieldJ1 = this.nifty.getScreen("lobbyMulti").findElementByName("nomJ1").getNiftyControl(TextField.class);
+         fieldJ1.setText(nick);
+         
+         this.g3rdr.getLogic().prepareGame(players, true);
+         */
+         this.nifty.gotoScreen("lobbyMulti");
+    }
+    
+    
     /**
      * Demarre une nouvelle partie avec les pseudos données ou des pseudos
      * aléatoires si non renseigné.
@@ -680,6 +707,18 @@ public class GuiController implements ScreenController {
     public void nickRandomMulti() {
         this.nifty.getScreen("start").findElementByName("btnRandom4").hide();
         TextField fieldMulti = this.nifty.getScreen("JoinLan").findElementByName("inputNick").getNiftyControl(TextField.class);
+        String tmp = this.nameRandomizer.get(new Random().nextInt(this.nameRandomizer.size()));
+        this.nameRandomizer.remove(tmp);
+        fieldMulti.setText(tmp);
+    }
+    
+    /**
+     * Remplis le champ pseudo pour le multijoueur LAN avec un pseudo aléatoire
+     * *
+     */
+    public void nickRandomMultiHost() {
+        this.nifty.getScreen("HostLan").findElementByName("btnRandom1").hide();
+        TextField fieldMulti = this.nifty.getScreen("HostLan").findElementByName("inputJ1").getNiftyControl(TextField.class);
         String tmp = this.nameRandomizer.get(new Random().nextInt(this.nameRandomizer.size()));
         this.nameRandomizer.remove(tmp);
         fieldMulti.setText(tmp);
