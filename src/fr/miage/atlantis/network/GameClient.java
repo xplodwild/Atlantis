@@ -34,6 +34,7 @@ import fr.miage.atlantis.network.messages.MessagePlayerJoined;
 import fr.miage.atlantis.network.messages.MessageSyncBoard;
 import fr.miage.atlantis.network.messages.MessageTurnEvent;
 import java.io.IOException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -97,7 +98,9 @@ public class GameClient implements ClientStateListener, MessageListener {
         } else if (m instanceof MessagePlayerJoined) {
             handleMessagePlayerJoined((MessagePlayerJoined) m);
         } else if (m instanceof MessageGameStart) {
-            // TODO: Le jeu commence, il faut passer vers le board
+            handleMessageGameStart((MessageGameStart) m);
+        } else if (m instanceof MessageSyncBoard) {
+            handleMessageSyncBoard((MessageSyncBoard) m);
         }
     }
 
@@ -105,9 +108,31 @@ public class GameClient implements ClientStateListener, MessageListener {
         return this.mClient;
     }
 
+    private void log(final String msg) {
+        Logger.getGlobal().info(msg);
+    }
+
     private void handleMessagePlayerJoined(MessagePlayerJoined m) {
-        Logger.getGlobal().info("Player joined game: " + m.getName());
+        log("Player joined game: " + m.getName());
         mGuiController.onPlayerConnected(m.getName());
     }
+
+    private void handleMessageGameStart(MessageGameStart m) {
+        log("Game is starting!");
+        mGuiController.onRemoteGameStart();
+    }
+
+    private void handleMessageSyncBoard(MessageSyncBoard m) {
+        log("Host is sending the board!");
+        // We (re)prepare the game
+        mLogic.prepareGame(mGuiController.getPlayers(), false);
+
+        try {
+            m.readBoard(mLogic);
+        } catch (IOException ex) {
+            log("Error!");
+        }
+    }
+
 
 }

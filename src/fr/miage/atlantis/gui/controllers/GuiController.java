@@ -107,6 +107,10 @@ public class GuiController implements ScreenController {
         this.g3rdr = g3d;
     }
 
+    public String[] getPlayers() {
+        return players;
+    }
+
     /**
      * Arrete l'action en cours lors d'une partie
      */
@@ -124,6 +128,30 @@ public class GuiController implements ScreenController {
     }
 
     public void startGameMulti() {
+    }
+
+    public void onRemoteGameStart() {
+        switch (players.length) {
+            case 2:
+                GuiController.mScreenType = 2;
+                this.nifty.gotoScreen("inGameHud2J");
+                break;
+            case 3:
+                GuiController.mScreenType = 3;
+                this.nifty.gotoScreen("inGameHud3J");
+                break;
+            case 4:
+                GuiController.mScreenType = 4;
+                this.nifty.gotoScreen("inGameHud");
+                break;
+        }
+
+        this.updatePlayerName();
+        this.g3rdr.getLogic().startGame();
+
+        Camera cam = g3rdr.getCamera();
+        CamConstants.moveAboveBoard(g3rdr.getCameraNode(), cam);
+        AudioManager.getDefault().setMainMusic(false);
     }
 
     /**
