@@ -5,7 +5,9 @@
 package fr.miage.atlantis.board;
 
 import fr.miage.atlantis.Game3DLogic;
+import fr.miage.atlantis.entities.SeaSerpent;
 import fr.miage.atlantis.entities.Shark;
+import fr.miage.atlantis.entities.Whale;
 import fr.miage.atlantis.logic.GameLogic;
 import java.util.Map;
 import java.util.Set;
@@ -341,9 +343,10 @@ public class GameBoardTest {
         System.out.println("hasEntityOfType");   
         GameLogic logic = new NullGameLogic();
         GameBoard board = new GameBoard();      
-        Shark requin = new Shark();
-        GameTile tile = board.getTileSet().get("Water #37");
+                      
         /**tester avec aucune entité dans le jeu **/
+        GameTile tile = board.getTileSet().get("Water #37");
+        Shark requin = new Shark();
         requin.moveToTile(logic, tile);   
         assertTrue(board.hasEntityOfType(Shark.class));
         
@@ -352,7 +355,62 @@ public class GameBoardTest {
         assertFalse(board.hasEntityOfType(Shark.class));
         
         /**tester avec une entité de chaque **/
+        GameTile tile1 = board.getTileSet().get("Water #36");
+        GameTile tile2 = board.getTileSet().get("Water #35");
+        SeaSerpent serpent = new SeaSerpent();
+        Whale baleine = new Whale();
+        requin.moveToTile(logic, tile);
+        serpent.moveToTile(logic, tile1);
+        baleine.moveToTile(logic, tile2);
+        assertTrue(board.hasEntityOfType(Shark.class));
+        assertTrue(board.hasEntityOfType(SeaSerpent.class));
+        assertTrue(board.hasEntityOfType(Whale.class));
+        
+        //On tue une entité on verifie qu'elle n'est plus là
+        tile2.removeEntity(baleine);
+        assertTrue(board.hasEntityOfType(Shark.class));
+        assertTrue(board.hasEntityOfType(SeaSerpent.class));
+        assertFalse(board.hasEntityOfType(Whale.class));
+             
         /** tester avec plusieurs entité de chaque **/
+        Shark req = new Shark();
+        Whale bal = new Whale();
+        SeaSerpent serp = new SeaSerpent();
+        SeaSerpent serpentDeMer = new SeaSerpent();
+        GameTile tileBal = board.getTileSet().get("Water #37");
+        GameTile tileReq = board.getTileSet().get("Water #35");
+        GameTile tileSerp = board.getTileSet().get("Water #36");
+        GameTile tileSerpent = board.getTileSet().get("Water #37");
+        
+        baleine.moveToTile(logic, tile);
+        bal.moveToTile(logic, tileBal);
+        req.moveToTile(logic, tileReq);
+        serp.moveToTile(logic, tileSerp);
+        serpentDeMer.moveToTile(logic, tileSerpent);
+        
+        //on vérifie qu'il y'a bien les entités sur la board
+        assertTrue(board.hasEntityOfType(Shark.class));
+        assertTrue(board.hasEntityOfType(SeaSerpent.class));
+        assertTrue(board.hasEntityOfType(Whale.class));
+        
+        //on supprime une entité, en sachant qu'il en reste sur la board et on vérifie
+        tileSerp.removeEntity(serp);
+        tile.removeEntity(baleine);
+        tile.removeEntity(requin);
+        
+        assertTrue(board.hasEntityOfType(Shark.class));
+        assertTrue(board.hasEntityOfType(SeaSerpent.class));
+        assertTrue(board.hasEntityOfType(Whale.class));
+        
+        //on supprime toutes les entités et on vérifie qu'il reconnait aucun type
+        tileSerpent.removeEntity(serpentDeMer);
+        tile1.removeEntity(serpent);
+        tileBal.removeEntity(bal);
+        tileReq.removeEntity(req);
+        
+        assertFalse(board.hasEntityOfType(Shark.class));
+        assertTrue(board.hasEntityOfType(SeaSerpent.class));
+        assertFalse(board.hasEntityOfType(Whale.class));
        
              
     }
