@@ -28,6 +28,7 @@ import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.board.MountainTile;
 import fr.miage.atlantis.board.WaterTile;
 import fr.miage.atlantis.entities.GameEntity;
+import fr.miage.atlantis.entities.SeaSerpent;
 import fr.miage.atlantis.logic.GameLogic;
 import fr.miage.atlantis.logic.GameTurn;
 import java.io.ByteArrayInputStream;
@@ -110,6 +111,11 @@ public class MessageSyncBoard extends AbstractMessage {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         DataOutputStream data = new DataOutputStream(baos);
 
+        // On créé les 5 seaserpent, puisque c'est les seules entités par défaut qu'on doit
+        // absolument avoir
+        for (int i = 0; i < 5; i++) {
+            board.putEntity(new SeaSerpent());
+        }
 
         // Nombre de tiles dans le board
         Map<String, GameTile> tiles = board.getTileSet();
@@ -140,5 +146,7 @@ public class MessageSyncBoard extends AbstractMessage {
         for (GameTile tile : tilesToSerialize) {
             tile.serializeTo(data);
         }
+
+        mData = baos.toByteArray();
     }
 }
