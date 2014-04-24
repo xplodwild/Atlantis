@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Random;
+import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -162,27 +163,32 @@ public class GuiController implements ScreenController {
     }
 
     public void onRemoteGameStart() {
-        switch (players.length) {
-            case 2:
-                GuiController.mScreenType = 2;
-                this.nifty.gotoScreen("inGameHud2J");
-                break;
-            case 3:
-                GuiController.mScreenType = 3;
-                this.nifty.gotoScreen("inGameHud3J");
-                break;
-            case 4:
-                GuiController.mScreenType = 4;
-                this.nifty.gotoScreen("inGameHud");
-                break;
-        }
+        this.g3rdr.runOnMainThread(new Callable<Void>() {
+            public Void call() {
+                switch (players.length) {
+                    case 2:
+                        GuiController.mScreenType = 2;
+                        nifty.gotoScreen("inGameHud2J");
+                        break;
+                    case 3:
+                        GuiController.mScreenType = 3;
+                        nifty.gotoScreen("inGameHud3J");
+                        break;
+                    case 4:
+                        GuiController.mScreenType = 4;
+                        nifty.gotoScreen("inGameHud");
+                        break;
+                }
 
-        this.updatePlayerName();
-        this.g3rdr.getLogic().startGame();
+                updatePlayerName();
 
-        Camera cam = g3rdr.getCamera();
-        CamConstants.moveAboveBoard(g3rdr.getCameraNode(), cam);
-        AudioManager.getDefault().setMainMusic(false);
+                g3rdr.getLogic().startGame();
+                Camera cam = g3rdr.getCamera();
+                CamConstants.moveAboveBoard(g3rdr.getCameraNode(), cam);
+                AudioManager.getDefault().setMainMusic(false);
+                return null;
+            }
+        });
     }
 
     /**
