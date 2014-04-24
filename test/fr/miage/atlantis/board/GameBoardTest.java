@@ -5,6 +5,7 @@
 package fr.miage.atlantis.board;
 
 import fr.miage.atlantis.Game3DLogic;
+import fr.miage.atlantis.entities.Shark;
 import fr.miage.atlantis.logic.GameLogic;
 import java.util.Map;
 import java.util.Set;
@@ -214,6 +215,7 @@ public class GameBoardTest {
 
     /**
      * Test of placeTileAtTheRightOf method, of class GameBoard.
+     * on vérifie que chaque tile inséré correspond à la bonne tile
      */
     @Test
     public void testPlaceTileAtTheRightOf() {
@@ -228,7 +230,6 @@ public class GameBoardTest {
             
         assertEquals(tile.getRightTile(), newtile);
         assertEquals(newtile.getLeftTile(),tile);
-        
         
         tile = tile.getRightBottomTile();
         assertEquals(tile.getRightUpperTile(), newtile);
@@ -267,7 +268,6 @@ public class GameBoardTest {
         tile = tile.getRightBottomTile();
         tile = tile.getLeftBottomTile();
         assertEquals(tile.getLeftUpperTile(), newtile);
-
         assertEquals(newtile.getRightBottomTile(), tile);
 
     }
@@ -339,15 +339,22 @@ public class GameBoardTest {
     @Test
     public void testHasEntityOfType() {
         System.out.println("hasEntityOfType");   
+        GameLogic logic = new NullGameLogic();
+        GameBoard board = new GameBoard();      
+        Shark requin = new Shark();
+        GameTile tile = board.getTileSet().get("Water #37");
         /**tester avec aucune entité dans le jeu **/
+        requin.moveToTile(logic, tile);   
+        assertTrue(board.hasEntityOfType(Shark.class));
+        
+        //on supprime l'entité et on regarde qu'il n'y a pas d'entité sur le plateau
+        tile.removeEntity(requin);
+        assertFalse(board.hasEntityOfType(Shark.class));
+        
         /**tester avec une entité de chaque **/
         /** tester avec plusieurs entité de chaque **/
-        GameBoard instance = new GameBoard();
-        Class type = null;
-        boolean expResult = false;
-        boolean result = instance.hasEntityOfType(type);
-        assertEquals(expResult, result);
-        
+       
+             
     }
 
     /**
