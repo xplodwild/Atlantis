@@ -169,8 +169,10 @@ public class GameHost implements ConnectionListener, MessageListener<HostedConne
 
         Collection<String> players = mConnectionToName.values();
         for (String player : players) {
-            msg = new MessagePlayerJoined(player);
-            source.send(msg);
+            if (player != null) {
+                msg = new MessagePlayerJoined(player);
+                source.send(msg);
+            }
         }
     }
 
