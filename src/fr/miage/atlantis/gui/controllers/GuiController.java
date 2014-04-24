@@ -30,7 +30,7 @@ import java.util.logging.Logger;
 
 /**
  * Controlleur implémentant les fonction appelées par les éléments du GUI
- * 
+ *
  * @author Atlantis Team
  */
 public class GuiController implements ScreenController {
@@ -39,46 +39,46 @@ public class GuiController implements ScreenController {
      * Renderer du jeu
      */
     private Game3DRenderer g3rdr;
-    
+
     /**
      * Objet NiftyGui
      */
     private Nifty nifty;
-    
+
     /**
      * Ecran courant
      */
     private Screen screen;
-    
+
     /**
      * Liste de Pseudo aléatoire
      */
     private ArrayList<String> nameRandomizer;
-    
+
     /**
      * Liste des joueurs
      */
     private String[] players;
-    
+
     /**
      * Type de screen pour la partie en cours (2 / 3 / 4 joueurs)
      */
     private static int mScreenType;
-    
+
     /**
      * Etat de la musique
      */
     private boolean musicState;
-    
+
     /**
      * Etat des autres sons
      */
     private boolean soundState;
 
-    
+
     /**
      * Constructeur du Controlleur
-     * 
+     *
      * @param g3d Renderer du jeu
      */
     public GuiController(Game3DRenderer g3d) {
@@ -203,28 +203,28 @@ public class GuiController implements ScreenController {
      */
     public void lanHost(){
         // Hébergement du serveur: On devient l'host et on se connecte à nous même
-        GameHost host = new GameHost(g3rdr.getLogic());
+        GameHost host = new GameHost(g3rdr.getLogic(), this);
         try {
             host.startListening();
         } catch (IOException ex) {
             Logger.getGlobal().log(Level.SEVERE, "Cannot start listening on the game server", ex);
         }
-        
+
         //Se connecte sur le serveur crée en local
         lanConnectImpl("127.0.0.1");
-        
+
         //Bouge sur l'ecran lobby multijoueur    @TODO : Réaliser l'ecran
         this.nifty.gotoScreen("HostLan");
-    }  
-    
-    
-     
+    }
+
+
+
     /**
      * Fonction appelée une fois que les champs de l'ecran pour rejoindre une
      * partie lan sont remplis.
      */
     public void lanConnect(){
-        
+
         TextField ip = this.nifty.getScreen("JoinLan").findElementByName("inputIP").getNiftyControl(TextField.class);
         TextField nick = this.nifty.getScreen("JoinLan").findElementByName("inputNick").getNiftyControl(TextField.class);
 
@@ -232,37 +232,37 @@ public class GuiController implements ScreenController {
         String nickname = nick.getRealText();
 
         boolean connected=this.lanConnectImpl(ipServ);
-        
+
         if(connected){
              this.nifty.gotoScreen("LobbyMultijoueur");
         }else{
             this.nifty.gotoScreen("ErrorConnect");
         }
     }
-    
-    
+
+
     /**
      * Connexion effective a un serveur de jeu en local
      * @param ipAddress IP au serveur a laquelle se connecter
-     * @return True or false si la connexion est opérationnelle 
+     * @return True or false si la connexion est opérationnelle
      */
     private boolean lanConnectImpl(final String ipAddress) {
-        
+
         boolean retour = false;
-        
+
         GameClient gameClient = new GameClient(g3rdr.getLogic());
         try {
             gameClient.connect(ipAddress);
             retour = true;
         } catch (IOException ex) {
-            
+
             Logger.getLogger(GuiController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         return retour;
     }
-     
-    
+
+
 
     /**
      * Redemarre le jeu en cours (avec les memes joueurs
@@ -302,8 +302,8 @@ public class GuiController implements ScreenController {
         }
     }
 
-    
-    
+
+
     /**
      * Désactive tout les sons du jeu
      *
@@ -403,12 +403,12 @@ public class GuiController implements ScreenController {
     public void load() {
         //Si le fichier existe
         //charge
-        //sinon 
+        //sinon
         //rien ou nouvelle partie ou disable le button(à debattre)
 
 
         //@TODO : Verifier pourquoi ca ne clear pas le board ?!
-        
+
         Camera cam = g3rdr.getCamera();
         this.g3rdr.getLogic().prepareGame(players, true);
 
@@ -421,10 +421,10 @@ public class GuiController implements ScreenController {
              */
             loader.loadFromFile(g3rdr.getLogic(), "./save.atlantis");
 
-            
 
-            
-            
+
+
+
             Player[] logicPlayers = g3rdr.getLogic().getPlayers();
             players = new String[logicPlayers.length];
             int i = 0;
@@ -432,12 +432,12 @@ public class GuiController implements ScreenController {
                 players[i] = p.getName();
                 i++;
             }
-            
+
             switch(logicPlayers.length){
                 case 2:
                     GuiController.mScreenType=2;
                     this.nifty.gotoScreen("inGameHud2J");
-                    
+
                     break;
                 case 3:
                     GuiController.mScreenType=3;
@@ -450,18 +450,18 @@ public class GuiController implements ScreenController {
             }
 
             this.cleanPlayerName();
-            
+
             this.updatePlayerName();
 
             this.initHudAfterGameLoad();
-            
-            
+
+
             CamConstants.moveAboveBoard(g3rdr.getCameraNode(), cam);
-            
+
         } catch (IOException ex) {
             Logger.getGlobal().log(Level.SEVERE, "Error while loading game!", ex);
         }
-        
+
         CamConstants.moveAboveBoard(g3rdr.getCameraNode(), cam);
     }
 
@@ -485,9 +485,9 @@ public class GuiController implements ScreenController {
         /*
          boolean gameOver = this.g3rdr.getLogic().isFinished();
          if (!gameOver) {
-           
+
          this.save();
-         }        
+         }
          */
 
         System.exit(0);
@@ -802,7 +802,7 @@ public class GuiController implements ScreenController {
 
 
 
-            //PARTIE A 2 JOUEURS***********************************************/ 
+            //PARTIE A 2 JOUEURS***********************************************/
 
             case 2:
                 //Lie les pseudos a leurs couleurs.
@@ -834,7 +834,7 @@ public class GuiController implements ScreenController {
 
 
 
-            //PARTIE A 3 JOUEURS***********************************************/    
+            //PARTIE A 3 JOUEURS***********************************************/
 
             case 3:
                 playerAndColor.put(plr[0].getName(), colorP1);
@@ -895,7 +895,7 @@ public class GuiController implements ScreenController {
 
 
 
-            //PARTIE A 4 JOUEURS***********************************************/ 
+            //PARTIE A 4 JOUEURS***********************************************/
 
             //PARTIE A 4 JOUEURS***********************************************/
 
@@ -988,5 +988,24 @@ public class GuiController implements ScreenController {
 
                 break;
         }
+    }
+
+    public void onPlayerConnected(final String name) {
+        String[] newPlayers = new String[players == null ? 1 : players.length + 1];
+        if (players != null) {
+            int i = 0;
+            for (String s : players) {
+                newPlayers[i] = players[i];
+                i++;
+            }
+        }
+        newPlayers[newPlayers.length - 1] = name;
+
+        players = newPlayers;
+        updatePlayerName();
+    }
+
+    public void startNetworkGame() {
+        // TODO
     }
 }
