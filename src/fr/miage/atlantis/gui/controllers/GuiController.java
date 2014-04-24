@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package fr.miage.atlantis.gui.controllers;
 
 import com.jme3.renderer.Camera;
@@ -10,31 +6,81 @@ import de.lessvoid.nifty.controls.Button;
 import de.lessvoid.nifty.controls.Label;
 import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.elements.render.PanelRenderer;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
-
+import de.lessvoid.nifty.tools.Color;
+import fr.miage.atlantis.GameSaver;
+import fr.miage.atlantis.Player;
 import fr.miage.atlantis.audio.AudioConstants;
 import fr.miage.atlantis.audio.AudioManager;
-
-
 import fr.miage.atlantis.graphics.CamConstants;
 import fr.miage.atlantis.graphics.Game3DRenderer;
+import fr.miage.atlantis.network.GameClient;
+import fr.miage.atlantis.network.GameHost;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Random;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
+/**
+ * Controlleur implémentant les fonction appelées par les éléments du GUI
+ *
+ * @author Atlantis Team
+ */
 public class GuiController implements ScreenController {
 
+    /**
+     * Renderer du jeu
+     */
     private Game3DRenderer g3rdr;
+
+    /**
+     * Objet NiftyGui
+     */
     private Nifty nifty;
+
+    /**
+     * Ecran courant
+     */
     private Screen screen;
+
+    /**
+     * Liste de Pseudo aléatoire
+     */
     private ArrayList<String> nameRandomizer;
+
+    /**
+     * Liste des joueurs
+     */
     private String[] players;
+
+    /**
+     * Type de screen pour la partie en cours (2 / 3 / 4 joueurs)
+     */
     private static int mScreenType;
+
+    /**
+     * Etat de la musique
+     */
     private boolean musicState;
+
+    /**
+     * Etat des autres sons
+     */
     private boolean soundState;
 
+
+    /**
+     * Constructeur du Controlleur
+     *
+     * @param g3d Renderer du jeu
+     */
     public GuiController(Game3DRenderer g3d) {
         super();
         this.g3rdr = g3d;
@@ -68,6 +114,22 @@ public class GuiController implements ScreenController {
 
     public void set3DRenderer(Game3DRenderer g3d) {
         this.g3rdr = g3d;
+    }
+
+    /**
+     * Arrete l'action en cours lors d'une partie
+     */
+    public void stopCurrentAction() {
+        if (this.g3rdr == null) {
+            Logger.getGlobal().severe("Game3DRenderer is null!");
+            return;
+        }
+        if (this.g3rdr.getLogic() == null) {
+            Logger.getGlobal().severe("Game3DRenderer's logic is null!");
+            return;
+        }
+
+        this.g3rdr.getLogic().finishCurrentAction();
     }
 
     /**
@@ -133,7 +195,7 @@ public class GuiController implements ScreenController {
 
             this.updatePlayerName();
 
-            this.g3rdr.getLogic().prepareGame(players);
+            this.g3rdr.getLogic().prepareGame(players, true);
             this.g3rdr.getLogic().startGame();
 
             Camera cam = g3rdr.getCamera();
@@ -143,41 +205,73 @@ public class GuiController implements ScreenController {
 
     }
 
+
+    /**
+     * Fonction appelée lorsqu'on hoste une nouvelle partie sur le réseau local
+     */
     public void lanHost(){
-        /**
-         * INIT UN SERVEUR ICI
-         */
-        
-        /**
-         * Se connecte a son propre serveur
-         */
-        
-        
-        
-    }  
-    
-     public void lanJoin(){
-        
-         /**
-          * Swappe sur un screen ou on entre une adresse IP et un Nick joueur.
-          */
-        
-         /**Si connection OK , screen de menu de jeu Sinon , screen erreur connection*/
-        
-         
-         this.nifty.gotoScreen("JoinLan");
-    }  
-     
-     
-    public void lanConnect(){
-        
-        
-        
-        
-        this.nifty.gotoScreen("ErrorConnect");
+        // Hébergement du serveur: On devient l'host et on se connecte à nous même
+        GameHost host = new GameHost(g3rdr.getLogic());
+        try {
+            host.startListening();
+        } catch (IOException ex) {
+            Logger.getGlobal().log(Level.SEVERE, "Cannot start listening on the game server", ex);
+        }
+
+        //Se connecte sur le serveur crée en local
+        lanConnectImpl("127.0.0.1");
+
+        //Bouge sur l'ecran lobby multijoueur    @TODO : Réaliser l'ecran
+        this.nifty.gotoScreen("HostLan");
     }
-     
-    
+
+
+
+    /**
+     * Fonction appelée une fois que les champs de l'ecran pour rejoindre une
+     * partie lan sont remplis.
+     */
+    public void lanConnect(){
+
+        TextField ip = this.nifty.getScreen("JoinLan").findElementByName("inputIP").getNiftyControl(TextField.class);
+        TextField nick = this.nifty.getScreen("JoinLan").findElementByName("inputNick").getNiftyControl(TextField.class);
+
+        String ipServ = ip.getRealText();
+        String nickname = nick.getRealText();
+
+        boolean connected=this.lanConnectImpl(ipServ);
+
+        if(connected){
+             this.nifty.gotoScreen("LobbyMultijoueur");
+        }else{
+            this.nifty.gotoScreen("ErrorConnect");
+        }
+    }
+
+
+    /**
+     * Connexion effective a un serveur de jeu en local
+     * @param ipAddress IP au serveur a laquelle se connecter
+     * @return True or false si la connexion est opérationnelle
+     */
+    private boolean lanConnectImpl(final String ipAddress) {
+
+        boolean retour = false;
+
+        GameClient gameClient = new GameClient(g3rdr.getLogic());
+        try {
+            gameClient.connect(ipAddress);
+            retour = true;
+        } catch (IOException ex) {
+
+            Logger.getLogger(GuiController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return retour;
+    }
+
+
+
     /**
      * Redemarre le jeu en cours (avec les memes joueurs
      *
@@ -187,7 +281,7 @@ public class GuiController implements ScreenController {
         //On garde les mêmes nick donc pas besoin de redefinir.
 
 
-        this.g3rdr.getLogic().prepareGame(players);
+        this.g3rdr.getLogic().prepareGame(players, true);
         this.g3rdr.getLogic().startGame();
 
         this.nifty.gotoScreen("inGameHud");
@@ -216,6 +310,8 @@ public class GuiController implements ScreenController {
         }
     }
 
+
+
     /**
      * Désactive tout les sons du jeu
      *
@@ -229,13 +325,12 @@ public class GuiController implements ScreenController {
              * Renseigner la source audio a pause à la place de null
              */
             // this.maudioRenderer.pauseSource(null);
-           
             this.nifty.getScreen("inGameMenu").findElementByName("btnOptions").getNiftyControl(Button.class).setText("Sons on");
             this.soundState = false;
         } else {
             // this.maudioRenderer.playSource(null);
 
-           
+
             this.nifty.getScreen("inGameMenu").findElementByName("btnOptions").getNiftyControl(Button.class).setText("Sons off");
             this.soundState = true;
         }
@@ -254,13 +349,12 @@ public class GuiController implements ScreenController {
              * Renseigner la source audio a pause à la place de null
              */
             // this.maudioRenderer.pauseSource(null);
-           
             this.nifty.getScreen("inGameMenu").findElementByName("btnOptions2").getNiftyControl(Button.class).setText("Musique on");
             this.musicState = false;
         } else {
             // this.maudioRenderer.playSource(null);
 
-          
+
             this.nifty.getScreen("inGameMenu").findElementByName("btnOptions2").getNiftyControl(Button.class).setText("Musique off");
             this.musicState = true;
         }
@@ -273,13 +367,13 @@ public class GuiController implements ScreenController {
 
         //Si le jeu n'est pas finis on sauvegarde par defaut.
         /*
-        boolean gameOver = this.g3rdr.getLogic().isFinished();
-        if (!gameOver) {
-            this.save();
-        }
-        */
-        
-        
+         boolean gameOver = this.g3rdr.getLogic().isFinished();
+         if (!gameOver) {
+         this.save();
+         }
+         */
+
+
         TextField fieldJ1 = this.nifty.getScreen("start").findElementByName("inputJ1").getNiftyControl(TextField.class);
         TextField fieldJ2 = this.nifty.getScreen("start").findElementByName("inputJ2").getNiftyControl(TextField.class);
         TextField fieldJ3 = this.nifty.getScreen("start").findElementByName("inputJ3").getNiftyControl(TextField.class);
@@ -315,22 +409,80 @@ public class GuiController implements ScreenController {
      * Charge le dernier fichier de sauvegarde existant
      */
     public void load() {
-        /**
-         * @TODO : chargement du dernier jeu
-         */
         //Si le fichier existe
         //charge
-        //sinon 
+        //sinon
         //rien ou nouvelle partie ou disable le button(à debattre)
+
+
+        //@TODO : Verifier pourquoi ca ne clear pas le board ?!
+
+        Camera cam = g3rdr.getCamera();
+        this.g3rdr.getLogic().prepareGame(players, true);
+
+
+        GameSaver loader = new GameSaver();
+        try {
+
+            /**
+             * @TODO : Clear board & entities
+             */
+            loader.loadFromFile(g3rdr.getLogic(), "./save.atlantis");
+
+
+
+
+
+            Player[] logicPlayers = g3rdr.getLogic().getPlayers();
+            players = new String[logicPlayers.length];
+            int i = 0;
+            for (Player p : logicPlayers) {
+                players[i] = p.getName();
+                i++;
+            }
+
+            switch(logicPlayers.length){
+                case 2:
+                    GuiController.mScreenType=2;
+                    this.nifty.gotoScreen("inGameHud2J");
+
+                    break;
+                case 3:
+                    GuiController.mScreenType=3;
+                    this.nifty.gotoScreen("inGameHud3J");
+                    break;
+                case 4:
+                    GuiController.mScreenType=4;
+                    this.nifty.gotoScreen("inGameHud");
+                    break;
+            }
+
+            this.cleanPlayerName();
+
+            this.updatePlayerName();
+
+            this.initHudAfterGameLoad();
+
+
+            CamConstants.moveAboveBoard(g3rdr.getCameraNode(), cam);
+
+        } catch (IOException ex) {
+            Logger.getGlobal().log(Level.SEVERE, "Error while loading game!", ex);
+        }
+
+        CamConstants.moveAboveBoard(g3rdr.getCameraNode(), cam);
     }
 
     /**
      * Sauvegarde la partie en cours
      */
     public void save() {
-        /**
-         * @TODO : sauvegarde du jeu
-         */
+        GameSaver saver = new GameSaver();
+        try {
+            saver.saveToFile("./save.atlantis", g3rdr.getLogic());
+        } catch (IOException ex) {
+            Logger.getGlobal().log(Level.SEVERE, "Error while saving game!", ex);
+        }
     }
 
     /**
@@ -338,19 +490,19 @@ public class GuiController implements ScreenController {
      *
      */
     public void exit() {
-       /*
-        boolean gameOver = this.g3rdr.getLogic().isFinished();
-        if (!gameOver) {
-           
-            this.save();
-        }        
-        */ 
-        
+        /*
+         boolean gameOver = this.g3rdr.getLogic().isFinished();
+         if (!gameOver) {
+
+         this.save();
+         }
+         */
+
         System.exit(0);
     }
 
     /**
-     * Met à jour les pseudo joueurs sur le GUI
+     * Nettoye les pseudo joueurs sur le GUI
      *
      */
     public void cleanPlayerName() {
@@ -478,8 +630,12 @@ public class GuiController implements ScreenController {
         this.nameRandomizer.add("Po");
         this.nameRandomizer.add("Swaggy");
         this.nameRandomizer.add("Youlow");
+        this.nameRandomizer.add("Alpa-Tchino");
     }
 
+    /**
+     * Remplis le champ pseudo pour joueur 1 avec un pseudo aléatoire *
+     */
     public void nickRandomJ1() {
         this.nifty.getScreen("start").findElementByName("btnRandom1").hide();
         TextField fieldJ1 = this.nifty.getScreen("start").findElementByName("inputJ1").getNiftyControl(TextField.class);
@@ -489,6 +645,9 @@ public class GuiController implements ScreenController {
         AudioManager.getDefault().playSound(AudioConstants.Path.WHOOSH);
     }
 
+    /**
+     * Remplis le champ pseudo pour joueur 2 avec un pseudo aléatoire *
+     */
     public void nickRandomJ2() {
         this.nifty.getScreen("start").findElementByName("btnRandom2").hide();
         TextField fieldJ2 = this.nifty.getScreen("start").findElementByName("inputJ2").getNiftyControl(TextField.class);
@@ -498,6 +657,9 @@ public class GuiController implements ScreenController {
         AudioManager.getDefault().playSound(AudioConstants.Path.WHOOSH);
     }
 
+    /**
+     * Remplis le champ pseudo pour joueur 3 avec un pseudo aléatoire *
+     */
     public void nickRandomJ3() {
         this.nifty.getScreen("start").findElementByName("btnRandom3").hide();
         TextField fieldJ3 = this.nifty.getScreen("start").findElementByName("inputJ3").getNiftyControl(TextField.class);
@@ -507,6 +669,9 @@ public class GuiController implements ScreenController {
         AudioManager.getDefault().playSound(AudioConstants.Path.WHOOSH);
     }
 
+    /**
+     * Remplis le champ pseudo pour joueur 4 avec un pseudo aléatoire *
+     */
     public void nickRandomJ4() {
         this.nifty.getScreen("start").findElementByName("btnRandom4").hide();
         TextField fieldJ4 = this.nifty.getScreen("start").findElementByName("inputJ4").getNiftyControl(TextField.class);
@@ -515,8 +680,12 @@ public class GuiController implements ScreenController {
         fieldJ4.setText(tmp);
         AudioManager.getDefault().playSound(AudioConstants.Path.WHOOSH);
     }
-    
-      public void nickRandomMulti() {
+
+    /**
+     * Remplis le champ pseudo pour le multijoueur LAN avec un pseudo aléatoire
+     * *
+     */
+    public void nickRandomMulti() {
         this.nifty.getScreen("start").findElementByName("btnRandom4").hide();
         TextField fieldMulti = this.nifty.getScreen("JoinLan").findElementByName("inputNick").getNiftyControl(TextField.class);
         String tmp = this.nameRandomizer.get(new Random().nextInt(this.nameRandomizer.size()));
@@ -524,6 +693,12 @@ public class GuiController implements ScreenController {
         fieldMulti.setText(tmp);
     }
 
+    /**
+     * Réorganise l'ordre des joueurs lors de la création d'une partie si des
+     * trous sont laissés au niveau des joueurs.
+     *
+     * @param nbPlayers nombre de joueurs
+     */
     private void reArrangePlayers(int nbPlayers) {
         switch (nbPlayers) {
             case 2:
@@ -587,6 +762,239 @@ public class GuiController implements ScreenController {
             tmp[0] = players[0];
             tmp[1] = players[1];
             this.players = tmp;
+        }
+    }
+
+    /**
+     * Changement d'ecran vers l'ecran "Rejoindre une partie réseau"
+     */
+    public void lanJoin() {
+        this.nifty.gotoScreen("JoinLan");
+    }
+
+    /**
+     * Initialise le hud du jeu au joueur courant (utile après le chargement
+     * d'une sauvegarde)
+     *
+     */
+    public void initHudAfterGameLoad() {
+        Player p = this.g3rdr.getLogic().getCurrentTurn().getPlayer();
+
+        String joueurCourant = p.getName();
+
+        Player[] plr = this.g3rdr.getLogic().getPlayers();
+
+        int lg = plr.length;
+
+        String colorP1 = "#0060ab4d";
+        String colorP2 = "#349b144d";
+        String colorP3 = "#eda0004d";
+        String colorP4 = "#c6000b4d";
+
+        HashMap<String, String> playerAndColor = new HashMap();
+
+        LinkedList<Player> lkl = new LinkedList();
+        lkl.add(plr[0]);
+        lkl.add(plr[1]);
+        if (lg >= 3) {
+            lkl.add(plr[2]);
+        }
+        if (lg == 4) {
+            lkl.add(plr[3]);
+        }
+
+
+        Element text, panel;
+
+        switch (lg) {
+
+
+
+            //PARTIE A 2 JOUEURS***********************************************/
+
+            case 2:
+                //Lie les pseudos a leurs couleurs.
+                playerAndColor.put(plr[0].getName(), colorP1);
+                playerAndColor.put(plr[1].getName(), colorP2);
+
+                //Defini le panel du bas et de droite à la couleur du joueur courant.
+                panel = nifty.getScreen("inGameHud2J").findElementByName("HudPanelBottom");
+                panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(p.getName())));
+                panel = nifty.getScreen("inGameHud2J").findElementByName("HudPanelRight");
+                panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(p.getName())));
+                //Defini le nom du joueur courant (zone du bas)
+                text = nifty.getScreen("inGameHud2J").findElementByName("nomJ1");
+                text.getRenderer(TextRenderer.class).setText(p.getName());
+
+                if (lkl.indexOf(p) == 1) {
+                    panel = nifty.getScreen("inGameHud2J").findElementByName("HudPanelTop2");
+                    panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(lkl.get(0).getName())));
+                    text = nifty.getScreen("inGameHud2J").findElementByName("nomJ2");
+                    text.getRenderer(TextRenderer.class).setText(lkl.get(0).getName());
+                } else {
+                    panel = nifty.getScreen("inGameHud2J").findElementByName("HudPanelTop2");
+                    panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(lkl.get(1).getName())));
+                    text = nifty.getScreen("inGameHud2J").findElementByName("nomJ2");
+                    text.getRenderer(TextRenderer.class).setText(lkl.get(1).getName());
+                }
+                break;
+
+
+
+
+            //PARTIE A 3 JOUEURS***********************************************/
+
+            case 3:
+                playerAndColor.put(plr[0].getName(), colorP1);
+                playerAndColor.put(plr[1].getName(), colorP2);
+                playerAndColor.put(plr[2].getName(), colorP3);
+
+                //Defini le panel du bas et de droite à la couleur du joueur courant.
+                panel = nifty.getScreen("inGameHud3J").findElementByName("HudPanelBottom");
+                panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(p.getName())));
+                panel = nifty.getScreen("inGameHud3J").findElementByName("HudPanelRight");
+                panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(p.getName())));
+                //Defini le nom du joueur courant (zone du bas)
+                text = nifty.getScreen("inGameHud3J").findElementByName("nomJ1");
+                text.getRenderer(TextRenderer.class).setText(p.getName());
+
+
+                switch (lkl.indexOf(p)) {
+                    case 0:
+                        panel = nifty.getScreen("inGameHud3J").findElementByName("HudPanelTop2");
+                        panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(lkl.get(1).getName())));
+                        text = nifty.getScreen("inGameHud3J").findElementByName("nomJ2");
+                        text.getRenderer(TextRenderer.class).setText(lkl.get(1).getName());
+
+                        panel = nifty.getScreen("inGameHud3J").findElementByName("HudPanelTop3");
+                        panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(lkl.get(2).getName())));
+                        text = nifty.getScreen("inGameHud3J").findElementByName("nomJ3");
+                        text.getRenderer(TextRenderer.class).setText(lkl.get(2).getName());
+                        break;
+
+                    case 1:
+                        panel = nifty.getScreen("inGameHud3J").findElementByName("HudPanelTop2");
+                        panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(lkl.get(2).getName())));
+                        text = nifty.getScreen("inGameHud3J").findElementByName("nomJ2");
+                        text.getRenderer(TextRenderer.class).setText(lkl.get(2).getName());
+
+                        panel = nifty.getScreen("inGameHud3J").findElementByName("HudPanelTop3");
+                        panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(lkl.get(0).getName())));
+                        text = nifty.getScreen("inGameHud3J").findElementByName("nomJ3");
+                        text.getRenderer(TextRenderer.class).setText(lkl.get(0).getName());
+
+                        break;
+
+                    case 2:
+                        panel = nifty.getScreen("inGameHud3J").findElementByName("HudPanelTop2");
+                        panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(lkl.get(0).getName())));
+                        text = nifty.getScreen("inGameHud3J").findElementByName("nomJ2");
+                        text.getRenderer(TextRenderer.class).setText(lkl.get(0).getName());
+
+                        panel = nifty.getScreen("inGameHud3J").findElementByName("HudPanelTop3");
+                        panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(lkl.get(1).getName())));
+                        text = nifty.getScreen("inGameHud3J").findElementByName("nomJ3");
+                        text.getRenderer(TextRenderer.class).setText(lkl.get(1).getName());
+                        break;
+                }
+
+                break;
+
+
+
+
+            //PARTIE A 4 JOUEURS***********************************************/
+
+            //PARTIE A 4 JOUEURS***********************************************/
+
+            case 4:
+                playerAndColor.put(plr[0].getName(), colorP1);
+                playerAndColor.put(plr[1].getName(), colorP2);
+                playerAndColor.put(plr[2].getName(), colorP3);
+                playerAndColor.put(plr[3].getName(), colorP4);
+
+                //Defini le panel du bas et de droite à la couleur du joueur courant.
+                panel = nifty.getScreen("inGameHud").findElementByName("HudPanelBottom");
+                panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(p.getName())));
+                panel = nifty.getScreen("inGameHud").findElementByName("HudPanelRight");
+                panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(p.getName())));
+                //Defini le nom du joueur courant (zone du bas)
+                text = nifty.getScreen("inGameHud").findElementByName("nomJ1");
+                text.getRenderer(TextRenderer.class).setText(p.getName());
+
+                switch (lkl.indexOf(p)) {
+                    case 0:
+                        panel = nifty.getScreen("inGameHud").findElementByName("HudPanelTop2");
+                        panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(lkl.get(1).getName())));
+                        text = nifty.getScreen("inGameHud").findElementByName("nomJ2");
+                        text.getRenderer(TextRenderer.class).setText(lkl.get(1).getName());
+
+                        panel = nifty.getScreen("inGameHud").findElementByName("HudPanelTop3");
+                        panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(lkl.get(2).getName())));
+                        text = nifty.getScreen("inGameHud").findElementByName("nomJ3");
+                        text.getRenderer(TextRenderer.class).setText(lkl.get(2).getName());
+
+                        panel = nifty.getScreen("inGameHud").findElementByName("HudPanelTop4");
+                        panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(lkl.get(3).getName())));
+                        text = nifty.getScreen("inGameHud").findElementByName("nomJ4");
+                        text.getRenderer(TextRenderer.class).setText(lkl.get(3).getName());
+
+                        break;
+
+                    case 1:
+                        panel = nifty.getScreen("inGameHud").findElementByName("HudPanelTop2");
+                        panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(lkl.get(2).getName())));
+                        text = nifty.getScreen("inGameHud").findElementByName("nomJ2");
+                        text.getRenderer(TextRenderer.class).setText(lkl.get(2).getName());
+
+                        panel = nifty.getScreen("inGameHud").findElementByName("HudPanelTop3");
+                        panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(lkl.get(3).getName())));
+                        text = nifty.getScreen("inGameHud").findElementByName("nomJ3");
+                        text.getRenderer(TextRenderer.class).setText(lkl.get(3).getName());
+
+                        panel = nifty.getScreen("inGameHud").findElementByName("HudPanelTop4");
+                        panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(lkl.get(0).getName())));
+                        text = nifty.getScreen("inGameHud").findElementByName("nomJ4");
+                        text.getRenderer(TextRenderer.class).setText(lkl.get(0).getName());
+
+                        break;
+
+                    case 2:
+                        panel = nifty.getScreen("inGameHud").findElementByName("HudPanelTop2");
+                        panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(lkl.get(3).getName())));
+                        text = nifty.getScreen("inGameHud").findElementByName("nomJ2");
+                        text.getRenderer(TextRenderer.class).setText(lkl.get(3).getName());
+
+                        panel = nifty.getScreen("inGameHud").findElementByName("HudPanelTop3");
+                        panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(lkl.get(0).getName())));
+                        text = nifty.getScreen("inGameHud").findElementByName("nomJ3");
+                        text.getRenderer(TextRenderer.class).setText(lkl.get(0).getName());
+
+                        panel = nifty.getScreen("inGameHud").findElementByName("HudPanelTop4");
+                        panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(lkl.get(1).getName())));
+                        text = nifty.getScreen("inGameHud").findElementByName("nomJ4");
+                        text.getRenderer(TextRenderer.class).setText(lkl.get(1).getName());
+                        break;
+
+                    case 3:
+                        panel = nifty.getScreen("inGameHud").findElementByName("HudPanelTop2");
+                        panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(lkl.get(0).getName())));
+                        text = nifty.getScreen("inGameHud").findElementByName("nomJ2");
+                        text.getRenderer(TextRenderer.class).setText(lkl.get(0).getName());
+
+                        panel = nifty.getScreen("inGameHud").findElementByName("HudPanelTop3");
+                        panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(lkl.get(1).getName())));
+                        text = nifty.getScreen("inGameHud").findElementByName("nomJ3");
+                        text.getRenderer(TextRenderer.class).setText(lkl.get(1).getName());
+
+                        panel = nifty.getScreen("inGameHud").findElementByName("HudPanelTop4");
+                        panel.getRenderer(PanelRenderer.class).setBackgroundColor(new Color(playerAndColor.get(lkl.get(2).getName())));
+                        text = nifty.getScreen("inGameHud").findElementByName("nomJ4");
+                        text.getRenderer(TextRenderer.class).setText(lkl.get(2).getName());
+                        break;
+                }
+
+                break;
         }
     }
 }

@@ -17,6 +17,10 @@
  */
 package fr.miage.atlantis.board;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 /**
  * Tile de type plage
  *
@@ -53,6 +57,28 @@ public class BorderTile extends GameTile {
     public BorderTile(GameBoard board, String name, boolean isEscapeBorder) {
         super(board, name, -99);
         this.mIsEscapeBorder = isEscapeBorder;
+    }
+    
+    public BorderTile(GameBoard board, DataInputStream stream) throws IOException {
+        super(board, stream);
+        readSerialized(stream);
+    }
+
+    @Override
+    public final void readSerialized(DataInputStream data) throws IOException {
+        super.readSerialized(data);
+        mIsEscapeBorder = data.readBoolean();
+    }
+
+    @Override
+    public void serializeTo(DataOutputStream data) throws IOException {
+        super.serializeTo(data);
+        data.writeBoolean(mIsEscapeBorder);
+    }
+    
+    @Override
+    public int getType() {
+        return TILE_BORDER;
     }
 
     //--------------------------------------------------------------------------

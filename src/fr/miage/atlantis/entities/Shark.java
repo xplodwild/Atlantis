@@ -39,7 +39,15 @@ public class Shark extends Animal {
      * @param tile Tile sur lequel on place le SeaSerpent
      */
     public Shark() {
-        super("Shark", MAX_MOVES);
+        this("Shark", true);
+    }
+    
+    public Shark(final String name) {
+        this(name, false);
+    }
+    
+    public Shark(final String name, boolean appendUniqueID) {
+        super(name, MAX_MOVES, appendUniqueID);
     }
 
     /**

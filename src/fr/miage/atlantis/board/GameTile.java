@@ -18,8 +18,12 @@
 package fr.miage.atlantis.board;
 
 import fr.miage.atlantis.entities.GameEntity;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Classe abstraite représentant les tiles que l'on place sur le plateau de jeu
@@ -29,6 +33,13 @@ import java.util.List;
  * @date 28/02/2014
  */
 public abstract class GameTile {
+    
+    public static final int TILE_NULL       = 0;
+    public static final int TILE_BORDER     = 1;
+    public static final int TILE_WATER      = 2;
+    public static final int TILE_BEACH      = 3;
+    public static final int TILE_FOREST     = 4;
+    public static final int TILE_MOUNTAIN   = 5;
 
     /**
      * mName : nom du tile
@@ -128,6 +139,94 @@ public abstract class GameTile {
         this.mIsOnBoard = true;
         this.mEntities = new ArrayList<GameEntity>();
     }
+    
+    /**
+     * Charge la tile depuis l'élément serialisé. Les classes enfant DOIVENT appeler readSerialized
+     * et l'overrider si nécessaire pour lire les éléments supplémentaires.
+     * @param board
+     * @param serial
+     * @throws IOException 
+     */
+    GameTile(GameBoard board, DataInputStream serial) throws IOException {
+        mBoard = board;
+    }
+    
+    /**
+     * Serialize la tile dans le DataOutputStream indiqué
+     * @param data La cible de serialisation
+     */
+    public void serializeTo(DataOutputStream data) throws IOException {
+        data.writeUTF(mName);
+        data.writeInt(mHeight);
+        data.writeBoolean(mIsOnBoard);
+        
+        // Vraiment, on aurait dû faire un tableau
+        data.writeBoolean(mLeftBottomTile != null);
+        if (mLeftBottomTile != null) data.writeUTF(mLeftBottomTile.getName());
+        
+        data.writeBoolean(mLeftTile != null);
+        if (mLeftTile != null) data.writeUTF(mLeftTile.getName());
+        
+        data.writeBoolean(mLeftUpperTile != null);
+        if (mLeftUpperTile != null) data.writeUTF(mLeftUpperTile.getName());
+        
+        data.writeBoolean(mRightBottomTile != null);
+        if (mRightBottomTile != null) data.writeUTF(mRightBottomTile.getName());
+        
+        data.writeBoolean(mRightTile != null);
+        if (mRightTile != null) data.writeUTF(mRightTile.getName());
+        
+        data.writeBoolean(mRightUpperTile != null);
+        if (mRightUpperTile != null) data.writeUTF(mRightUpperTile.getName());
+        
+        data.writeInt(mEntities.size());
+        for (GameEntity ent : mEntities) {
+            data.writeUTF(ent.getName());
+        }
+    }
+    
+    public void readSerialized(DataInputStream data) throws IOException {
+        mName = data.readUTF();
+        mHeight = data.readInt();
+        mIsOnBoard = data.readBoolean();
+        
+        if (data.readBoolean()) {
+            mLeftBottomTile = mBoard.getTileSet().get(data.readUTF());
+        }
+        
+        if (data.readBoolean()) {
+            mLeftTile = mBoard.getTileSet().get(data.readUTF());
+        }
+        
+        if (data.readBoolean()) {
+            mLeftUpperTile = mBoard.getTileSet().get(data.readUTF());
+        }
+        
+        if (data.readBoolean()) {
+            mRightBottomTile = mBoard.getTileSet().get(data.readUTF());
+        }
+        
+        if (data.readBoolean()) {
+            mRightTile = mBoard.getTileSet().get(data.readUTF());
+        }
+        
+        if (data.readBoolean()) {
+            mRightUpperTile = mBoard.getTileSet().get(data.readUTF());
+        }
+        
+        int entCount = data.readInt();
+        for (int i = 0; i < entCount; i++) {
+            GameEntity ent = mBoard.getEntity(data.readUTF());
+            mEntities.add(ent);
+            ent.moveToTile(null, this);
+        }
+    }
+    
+    /**
+     * Retourne le type de la tile (constantes TILE_*)
+     * @return Le type de la tile
+     */
+    public abstract int getType();
 
     /**
      * Ajoute une entité sur le tile courant

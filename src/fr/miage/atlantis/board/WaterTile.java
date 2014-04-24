@@ -17,6 +17,10 @@
  */
 package fr.miage.atlantis.board;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 /**
  * Tile de type mer
  *
@@ -77,6 +81,30 @@ public class WaterTile extends GameTile {
      */
     public WaterTile(GameBoard board, GameTile hg, GameTile hd, GameTile g, GameTile d, GameTile bd, GameTile bg, String name, int height) {
         super(board, hg, hd, g, d, bd, bg, name, 0);
+    }
+    
+    public WaterTile(GameBoard board, DataInputStream stream) throws IOException {
+        super(board, stream);
+        readSerialized(stream);
+    }
+
+    @Override
+    public final void readSerialized(DataInputStream data) throws IOException {
+        super.readSerialized(data);
+        mIsLandingTile = data.readBoolean();
+        mIsBeginningWithSeaShark = data.readBoolean();
+    }
+
+    @Override
+    public void serializeTo(DataOutputStream data) throws IOException {
+        super.serializeTo(data);
+        data.writeBoolean(mIsLandingTile);
+        data.writeBoolean(mIsBeginningWithSeaShark);
+    }
+    
+    @Override
+    public int getType() {
+        return TILE_WATER;
     }
 
     //--------------------------------------------------------------------------

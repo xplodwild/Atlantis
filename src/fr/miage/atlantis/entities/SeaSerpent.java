@@ -39,7 +39,15 @@ public class SeaSerpent extends Animal {
      * @param tile Tile sur lequel on place le SeaSerpent
      */
     public SeaSerpent() {
-        super("Serpent de mer", MAX_MOVES);
+        this("Serpent de mer", true);
+    }
+    
+    public SeaSerpent(String name) {
+        this(name, false);
+    }
+    
+    public SeaSerpent(String name, boolean appendUniqueID) {
+        super(name, MAX_MOVES, appendUniqueID);
     }
 
     /**

@@ -29,6 +29,9 @@ import fr.miage.atlantis.entities.PlayerToken;
 import fr.miage.atlantis.entities.SeaSerpent;
 import fr.miage.atlantis.entities.Shark;
 import fr.miage.atlantis.entities.Whale;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -44,6 +47,18 @@ import java.util.logging.Logger;
 public class GameTurn implements GameRenderListener {
 
     public static boolean DBG_QUICKTEST = false;
+
+    public static final int STEP_START                  = 0;
+    public static final int STEP_INITIAL_PLAYER_PUT     = 1;
+    public static final int STEP_INITIAL_BOAT_PUT       = 2;
+    public static final int STEP_MOVE_ENTITY            = 3;
+    public static final int STEP_MOVE_DICE_ENTITY       = 4;
+    public static final int STEP_MOVE_BONUS_BOAT        = 5;
+    public static final int STEP_MOVE_BONUS_SWIMMER     = 6;
+    public static final int STEP_SINK_TILE              = 7;
+    public static final int STEP_USE_TILE_ACTION        = 8;
+    public static final int STEP_FINISH                 = 9;
+
     private TileAction mTileAction;
     private List<TileAction> mRemoteTiles;
     private List<EntityMove> mMoves;
@@ -58,6 +73,7 @@ public class GameTurn implements GameRenderListener {
     private boolean mDiceEntityPicked;
     private PlayerToken mTokenToPlace;
     private List<PlayerToken> mSwimmersMoved;
+    private int mCurrentStep;
     /**
      * Instance du logger Java
      */
@@ -81,6 +97,52 @@ public class GameTurn implements GameRenderListener {
         mSwimmersMoved = new ArrayList<PlayerToken>();
     }
 
+    public void serializeTo(DataOutputStream data) throws IOException {
+        data.writeBoolean(DBG_QUICKTEST);
+        data.writeBoolean(mTileAction != null);
+        if (mTileAction != null) mTileAction.serializeTo(data);
+
+        // mRemoteTiles: Non utilisé a part pour du logging, donc pas sauvegardé
+        // mMoves:       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        data.writeBoolean(mSunkenTile != null);
+        if (mSunkenTile != null) data.writeUTF(mSunkenTile.getName());
+
+        data.writeInt(mDiceAction);
+        data.writeBoolean(mDiceRolled);
+        data.writeBoolean(mTurnIsOver);
+        data.writeInt(mRemainingMoves);
+        data.writeInt(mRemainingDiceMoves);
+        data.writeBoolean(mDiceEntityPicked);
+        // mTokenToPlace: On ne laisse pas sauvegarder une partie qui n'a pas commencé
+        data.writeInt(mSwimmersMoved.size());
+        for (PlayerToken token : mSwimmersMoved) {
+            data.writeUTF(token.getName());
+        }
+    }
+
+    public void readSerialized(DataInputStream data) throws IOException {
+        DBG_QUICKTEST = data.readBoolean();
+        if (data.readBoolean()) {
+            TileAction.Factory.createFromSerialized(data);
+        }
+        if (data.readBoolean()) {
+            mSunkenTile = mController.getBoard().getTileSet().get(data.readUTF());
+        }
+        mDiceAction = data.readInt();
+        mDiceRolled = data.readBoolean();
+        mTurnIsOver = data.readBoolean();
+        mRemainingMoves = data.readInt();
+        mRemainingDiceMoves = data.readInt();
+        mDiceEntityPicked = data.readBoolean();
+        // mTokenToPlace
+        int swimmersCount = data.readInt();
+        for (int i = 0; i < swimmersCount; i++) {
+            String swimmerName = data.readUTF();
+            PlayerToken swimmer = (PlayerToken) mController.getBoard().getEntity(swimmerName);
+            mSwimmersMoved.add(swimmer);
+        }
+    }
+
     public TileAction getTileAction() {
         return mTileAction;
     }
@@ -90,6 +152,7 @@ public class GameTurn implements GameRenderListener {
      */
     public void startTurn() {
         logger.log(Level.FINE, "GameTurn: startTurn()", new Object[]{});
+        mCurrentStep = STEP_START;
         mController.onTurnStart(mPlayer);
     }
 
@@ -99,6 +162,7 @@ public class GameTurn implements GameRenderListener {
     private void finishTurn() {
         logger.log(Level.FINE, "GameTurn: finishTurn()", new Object[]{});
         mTurnIsOver = true;
+        mCurrentStep = STEP_FINISH;
         mController.nextTurn();
     }
 
@@ -177,7 +241,7 @@ public class GameTurn implements GameRenderListener {
     /**
      * déplacement de l'entité sur lequel on est tombé au lancé de dés
      * @param ent
-     * @param dest 
+     * @param dest
      */
     public void moveDiceEntity(GameEntity ent, GameTile dest) {
         logger.log(Level.FINE, "GameTurn: moveDiceEntity ", new Object[]{});
@@ -189,6 +253,7 @@ public class GameTurn implements GameRenderListener {
 
     public void tileActionTeleport(GameEntity ent, GameTile dest) {
         logger.log(Level.FINE, "GameTile: tileActionTeleport");
+        // mCurrentStep?
         mController.onUnitMove(ent, dest);
     }
 
@@ -249,12 +314,14 @@ public class GameTurn implements GameRenderListener {
     public void putInitialToken(PlayerToken pt, GameTile tile) {
         pt.moveToTile(null, tile);
         pt.setState(PlayerToken.STATE_ON_LAND);
+        mController.getBoard().putEntity(pt);
         mController.onInitialTokenPut(pt);
     }
 
     public void putInitialBoat(GameTile tile) {
         Boat b = new Boat();
         b.moveToTile(null, tile);
+        mController.getBoard().putEntity(b);
         mController.onInitialBoatPut(b);
     }
 
@@ -269,6 +336,7 @@ public class GameTurn implements GameRenderListener {
                 request.landTilesOnly = true;
                 request.noEntitiesOnTile = true;
 
+                mCurrentStep = STEP_INITIAL_PLAYER_PUT;
                 mTokenToPlace = pt;
                 mController.requestPick(null, request);
                 break;
@@ -350,11 +418,14 @@ public class GameTurn implements GameRenderListener {
                 case TileAction.ACTION_MOVE_ANIMAL:
                     // Téléportation d'animale faite, on est good, on continue le tour
                     mTileAction.setUsed();
+                    mCurrentStep = STEP_MOVE_ENTITY;
                     requestPlayerMovePicking();
                     break;
 
                 case TileAction.ACTION_BONUS_BOAT:
                 case TileAction.ACTION_BONUS_SWIM:
+                    mCurrentStep = STEP_MOVE_BONUS_BOAT;
+
                     // On a bougé le bateau d'une case, on continue si on a encore des mouvements
                     if (mTileAction.getMovesRemaining() > 0) {
                         // On redemande une tile, l'entité reste sauvée par Game3DLogic
@@ -371,6 +442,7 @@ public class GameTurn implements GameRenderListener {
                         logger.log(Level.FINE, "GameTurn: picking for BONUS_BOAT or BONUS_SWIM");
                     } else {
                         // On a fini, on reprend le cours normal du tour
+                        mCurrentStep = STEP_MOVE_ENTITY;
                         requestPlayerMovePicking();
                     }
                     break;
@@ -378,6 +450,7 @@ public class GameTurn implements GameRenderListener {
         } else if (mRemainingMoves > 0) {
             // On a encore des mouvements de ses unités possibles, alors on le fait.
             logger.log(Level.FINE, "GameTurn: ==> Remaining moves: " + mRemainingMoves, new Object[]{});
+            mCurrentStep = STEP_MOVE_ENTITY;
             requestPlayerMovePicking();
         } else if (mSunkenTile == null) {
             logger.log(Level.FINE, "GameTurn: ==> Tile sinking required! ", new Object[]{});
@@ -395,10 +468,13 @@ public class GameTurn implements GameRenderListener {
             request.requiredHeight = level;
             request.waterEdgeOnly = mController.getBoard().hasTileAtWaterEdge(level);
 
+            mCurrentStep = STEP_SINK_TILE;
+
             mController.requestPick(null, request);
         } else if (mRemainingDiceMoves > 0) {
             // On a encore des mouvements de l'unité du dé possible
             logger.log(Level.FINE, "GameTurn: ==> Remaining dice moves: " + mRemainingDiceMoves, new Object[]{});
+            mCurrentStep = STEP_MOVE_DICE_ENTITY;
             requestDiceEntityPicking(mController.getLastPickedEntity().getTile());
         } else {
             // On a plus de mouvements d'unités, on a coulé la tile, et on a bougé les unités
@@ -426,6 +502,7 @@ public class GameTurn implements GameRenderListener {
         }
 
         if (mController.getBoard().hasEntityOfType(entityType)) {
+            mCurrentStep = STEP_MOVE_DICE_ENTITY;
             requestDiceEntityPicking(null);
         } else {
             // Pas d'entité du type du dé a bouger. Le dé étant la dernière étape d'un tour,
@@ -502,6 +579,43 @@ public class GameTurn implements GameRenderListener {
             tilePick.requiredHeight = 0;
 
             mController.requestPick(null, tilePick);
+        }
+    }
+
+    public boolean canFinishCurrentAction() {
+        if (mCurrentStep == STEP_MOVE_ENTITY) {
+            return true;
+        } else if (mCurrentStep == STEP_MOVE_DICE_ENTITY) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean finishCurrentAction() {
+        Logger.getGlobal().info("Current action: " + mCurrentStep);
+
+        if (!canFinishCurrentAction()) return false;
+
+        if (mCurrentStep == STEP_MOVE_ENTITY) {
+            mRemainingMoves = 0;
+            onUnitMoveFinished();
+            return true;
+        } else if (mCurrentStep == STEP_MOVE_DICE_ENTITY) {
+            mRemainingDiceMoves = 0;
+            onUnitMoveFinished();
+            return true;
+        } else if (mCurrentStep == STEP_MOVE_BONUS_BOAT || mCurrentStep == STEP_MOVE_BONUS_SWIMMER) {
+            if (mTileAction != null) {
+                while (mTileAction.getMovesRemaining() > 0) {
+                    mTileAction.decreaseMovesRemaining();
+                }
+            }
+            onUnitMoveFinished();
+            return true;
+        } else {
+            Logger.getGlobal().info("Cannot skip the current action!");
+            return false;
         }
     }
 
