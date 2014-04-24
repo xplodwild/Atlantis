@@ -33,7 +33,7 @@ import java.util.logging.Logger;
  * @date 28/02/2014
  */
 public abstract class GameTile {
-    
+
     public static final int TILE_NULL       = 0;
     public static final int TILE_BORDER     = 1;
     public static final int TILE_WATER      = 2;
@@ -139,18 +139,18 @@ public abstract class GameTile {
         this.mIsOnBoard = true;
         this.mEntities = new ArrayList<GameEntity>();
     }
-    
+
     /**
      * Charge la tile depuis l'élément serialisé. Les classes enfant DOIVENT appeler readSerialized
      * et l'overrider si nécessaire pour lire les éléments supplémentaires.
      * @param board
      * @param serial
-     * @throws IOException 
+     * @throws IOException
      */
     GameTile(GameBoard board, DataInputStream serial) throws IOException {
         mBoard = board;
     }
-    
+
     /**
      * Serialize la tile dans le DataOutputStream indiqué
      * @param data La cible de serialisation
@@ -159,69 +159,76 @@ public abstract class GameTile {
         data.writeUTF(mName);
         data.writeInt(mHeight);
         data.writeBoolean(mIsOnBoard);
-        
+
         // Vraiment, on aurait dû faire un tableau
         data.writeBoolean(mLeftBottomTile != null);
         if (mLeftBottomTile != null) data.writeUTF(mLeftBottomTile.getName());
-        
+
         data.writeBoolean(mLeftTile != null);
         if (mLeftTile != null) data.writeUTF(mLeftTile.getName());
-        
+
         data.writeBoolean(mLeftUpperTile != null);
         if (mLeftUpperTile != null) data.writeUTF(mLeftUpperTile.getName());
-        
+
         data.writeBoolean(mRightBottomTile != null);
         if (mRightBottomTile != null) data.writeUTF(mRightBottomTile.getName());
-        
+
         data.writeBoolean(mRightTile != null);
         if (mRightTile != null) data.writeUTF(mRightTile.getName());
-        
+
         data.writeBoolean(mRightUpperTile != null);
         if (mRightUpperTile != null) data.writeUTF(mRightUpperTile.getName());
-        
+
         data.writeInt(mEntities.size());
         for (GameEntity ent : mEntities) {
             data.writeUTF(ent.getName());
         }
+
+        data.writeBoolean(mAction != null);
+        if (mAction != null) mAction.serializeTo(data);
     }
-    
+
     public void readSerialized(DataInputStream data) throws IOException {
         mName = data.readUTF();
         mHeight = data.readInt();
         mIsOnBoard = data.readBoolean();
-        
+
         if (data.readBoolean()) {
             mLeftBottomTile = mBoard.getTileSet().get(data.readUTF());
         }
-        
+
         if (data.readBoolean()) {
             mLeftTile = mBoard.getTileSet().get(data.readUTF());
         }
-        
+
         if (data.readBoolean()) {
             mLeftUpperTile = mBoard.getTileSet().get(data.readUTF());
         }
-        
+
         if (data.readBoolean()) {
             mRightBottomTile = mBoard.getTileSet().get(data.readUTF());
         }
-        
+
         if (data.readBoolean()) {
             mRightTile = mBoard.getTileSet().get(data.readUTF());
         }
-        
+
         if (data.readBoolean()) {
             mRightUpperTile = mBoard.getTileSet().get(data.readUTF());
         }
-        
+
         int entCount = data.readInt();
         for (int i = 0; i < entCount; i++) {
             GameEntity ent = mBoard.getEntity(data.readUTF());
             mEntities.add(ent);
             ent.moveToTile(null, this);
         }
+
+        if (data.readBoolean()) {
+            mAction = TileAction.Factory.createFromSerialized(data);
+        }
     }
-    
+
     /**
      * Retourne le type de la tile (constantes TILE_*)
      * @return Le type de la tile
