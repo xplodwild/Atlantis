@@ -22,7 +22,7 @@ import com.jme3.scene.shape.Box;
 import fr.miage.atlantis.graphics.Utils;
 
 /**
- *
+ * Modèle du SeaSerpent extends des modèles animés
  */
 public class SeaSerpentModel extends AnimatedModel {
 
@@ -34,6 +34,10 @@ public class SeaSerpentModel extends AnimatedModel {
     public final static String ANIMATION_DIVE = "Dive";
     private final static String COLLISION_BONE_ATTACH = "root";
 
+    /**
+     * Constructeur du modèle SeaSerpent 
+     * @param am AssetManager qui permet d'accéder aux assets
+     */
     public SeaSerpentModel(AssetManager am) {
         super(am, "Models/serpentA.mesh.xml", "Textures/seaserpent.png",
                 "Textures/seaserpent_normal.png");
