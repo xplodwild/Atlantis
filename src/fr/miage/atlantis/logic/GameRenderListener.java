@@ -17,6 +17,9 @@
  */
 package fr.miage.atlantis.logic;
 
+import fr.miage.atlantis.entities.Boat;
+import fr.miage.atlantis.entities.PlayerToken;
+
 /**
  *
  */
@@ -24,9 +27,9 @@ public interface GameRenderListener {
 
     public void onTurnStarted();
 
-    public void onInitialTokenPutDone();
+    public void onInitialTokenPutDone(PlayerToken pt);
 
-    public void onInitialBoatPutDone();
+    public void onInitialBoatPutDone(Boat pt);
 
     public void onPlayedTileAction();
 

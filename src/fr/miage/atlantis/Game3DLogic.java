@@ -243,14 +243,14 @@ public class Game3DLogic extends GameLogic {
 
     public void onInitialTokenPut(PlayerToken pt) {
         mRenderer.getEntitiesRenderer().addEntity(pt);
-        getCurrentTurn().onInitialTokenPutDone();
+        getCurrentTurn().onInitialTokenPutDone(pt);
     }
 
     @Override
     public void onInitialBoatPut(Boat b) {
         super.onInitialBoatPut(b);
         mRenderer.getEntitiesRenderer().addEntity(b);
-        getCurrentTurn().onInitialBoatPutDone();
+        getCurrentTurn().onInitialBoatPutDone(b);
     }
 
     public void onPlayTileAction(GameTile tile, TileAction action) {
@@ -1255,79 +1255,79 @@ public class Game3DLogic extends GameLogic {
 
     }
 
-    
+
     /**
      * Affichage des scores
      */
     @Override
     public void onGameFinished() {
-        Nifty nifty = mRenderer.getNifty();       
-        
+        Nifty nifty = mRenderer.getNifty();
+
         Element element;
         Player[] p = this.getPlayers();
-        
+
         element = nifty.getScreen("endGame").findElementByName("nomJ1");
         element.getRenderer(TextRenderer.class).setText(p[0].getName());
-        
+
         element = nifty.getScreen("endGame").findElementByName("nomJ2");
         element.getRenderer(TextRenderer.class).setText(p[1].getName());
-        
+
         int scoreJ1=p[0].getScore();
         int scoreJ2=p[1].getScore();
-        
+
         element = nifty.getScreen("endGame").findElementByName("pointsJ1");
         element.getRenderer(TextRenderer.class).setText(scoreJ1+" points");
         element = nifty.getScreen("endGame").findElementByName("pointsJ2");
         element.getRenderer(TextRenderer.class).setText(scoreJ2+" points");
-        
-       
-        
-        
-        
-        if(p.length==2){            
+
+
+
+
+
+        if(p.length==2){
             if(scoreJ1>scoreJ2){
                 element = nifty.getScreen("endGame").findElementByName("winnerJ1");
                 element.getRenderer(TextRenderer.class).setText("GAGNANT !");
             }
-            
+
             if(scoreJ1<scoreJ2){
                 element = nifty.getScreen("endGame").findElementByName("winnerJ2");
                 element.getRenderer(TextRenderer.class).setText("GAGNANT !");
             }
-            
+
             if(scoreJ1==scoreJ2){
                 element = nifty.getScreen("endGame").findElementByName("winnerJ1");
                 element.getRenderer(TextRenderer.class).setText("EGALITE !");
                 element = nifty.getScreen("endGame").findElementByName("winnerJ2");
                 element.getRenderer(TextRenderer.class).setText("EGALITE !");
-            }  
+            }
             nifty.gotoScreen("endGame");
         }
-        
+
         if(p.length==3){
             element = nifty.getScreen("endGame").findElementByName("nomJ3");
             element.getRenderer(TextRenderer.class).setText(p[2].getName());
-            element = nifty.getScreen("endGame").findElementByName("pointsJ3");        
+            element = nifty.getScreen("endGame").findElementByName("pointsJ3");
             int scoreJ3=p[2].getScore();
             element.getRenderer(TextRenderer.class).setText(scoreJ3+" points");
-            
+
             if(scoreJ1>scoreJ2 && scoreJ1>scoreJ3){
                 element = nifty.getScreen("endGame").findElementByName("winnerJ1");
                 element.getRenderer(TextRenderer.class).setText("GAGNANT !");
             }
-            
+
             if(scoreJ1<scoreJ2 && scoreJ3 < scoreJ2){
                 element = nifty.getScreen("endGame").findElementByName("winnerJ2");
                 element.getRenderer(TextRenderer.class).setText("GAGNANT !");
             }
-            
+
             if(scoreJ1 < scoreJ3 && scoreJ3 > scoreJ2){
                 element = nifty.getScreen("endGame").findElementByName("winnerJ3");
                 element.getRenderer(TextRenderer.class).setText("GAGNANT !");
             }
-            
-            
-            
+
+
+
             if(scoreJ1==scoreJ2 && scoreJ1==scoreJ3){
                 element = nifty.getScreen("endGame").findElementByName("winnerJ1");
                 element.getRenderer(TextRenderer.class).setText("EGALITE !");
@@ -1335,48 +1335,48 @@ public class Game3DLogic extends GameLogic {
                 element.getRenderer(TextRenderer.class).setText("EGALITE !");
                 element = nifty.getScreen("endGame").findElementByName("winnerJ3");
                 element.getRenderer(TextRenderer.class).setText("EGALITE !");
-            }   
+            }
             nifty.gotoScreen("endGame");
         }
-        
-        
+
+
         if(p.length==4){
             element = nifty.getScreen("endGame").findElementByName("nomJ3");
             element.getRenderer(TextRenderer.class).setText(p[2].getName());
-            element = nifty.getScreen("endGame").findElementByName("pointsJ3");        
+            element = nifty.getScreen("endGame").findElementByName("pointsJ3");
             int scoreJ3=p[2].getScore();
             element.getRenderer(TextRenderer.class).setText(scoreJ3+" points");
-           
+
             element = nifty.getScreen("endGame").findElementByName("nomJ4");
             element.getRenderer(TextRenderer.class).setText(p[3].getName());
-            element = nifty.getScreen("endGame").findElementByName("pointsJ4");        
+            element = nifty.getScreen("endGame").findElementByName("pointsJ4");
             int scoreJ4=p[3].getScore();
             element.getRenderer(TextRenderer.class).setText(scoreJ3+" points");
-            
-            
-            
+
+
+
             if(scoreJ2 < scoreJ1 && scoreJ3 < scoreJ1 && scoreJ4 < scoreJ1 ){
                 element = nifty.getScreen("endGame").findElementByName("winnerJ1");
                 element.getRenderer(TextRenderer.class).setText("GAGNANT !");
             }
-            
+
             if(scoreJ1 < scoreJ2 && scoreJ3 < scoreJ2 && scoreJ4 < scoreJ2){
                 element = nifty.getScreen("endGame").findElementByName("winnerJ2");
                 element.getRenderer(TextRenderer.class).setText("GAGNANT !");
             }
-            
+
             if(scoreJ1 < scoreJ3 && scoreJ2 < scoreJ3 && scoreJ4 < scoreJ3){
                 element = nifty.getScreen("endGame").findElementByName("winnerJ3");
                 element.getRenderer(TextRenderer.class).setText("GAGNANT !");
             }
-            
+
             if(scoreJ1 < scoreJ4 && scoreJ2 < scoreJ4 && scoreJ3<scoreJ4){
                 element = nifty.getScreen("endGame").findElementByName("winnerJ4");
                 element.getRenderer(TextRenderer.class).setText("GAGNANT !");
             }
-            
-            
-            
+
+
+
             if(scoreJ1==scoreJ2 && scoreJ1==scoreJ3 && scoreJ1==scoreJ4){
                 element = nifty.getScreen("endGame").findElementByName("winnerJ1");
                 element.getRenderer(TextRenderer.class).setText("EGALITE !");
@@ -1386,12 +1386,12 @@ public class Game3DLogic extends GameLogic {
                 element.getRenderer(TextRenderer.class).setText("EGALITE !");
                 element = nifty.getScreen("endGame").findElementByName("winnerJ4");
                 element.getRenderer(TextRenderer.class).setText("EGALITE !");
-            }  
+            }
             nifty.gotoScreen("endGame");
-        }        
-        
-        
-        
+        }
+
+
+
     }
 
     @Override

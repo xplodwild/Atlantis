@@ -17,9 +17,12 @@
  */
 package fr.miage.atlantis.network;
 
+import com.jme3.network.Message;
 import fr.miage.atlantis.board.GameBoard;
 import fr.miage.atlantis.network.messages.MessageGameStart;
+import fr.miage.atlantis.network.messages.MessageNextTurn;
 import fr.miage.atlantis.network.messages.MessageSyncBoard;
+import fr.miage.atlantis.network.messages.MessageTurnEvent;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,6 +36,7 @@ public class NetworkObserverProxy {
 
     private GameHost mHost;
     private GameClient mClient;
+    private int mNumber;
 
     private NetworkObserverProxy() {
 
@@ -49,7 +53,7 @@ public class NetworkObserverProxy {
     public boolean isNetworkGame() {
         return isHost() || isClient();
     }
-    
+
     /**
      * Renvoie true si cet ordinateur est hôte d'une partie réseau
      * @return boolean
@@ -57,10 +61,12 @@ public class NetworkObserverProxy {
     public boolean isHost() {
         return mHost != null;
     }
-    
+
+
     /**
      * Renvoie true si cet ordinateur est client d'une partie réseau
-     * @return 
+     * @return
+
      */
     public boolean isClient() {
         return mClient != null;
@@ -82,6 +88,14 @@ public class NetworkObserverProxy {
         return mClient;
     }
 
+    public void setPlayerNumber(int number) {
+        mNumber = number;
+    }
+
+    public int getPlayerNumber() {
+        return mNumber;
+    }
+
     /**
      * Ferme le client et le serveur, si existe
      */
@@ -94,6 +108,14 @@ public class NetworkObserverProxy {
         if (mHost != null) {
             mHost.stop();
             mHost = null;
+        }
+    }
+
+    private void sendCommon(Message msg) {
+        if (isHost()) {
+            mHost.broadcast(msg);
+        } else {
+            mClient.send(msg);
         }
     }
 
@@ -111,5 +133,18 @@ public class NetworkObserverProxy {
     public void onHostGameStart() {
         MessageGameStart msg = new MessageGameStart();
         mHost.broadcast(msg);
+    }
+
+    public void onPlayerFinishTurn(int newPlayerNumber) {
+        MessageNextTurn msg = new MessageNextTurn(newPlayerNumber);
+        sendCommon(msg);
+    }
+
+    public void onPlayerTurnEvent(int event, Object[] params) {
+        MessageTurnEvent msg = new MessageTurnEvent(event);
+        for (Object o : params) {
+            msg.addParameter(o);
+        }
+        sendCommon(msg);
     }
 }

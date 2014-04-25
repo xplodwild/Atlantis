@@ -24,6 +24,9 @@ import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.entities.Boat;
 import fr.miage.atlantis.entities.GameEntity;
 import fr.miage.atlantis.entities.PlayerToken;
+
+import static fr.miage.atlantis.logic.GameTurn.STEP_FINISH;
+
 import fr.miage.atlantis.network.NetworkObserverProxy;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -172,6 +175,8 @@ public abstract class GameLogic implements GameTurnListener {
      * @param prepareBoard Indique si il faut générer un board ou non
      */
     public void prepareGame(String[] players, boolean prepareBoard) {
+        final NetworkObserverProxy nop = NetworkObserverProxy.getDefault();
+
         // Création du board
         mBoard = new GameBoard(prepareBoard);
 
@@ -179,6 +184,10 @@ public abstract class GameLogic implements GameTurnListener {
         mPlayers = new Player[players.length];
         for (int i = 0; i < mPlayers.length; i++) {
             mPlayers[i] = new Player(players[i], i + 1, prepareBoard);
+
+            if (nop.getPlayerNumber() == i + 1) {
+                mPlayers[i].createTokens();
+            }
         }
 
         if (DBG_AUTOPREPARE) {
@@ -190,9 +199,8 @@ public abstract class GameLogic implements GameTurnListener {
         }
 
         mVolcanized = false;
-        
-        // Propagation du board si on est en réseau et qu'on est hôte
-        NetworkObserverProxy nop = NetworkObserverProxy.getDefault();
+
+
         if (nop.isHost()) {
             nop.onHostBoardSync(mBoard);
         }
@@ -229,7 +237,10 @@ public abstract class GameLogic implements GameTurnListener {
         }
         Player p = mPlayers[0];
         mCurrentTurn = new GameTurn(this, p);
-        mCurrentTurn.startTurn();
+        if (!NetworkObserverProxy.getDefault().isNetworkGame() ||
+                NetworkObserverProxy.getDefault().isHost()) {
+            mCurrentTurn.startTurn();
+        }
     }
 
     /**
@@ -243,10 +254,19 @@ public abstract class GameLogic implements GameTurnListener {
         if (isFinished()) {
             onGameFinished();
         } else {
-            mCurrentTurn = new GameTurn(this, this.nextPlayer(p));
+            Player next = this.nextPlayer(p);
+            mCurrentTurn = new GameTurn(this, next);
 
-            // Lance le nouveau tour
-            mCurrentTurn.startTurn();
+            NetworkObserverProxy nop = NetworkObserverProxy.getDefault();
+            if (nop.isNetworkGame() && nop.getPlayerNumber() == p.getNumber()) {
+                nop.onPlayerFinishTurn(next.getNumber());
+            }
+
+            if (!NetworkObserverProxy.getDefault().isNetworkGame() ||
+                    NetworkObserverProxy.getDefault().getPlayerNumber() == next.getNumber()) {
+                // Lance le nouveau tour
+                mCurrentTurn.startTurn();
+            }
         }
     }
 
