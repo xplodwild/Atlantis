@@ -83,7 +83,7 @@ public final class GameBoard {
             this.beachTilesRemaining = NB_BEACHTILES;
             this.forestTilesRemaining = NB_FORESTTILES;
             this.mountainTilesRemaining = NB_MOUNTAINTILES;
-        
+
             this.fillInRandomizerWithTiles();
             this.generateDefaultBoard();
             this.setDefaultBoardTileAttributes();
@@ -97,11 +97,10 @@ public final class GameBoard {
 
     }
 
+    /**
+     * Update des attributs des tiles SeaShark & Echappatoires
+     */
     private void setDefaultBoardTileAttributes() {
-        //-----------------------------------------------------------------------
-        //Update des attributs des tiles SeaShark & Echappatoires               |
-        //-----------------------------------------------------------------------
-
 
         WaterTile temp = (WaterTile) this.mTileSet.get("Water #17");
         temp.setIsLandingTile(true);
@@ -131,9 +130,12 @@ public final class GameBoard {
         temp.setIsLandingTile(true);
         temp.setIsBeginningWithSeaShark(true);
         this.mTileSet.put("Water #66", temp);
-        //-----------------------------------------------------------------------
+
     }
 
+    /**
+     * Ajout des 3 types de tiles
+     */
     public void fillInRandomizerWithTiles() {
 
         for (int i = 1; i <= this.forestTilesRemaining; i++) {
@@ -155,11 +157,12 @@ public final class GameBoard {
         }
     }
 
+    /**
+     * Ajout les Entités par défaut sur les cases prévues à cet effet C'est à
+     * dire 5 SeaSerpents sur les 5 cases prévues
+     */
     private void placeDefaultEntitiesOnBoard() {
 
-        //-----------------------------------------------------------------------
-        //Ajout des 5 SeaSerpent sur les Cases prévues à cet effet                |
-        //-----------------------------------------------------------------------
         GameTile temp;
         SeaSerpent ss;
 
@@ -190,15 +193,13 @@ public final class GameBoard {
         ss = new SeaSerpent();
         ss.moveToTile(null, temp);
         putEntity(ss);
-        //-----------------------------------------------------------------------
+
     }
 
+    /**
+     * Génère un Board par défaut Ajout des Tiles de la Ligne 1 à la dernière
+     */
     private void generateDefaultBoard() {
-
-
-        //-----------------------------------------------------------------------
-        //Ligne 1                                                               |
-        //-----------------------------------------------------------------------
 
 
         //On defini les deux premiere Tile de frontiere du board
@@ -217,10 +218,6 @@ public final class GameBoard {
             this.placeTileAtTheRightOf(nextTile, tmp);
             nextTile = (BorderTile) this.mTileSet.get("Border #" + i);
         }
-        //-----------------------------------------------------------------------
-
-
-
 
         //-----------------------------------------------------------------------
         //Ligne 2                                                               |
@@ -249,9 +246,6 @@ public final class GameBoard {
         this.placeTileAtTheRightOf(tmp, nextTile);
         nextTile = (BorderTile) this.mTileSet.get("Border #9");
         this.placeTileAtTheRightOf(nextTile, new BorderTile(this, "Border #10", true));
-        //-----------------------------------------------------------------------
-
-
 
 
         //-----------------------------------------------------------------------
@@ -277,7 +271,6 @@ public final class GameBoard {
 
         nextTile = new BorderTile(this, "Border #11", true);
         this.placeTileAtTheRightOf(tmp, nextTile);
-        //-----------------------------------------------------------------------
 
 
         //-----------------------------------------------------------------------
@@ -303,9 +296,6 @@ public final class GameBoard {
 
         nextTile = new BorderTile(this, "Border #12", true);
         this.placeTileAtTheRightOf(tmp, nextTile);
-        //-----------------------------------------------------------------------
-
-
 
 
         //-----------------------------------------------------------------------
@@ -348,9 +338,6 @@ public final class GameBoard {
 
         nextTile = new BorderTile(this, "Border #13");
         this.placeTileAtTheRightOf(tmp, nextTile);
-        //-----------------------------------------------------------------------
-
-
 
 
         //-----------------------------------------------------------------------
@@ -393,9 +380,6 @@ public final class GameBoard {
 
         nextTile = new BorderTile(this, "Border #14");
         this.placeTileAtTheRightOf(tmp, nextTile);
-        //-----------------------------------------------------------------------
-
-
 
 
         //-----------------------------------------------------------------------
@@ -433,9 +417,6 @@ public final class GameBoard {
 
         nextTile = new BorderTile(this, "Border #15");
         this.placeTileAtTheRightOf(nextTile3, nextTile);
-        //-----------------------------------------------------------------------
-
-
 
 
         //-----------------------------------------------------------------------
@@ -486,9 +467,6 @@ public final class GameBoard {
 
         nextTile = new BorderTile(this, "Border #16");
         this.placeTileAtTheRightOf(nextTile2, nextTile);
-        //-----------------------------------------------------------------------
-
-
 
 
         //-----------------------------------------------------------------------
@@ -526,9 +504,6 @@ public final class GameBoard {
 
         nextTile = new BorderTile(this, "Border #17");
         this.placeTileAtTheRightOf(nextTile3, nextTile);
-        //-----------------------------------------------------------------------
-
-
 
 
         //-----------------------------------------------------------------------
@@ -572,9 +547,6 @@ public final class GameBoard {
 
         nextTile = new BorderTile(this, "Border #18");
         this.placeTileAtTheRightOf(tmp, nextTile);
-        //-----------------------------------------------------------------------
-
-
 
 
         //-----------------------------------------------------------------------
@@ -619,9 +591,6 @@ public final class GameBoard {
 
         nextTile = new BorderTile(this, "Border #19");
         this.placeTileAtTheRightOf(tmp, nextTile);
-        //-----------------------------------------------------------------------
-
-
 
 
         //-----------------------------------------------------------------------
@@ -647,9 +616,6 @@ public final class GameBoard {
 
         nextTile = new BorderTile(this, "Border #20", true);
         this.placeTileAtTheRightOf(tmp, nextTile);
-        //-----------------------------------------------------------------------
-
-
 
 
         //-----------------------------------------------------------------------
@@ -675,9 +641,6 @@ public final class GameBoard {
 
         nextTile = new BorderTile(this, "Border #21", true);
         this.placeTileAtTheRightOf(tmp, nextTile);
-        //-----------------------------------------------------------------------
-
-
 
 
         //-----------------------------------------------------------------------
@@ -711,9 +674,6 @@ public final class GameBoard {
 
         nextTile3 = new BorderTile(this, "Border #22", true);
         this.placeTileAtTheRightOf(nextTile, nextTile3);
-        //-----------------------------------------------------------------------
-
-
 
 
         //-----------------------------------------------------------------------
@@ -731,8 +691,6 @@ public final class GameBoard {
             this.placeTileAtTheRightOf(nextTile, tmps);
             nextTile = (BorderTile) this.mTileSet.get("Border #" + i);
         }
-        //-----------------------------------------------------------------------
-
 
 
     }
@@ -742,7 +700,7 @@ public final class GameBoard {
      * (h=0)
      *
      * @param tile Tile du plateau à tester
-     * @return
+     * @return un boolean
      */
     public boolean isTileAtWaterEdge(GameTile tile) {
         boolean isAtWaterEdge = false;
@@ -773,7 +731,7 @@ public final class GameBoard {
     /**
      * Génère un tile de type aléatoire
      *
-     * @return un tile generé aléatoirement parmis les 3 types.
+     * @return un tile géneré aléatoirement parmi les 3 types.
      */
     public GameTile generateRandomTile() {
         int random = new Random().nextInt(randomiser.size());
@@ -784,11 +742,11 @@ public final class GameBoard {
     }
 
     /**
-     * Teste si existance d'un tile d'une hauteur donnée dans les tiles de la
+     * Teste si il y a existence d'un tile d'une hauteur donnée dans les tiles de la
      * board
      *
      * @param h hauteur du tile dont on teste l'existance
-     * @return Si existance d'un tile de cette hauteur
+     * @return Boolean : Si existance d'un tile de cette hauteur
      */
     public boolean hasTileAtLevel(int h) {
         Boolean retour = false;
@@ -804,9 +762,9 @@ public final class GameBoard {
         return retour;
     }
 
+    
     /**
-     * Coule le tile donné et le supprime du plateau, passe tout les player
-     * present sur le tile à Swimmer
+     * Coule le tile donné et le supprime du plateau, passe tous les players presents sur le tile à Swimmer
      *
      * @param tile tile a couler
      * @return La WaterTile qui a remplacé la tile
@@ -863,19 +821,18 @@ public final class GameBoard {
         mTileSet.put(newTile.getName(), newTile);
         return newTile;
     }
-    
+
+    /**
+     * Ajout de la Tile sans faire de vérification préalable
+     * @param tile Tile à ajouter
+     */
     public void forcePutTile(GameTile tile) {
         mTileSet.put(tile.getName(), tile);
     }
 
-    public boolean canPlaceTile() {
-        boolean canPlace = false;
-
-        return canPlace;
-    }
-
+   
     /**
-     * Permet de place un Tile a la droite d'un autre, tout en updatant les Tile
+     * Permet de placer un Tile à la droite d'un autre, tout en updatant les Tiles
      * adjacents.
      *
      * @param base Tile existant
@@ -895,8 +852,7 @@ public final class GameBoard {
 
             newTile.setLeftUpperTile(baseUpperRightTile);
             this.placeTileAtTheBottomRightOf(baseUpperRightTile, newTile);
-            //baseUpperRightTile.setRightBottomTile(newTile);            
-            //this.mTileSet.put(baseUpperRightTile.getName(), baseUpperRightTile);
+            
         }
         if (baseBottomRightTile != null) {
             this.placeTileAtTheBottomLeftOf(newTile, baseBottomRightTile);
@@ -1006,6 +962,9 @@ public final class GameBoard {
         this.mTileSet.put(newTile.getName(), newTile);
     }
 
+    /**
+     * Afficher les informations sur toutes les tiles du board
+     */
     public void printAllTiles() {
         Set<String> s = this.mTileSet.keySet();
 
@@ -1039,9 +998,9 @@ public final class GameBoard {
     }
 
     /**
-     * Retourne si oui ou non il y a une tile au bord de l'eau au niveau
-     * spécifié. Exemple, si on a une tile Beach entourée de Mountain, cela
-     * renverra false même si une tile au niveau beach existe.
+     * Retourne si oui ou non il y a une tile au bord de l'eau au niveau spécifié. 
+     * Exemple, si on a une tile Beach entourée de Mountain, cela renverra 
+     * false même si une tile au niveau beach existe.
      *
      * @param level Le niveau
      * @return true si il y a une tile au bord de l'eau, false sinon
@@ -1059,22 +1018,24 @@ public final class GameBoard {
 
         return false;
     }
-    
+
     public Set<String> getAllEntities() {
         return mEntities.keySet();
     }
-    
+
     /**
      * Retourne l'entité ayant le nom indiqué, ou null
+     *
      * @param name Nom de l'entité
      * @return Le GameEntity associé
      */
     public GameEntity getEntity(final String name) {
         return mEntities.get(name);
     }
-    
+
     /**
      * Met une entité dans le hashmap d'entités
+     *
      * @param ent L'entité à sauver
      */
     public void putEntity(GameEntity ent) {
@@ -1084,58 +1045,117 @@ public final class GameBoard {
     //--------------------------------------------------------------------------
     //GETTERS                                                                  |
     //--------------------------------------------------------------------------
+    
+    /**
+     * Recupère la tile dans le coin en haut à droite de la tile courante
+     * @param tile tile choisie
+     * @return la tile en haut à droite de la tile choisi
+     */
     private GameTile getUpperRightCornerTile(GameTile tile) {
         return tile.getRightUpperTile();
     }
 
+    /**
+     * Recupère la tile dans le coin en haut à gauche
+     * @param tile tile choisie
+     * @return la tile en haut à gauche
+     */
     private GameTile getUpperLeftCornerTile(GameTile tile) {
         return tile.getLeftUpperTile();
     }
 
+     /**
+     * Recupère la tile dans le coin en bas à gauche
+     * @param tile tile choisie
+     * @return la tile en bas à gauche
+     */
     private GameTile getBottomLeftCornerTile(GameTile tile) {
         return tile.getLeftBottomTile();
     }
 
+    /**
+     * Recupère la tile dans le coin en bas à droite
+     * @param tile tile choisie
+     * @return  la tile en bas à droite
+     */
     private GameTile getBottomRightCornerTile(GameTile tile) {
         return tile.getRightBottomTile();
     }
 
+    /**
+     * Recupère la tile à côté à droite
+     * @param tile tile choisie
+     * @return la tile à droite 
+     */
     private GameTile getRightSideTile(GameTile tile) {
         return tile.getRightTile();
     }
 
+    /**
+     * Recupère la tile à gauche
+     * @param tile tile choisie
+     * @return la tile à gauche
+     */
     private GameTile getLeftSideTile(GameTile tile) {
         return tile.getLeftTile();
     }
-    //--------------------------------------------------------------------------
+  
 
     //--------------------------------------------------------------------------
     //SETTERS                                                                  |
     //--------------------------------------------------------------------------
+    /**
+     * Définit la tile en haut à droite
+     * @param tile tile choisie
+     * @param toBePlaced tile a placer
+     */
     private void setUpperRightCornerTile(GameTile tile, GameTile toBePlaced) {
         tile.setRightUpperTile(toBePlaced);
     }
 
+    /**
+     * Définit  la tile en haut à gauche
+     * @param tile tile choisie
+     * @param toBePlaced tile à placer
+     */
     private void setUpperLeftCornerTile(GameTile tile, GameTile toBePlaced) {
         tile.setLeftUpperTile(toBePlaced);
     }
 
+    /**
+     * Définit la tile en bas à gauche
+     * @param tile tile choisie
+     * @param toBePlaced tile à placer 
+     */
     private void setBottomLeftCornerTile(GameTile tile, GameTile toBePlaced) {
         tile.setLeftBottomTile(toBePlaced);
     }
 
+    /**
+     * Définit la tile en bas à droite
+     * @param tile tile choisie
+     * @param toBePlaced tile à placer
+     */
     private void setBottomRightCornerTile(GameTile tile, GameTile toBePlaced) {
         tile.setRightBottomTile(toBePlaced);
     }
 
+    /**
+     * Définit la tile à droite
+     * @param tile tile choisie
+     * @param toBePlaced tile à placer
+     */
     private void setRightSideTile(GameTile tile, GameTile toBePlaced) {
         tile.setRightTile(toBePlaced);
     }
 
+    /**
+     * Définit la tile à gauche
+     * @param tile tile choisie
+     * @param toBePlaced tile à placer
+     */
     private void setLeftSideTile(GameTile tile, GameTile toBePlaced) {
         tile.setLeftTile(toBePlaced);
     }
-    //--------------------------------------------------------------------------
-
-   
+    
 }
