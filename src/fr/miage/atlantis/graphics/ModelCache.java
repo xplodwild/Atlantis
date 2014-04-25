@@ -23,13 +23,22 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
+ * Classe cache des modèles du jeux
  */
 public class ModelCache {
 
+    /**
+     * Modèles spatiaux
+     */
     private Map<String, Spatial> mModels;
+    /**
+     * Modeles entités et tuiles et autres éléments
+     */
     private Map<String, Material> mMaterials;
 
+    /**
+     * Constructeur vide de ModelCahce
+     */
     private ModelCache() {
         mModels = new HashMap<String, Spatial>();
         mMaterials = new HashMap<String, Material>();
@@ -39,24 +48,56 @@ public class ModelCache {
         getModel("Models/boat.mesh.xml");
         getModel("Models/serpentA.mesh.xml");
     }
+    /**
+     * Instace actuelle (design singleton)
+     */
     private final static ModelCache INSTANCE = new ModelCache();
 
+    /**
+     * Renvoie l'instance actuelle
+     *
+     * @return l'instance actuelle
+     */
     public static ModelCache getInstance() {
         return INSTANCE;
     }
 
+    /**
+     * Renvoie le modèle selon le chemin indiqué
+     *
+     * @param path chemin de modèle
+     * @return modèle spatial
+     */
     public final Spatial getModel(final String path) {
         return mModels.get(path);
     }
 
+    /**
+     * Place un modèle à un chemin donnée
+     *
+     * @param path chemin donnée
+     * @param model model à placer
+     */
     public void putModel(final String path, final Spatial model) {
         mModels.put(path, model);
     }
 
+    /**
+     * Récupère un materiel en fonction de sa clé
+     *
+     * @param key la clé
+     * @return le matérial
+     */
     public Material getMaterial(final String key) {
         return mMaterials.get(key);
     }
 
+    /**
+     * Placé un matérial avec sa clé
+     *
+     * @param key clé
+     * @param mat material à placer
+     */
     public void putMaterial(final String key, final Material mat) {
         mMaterials.put(key, mat);
     }
