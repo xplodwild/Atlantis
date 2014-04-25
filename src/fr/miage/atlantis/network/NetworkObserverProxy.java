@@ -65,9 +65,11 @@ public class NetworkObserverProxy {
         return mHost != null;
     }
 
+
     /**
      * Renvoie true si cet ordinateur est client d'une partie réseau
      * @return
+
      */
     public boolean isClient() {
         return mClient != null;

@@ -205,7 +205,7 @@ public abstract class GameLogic implements GameTurnListener {
 
         mVolcanized = false;
 
-        // Propagation du board si on est en réseau et qu'on est hôte
+
         if (nop.isHost()) {
             nop.onHostBoardSync(mBoard);
         }

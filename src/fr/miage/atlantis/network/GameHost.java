@@ -73,7 +73,9 @@ public class GameHost implements ConnectionListener, MessageListener<HostedConne
         Serializer.registerClass(MessageRemoteTile.class);
     }
 
+
     public GameHost(Game3DLogic logic, GuiController guiController, String name) {
+
         mConnections = new ArrayList<HostedConnection>();
         mConnectionToName = new HashMap<Integer, String>();
         mLogic = logic;
@@ -165,6 +167,7 @@ public class GameHost implements ConnectionListener, MessageListener<HostedConne
         }
     }
 
+
     private void log(final String m) {
         Logger.getGlobal().info(m);
     }
@@ -179,19 +182,26 @@ public class GameHost implements ConnectionListener, MessageListener<HostedConne
         mGuiController.onPlayerConnected(m.getName());
 
         // On retransmet aux autres ce joueur
+
+
         int playerNumber = mConnectionToName.size() + 1;
         MessagePlayerJoined msg = new MessagePlayerJoined(m.getName(), playerNumber);
+
         broadcast(msg, source);
 
         // On transmet les joueurs existant à ce joueur, y compris lui-même afin qu'il connaisse
         // sa place dans le jeu.
+
         msg = new MessagePlayerJoined(mPlayerName, playerNumber);
+
         source.send(msg);
 
         Collection<String> players = mConnectionToName.values();
         for (String player : players) {
             if (player != null) {
+
                 msg = new MessagePlayerJoined(player, playerNumber);
+
                 source.send(msg);
             }
         }

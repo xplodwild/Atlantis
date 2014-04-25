@@ -2,12 +2,17 @@ package fr.miage.atlantis.gui.controllers;
 
 import com.jme3.renderer.Camera;
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.controls.Button;
+import de.lessvoid.nifty.controls.Chat;
+import de.lessvoid.nifty.controls.ChatTextSendEvent;
 import de.lessvoid.nifty.controls.Label;
 import de.lessvoid.nifty.controls.TextField;
+import de.lessvoid.nifty.controls.chatcontrol.ChatControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.PanelRenderer;
 import de.lessvoid.nifty.elements.render.TextRenderer;
+import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.Color;
@@ -132,7 +137,9 @@ public class GuiController implements ScreenController {
      * Démarre effectivement la partie réseau
      */
     public void startGameMulti() {
-        // On prépare le jeu sur l'hôte, puis on le propage aux clients (prepareGame le fait)
+
+        if(players.length>2){
+            // On prépare le jeu sur l'hôte, puis on le propage aux clients (prepareGame le fait)
         this.g3rdr.getLogic().prepareGame(players, true);
 
         // Préparation de l'interface
@@ -160,7 +167,29 @@ public class GuiController implements ScreenController {
         Camera cam = g3rdr.getCamera();
         CamConstants.moveAboveBoard(g3rdr.getCameraNode(), cam);
         AudioManager.getDefault().setMainMusic(false);
+        }
     }
+    
+    
+    
+    public void receiveChatMessage(String joueur,String message){
+        Chat ipx = this.nifty.getScreen("lobbyMulti").findElementByName("chatId").getNiftyControl(Chat.class);
+                                
+        final Element chatPanel = this.nifty.getScreen("lobbyMulti").findElementByName("chatId");
+        final Chat chatController = chatPanel.findNiftyControl("chatPanel", Chat.class);
+                               
+        chatController.receivedChatLine(joueur,null,message);
+    }
+    
+    @NiftyEventSubscriber(id="chatId")
+    public final void onSendText(final String id, final ChatTextSendEvent event) {
+            
+        this.receiveChatMessage(id,event.getText());
+        
+    }
+    
+    
+
 
     public void onRemoteGameStart() {
         this.g3rdr.runOnMainThread(new Callable<Void>() {
@@ -198,6 +227,7 @@ public class GuiController implements ScreenController {
         TextField fieldJ1 = this.nifty.getScreen("HostLan").findElementByName("inputJ1").getNiftyControl(TextField.class);
         String nick;
 
+        
         if (fieldJ1.getRealText().isEmpty()) {
             nick = this.nameRandomizer.get(0);
         } else {
@@ -207,6 +237,9 @@ public class GuiController implements ScreenController {
         players = new String[1];
         players[0] = nick;
 
+        Chat ipx = this.nifty.getScreen("lobbyMulti").findElementByName("chatId").getNiftyControl(Chat.class);
+        ipx.addPlayer(nick, null);
+        
         Element niftyElement;
         niftyElement = nifty.getScreen("lobbyMulti").findElementByName("nom");
         niftyElement.getRenderer(TextRenderer.class).setText(nick);
@@ -222,6 +255,7 @@ public class GuiController implements ScreenController {
         this.nifty.gotoScreen("lobbyMulti");
     }
 
+    
     /**
      * Demarre une nouvelle partie avec les pseudos données ou des pseudos
      * aléatoires si non renseigné.
@@ -302,29 +336,39 @@ public class GuiController implements ScreenController {
         this.nifty.gotoScreen("HostLan");
     }
 
+    
+    
     /**
      * Fonction appelée une fois que les champs de l'ecran pour rejoindre une
      * partie lan sont remplis.
      */
     public void lanConnect() {
-
+        this.nifty.getScreen("lobbyMulti").findElementByName("btnNouvPartie").hide();
+        
         TextField ip = this.nifty.getScreen("JoinLan").findElementByName("inputIP").getNiftyControl(TextField.class);
         TextField nick = this.nifty.getScreen("JoinLan").findElementByName("inputNick").getNiftyControl(TextField.class);
 
         String ipServ = ip.getRealText();
         String nickname = nick.getRealText();
+        
+        if(nickname.equals("")){
+            int k=new Random().nextInt(20);
+            nickname = this.nameRandomizer.get(k);
+        }
 
         boolean connected = this.lanConnectImpl(ipServ, nickname);
 
         if (connected) {
-
-            this.nifty.gotoScreen("lobbyMulti");
-
+            Chat ipx = this.nifty.getScreen("lobbyMulti").findElementByName("chatId").getNiftyControl(Chat.class);
+            ipx.addPlayer(nickname, null);
+            
+            this.nifty.gotoScreen("lobbyMulti"); 
         } else {
             this.nifty.gotoScreen("ErrorConnect");
         }
     }
 
+    
     /**
      * Connexion effective a un serveur de jeu en local
      *
@@ -348,6 +392,7 @@ public class GuiController implements ScreenController {
 
         return retour;
     }
+    
 
     /**
      * Redemarre le jeu en cours (avec les memes joueurs
@@ -385,6 +430,11 @@ public class GuiController implements ScreenController {
                 this.nifty.gotoScreen("inGameHud");
                 break;
         }
+    }    
+    
+    
+    public void errorConnection(){
+        this.nifty.gotoScreen("ErrorConnect");
     }
 
     /**

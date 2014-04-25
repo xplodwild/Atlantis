@@ -23,6 +23,7 @@ import com.jme3.network.Message;
 import com.jme3.network.MessageListener;
 import com.jme3.network.Network;
 import com.jme3.network.serializing.Serializer;
+
 import fr.miage.atlantis.Game3DLogic;
 import fr.miage.atlantis.gui.controllers.GuiController;
 import fr.miage.atlantis.logic.GameLogic;
@@ -37,7 +38,9 @@ import fr.miage.atlantis.network.messages.MessageRollDice;
 import fr.miage.atlantis.network.messages.MessageSyncBoard;
 import fr.miage.atlantis.network.messages.MessageTurnEvent;
 import java.io.IOException;
+
 import java.util.concurrent.Callable;
+
 import java.util.logging.Logger;
 
 /**
@@ -66,7 +69,9 @@ public class GameClient implements ClientStateListener, MessageListener {
 
 
     public GameClient(GameLogic logic, GuiController gui) {
+
         mLogic = (Game3DLogic) logic;
+
         mGuiController = gui;
         mCommon = new GameCommonCommands(mLogic);
     }
@@ -109,6 +114,7 @@ public class GameClient implements ClientStateListener, MessageListener {
             handleMessageGameStart((MessageGameStart) m);
         } else if (m instanceof MessageSyncBoard) {
             handleMessageSyncBoard((MessageSyncBoard) m);
+
         } else if (m instanceof MessageNextTurn) {
             handleMessageNextTurn((MessageNextTurn) m);
         } else if (m instanceof MessageTurnEvent) {
@@ -131,9 +137,11 @@ public class GameClient implements ClientStateListener, MessageListener {
     private void handleMessagePlayerJoined(MessagePlayerJoined m) {
         log("Player joined game: " + m.getName());
         mGuiController.onPlayerConnected(m.getName());
+
         if (m.getName().equals(mPlayerName)) {
             NetworkObserverProxy.getDefault().setPlayerNumber(m.getNumber());
         }
+
     }
 
     private void handleMessageGameStart(MessageGameStart m) {
