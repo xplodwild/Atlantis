@@ -62,18 +62,38 @@ public class EntityMove {
     //--------------------------------------------------------------------------
     //GETTERS                                                                  |
     //--------------------------------------------------------------------------
+    /**
+     * Retourne la souce du mouvement
+     *
+     * @return la tile source du Move
+     */
     public GameTile getSource() {
         return mSource;
     }
 
+    /**
+     * Récupère la destination
+     *
+     * @return la tile destination
+     */
     public GameTile getDestination() {
         return mDestination;
     }
 
+    /**
+     * Récupère l'entity qu'on essaie de déplacer
+     *
+     * @return l'entity qu'on tente de move
+     */
     public GameEntity getEntity() {
         return mEntity;
     }
 
+    /**
+     * Recupère le numéro du tour
+     *
+     * @return le numéro du tour en cours
+     */
     public int getTurnNumber() {
         return this.mTurnNumber;
     }
