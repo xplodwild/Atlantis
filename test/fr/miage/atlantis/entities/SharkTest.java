@@ -49,7 +49,7 @@ public class SharkTest {
     public void testOnEntityCross() {
         System.out.println("onEntityCross");
         GameLogic logic = new NullGameLogic();
-        GameBoard board = new GameBoard();
+        GameBoard board = new GameBoard(true);
         GameTile tile = board.getTileSet().get("Water #37");
         Player winnie = new Player("Winnie", 1);
         PlayerToken pt1 = new PlayerToken(winnie, 3);
