@@ -25,7 +25,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.ui.Picture;
 
 /**
- *
+ * Implémentation de code pour les objets dessins, pour pouvoir les placer
  */
 public class AbstractDisplay extends Picture {
 
@@ -34,6 +34,14 @@ public class AbstractDisplay extends Picture {
     private int mWidth;
     private int mHeight;
 
+    /**
+     * Constructeur de la classe
+     *
+     * @param width largeur du picture
+     * @param height hauteur du picture
+     * @param name nom du picture
+     * @param assetManager AssetManager qui permet d'accéder aux assets
+     */
     public AbstractDisplay(final int width, final int height, final String name,
             final AssetManager assetManager) {
         super(name);
@@ -42,6 +50,12 @@ public class AbstractDisplay extends Picture {
         mAssetManager = assetManager;
     }
 
+    /**
+     * Représente l'échelle
+     *
+     * @param s taille de la picture
+     * @return l'echelle de la picture
+     */
     @Override
     public Spatial scale(float s) {
         mWidth *= s;
@@ -49,10 +63,20 @@ public class AbstractDisplay extends Picture {
         return super.scale(s);
     }
 
+    /**
+     * Recupère la largeur
+     *
+     * @return la largeur
+     */
     public int getWidth() {
         return mWidth;
     }
 
+    /**
+     * Recupère la hauteur
+     *
+     * @return la hauteur
+     */
     public int getHeight() {
         return mHeight;
     }
