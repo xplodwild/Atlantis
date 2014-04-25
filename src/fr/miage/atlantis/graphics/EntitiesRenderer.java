@@ -37,7 +37,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- *
+ * Rendu graphique des entités
  */
 public class EntitiesRenderer extends Node {
 
@@ -46,6 +46,12 @@ public class EntitiesRenderer extends Node {
     private Map<GameEntity, Node> mEntityToNode;
     private Map<Node, GameEntity> mNodeToEntity;
 
+    /**
+     * Constructeur de EntitiesRenderer
+     *
+     * @param am AssetManager qui permet d'accéder aux assets
+     * @param board Renderer de la board
+     */
     public EntitiesRenderer(AssetManager am, BoardRenderer board) {
         mAssetManager = am;
         mBoardRenderer = board;
@@ -53,6 +59,12 @@ public class EntitiesRenderer extends Node {
         mNodeToEntity = new HashMap<Node, GameEntity>();
     }
 
+    /**
+     * Ajout d'une entité dans le renderer
+     *
+     * @param ent entité a ajouter
+     * @return le modèle animé de l'entité
+     */
     public AnimatedModel addEntity(GameEntity ent) {
         AnimatedModel output = null;
         if (ent instanceof Boat) {
@@ -82,7 +94,7 @@ public class EntitiesRenderer extends Node {
         output.playAnimation(AnimationBrain.getIdleAnimation(ent));
         return output;
     }
-    
+
     /**
      * Supprime toutes les entitées présentes sur le plateau
      */
@@ -91,13 +103,14 @@ public class EntitiesRenderer extends Node {
         for (Node node : nodes) {
             detachChild(node);
         }
-        
+
         mEntityToNode.clear();
         mNodeToEntity.clear();
     }
 
     /**
      * Supprime du plateau l'entité indiquée
+     *
      * @param ent L'entité à supprimer
      */
     public void removeEntity(GameEntity ent) {
@@ -107,35 +120,77 @@ public class EntitiesRenderer extends Node {
         mNodeToEntity.remove(node);
     }
 
+    /**
+     * Retourne le noeud ou ets attaché l'entité
+     *
+     * @param ent entité en question
+     * @return un noeud
+     */
     public Node getNodeFromEntity(GameEntity ent) {
         return mEntityToNode.get(ent);
     }
 
+    /**
+     * Retourne l'entité placée sur un noeud
+     *
+     * @param node noeud concerné
+     * @return entité sur le noeud
+     */
     public GameEntity getEntityFromNode(Node node) {
         return mNodeToEntity.get(node);
     }
 
+    /**
+     * Renvoie le modèle animé d'un bateau
+     *
+     * @param b le bateau
+     * @return le modele animé du bateau
+     */
     private AnimatedModel addBoat(Boat b) {
         BoatModel model = new BoatModel(mAssetManager);
         return model;
     }
 
+    /**
+     * Renvoie le modèle animé d'un pion
+     *
+     * @param b le pion
+     * @return le modele animé du pion
+     */
     private AnimatedModel addPlayer(PlayerToken p) {
         PlayerModel model = new PlayerModel(mAssetManager,
                 PlayerModel.intToColor(p.getPlayer().getNumber()));
         return model;
     }
 
+    /**
+     * Renvoie le modèle animé d'un serpent
+     *
+     * @param b le serpent
+     * @return le modele animé du serpent
+     */
     private AnimatedModel addSeaSerpent(SeaSerpent s) {
         SeaSerpentModel model = new SeaSerpentModel(mAssetManager);
         return model;
     }
 
+    /**
+     * Renvoie le modèle animé d'un requin bateau
+     *
+     * @param b le requin
+     * @return le modele animé du requin
+     */
     private AnimatedModel addShark(Shark s) {
         SharkModel model = new SharkModel(mAssetManager);
         return model;
     }
 
+    /**
+     * Renvoie le modèle animé de la baleine
+     *
+     * @param b la baleine
+     * @return le modele animé de la baleine
+     */
     private AnimatedModel addWhale(Whale w) {
         WhaleModel model = new WhaleModel(mAssetManager);
         return model;
