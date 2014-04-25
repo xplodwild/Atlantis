@@ -31,10 +31,25 @@ import fr.miage.atlantis.logic.GameLogic;
  */
 public class PlayerToken extends GameEntity {
 
+    /**
+     *
+     */
     public final static int STATE_UNDEFINED = -1;
+    /**
+     *
+     */
     public final static int STATE_ON_LAND = 0;
+    /**
+     *
+     */
     public final static int STATE_SWIMMING = 1;
+    /**
+     *
+     */
     public final static int STATE_ON_BOAT = 2;
+    /**
+     *
+     */
     public final static int STATE_SAFE = 3;
     /**
      * Joueur a qui appartient le pion
@@ -56,7 +71,6 @@ public class PlayerToken extends GameEntity {
     /**
      * Constructeur des pions
      *
-     * @param tile Tile sur lequel le pion est placé
      * @param p Joueur a qui appartient le pion
      * @param points Valeur du pion
      */

@@ -19,18 +19,34 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({fr.miage.atlantis.logic.GameTurnTest.class, fr.miage.atlantis.logic.GameLogTest.class})
 public class LogicSuite {
 
+    /**
+     *
+     * @throws Exception
+     */
     @BeforeClass
     public static void setUpClass() throws Exception {
     }
 
+    /**
+     *
+     * @throws Exception
+     */
     @AfterClass
     public static void tearDownClass() throws Exception {
     }
 
+    /**
+     *
+     * @throws Exception
+     */
     @Before
     public void setUp() throws Exception {
     }
 
+    /**
+     *
+     * @throws Exception
+     */
     @After
     public void tearDown() throws Exception {
     }

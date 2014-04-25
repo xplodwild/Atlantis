@@ -36,7 +36,6 @@ public class Shark extends Animal {
     /**
      * Constructeur de Requin
      *
-     * @param tile Tile sur lequel on place le SeaSerpent
      */
     public Shark() {
         this("Shark", true);

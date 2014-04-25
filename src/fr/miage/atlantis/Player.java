@@ -102,30 +102,58 @@ public class Player {
     //--------------------------------------------------------------------------
     //GETTERS                                                                  |
     //--------------------------------------------------------------------------
+    /**
+     *
+     * @return
+     */
     public int getNumber() {
         return mNumber;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getName() {
         return mName;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<PlayerToken> getTokens() {
         return mTokens;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<TileAction> getActionTiles() {
         return mActionTiles;
     }
 
+    /**
+     *
+     * @param action
+     */
     public void addActionTile(TileAction action) {
         mActionTiles.add(action);
     }
 
+    /**
+     *
+     * @param action
+     */
     public void removeActionTile(TileAction action) {
         mActionTiles.remove(action);
     }
 
+    /**
+     *
+     * @return
+     */
     public int getScore() {
         Iterator it = mTokens.iterator();
         int score = 0;

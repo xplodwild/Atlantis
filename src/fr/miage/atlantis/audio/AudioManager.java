@@ -119,6 +119,7 @@ public class AudioManager {
      * Lis le song indiqué en chemin et renvoie une node
      *
      * @param path Le chemin du fichier
+     * @return  
      */
     public AudioNode playSound(final String path) {
         return playSound(path, false);
@@ -129,6 +130,7 @@ public class AudioManager {
      *
      * @param path Le chemin du fichier
      * @param loop true pour lire en boucle
+     * @return  
      */
     public AudioNode playSound(final String path, final boolean loop) {
         AudioNode node = mKnownNodes.get(path);

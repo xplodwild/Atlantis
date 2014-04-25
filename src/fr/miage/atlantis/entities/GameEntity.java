@@ -37,14 +37,41 @@ public class GameEntity {
      * Constantes de jeu
      */
     public final static int ACTION_SHARK_EAT = 0;
+    /**
+     *
+     */
     public final static int ACTION_WHALE_NUKE = 1;
+    /**
+     *
+     */
     public final static int ACTION_SEASERPENT_CRUSH = 2;
+    /**
+     *
+     */
     public final static int ACTION_PLAYER_ESCAPE = 3;
+    /**
+     *
+     */
     public final static int TYPE_NULL = 0;
+    /**
+     *
+     */
     public final static int TYPE_PLAYERTOKEN = 1;
+    /**
+     *
+     */
     public final static int TYPE_BOAT = 2;
+    /**
+     *
+     */
     public final static int TYPE_SEASERPENT = 3;
+    /**
+     *
+     */
     public final static int TYPE_SHARK = 4;
+    /**
+     *
+     */
     public final static int TYPE_WHALE = 5;
     private static int ENTITY_UNIQUE_ID = 0;
     private static final Logger logger = Logger.getGlobal();
@@ -65,7 +92,6 @@ public class GameEntity {
      * Constructeur de l'entité
      *
      * @param name Nom de l'entité
-     * @param tile Tile ou se place l'entité
      */
     public GameEntity(final String name) {
         this(name, true);

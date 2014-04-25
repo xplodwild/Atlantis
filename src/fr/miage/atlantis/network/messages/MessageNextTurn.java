@@ -28,14 +28,25 @@ import com.jme3.network.serializing.Serializable;
 public class MessageNextTurn extends AbstractMessage {
     private int mPlayerNumber;
     
+    /**
+     *
+     */
     public MessageNextTurn() {
         
     }
     
+    /**
+     *
+     * @param number
+     */
     public MessageNextTurn(int number) {
         mPlayerNumber = number;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getPlayerNumber() {
         return mPlayerNumber;
     }

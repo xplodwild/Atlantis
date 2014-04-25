@@ -61,6 +61,11 @@ public class Gui {
 
     
     
+    /**
+     *
+     * @param g3d
+     * @param n
+     */
     public Gui(Game3DRenderer g3d, Nifty n) {
         this.mAm = g3d.getAssetManager();
         this.maudioRenderer = g3d.getAudioRenderer();
@@ -271,18 +276,34 @@ public class Gui {
     //--------------------------------------------------------------------------
     //GETTERS
     //--------------------------------------------------------------------------
+    /**
+     *
+     * @return
+     */
     public Nifty getNifty() {
         return this.mNifty;
     }
 
+    /**
+     *
+     * @return
+     */
     public Console getConsole() {
         return mConsole;
     }
 
+    /**
+     *
+     * @return
+     */
     public InputManager getInputManager() {
         return minputManager;
     }
 
+    /**
+     *
+     * @return
+     */
     public Game3DRenderer getGame3DRenderer() {
         return mGame3DRenderer;
     }

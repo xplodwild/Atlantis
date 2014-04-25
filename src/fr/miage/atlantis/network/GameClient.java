@@ -65,6 +65,11 @@ public class GameClient implements ClientStateListener, MessageListener {
         Serializer.registerClass(MessageTurnEvent.class);
     }
 
+    /**
+     *
+     * @param logic
+     * @param gui
+     */
     public GameClient(GameLogic logic, GuiController gui) {
 
         mLogic = (Game3DLogic) logic;
@@ -72,6 +77,12 @@ public class GameClient implements ClientStateListener, MessageListener {
         mGuiController = gui;
     }
 
+    /**
+     *
+     * @param ipAddress
+     * @param name
+     * @throws IOException
+     */
     public void connect(final String ipAddress, final String name) throws IOException {
         mPlayerName = name;
         mClient = Network.connectToServer(ipAddress, GameHost.DEFAULT_PORT);
@@ -84,10 +95,17 @@ public class GameClient implements ClientStateListener, MessageListener {
         NetworkObserverProxy.getDefault().setClient(this);
     }
 
+    /**
+     *
+     * @param msg
+     */
     public void send(Message msg) {
         mClient.send(msg);
     }
 
+    /**
+     *
+     */
     public void close() {
         mClient.close();
     }
@@ -102,6 +120,11 @@ public class GameClient implements ClientStateListener, MessageListener {
 
     }
 
+    /**
+     *
+     * @param source
+     * @param m
+     */
     public void messageReceived(Object source, Message m) {
         if (m instanceof MessageOhai) {
         } else if (m instanceof MessagePlayerJoined) {
@@ -119,6 +142,10 @@ public class GameClient implements ClientStateListener, MessageListener {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public Client getClient() {
         return this.mClient;
     }

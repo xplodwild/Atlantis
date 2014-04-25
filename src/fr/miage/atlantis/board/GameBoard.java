@@ -715,6 +715,10 @@ public final class GameBoard {
         return isAtWaterEdge;
     }
 
+    /**
+     *
+     * @return
+     */
     public Map<String, GameTile> getTileSet() {
         return mTileSet;
     }
@@ -766,6 +770,7 @@ public final class GameBoard {
     /**
      * Coule le tile donné et le supprime du plateau, passe tous les players presents sur le tile à Swimmer
      *
+     * @param logic 
      * @param tile tile a couler
      * @return La WaterTile qui a remplacé la tile
      */
@@ -1019,6 +1024,10 @@ public final class GameBoard {
         return false;
     }
 
+    /**
+     *
+     * @return
+     */
     public Set<String> getAllEntities() {
         return mEntities.keySet();
     }

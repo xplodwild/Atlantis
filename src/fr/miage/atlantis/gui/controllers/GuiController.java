@@ -88,6 +88,9 @@ public class GuiController implements ScreenController {
         this.soundState = true;
     }
 
+    /**
+     *
+     */
     public GuiController() {
         super();
         this.nameRandomizer = new ArrayList();
@@ -95,24 +98,43 @@ public class GuiController implements ScreenController {
         this.players = new String[4];
     }
 
+    /**
+     *
+     * @param nifty
+     * @param screen
+     */
     @Override
     public void bind(Nifty nifty, Screen screen) {
         this.nifty = nifty;
         this.screen = screen;
     }
 
+    /**
+     *
+     */
     @Override
     public void onStartScreen() {
     }
 
+    /**
+     *
+     */
     @Override
     public void onEndScreen() {
     }
 
+    /**
+     *
+     * @param g3d
+     */
     public void set3DRenderer(Game3DRenderer g3d) {
         this.g3rdr = g3d;
     }
 
+    /**
+     *
+     * @return
+     */
     public String[] getPlayers() {
         return players;
     }
@@ -172,6 +194,11 @@ public class GuiController implements ScreenController {
     
     
     
+    /**
+     *
+     * @param joueur
+     * @param message
+     */
     public void receiveChatMessage(String joueur,String message){
         Chat ipx = this.nifty.getScreen("lobbyMulti").findElementByName("chatId").getNiftyControl(Chat.class);
                                 
@@ -181,6 +208,11 @@ public class GuiController implements ScreenController {
         chatController.receivedChatLine(joueur,null,message);
     }
     
+    /**
+     *
+     * @param id
+     * @param event
+     */
     @NiftyEventSubscriber(id="chatId")
     public final void onSendText(final String id, final ChatTextSendEvent event) {
             
@@ -191,6 +223,9 @@ public class GuiController implements ScreenController {
     
 
 
+    /**
+     *
+     */
     public void onRemoteGameStart() {
         this.g3rdr.runOnMainThread(new Callable<Void>() {
             public Void call() {
@@ -415,6 +450,9 @@ public class GuiController implements ScreenController {
 
     }
 
+    /**
+     *
+     */
     public void returnToGame() {
         Camera cam = g3rdr.getCamera();
         CamConstants.moveAboveBoard(g3rdr.getCameraNode(), cam);
@@ -433,6 +471,9 @@ public class GuiController implements ScreenController {
     }    
     
     
+    /**
+     *
+     */
     public void errorConnection(){
         this.nifty.gotoScreen("ErrorConnect");
     }
@@ -1115,6 +1156,10 @@ public class GuiController implements ScreenController {
         }
     }
 
+    /**
+     *
+     * @param name
+     */
     public void onPlayerConnected(final String name) {
         String[] newPlayers = new String[players == null ? 1 : players.length + 1];
         if (players != null) {

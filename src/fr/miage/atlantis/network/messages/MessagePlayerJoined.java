@@ -31,22 +31,38 @@ public class MessagePlayerJoined extends AbstractMessage {
     private int mNumber;
 
 
+    /**
+     *
+     */
     public MessagePlayerJoined() {
 
     }
 
 
+    /**
+     *
+     * @param name
+     * @param number
+     */
     public MessagePlayerJoined(final String name, final int number) {
         mNickname = name;
         mNumber = number;
 
     }
 
+    /**
+     *
+     * @return
+     */
     public String getName() {
         return mNickname;
     }
 
 
+    /**
+     *
+     * @return
+     */
     public int getNumber() {
         return mNumber;
     }

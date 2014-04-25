@@ -27,6 +27,9 @@ import com.jme3.network.serializing.Serializable;
 @Serializable
 public class MessageGameStart extends AbstractMessage {
 
+    /**
+     *
+     */
     public MessageGameStart() {
         
     }

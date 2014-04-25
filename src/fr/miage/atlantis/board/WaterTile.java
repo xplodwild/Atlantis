@@ -58,6 +58,8 @@ public class WaterTile extends GameTile {
      *
      * @param board Plateau de jeu auquel appartient le tiles de type mer
      * @param name Nom du tile
+     * @param escape 
+     * @param seashark  
      */
     public WaterTile(GameBoard board, String name, boolean escape, boolean seashark) {
         super(board, name, 0);

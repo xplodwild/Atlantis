@@ -51,6 +51,9 @@ import java.util.logging.Logger;
  */
 public class GameHost implements ConnectionListener, MessageListener<HostedConnection> {
 
+    /**
+     *
+     */
     public static final int DEFAULT_PORT = 8199;
 
     private Server mServer;
@@ -72,6 +75,12 @@ public class GameHost implements ConnectionListener, MessageListener<HostedConne
     }
 
 
+    /**
+     *
+     * @param logic
+     * @param guiController
+     * @param name
+     */
     public GameHost(Game3DLogic logic, GuiController guiController, String name) {
 
         mConnections = new ArrayList<HostedConnection>();
@@ -81,6 +90,10 @@ public class GameHost implements ConnectionListener, MessageListener<HostedConne
         mPlayerName = name;
     }
 
+    /**
+     *
+     * @throws IOException
+     */
     public void startListening() throws IOException {
         mServer = Network.createServer(DEFAULT_PORT);
         mServer.addConnectionListener(this);
@@ -92,6 +105,9 @@ public class GameHost implements ConnectionListener, MessageListener<HostedConne
         NetworkObserverProxy.getDefault().setPlayerNumber(1);
     }
 
+    /**
+     *
+     */
     public void stop() {
         mServer.close();
     }
@@ -139,6 +155,11 @@ public class GameHost implements ConnectionListener, MessageListener<HostedConne
         mConnections.remove(conn);
     }
 
+    /**
+     *
+     * @param source
+     * @param m
+     */
     public void messageReceived(HostedConnection source, Message m) {
         if (m instanceof MessageOhai) {
             // Un joueur s'est connecté

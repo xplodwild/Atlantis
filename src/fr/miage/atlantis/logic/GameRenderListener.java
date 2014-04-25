@@ -31,8 +31,16 @@ public interface GameRenderListener {
     public void onTurnStarted();
 
 
+    /**
+     *
+     * @param pt
+     */
     public void onInitialTokenPutDone(PlayerToken pt);
 
+    /**
+     *
+     * @param pt
+     */
     public void onInitialBoatPutDone(Boat pt);
 
 

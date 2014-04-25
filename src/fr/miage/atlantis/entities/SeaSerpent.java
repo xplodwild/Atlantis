@@ -36,7 +36,6 @@ public class SeaSerpent extends Animal {
     /**
      * Constructeur de SeaSerpent
      *
-     * @param tile Tile sur lequel on place le SeaSerpent
      */
     public SeaSerpent() {
         this("Serpent de mer", true);

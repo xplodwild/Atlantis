@@ -31,6 +31,10 @@ public class HelpCommand implements ConsoleCommands.ConsoleCommand {
 
     private Console console;
 
+    /**
+     *
+     * @param mConsole
+     */
     public HelpCommand(Console mConsole) {
         this.console = mConsole;
     }

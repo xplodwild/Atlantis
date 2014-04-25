@@ -42,6 +42,7 @@ public interface GameTurnListener {
 
     /**
      * Action à effectuer lorsqu'un pion a été initialement placé
+     * @param pt 
      */
     public void onInitialTokenPut(PlayerToken pt);
 
@@ -130,11 +131,14 @@ public interface GameTurnListener {
 
     /**
      * Signale au moteur logique qu'on est descendu d'un bateau
+     * @param player 
+     * @param b 
      */
     public void onPlayerDismountBoat(PlayerToken player, Boat b);
 
     /**
      * Action à réaliser losrqu'une tile se fait aspirer dans un tourbillon
+     * @param tile 
      */
     public void onTileWhirl(final GameTile tile);
 

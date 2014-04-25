@@ -28,34 +28,75 @@ import java.util.List;
  */
 @Serializable
 public class MessageTurnEvent extends AbstractMessage {
+    /**
+     *
+     */
     public static final int TURN_EVENT_PUT_INITIAL_TOKEN    = 0;
+    /**
+     *
+     */
     public static final int TURN_EVENT_MOVE_ENTITY          = 1;
+    /**
+     *
+     */
     public static final int TURN_EVENT_MOVE_DICE_ENTITY     = 2;
+    /**
+     *
+     */
     public static final int TURN_EVENT_ROLL_DICE            = 3;
+    /**
+     *
+     */
     public static final int TURN_EVENT_TILE_ACTION_TELEPORT = 4;
+    /**
+     *
+     */
     public static final int TURN_EVENT_TILE_ACTION_BONUS    = 5;
+    /**
+     *
+     */
     public static final int TURN_EVENT_SINK_TILE            = 6;
 
     private int mEvent;
     private List<Object> mParameters;
 
+    /**
+     *
+     */
     public MessageTurnEvent() {
         
     }
     
+    /**
+     *
+     * @param event
+     */
     public MessageTurnEvent(int event) {
         mEvent = event;
         mParameters = new ArrayList<Object>();
     }
 
+    /**
+     *
+     * @param param
+     */
     public void addParameter(Object param) {
         mParameters.add(param);
     }
 
+    /**
+     *
+     * @return
+     */
     public int getEvent() {
         return mEvent;
     }
 
+    /**
+     *
+     * @param i
+     * @return
+     */
     public Object getParameter(int i) {
         return mParameters.get(i);
     }

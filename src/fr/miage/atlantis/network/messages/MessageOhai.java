@@ -28,14 +28,25 @@ import com.jme3.network.serializing.Serializable;
 public class MessageOhai extends AbstractMessage {
     private String mNickname;
     
+    /**
+     *
+     */
     public MessageOhai() {
         
     }
     
+    /**
+     *
+     * @param name
+     */
     public MessageOhai(final String name) {
         mNickname = name;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getName() {
         return mNickname;
     }

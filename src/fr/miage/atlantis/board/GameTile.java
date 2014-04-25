@@ -34,11 +34,29 @@ import java.util.logging.Logger;
  */
 public abstract class GameTile {
 
+    /**
+     *
+     */
     public static final int TILE_NULL = 0;
+    /**
+     *
+     */
     public static final int TILE_BORDER = 1;
+    /**
+     *
+     */
     public static final int TILE_WATER = 2;
+    /**
+     *
+     */
     public static final int TILE_BEACH = 3;
+    /**
+     *
+     */
     public static final int TILE_FOREST = 4;
+    /**
+     *
+     */
     public static final int TILE_MOUNTAIN = 5;
     /**
      * mName : nom du tile
@@ -156,6 +174,7 @@ public abstract class GameTile {
      * Serialize la tile dans le DataOutputStream indiqué
      *
      * @param data La cible de serialisation
+     * @throws IOException  
      */
     public void serializeTo(DataOutputStream data) throws IOException {
         data.writeUTF(mName);

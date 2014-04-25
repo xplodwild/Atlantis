@@ -76,6 +76,10 @@ public class NullGameLogic extends GameLogic {
    
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public GameEntity getLastPickedEntity() {
         return null;
@@ -91,14 +95,25 @@ public class NullGameLogic extends GameLogic {
         
     }
 
+    /**
+     *
+     * @return
+     */
     public NullGameLogic onDiceRollFinished() {
       return null;
     }
 
+    /**
+     *
+     */
     public void startTurn() {
   
     }
 
+    /**
+     *
+     * @return
+     */
     public Object getTileSet() {
         return null;
     }

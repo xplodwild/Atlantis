@@ -42,6 +42,10 @@ public class NetworkObserverProxy {
 
     }
 
+    /**
+     *
+     * @return
+     */
     public static NetworkObserverProxy getDefault() {
         return INSTANCE;
     }
@@ -72,26 +76,50 @@ public class NetworkObserverProxy {
         return mClient != null;
     }
 
+    /**
+     *
+     * @param host
+     */
     public void setHost(GameHost host) {
         mHost = host;
     }
 
+    /**
+     *
+     * @return
+     */
     public GameHost getHost() {
         return mHost;
     }
 
+    /**
+     *
+     * @param client
+     */
     public void setClient(GameClient client) {
         mClient = client;
     }
 
+    /**
+     *
+     * @return
+     */
     public GameClient getClient() {
         return mClient;
     }
 
+    /**
+     *
+     * @param number
+     */
     public void setPlayerNumber(int number) {
         mNumber = number;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getPlayerNumber() {
         return mNumber;
     }
@@ -119,6 +147,10 @@ public class NetworkObserverProxy {
         }
     }
 
+    /**
+     *
+     * @param board
+     */
     public void onHostBoardSync(GameBoard board) {
         MessageSyncBoard msg = new MessageSyncBoard();
         try {
@@ -130,16 +162,28 @@ public class NetworkObserverProxy {
         mHost.broadcast(msg);
     }
 
+    /**
+     *
+     */
     public void onHostGameStart() {
         MessageGameStart msg = new MessageGameStart();
         mHost.broadcast(msg);
     }
 
+    /**
+     *
+     * @param newPlayerNumber
+     */
     public void onPlayerFinishTurn(int newPlayerNumber) {
         MessageNextTurn msg = new MessageNextTurn(newPlayerNumber);
         sendCommon(msg);
     }
 
+    /**
+     *
+     * @param event
+     * @param params
+     */
     public void onPlayerTurnEvent(int event, Object[] params) {
         MessageTurnEvent msg = new MessageTurnEvent(event);
         for (Object o : params) {

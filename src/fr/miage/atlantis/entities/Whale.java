@@ -36,7 +36,6 @@ public class Whale extends Animal {
     /**
      * Constructeur de Whale
      *
-     * @param tile Tile sur lequel on place le SeaSerpent
      */
     public Whale() {
         this("Whale", true);

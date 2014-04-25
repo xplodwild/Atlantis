@@ -50,9 +50,17 @@ import java.util.logging.Logger;
 public class MessageSyncBoard extends AbstractMessage {
     byte[] mData;
 
+    /**
+     *
+     */
     public MessageSyncBoard() {
     }
 
+    /**
+     *
+     * @param logic
+     * @throws IOException
+     */
     public void readBoard(GameLogic logic) throws IOException {
         ByteArrayInputStream bais = new ByteArrayInputStream(mData);
         DataInputStream data = new DataInputStream(bais);
@@ -104,6 +112,11 @@ public class MessageSyncBoard extends AbstractMessage {
         }
     }
 
+    /**
+     *
+     * @param board
+     * @throws IOException
+     */
     public void writeBoard(GameBoard board) throws IOException {
         // On fait comme pour la serialisation de GameSaver, sauf qu'au lieu d'écrire dans un
         // fichier, on écrit dans un byte array. De l'autre côté, on lit, et on régénère le board

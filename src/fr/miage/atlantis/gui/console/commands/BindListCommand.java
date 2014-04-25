@@ -31,6 +31,10 @@ public class BindListCommand implements ConsoleCommands.ConsoleCommand {
 
     private Console console;
 
+    /**
+     *
+     * @param mConsole
+     */
     public BindListCommand(Console mConsole) {
         this.console = mConsole;
     }

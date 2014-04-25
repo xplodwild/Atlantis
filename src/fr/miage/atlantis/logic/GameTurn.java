@@ -47,16 +47,49 @@ import java.util.logging.Logger;
  */
 public class GameTurn implements GameRenderListener {
 
+    /**
+     *
+     */
     public static boolean DBG_QUICKTEST = false;
+    /**
+     *
+     */
     public static final int STEP_START = 0;
+    /**
+     *
+     */
     public static final int STEP_INITIAL_PLAYER_PUT = 1;
+    /**
+     *
+     */
     public static final int STEP_INITIAL_BOAT_PUT = 2;
+    /**
+     *
+     */
     public static final int STEP_MOVE_ENTITY = 3;
+    /**
+     *
+     */
     public static final int STEP_MOVE_DICE_ENTITY = 4;
+    /**
+     *
+     */
     public static final int STEP_MOVE_BONUS_BOAT = 5;
+    /**
+     *
+     */
     public static final int STEP_MOVE_BONUS_SWIMMER = 6;
+    /**
+     *
+     */
     public static final int STEP_SINK_TILE = 7;
+    /**
+     *
+     */
     public static final int STEP_USE_TILE_ACTION = 8;
+    /**
+     *
+     */
     public static final int STEP_FINISH = 9;
     private TileAction mTileAction;
     private List<TileAction> mRemoteTiles;
@@ -359,6 +392,11 @@ public class GameTurn implements GameRenderListener {
         mController.onSinkTile(tile);
     }
 
+    /**
+     *
+     * @param pt
+     * @param tile
+     */
     public void putInitialToken(PlayerToken pt, GameTile tile) {
         pt.moveToTile(null, tile);
         pt.setState(PlayerToken.STATE_ON_LAND);
@@ -366,6 +404,10 @@ public class GameTurn implements GameRenderListener {
         mController.onInitialTokenPut(pt);
     }
 
+    /**
+     *
+     * @param tile
+     */
     public void putInitialBoat(GameTile tile) {
         Boat b = new Boat();
         b.moveToTile(null, tile);
@@ -392,6 +434,11 @@ public class GameTurn implements GameRenderListener {
         }
     }
 
+    /**
+     *
+     * @param playuse
+     * @param action
+     */
     public void useRemoteTile(Player playuse, TileAction action) {
         mRemoteTiles.add(action);
 
@@ -402,6 +449,10 @@ public class GameTurn implements GameRenderListener {
         mController.onCancelAction();
     }
 
+    /**
+     *
+     * @param action
+     */
     public void useLocalTile(TileAction action) {
         // On ne peut utiliser qu'une seule tile d'action non immédiate par tour.
         if (mTileAction != null) {
@@ -442,6 +493,10 @@ public class GameTurn implements GameRenderListener {
         }
     }
 
+    /**
+     *
+     * @param pt
+     */
     @Override
     public void onInitialTokenPutDone(PlayerToken pt) {
         // Un pion joueur a été placé. On finit le tour, c'est au suivant même si on a tout placé.
@@ -456,6 +511,10 @@ public class GameTurn implements GameRenderListener {
         }
     }
 
+    /**
+     *
+     * @param pt
+     */
     @Override
     public void onInitialBoatPutDone(Boat pt) {
         // Un pion bateau a été placé. On finit le tour, c'est au suivant même si on a tout placé.
@@ -647,6 +706,10 @@ public class GameTurn implements GameRenderListener {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean canFinishCurrentAction() {
         if (mCurrentStep == STEP_MOVE_ENTITY) {
             return true;
@@ -657,6 +720,10 @@ public class GameTurn implements GameRenderListener {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean finishCurrentAction() {
         Logger.getGlobal().info("Current action: " + mCurrentStep);
 
@@ -689,18 +756,34 @@ public class GameTurn implements GameRenderListener {
     //--------------------------------------------------------------------------
     //GETTERS                                                                  |
     //--------------------------------------------------------------------------
+    /**
+     *
+     * @return
+     */
     public Player getPlayer() {
         return mPlayer;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getRemainingMoves() {
         return mRemainingMoves;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean getEndOfTurn() {
         return mTurnIsOver;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean hasRolledDice() {
         return mDiceRolled;
     }

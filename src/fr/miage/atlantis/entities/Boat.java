@@ -44,7 +44,6 @@ public class Boat extends GameEntity {
     /**
      * Constructeur du bateau
      *
-     * @param tile Tile sur lequel est placé le bateau.
      */
     public Boat() {
         this("Boat", true);
@@ -112,6 +111,8 @@ public class Boat extends GameEntity {
 
     /**
      * Retourne le numéro du slot du PlayerToken
+     * @param token
+     * @return  
      */
     public int getPlayerSlot(PlayerToken token) {
         int pos = mOnboard.indexOf(token);

@@ -33,6 +33,10 @@ public class LoggingCommand implements ConsoleCommands.ConsoleCommand {
 
     private Console console;
 
+    /**
+     *
+     * @param mConsole
+     */
     public LoggingCommand(Console mConsole) {
         this.console = mConsole;
     }

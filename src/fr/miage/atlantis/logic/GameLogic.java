@@ -43,6 +43,9 @@ import java.util.List;
  */
 public abstract class GameLogic implements GameTurnListener {
 
+    /**
+     *
+     */
     protected static final boolean DBG_AUTOPREPARE = false;
     /**
      * Plateau du jeu
@@ -73,14 +76,38 @@ public abstract class GameLogic implements GameTurnListener {
      */
     private boolean mVolcanized;
 
+    /**
+     *
+     */
     public static class EntityPickRequest {
 
+        /**
+         *
+         */
         public static final int FLAG_PICK_PLAYER_ENTITIES = (1 << 0);
+        /**
+         *
+         */
         public static final int FLAG_PICK_SHARK = (1 << 1);
+        /**
+         *
+         */
         public static final int FLAG_PICK_WHALE = (1 << 2);
+        /**
+         *
+         */
         public static final int FLAG_PICK_SEASERPENT = (1 << 3);
+        /**
+         *
+         */
         public static final int FLAG_PICK_BOAT_WITH_ROOM = (1 << 4);
+        /**
+         *
+         */
         public static final int FLAG_PICK_BOAT_WITHOUT_ROOM = (1 << 5);
+        /**
+         *
+         */
         public static final int FLAG_PICK_SWIMMER = (1 << 6);
         /**
          * Restriction des entités pouvant être pickées La valeur doit être une
@@ -113,6 +140,9 @@ public abstract class GameLogic implements GameTurnListener {
         }
     }
 
+    /**
+     *
+     */
     public static class TilePickRequest {
 
         /**
@@ -215,11 +245,21 @@ public abstract class GameLogic implements GameTurnListener {
         mCurrentTurn.startTurn();
     }
 
+    /**
+     *
+     * @param data
+     * @throws IOException
+     */
     public void serializeEssentialData(DataOutputStream data) throws IOException {
         data.writeInt(mBoatsPlaced);
         data.writeBoolean(mVolcanized);
     }
 
+    /**
+     *
+     * @param data
+     * @throws IOException
+     */
     public void deserializeData(DataInputStream data) throws IOException {
         mBoatsPlaced = data.readInt();
         mVolcanized = data.readBoolean();
@@ -318,6 +358,7 @@ public abstract class GameLogic implements GameTurnListener {
 
     /**
      * Retourne le nombre de bateaux initiaux RESTANT à placer
+     * @return 
      */
     public int getRemainingInitialBoats() {
         // Chaque joueur a deux bateaux à placer
@@ -343,7 +384,6 @@ public abstract class GameLogic implements GameTurnListener {
     /**
      * Actions lors de la tile volcan
      *
-     * @param tile
      */
     public void onTileVolcano() {
         mVolcanized = true;
@@ -393,6 +433,10 @@ public abstract class GameLogic implements GameTurnListener {
      */
     public abstract void boot();
 
+    /**
+     *
+     * @return
+     */
     public abstract GameEntity getLastPickedEntity();
 
     /**

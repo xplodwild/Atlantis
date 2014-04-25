@@ -28,6 +28,9 @@ import de.lessvoid.nifty.controls.ConsoleCommands;
  */
 public class QuitCommand implements ConsoleCommands.ConsoleCommand {
 
+    /**
+     *
+     */
     public QuitCommand() {
     }
 

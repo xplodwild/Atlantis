@@ -44,9 +44,21 @@ public class TileAction {
      * Constantes representant les faces arrières des Tiles du plateau
      */
     public final static int NONE = -1;
+    /**
+     *
+     */
     public final static int ENTITY_SHARK = 0;
+    /**
+     *
+     */
     public final static int ENTITY_WHALE = 1;
+    /**
+     *
+     */
     public final static int ENTITY_BOAT = 2;
+    /**
+     *
+     */
     public final static int ENTITY_SEASERPENT = 3;
     /**
      * Action de déplacer un animal au début de son tour
@@ -358,36 +370,76 @@ public class TileAction {
         mHasBeenUsed = true;
     }
 
+    /**
+     *
+     */
     public final static class Factory {
 
+        /**
+         *
+         * @param data
+         * @return
+         * @throws IOException
+         */
         public static TileAction createFromSerialized(final DataInputStream data) throws IOException {
             return new TileAction(data);
         }
 
+        /**
+         *
+         * @param entity
+         * @return
+         */
         public static TileAction createMoveAnimal(int entity) {
             return new TileAction(ACTION_MOVE_ANIMAL, entity, false, false, false);
         }
 
+        /**
+         *
+         * @param entity
+         * @return
+         */
         public static TileAction createCancelAnimal(int entity) {
             return new TileAction(ACTION_CANCEL_ANIMAL, entity, false, true, false);
         }
 
+        /**
+         *
+         * @param entity
+         * @return
+         */
         public static TileAction createSpawnEntity(int entity) {
             return new TileAction(ACTION_SPAWN_ENTITY, entity, true, false, false);
         }
 
+        /**
+         *
+         * @return
+         */
         public static TileAction createBonusBoat() {
             return new TileAction(ACTION_BONUS_BOAT, NONE, false, false, false);
         }
 
+        /**
+         *
+         * @return
+         */
         public static TileAction createBonusSwim() {
             return new TileAction(ACTION_BONUS_SWIM, NONE, false, false, false);
         }
 
+        /**
+         *
+         * @return
+         */
         public static TileAction createWhirl() {
             return new TileAction(ACTION_WHIRL, NONE, true, false, false);
         }
 
+        /**
+         *
+         * @return
+         */
         public static TileAction createVolcano() {
             return new TileAction(ACTION_VOLCANO, NONE, false, false, true);
         }
@@ -585,9 +637,6 @@ public class TileAction {
      *
      * @param tile Tile d'action, si l'action est immédiate
      * @param logic Logique a executer à l'utilisation
-     * @return true si l'action s'est lancée, false si elle ne s'est pas lancée
-     * (par exemple, si c'est un mouvement de baleine mais qu'il n'y a pas de
-     * baleine dans le plateau)
      */
     public void use(GameTile tile, GameLogic logic) {
         switch (mAction) {
@@ -629,6 +678,7 @@ public class TileAction {
      * qu'il existe des entités sur lesquelles l'action de cette classe est
      * possible)
      *
+     * @param logic 
      * @return true si l'action a une utilité dans l'état actuel du jeu
      */
     public boolean canBeUsed(GameLogic logic) {

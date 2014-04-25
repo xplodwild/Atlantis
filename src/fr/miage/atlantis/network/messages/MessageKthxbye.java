@@ -26,6 +26,9 @@ import com.jme3.network.serializing.Serializable;
 @Serializable
 public class MessageKthxbye extends AbstractMessage {
 
+    /**
+     *
+     */
     public MessageKthxbye() {
         
     }

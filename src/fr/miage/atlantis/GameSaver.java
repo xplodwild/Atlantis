@@ -93,10 +93,19 @@ public class GameSaver {
         }
     }
     
+    /**
+     *
+     */
     public GameSaver() {
         
     }
     
+    /**
+     *
+     * @param path
+     * @param logic
+     * @throws IOException
+     */
     public void saveToFile(final String path, final GameLogic logic) throws IOException {
         DataOutputStream data = new DataOutputStream(new FileOutputStream(path));
         
@@ -211,6 +220,12 @@ public class GameSaver {
         data.close();
     }
     
+    /**
+     *
+     * @param logic
+     * @param path
+     * @throws IOException
+     */
     public void loadFromFile(final GameLogic logic, final String path) throws IOException {
         DataInputStream data = new DataInputStream(new FileInputStream(path));
         
