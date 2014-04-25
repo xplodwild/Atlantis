@@ -4,12 +4,10 @@
  */
 package fr.miage.atlantis.board;
 
-import fr.miage.atlantis.Game3DLogic;
 import fr.miage.atlantis.entities.SeaSerpent;
 import fr.miage.atlantis.entities.Shark;
 import fr.miage.atlantis.entities.Whale;
 import fr.miage.atlantis.logic.GameLogic;
-import java.util.Map;
 import java.util.Set;
 import org.junit.After;
 import org.junit.AfterClass;
