@@ -146,11 +146,12 @@ public class Game3DLogic extends GameLogic {
 
         // On fait le rendu des tiles
         mRenderer.getBoardRenderer().clearBoard();
+        mRenderer.getEntitiesRenderer().clearEntities();
+
         if (prepareBoard) {
             mRenderer.getBoardRenderer().renderBoard(getBoard());
 
             // Rendu des entités déjà placées sur le plateau
-            mRenderer.getEntitiesRenderer().clearEntities();
             Map<String, GameTile> tiles = getBoard().getTileSet();
             for (GameTile tile : tiles.values()) {
                 for (GameEntity ent : tile.getEntities()) {
