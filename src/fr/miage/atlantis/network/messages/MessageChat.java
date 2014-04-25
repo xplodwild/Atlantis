@@ -28,13 +28,24 @@ import com.jme3.network.serializing.Serializable;
 public class MessageChat extends AbstractMessage {
     private String mMessage;
     
+    /**
+     * Constructeur de la class MessageChat #1
+     */
     public MessageChat() {
     }
     
+    /**
+     * Constructeur de MassageChat #2
+     * @param message message envoyé
+     */
     public MessageChat(final String message) {
         mMessage = message;
     }
 
+    /**
+     * Recupère le message
+     * @return le message
+     */
     public String getMessage() {
         return mMessage;
     }
