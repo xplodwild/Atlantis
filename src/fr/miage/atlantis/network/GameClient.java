@@ -49,21 +49,12 @@ public class GameClient implements ClientStateListener, MessageListener {
     private String mPlayerName;
     private Client mClient;
     private GuiController mGuiController;
-
-    static {
-        Serializer.registerClass(MessageOhai.class);
-        Serializer.registerClass(MessageKthxbye.class);
-        Serializer.registerClass(MessageChat.class);
-        Serializer.registerClass(MessagePlayerJoined.class);
-        Serializer.registerClass(MessageNextTurn.class);
-        Serializer.registerClass(MessageGameStart.class);
-        Serializer.registerClass(MessageSyncBoard.class);
-        Serializer.registerClass(MessageTurnEvent.class);
-    }
+    private GameCommonCommands mCommon;
 
     public GameClient(GameLogic logic, GuiController gui) {
         mLogic = (Game3DLogic) logic;
         mGuiController = gui;
+        mCommon = new GameCommonCommands(mLogic);
     }
 
     public void connect(final String ipAddress, final String name) throws IOException {
@@ -146,32 +137,11 @@ public class GameClient implements ClientStateListener, MessageListener {
 
     private void handleMessageNextTurn(MessageNextTurn m) {
         log("Next turn: " + m.getPlayerNumber());
-        mLogic.getRenderer().runOnMainThread(new Callable<Void>() {
-            public Void call() throws Exception {
-                mLogic.nextTurn();
-                return null;
-            }
-        });
-
+        mCommon.handleMessageNextTurn(m);
     }
 
     private void handleMessageTurnEvent(final MessageTurnEvent m) {
         log("Turn event: " + m.getEvent());
-        mLogic.getRenderer().runOnMainThread(new Callable<Void>() {
-            public Void call() throws Exception {
-                switch (m.getEvent()) {
-                    case GameTurn.STEP_INITIAL_PLAYER_PUT: {
-                        String tileName = (String) m.getParameter(0);
-                        int points = (Integer) m.getParameter(1);
-                        PlayerToken pt = new PlayerToken(mLogic.getCurrentTurn().getPlayer(), points);
-                        pt.moveToTile(null, mLogic.getBoard().getTileSet().get(tileName));
-                        mLogic.getCurrentTurn().getPlayer().getTokens().add(pt);
-                        mLogic.onInitialTokenPut(pt);
-                    }
-                    break;
-                }
-                return null;
-            }
-        });
+        mCommon.handleMessageTurnEvent(m);
     }
 }

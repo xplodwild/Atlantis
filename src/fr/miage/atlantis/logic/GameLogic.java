@@ -183,7 +183,7 @@ public abstract class GameLogic implements GameTurnListener {
         for (int i = 0; i < mPlayers.length; i++) {
             mPlayers[i] = new Player(players[i], i + 1, prepareBoard);
 
-            if (nop.getPlayerNumber() == i + 1) {
+            if (nop.isNetworkGame() && nop.getPlayerNumber() == i + 1 && !nop.isHost()) {
                 mPlayers[i].createTokens();
             }
         }

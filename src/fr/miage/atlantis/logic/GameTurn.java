@@ -330,6 +330,7 @@ public class GameTurn implements GameRenderListener {
         List<PlayerToken> tokens = mPlayer.getTokens();
         mTokenToPlace = null;
 
+        Logger.getGlobal().info("PLAYER HAS " + tokens.size() + " !");
         for (PlayerToken pt : tokens) {
             if (pt.getState() == PlayerToken.STATE_UNDEFINED && pt.getTile() == null) {
                 // On a un token non placé, on demande pour le placer

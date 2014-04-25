@@ -59,6 +59,7 @@ public class GameHost implements ConnectionListener, MessageListener<HostedConne
     private Game3DLogic mLogic;
     private GuiController mGuiController;
     private String mPlayerName;
+    private GameCommonCommands mCommon;
 
     static {
         Serializer.registerClass(MessageOhai.class);
@@ -77,6 +78,7 @@ public class GameHost implements ConnectionListener, MessageListener<HostedConne
         mLogic = logic;
         mGuiController = guiController;
         mPlayerName = name;
+        mCommon = new GameCommonCommands(mLogic);
     }
 
     public void startListening() throws IOException {
@@ -207,30 +209,16 @@ public class GameHost implements ConnectionListener, MessageListener<HostedConne
         // Retransmission du message
         broadcast(m, source);
 
-        switch (m.getEvent()) {
-            case GameTurn.STEP_INITIAL_PLAYER_PUT: {
-                String tileName = (String) m.getParameter(0);
-                int points = (Integer) m.getParameter(1);
-                PlayerToken pt = new PlayerToken(mLogic.getCurrentTurn().getPlayer(), points);
-                pt.moveToTile(null, mLogic.getBoard().getTileSet().get(tileName));
-                mLogic.onInitialTokenPut(pt);
-            }
-            break;
-        }
+        mCommon.handleMessageTurnEvent(m);
     }
 
     private void handleMessageNextTurn(HostedConnection source, MessageNextTurn m) {
         log("Next turn: " + m.getPlayerNumber());
 
+        // Retransmission du message
         broadcast(m, source);
 
-        mLogic.getRenderer().runOnMainThread(new Callable<Void>() {
-            public Void call() throws Exception {
-                mLogic.nextTurn();
-                return null;
-            }
-        });
-
+        mCommon.handleMessageNextTurn(m);
     }
 
 }
