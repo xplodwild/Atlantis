@@ -41,11 +41,22 @@ public class Shark extends Animal {
     public Shark() {
         this("Shark", true);
     }
-    
+
+    /**
+     * Constructeur de Requin
+     *
+     * @param name nom du bestiau
+     */
     public Shark(final String name) {
         this(name, false);
     }
-    
+
+    /**
+     * Constructeur de Requin
+     *
+     * @param name nom du bestiau
+     * @param appendUniqueID true si on souhaite ajouter un ID unique
+     */
     public Shark(final String name, boolean appendUniqueID) {
         super(name, MAX_MOVES, appendUniqueID);
     }

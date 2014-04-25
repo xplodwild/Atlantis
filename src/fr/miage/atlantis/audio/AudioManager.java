@@ -29,37 +29,53 @@ import java.util.Map;
 public class AudioManager {
 
     private static final AudioManager INSTANCE = new AudioManager();
-
     private AssetManager mAssetManager;
     private Node mRootNode;
     private AudioNode mMainMusicNode;
     private AudioNode mAmbienceNode;
     private Map<String, AudioNode> mKnownNodes;
 
+    /**
+     * Constructeur de AudioManager
+     */
     private AudioManager() {
         mKnownNodes = new HashMap<String, AudioNode>();
     }
 
+    /**
+     * Retourne une instance d'AudioManager en cours
+     *
+     * @return retourne l'instance d'AudioManager active.
+     */
     public static AudioManager getDefault() {
         return INSTANCE;
     }
 
+    /**
+     * Initialise un AudioManager
+     *
+     * @param am asset pour retrouver les fichiers
+     * @param rootNode node concerné
+     */
     public void initialize(AssetManager am, Node rootNode) {
         mAssetManager = am;
         mRootNode = rootNode;
     }
 
     /**
-     * Met à jour le gestionnaire audio à chaque frame.
-     * Appelé automatiquement par Game3DRenderer
+     * Met à jour le gestionnaire audio à chaque frame. Appelé automatiquement
+     * par Game3DRenderer
+     *
      * @param timeDelta Temps en secondes depuis le dernier appel
      */
     public void update(float timeDelta) {
-        
+        //TODO : Pas utilisé pour le moment
+        //Permet les fondus enchainésentre 2 sons
     }
 
     /**
      * Lit ou arrête la lecture de la musique principale
+     *
      * @param playing true pour lire, false pour arrêter
      */
     public void setMainMusic(boolean playing) {
@@ -77,9 +93,10 @@ public class AudioManager {
             mMainMusicNode.pause();
         }
     }
-    
+
     /**
      * Lit ou arrête la lecture de l'ambiance audio "eau" de fond
+     *
      * @param playing true pour lire, false pour arrêter
      */
     public void setAmbience(boolean playing) {
@@ -100,6 +117,7 @@ public class AudioManager {
 
     /**
      * Lis le song indiqué en chemin et renvoie une node
+     *
      * @param path Le chemin du fichier
      */
     public AudioNode playSound(final String path) {
@@ -108,6 +126,7 @@ public class AudioManager {
 
     /**
      * Lis le song indiqué en chemin et renvoie une node
+     *
      * @param path Le chemin du fichier
      * @param loop true pour lire en boucle
      */
@@ -120,7 +139,7 @@ public class AudioManager {
             mRootNode.attachChild(node);
             mKnownNodes.put(path, node);
         }
-        
+
         node.setTimeOffset(0.0f);
         node.play();
 
@@ -129,10 +148,10 @@ public class AudioManager {
 
     /**
      * Arrête la lecture de la node passée en paramètre.
+     *
      * @param node Le noeud audio à arrêter (ce que renvoie playSound)
      */
     public void stopSound(final AudioNode node) {
         node.pause();
     }
-
 }

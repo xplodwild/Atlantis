@@ -83,11 +83,24 @@ public class WaterTile extends GameTile {
         super(board, hg, hd, g, d, bd, bg, name, 0);
     }
     
+    /**
+     * Constructeur de WaterTile #4
+     * 
+     * @param board Plateau auquel appartient le tile
+     * @param stream chargement du fichier
+     * @throws IOException 
+     */
     public WaterTile(GameBoard board, DataInputStream stream) throws IOException {
         super(board, stream);
         readSerialized(stream);
     }
 
+    /**
+     * ressort une BorderTile d'une sauvegarde 
+     * 
+     * @param data flux de données
+     * @throws IOException 
+     */
     @Override
     public final void readSerialized(DataInputStream data) throws IOException {
         super.readSerialized(data);
@@ -95,6 +108,12 @@ public class WaterTile extends GameTile {
         mIsBeginningWithSeaShark = data.readBoolean();
     }
 
+    /**
+     * Serialize la tile dans le DataOutputStream indiqué
+     * 
+     * @param data la cible de serialisation
+     * @throws IOException 
+     */
     @Override
     public void serializeTo(DataOutputStream data) throws IOException {
         super.serializeTo(data);
@@ -102,6 +121,10 @@ public class WaterTile extends GameTile {
         data.writeBoolean(mIsBeginningWithSeaShark);
     }
     
+    /**
+     * Recupère le type de la tile
+     * @return le type de la tile (tile water)
+     */
     @Override
     public int getType() {
         return TILE_WATER;
@@ -110,22 +133,38 @@ public class WaterTile extends GameTile {
     //--------------------------------------------------------------------------
     //GETTERS                                                                  |
     //--------------------------------------------------------------------------
+   /**
+    * Retourne si le tile commence avec une entité SeaShark
+    * @return boolean : true si la tile a un SeaSerpent
+    */
     public boolean isBeginningWithSeaShark() {
         return this.mIsBeginningWithSeaShark;
     }
 
+    /**
+     * Retourne si la tile est une WaterTile ou une tile où l'on peux sauver un pion
+     * @return boolean : true si c'est une tile "ile"
+     */
     public boolean isLandingTile() {
         return this.mIsLandingTile;
     }
-    //--------------------------------------------------------------------------
+    
 
     //--------------------------------------------------------------------------
     //SETTERS                                                                  |
     //--------------------------------------------------------------------------
+    /**
+     * Définit si la tile est une tile avec un SeaSerpent au début du jeu
+     * @param mIsBeginningWithSeaShark boolean : true si la tile a un SeaSerpent
+     */
     public void setIsBeginningWithSeaShark(boolean mIsBeginningWithSeaShark) {
         this.mIsBeginningWithSeaShark = mIsBeginningWithSeaShark;
     }
 
+    /**
+     * Définit si la tile est une tile "ile" ou une waterTile
+     * @param mIsLandingTile boolean : true si c'est une tile "ile"
+     */
     public void setIsLandingTile(boolean mIsLandingTile) {
         this.mIsLandingTile = mIsLandingTile;
     }

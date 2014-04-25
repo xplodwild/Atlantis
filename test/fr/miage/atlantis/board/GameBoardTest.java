@@ -4,12 +4,10 @@
  */
 package fr.miage.atlantis.board;
 
-import fr.miage.atlantis.Game3DLogic;
 import fr.miage.atlantis.entities.SeaSerpent;
 import fr.miage.atlantis.entities.Shark;
 import fr.miage.atlantis.entities.Whale;
 import fr.miage.atlantis.logic.GameLogic;
-import java.util.Map;
 import java.util.Set;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -51,7 +49,7 @@ public class GameBoardTest {
     @Test
     public void testIsTileAtWaterEdge() {
         System.out.println("isTileAtWaterEdge");
-        GameBoard instance = new GameBoard();
+        GameBoard instance = new GameBoard(true);
         
         // Au bord de l'eau
         GameTile tile = instance.getTileSet().get("Water #37");
@@ -91,7 +89,7 @@ public class GameBoardTest {
     @Test
     public void testGetTileSet() {
         System.out.println("getTileSet");
-        GameBoard instance = new GameBoard();
+        GameBoard instance = new GameBoard(true);
         
         // On vénifie que le set contient le bon nombre de tuiles.
         int bt = 0;
@@ -120,7 +118,7 @@ public class GameBoardTest {
     @Test
     public void testGetFirstTile() {
         System.out.println("getFirstTile");
-        GameBoard instance = new GameBoard();
+        GameBoard instance = new GameBoard(true);
         
         String result = instance.getFirstTile().getName();
         assertEquals("Border #1", result);
@@ -133,7 +131,7 @@ public class GameBoardTest {
     @Test
     public void testGenerateRandomTile() {
         System.out.println("generateRandomTile");
-        GameBoard instance = new GameBoard();
+        GameBoard instance = new GameBoard(true);
         
         // On génère 40 tiles et on vérifie qu'il y a le compte.
         instance.fillInRandomizerWithTiles();
@@ -159,7 +157,7 @@ public class GameBoardTest {
     public void testHasTileAtLevel() {
         System.out.println("hasTileAtLevel");
         
-        GameBoard instance = new GameBoard();
+        GameBoard instance = new GameBoard(true);
         
         // Il doit rester des tuiles sable
         assertTrue(instance.hasTileAtLevel(1));
@@ -195,7 +193,7 @@ public class GameBoardTest {
     @Test
     public void testSinkTile() {
         System.out.println("sinkTile");
-        GameBoard instance = new GameBoard();
+        GameBoard instance = new GameBoard(true);
         GameTile tile = instance.getTileSet().get("Water #42");
         tile = tile.getRightTile().getRightTile();
         GameTile r = tile.getRightTile();
@@ -223,7 +221,7 @@ public class GameBoardTest {
     public void testPlaceTileAtTheRightOf() {
         System.out.println("placeTileAtTheRightOf");
         
-        GameBoard instance = new GameBoard();
+        GameBoard instance = new GameBoard(true);
         GameTile tile = instance.getTileSet().get("Water #37");
         tile = tile.getRightTile();
 
@@ -255,7 +253,7 @@ public class GameBoardTest {
     @Test
     public void testPlaceTileAtTheLeftOf() {
         System.out.println("placeTileAtTheLeftOf");
-        GameBoard instance = new GameBoard();
+        GameBoard instance = new GameBoard(true);
         GameTile tile = instance.getTileSet().get("Water #12").getLeftTile();   
         GameTile newtile = new WaterTile(instance, "Water #yolo");
         instance.placeTileAtTheLeftOf(tile, newtile);
@@ -280,7 +278,7 @@ public class GameBoardTest {
     @Test
     public void testPlaceTileAtTheBottomRightOf() {
         System.out.println("placeTileAtTheBottomRightOf");
-        GameBoard instance = new GameBoard();
+        GameBoard instance = new GameBoard(true);
         GameTile tile = instance.getTileSet().get("Water #30").getRightBottomTile(); 
         GameTile newtile = new WaterTile(instance, "Water #yolo");
         instance.placeTileAtTheBottomRightOf(tile, newtile);
@@ -310,7 +308,7 @@ public class GameBoardTest {
     @Test
     public void testPlaceTileAtTheBottomLeftOf() {
         System.out.println("placeTileAtTheBottomLeftOf");
-        GameBoard instance = new GameBoard();
+        GameBoard instance = new GameBoard(true);
         GameTile tile = instance.getTileSet().get("Water #30").getLeftBottomTile(); 
         GameTile newtile = new WaterTile(instance, "Water #yolo");
         instance.placeTileAtTheBottomLeftOf(tile, newtile);
@@ -342,7 +340,7 @@ public class GameBoardTest {
     public void testHasEntityOfType() {
         System.out.println("hasEntityOfType");   
         GameLogic logic = new NullGameLogic();
-        GameBoard board = new GameBoard();      
+        GameBoard board = new GameBoard(true);      
                       
         /**tester avec aucune entité dans le jeu **/
         GameTile tile = board.getTileSet().get("Water #37");
@@ -421,7 +419,7 @@ public class GameBoardTest {
     @Test
     public void testHasTileAtWaterEdge() {
         System.out.println("hasTileAtWaterEdge");
-        GameBoard board = new GameBoard();
+        GameBoard board = new GameBoard(true);
         
         // On laisse une tile de chaque (pour s'assurer du contact avec l'eau)
         for(int i =1; i<16;i++){

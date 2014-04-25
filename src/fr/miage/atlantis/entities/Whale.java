@@ -41,11 +41,22 @@ public class Whale extends Animal {
     public Whale() {
         this("Whale", true);
     }
-    
+
+    /**
+     * Constructeur de Baleine
+     *
+     * @param name nom du bestiau
+     */
     public Whale(String name) {
         this(name, false);
     }
-    
+
+    /**
+     * Constructeur de Baleine
+     *
+     * @param name nom du bestiau
+     * @param appendUniqueID true si on souhaite créer un ID unique
+     */
     public Whale(String name, boolean appendUniqueID) {
         super(name, MAX_MOVES, appendUniqueID);
     }

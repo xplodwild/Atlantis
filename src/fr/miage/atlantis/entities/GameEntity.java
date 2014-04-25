@@ -40,16 +40,13 @@ public class GameEntity {
     public final static int ACTION_WHALE_NUKE = 1;
     public final static int ACTION_SEASERPENT_CRUSH = 2;
     public final static int ACTION_PLAYER_ESCAPE = 3;
-    
     public final static int TYPE_NULL = 0;
     public final static int TYPE_PLAYERTOKEN = 1;
     public final static int TYPE_BOAT = 2;
     public final static int TYPE_SEASERPENT = 3;
     public final static int TYPE_SHARK = 4;
     public final static int TYPE_WHALE = 5;
-    
     private static int ENTITY_UNIQUE_ID = 0;
-    
     private static final Logger logger = Logger.getGlobal();
     /**
      * Nom de l'entité
@@ -73,7 +70,13 @@ public class GameEntity {
     public GameEntity(final String name) {
         this(name, true);
     }
-    
+
+    /**
+     * Constructeur de l'entité
+     *
+     * @param name Nom de l'entité
+     * @param appendUniqueID Si on ajoute ou non
+     */
     public GameEntity(final String name, final boolean appendUniqueID) {
         if (appendUniqueID) {
             mName = name + "_" + Integer.toString(ENTITY_UNIQUE_ID);
@@ -81,7 +84,7 @@ public class GameEntity {
             mName = name;
         }
         mIsDead = false;
-        
+
         ENTITY_UNIQUE_ID++;
     }
 
@@ -104,7 +107,7 @@ public class GameEntity {
         if (mTile != null) {
             mTile.removeEntity(this);
         }
-        
+
         // On s'assure qu'on soit bien enregistré sur le board
         if (logic != null && logic.getBoard() != null) {
             logic.getBoard().putEntity(this);
@@ -143,15 +146,6 @@ public class GameEntity {
     }
 
     /**
-     * Spawn une unité.
-     *
-     * @param logic logique de jeu spawnant une unité.
-     */
-    public void spawn(GameLogic logic) {
-        throw new UnsupportedOperationException("Not implemented");
-    }
-
-    /**
      * Actions a effectuer lors d'un croisement de deux Entity this et ent
      *
      * @param logic Logique de jeu a adopter
@@ -166,10 +160,20 @@ public class GameEntity {
     //--------------------------------------------------------------------------
     //GETTERS                                                                  |
     //--------------------------------------------------------------------------
+    /**
+     * Retourne la tile sur laquelle est l'entité
+     *
+     * @return une GameTile
+     */
     public GameTile getTile() {
         return mTile;
     }
-    
+
+    /**
+     * Renvoie le nom de l'entité
+     *
+     * @return Un String, nom de l'entité
+     */
     public String getName() {
         return mName;
     }

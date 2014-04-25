@@ -33,13 +33,21 @@ import com.jme3.util.SkyFactory;
 import com.jme3.water.WaterFilter;
 
 /**
- *
+ * Représent l'environnement de jeu
  */
 public class Environment {
 
     private AmbientLight mAmbient;
     private DirectionalLight mDirectionalLight;
 
+    /**
+     * Constructeur de l'environnement
+     *
+     * @param parent noeud de base
+     * @param am AssetManager utilisé pour l'asset
+     * @param viewPort viewport
+     * @param cam caméra
+     */
     public Environment(Node parent, AssetManager am, ViewPort viewPort, Camera cam) {
 
         // Mise en place du lighting
@@ -53,6 +61,13 @@ public class Environment {
 
     }
 
+    /**
+     * Affiche l'eau (infinie)
+     *
+     * @param parent node pour attacher l'eau
+     * @param am AssetManager utilisé pour l'asset
+     * @param viewPort viewport
+     */
     private void setupWater(Node parent, AssetManager am, ViewPort viewPort) {
         WaterFilter water = new WaterFilter(parent, mDirectionalLight.getDirection());
 
@@ -74,11 +89,26 @@ public class Environment {
         viewPort.addProcessor(fpp);
     }
 
+    /**
+     * Afficher le ciel (infini)
+     *
+     * @param parent noeud d'attache
+     * @param viewPort viewport
+     * @param am AssetManager utilisé pou les assets
+     * @param cam caméra associée
+     */
     private void setupSky(Node parent, ViewPort viewPort, AssetManager am, Camera cam) {
         parent.attachChild(SkyFactory.createSky(am,
                 "Textures/Sky/Bright/BrightSky.dds", false));
     }
 
+    /**
+     * Afficher les lumières
+     *
+     * @param parent noeud d'attache
+     * @param am AssetManager utilisé pou les assets
+     * @param viewPort viewport
+     */
     private void setupLight(Node parent, AssetManager am, ViewPort viewPort) {
         // Lumière ambiante
         mAmbient = new AmbientLight();
@@ -98,6 +128,5 @@ public class Environment {
         dlsr.setEdgeFilteringMode(EdgeFilteringMode.PCF4);
         dlsr.setLight(mDirectionalLight);
         viewPort.addProcessor(dlsr);
-
     }
 }

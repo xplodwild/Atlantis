@@ -49,14 +49,14 @@ public class SeaSerpentTest {
     public void testOnEntityCross() {
         System.out.println("onEntityCross");
         GameLogic logic = new NullGameLogic();
-        GameBoard board = new GameBoard();
+        GameBoard board = new GameBoard(true);
         GameTile tile = board.getTileSet().get("Water #37");
         GameTile tile1 = board.getTileSet().get("Water #36");
         GameTile tile2 = board.getTileSet().get("Water #35");
         
-        Player mario = new Player("Mario",1);
+        Player mario = new Player("Mario",1,false);
         PlayerToken pt1 = new PlayerToken(mario, 3);
-        PlayerToken pt2 = new PlayerToken(new Player("lu", 1), 2);
+        PlayerToken pt2 = new PlayerToken(new Player("lu", 1,false), 2);
         SeaSerpent serpent = new SeaSerpent();
         Boat petitBateau = new Boat();
         

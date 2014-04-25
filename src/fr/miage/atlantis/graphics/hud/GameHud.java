@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * Interface s'affichant par dessus le jeu
  */
 public class GameHud {
 
@@ -32,12 +32,19 @@ public class GameHud {
     private AbstractDisplay mSpaceToSkip;
     private List<TileActionDisplay> mPlayerTiles;
 
+    /**
+     * Constructeur de GameHud
+     * @param man gère l'interface 
+     */
     public GameHud(HudManager man) {
         mHudManager = man;
         mPlayerTiles = new ArrayList<TileActionDisplay>();
         setup();
     }
 
+    /**
+     * initialisation dont les images sont organisés
+     */
     private void setup() {
         // HUD: Clic droit pour annuler, affiché dans le coin en bas à droite
         mRightClickToCancel = new AbstractDisplay(52, 75, "RightClick Cancel Hint", mHudManager.getAssetManager());
@@ -144,6 +151,10 @@ public class GameHud {
         mHudManager.getAnimator().animateFade(mSpaceToSkip, 1.0f);
     }
 
+    /**
+     * cache l'affichage d'une image indiquant à l'utilisateur qu'il peut annuler l'action
+     * qui va se passer
+     */
     public void hidePromptCancel() {
         mHudManager.getAnimator().animateFade(mSpaceToSkip, 0.0f);
     }

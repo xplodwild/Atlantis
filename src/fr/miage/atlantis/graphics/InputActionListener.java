@@ -53,7 +53,7 @@ import fr.miage.atlantis.logic.GameLogic;
 import java.util.logging.Logger;
 
 /**
- *
+ * Suis les actions de la souris et du clavier
  */
 public class InputActionListener {
 
@@ -71,6 +71,9 @@ public class InputActionListener {
     private GameLogic.EntityPickRequest mEntityRequest;
     private GameLogic.TilePickRequest mTileRequest;
 
+    /**
+     * Class résultats d'un sélection
+     */
     private class PickingResult {
 
         public final static int SOURCE_BOARD = 0;
@@ -78,6 +81,9 @@ public class InputActionListener {
         public Geometry geometry;
         public int source;
     }
+    /**
+     * Attribut d'écoute des mouvements du clavier
+     */
     private ActionListener mKeyboardListener = new ActionListener() {
         public void onAction(String name, boolean isPressed, float tpf) {
             if (name.equals(INPUTMAP_KEY_SPACE)) {
@@ -86,6 +92,9 @@ public class InputActionListener {
             }
         }
     };
+    /**
+     * Attribut d'écoute des mouvements de la souris
+     */
     private AnalogListener mMouseHoverListener = new AnalogListener() {
         private Spatial mPreviousGeometry = null;
         private Material mOriginalMaterial = null;
@@ -131,6 +140,9 @@ public class InputActionListener {
             }
         }
     };
+    /**
+     * Attribut d'écoute du clic droit de la souris
+     */
     private ActionListener mMouseRightClickListener = new ActionListener() {
         public void onAction(String name, boolean isPressed, float tpf) {
             // Si on clic droit et qu'on est en requête, on demande à annuler les requêtes
@@ -139,6 +151,9 @@ public class InputActionListener {
             }
         }
     };
+    /**
+     * Attribut d'écoute de clic gauche de la souris
+     */
     private ActionListener mMouseClickListener = new ActionListener() {
         public void onAction(String name, boolean isPressed, float tpf) {
             // Si on clique et qu'on a effectivement une requête de picking
@@ -200,6 +215,12 @@ public class InputActionListener {
         }
     };
 
+    /**
+     * Constructeur de InputActionListener
+     *
+     * @param inputManager gestionnaire d'entrées
+     * @param renderer gestionnaire de rendu
+     */
     public InputActionListener(InputManager inputManager, Game3DRenderer renderer) {
         mInputManager = inputManager;
         mRenderer = renderer;
@@ -236,6 +257,12 @@ public class InputActionListener {
         mPickingRequest = REQUEST_NONE;
     }
 
+    /**
+     * Attente d'un choix du joueur
+     *
+     * @param entRq Entité a selectionner
+     * @param tileRq Tuile a sélectionner
+     */
     public void requestPicking(GameLogic.EntityPickRequest entRq, GameLogic.TilePickRequest tileRq) {
         int flag = 0;
         if (entRq != null) {
@@ -281,6 +308,11 @@ public class InputActionListener {
         return pleaseLog;
     }
 
+    /**
+     * Résultat du choix d'un joueur
+     *
+     * @return un résultat de picking
+     */
     private PickingResult performPicking() {
         CollisionResults results = new CollisionResults();
 
@@ -314,6 +346,13 @@ public class InputActionListener {
         return output;
     }
 
+    /**
+     * Sortie du choix de picking
+     *
+     * @param results Résultat de clic
+     * @param source source du clic
+     * @return
+     */
     private PickingResult processPickingOutput(CollisionResults results, int source) {
         if (results.size() > 0) {
             // On a des résultats, on prend le plus proche
@@ -469,6 +508,14 @@ public class InputActionListener {
         return false;
     }
 
+    /**
+     * Vérifie que la tuile pickée correspond aux contraintes de la requête de
+     * picking
+     *
+     * @param request La requête
+     * @param tile Tuile pickée
+     * @return true si la tuile respecte au moins une condition, false sinon
+     */
     private boolean checkPickingConstraints(GameLogic.TilePickRequest request, GameTile tile) {
         if (request.requiredHeight >= 0 && tile.getHeight() != request.requiredHeight) {
             return false;
@@ -552,7 +599,7 @@ public class InputActionListener {
      * Retrouve l'entité a partir d'une géometrie d'entité pickée
      *
      * @param geometry
-     * @return
+     * @return L'entité sur une node
      */
     private GameEntity getEntityFromNode(Geometry geometry) {
         // Hierarchie: submesh0.getParent(mesh).getParent(modelNode).getParent(node)
@@ -564,13 +611,19 @@ public class InputActionListener {
      * Retrouve une GameTile à partir d'une géométrie de tile pickée
      *
      * @param geometry
-     * @return
+     * @return la tile sur une node
      */
     private GameTile getTileFromNode(Geometry geometry) {
         String tileName = geometry.getParent().getUserData(TileModel.DATA_TILE_NAME);
         return mRenderer.getLogic().getBoard().getTileSet().get(tileName);
     }
 
+    /**
+     * Met en lumière un item sélectionné
+     *
+     * @param mat objet graphique a mettre en surbrillance
+     * @return true si tout se passe bien
+     */
     private boolean highlightMaterial(Material mat) {
         for (MatParam def : mat.getParams()) {
             if (def.getName().equals("Diffuse")) {

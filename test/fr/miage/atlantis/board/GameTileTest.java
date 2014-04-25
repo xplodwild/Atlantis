@@ -6,7 +6,6 @@ package fr.miage.atlantis.board;
 
 import fr.miage.atlantis.entities.GameEntity;
 import fr.miage.atlantis.entities.Shark;
-import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -46,7 +45,7 @@ public class GameTileTest {
     @Test
     public void testAddEntity() {
         System.out.println("addEntity");
-        GameBoard board = new GameBoard();
+        GameBoard board = new GameBoard(true);
         GameEntity gE = new Shark();
         GameTile tile = board.getTileSet().get("Water #37");
         tile.addEntity(gE);
@@ -60,7 +59,7 @@ public class GameTileTest {
     @Test
     public void testRemoveEntity() {
         System.out.println("removeEntity");
-        GameBoard board = new GameBoard();
+        GameBoard board = new GameBoard(true);
         GameEntity entity = new Shark();
         GameTile tile = board.getTileSet().get("Water #37");
         
@@ -79,7 +78,7 @@ public class GameTileTest {
     @Test
     public void testRemoveFromBoard() {
         System.out.println("removeFromBoard");
-        GameBoard board = new GameBoard();
+        GameBoard board = new GameBoard(true);
         GameTile tile = board.getTileSet().get("Beach #1");       
         tile.removeFromBoard();
         assertFalse(tile.isOnBoard());

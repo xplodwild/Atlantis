@@ -28,7 +28,7 @@ import com.jme3.util.TangentBinormalGenerator;
 import fr.miage.atlantis.graphics.ModelCache;
 
 /**
- *
+ * Modèle Statique extends de la Class Node (repère graphique)
  */
 public class StaticModel extends Node {
 
@@ -38,6 +38,13 @@ public class StaticModel extends Node {
     private Material mMaterial;
     private Node mModelNode;
 
+    /**
+     * Constructeur du modèle static
+     * @param am AssetManager qui permet d'accéder aux assets
+     * @param meshName nom de la mesh
+     * @param diffusePath chemin de diffusion
+     * @param normalPath chemin normal
+     */
     public StaticModel(AssetManager am, String meshName,
             String diffusePath, String normalPath) {
         mModelNode = new Node();
@@ -90,14 +97,26 @@ public class StaticModel extends Node {
         this.attachChild(mModelNode);
     }
 
+    /**
+     * Recupère le modele
+     * @return le modele
+     */
     public Spatial getModel() {
         return mModel;
     }
 
+    /**
+     * Recupère le noeud du repère graphique du modèle
+     * @return le noeud
+     */
     public Node getModelNode() {
         return mModelNode;
     }
 
+    /**
+     * REcupère le matériel
+     * @return le matériel
+     */
     public Material getMaterial() {
         return mMaterial;
     }

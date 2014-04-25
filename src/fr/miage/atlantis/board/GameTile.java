@@ -34,13 +34,12 @@ import java.util.logging.Logger;
  */
 public abstract class GameTile {
 
-    public static final int TILE_NULL       = 0;
-    public static final int TILE_BORDER     = 1;
-    public static final int TILE_WATER      = 2;
-    public static final int TILE_BEACH      = 3;
-    public static final int TILE_FOREST     = 4;
-    public static final int TILE_MOUNTAIN   = 5;
-
+    public static final int TILE_NULL = 0;
+    public static final int TILE_BORDER = 1;
+    public static final int TILE_WATER = 2;
+    public static final int TILE_BEACH = 3;
+    public static final int TILE_FOREST = 4;
+    public static final int TILE_MOUNTAIN = 5;
     /**
      * mName : nom du tile
      */
@@ -141,8 +140,10 @@ public abstract class GameTile {
     }
 
     /**
-     * Charge la tile depuis l'élément serialisé. Les classes enfant DOIVENT appeler readSerialized
-     * et l'overrider si nécessaire pour lire les éléments supplémentaires.
+     * Charge la tile depuis l'élément serialisé. Les classes enfant DOIVENT
+     * appeler readSerialized et l'overrider si nécessaire pour lire les
+     * éléments supplémentaires.
+     *
      * @param board
      * @param serial
      * @throws IOException
@@ -153,6 +154,7 @@ public abstract class GameTile {
 
     /**
      * Serialize la tile dans le DataOutputStream indiqué
+     *
      * @param data La cible de serialisation
      */
     public void serializeTo(DataOutputStream data) throws IOException {
@@ -162,6 +164,7 @@ public abstract class GameTile {
 
         // Vraiment, on aurait dû faire un tableau
         data.writeBoolean(mLeftBottomTile != null);
+
         if (mLeftBottomTile != null) data.writeUTF(mLeftBottomTile.getName());
 
         data.writeBoolean(mLeftTile != null);
@@ -184,6 +187,14 @@ public abstract class GameTile {
             data.writeUTF(ent.getName());
         }
     }
+
+
+    /**
+     * ressort une BorderTile d'une sauvegarde
+     *
+     * @param data cible de serialisation
+     * @throws IOException
+     */
 
     public void readSerialized(DataInputStream data) throws IOException {
         mName = data.readUTF();
@@ -229,6 +240,7 @@ public abstract class GameTile {
 
     /**
      * Retourne le type de la tile (constantes TILE_*)
+     *
      * @return Le type de la tile
      */
     public abstract int getType();
@@ -289,6 +301,11 @@ public abstract class GameTile {
         return null;
     }
 
+    /**
+     * Affiche la tile sous forme de phrase pour plus de lisibilité
+     *
+     * @return la tile en "français"
+     */
     @Override
     public String toString() {
         String retour = "_____________________________\n";
@@ -334,92 +351,195 @@ public abstract class GameTile {
     //--------------------------------------------------------------------------
     //GETTERS                                                                  |
     //--------------------------------------------------------------------------
+    /**
+     * Recupère une liste d'entité
+     *
+     * @return les entités
+     */
     public List<GameEntity> getEntities() {
         return mEntities;
     }
 
+    /**
+     * Recupère l'action de la tile
+     *
+     * @return l'action
+     */
     public TileAction getAction() {
         return mAction;
     }
 
+    /**
+     * recupère la hauteur de la tile
+     *
+     * @return la hauteur
+     */
     public int getHeight() {
         return mHeight;
     }
 
+    /**
+     * recupère la Board
+     *
+     * @return la board
+     */
     public GameBoard getBoard() {
         return mBoard;
     }
 
+    /**
+     * Vérifie si la tile est coulé ou non
+     *
+     * @return un boolean si oui ou non elle est coulé
+     */
     public boolean isOnBoard() {
         return mIsOnBoard;
     }
 
+    /**
+     * Recupère le nom de la tile
+     *
+     * @return le nom de la tile
+     */
     public String getName() {
         return mName;
     }
 
+    /**
+     * recupère la tile à gauche de la tile
+     *
+     * @return la tile à gauche
+     */
     public GameTile getLeftTile() {
         return mLeftTile;
     }
 
+    /**
+     * recupère la tile à droite de la tile
+     *
+     * @return la tile à droite
+     */
     public GameTile getRightTile() {
         return mRightTile;
     }
 
+    /**
+     * recupère la tile en haut à gauche de la tile
+     *
+     * @return la tile en haut à gauche
+     */
     public GameTile getLeftUpperTile() {
         return mLeftUpperTile;
     }
 
+    /**
+     * recupère la tile en bas à gauche de la tile
+     *
+     * @return la tile en bas à gauche
+     */
     public GameTile getLeftBottomTile() {
         return mLeftBottomTile;
     }
 
+    /**
+     * recupère la tile en haut à droite de la tile
+     *
+     * @return la tile en haut à droite
+     */
     public GameTile getRightUpperTile() {
         return mRightUpperTile;
     }
 
+    /**
+     * recupère la tile en bas à droite
+     *
+     * @return la tile en bas à droite
+     */
     public GameTile getRightBottomTile() {
         return mRightBottomTile;
     }
-    //--------------------------------------------------------------------------
 
     //--------------------------------------------------------------------------
     //SETTERS                                                                  |
     //--------------------------------------------------------------------------
+    /**
+     * Définit le nom de la tile
+     *
+     * @param mName nom de la tile
+     */
     public void setName(String mName) {
         this.mName = mName;
     }
 
+    /**
+     * Définit la tile à gauche de la tile
+     *
+     * @param mLeftTile tile à gauche de la tile
+     */
     public void setLeftTile(GameTile mLeftTile) {
         this.mLeftTile = mLeftTile;
     }
 
+    /**
+     * Définit la tile à droite de la tile
+     *
+     * @param mRightTile tile à droite de la tile
+     */
     public void setRightTile(GameTile mRightTile) {
         this.mRightTile = mRightTile;
     }
 
+    /**
+     * Définit la tile en haut à gauche de la tile
+     *
+     * @param mLeftUpperTile tile en haut à gauche de la tile
+     */
     public void setLeftUpperTile(GameTile mLeftUpperTile) {
         this.mLeftUpperTile = mLeftUpperTile;
     }
 
+    /**
+     * Définit la tile en bas à gauche de la tile
+     *
+     * @param mLeftBottomTile tile en bas à gauche de la tile
+     */
     public void setLeftBottomTile(GameTile mLeftBottomTile) {
         this.mLeftBottomTile = mLeftBottomTile;
     }
 
+    /**
+     * Définit la tile en haut à droite de la tile
+     *
+     * @param mRightUpperTile tile en haut à droite de la tile
+     */
     public void setRightUpperTile(GameTile mRightUpperTile) {
         this.mRightUpperTile = mRightUpperTile;
     }
 
+    /**
+     * Définit la tile en bas à droite de la tile
+     *
+     * @param mRightBottomTile tile en bas à droite de la tile
+     */
     public void setRightBottomTile(GameTile mRightBottomTile) {
         this.mRightBottomTile = mRightBottomTile;
     }
 
+    /**
+     * Définit si la tile est coulé ou non
+     *
+     * @param mIsOnBoard boolean si tile soulé ou non
+     */
     public void setIsOnBoard(boolean mIsOnBoard) {
         this.mIsOnBoard = mIsOnBoard;
     }
 
+    /**
+     * Définit l'action d'une tile
+     *
+     * @param action action de la tile
+     */
     public void setAction(TileAction action) {
         this.mAction = action;
     }
-    //--------------------------------------------------------------------------
 }

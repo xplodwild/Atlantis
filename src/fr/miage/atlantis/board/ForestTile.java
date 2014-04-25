@@ -57,11 +57,23 @@ public class ForestTile extends GameTile {
         super(board, hg, hd, g, d, bd, bg, name, 2);
     }
     
+    /**
+     * Constructeur de ForestTile
+     * 
+     * @param board Plateau de jeu auquel appartient la tile
+     * @param stream chargement du fichier
+     * @throws IOException 
+     */
     public ForestTile(GameBoard board, DataInputStream stream) throws IOException {
         super(board, stream);
         readSerialized(stream);
     }
     
+    /**
+     * Getter qui recupère le type de la tile
+     * 
+     * @return type de la tile
+     */
     @Override
     public int getType() {
         return TILE_FOREST;

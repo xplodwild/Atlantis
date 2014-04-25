@@ -21,7 +21,7 @@ import com.jme3.asset.AssetManager;
 import fr.miage.atlantis.board.TileAction;
 
 /**
- *
+ * Classe affichant les actions
  */
 public class TileActionDisplay extends AbstractDisplay {
 
@@ -29,6 +29,12 @@ public class TileActionDisplay extends AbstractDisplay {
     public final static int IMAGE_WIDTH = 256;
     public final static int IMAGE_HEIGHT = 223;
 
+    /**
+     * Constructeur de TileActionDisplay
+     * 
+     * @param assetManager AssetManager qui permet d'accéder aux assets
+     * @param action action de la tile
+     */
     public TileActionDisplay(final AssetManager assetManager, final TileAction action) {
         super(IMAGE_WIDTH, IMAGE_HEIGHT, "HUD TileAction Display", assetManager);
         mAction = action;
@@ -43,6 +49,12 @@ public class TileActionDisplay extends AbstractDisplay {
         return mAction;
     }
 
+    /**
+     * Recupère l'action de la tile
+     * @param action action de la tile
+     * @param assetManager AssetManager qui permet d'accéder aux assets
+     * @return affichage de l'action a effectuer
+     */
     public static TileActionDisplay getTileForAction(TileAction action, AssetManager assetManager) {
         TileActionDisplay tad = new TileActionDisplay(assetManager, action);
 
@@ -133,14 +145,24 @@ public class TileActionDisplay extends AbstractDisplay {
         }
     }
 
+    /**
+     * Affiche la tile du bonus de nage
+     */
     public void displayActionBonusSwim() {
         showImage("Interface/TileAction_Move_Swimmer.png");
     }
 
+    /**
+     * Affiche la tile du bonus bateau
+     */
     public void displayActionBonusBoat() {
         showImage("Interface/TileAction_Move_Boat.png");
     }
 
+    /**
+     * Affiche l'action qui fait apparaître l'entité
+     * @param entity entité à faire apparaître
+     */
     public void displayActionSpawn(int entity) {
         switch (entity) {
             case TileAction.ENTITY_BOAT:
@@ -163,10 +185,16 @@ public class TileActionDisplay extends AbstractDisplay {
         }
     }
 
+    /**
+     * Affiche la tile du volcan
+     */
     public void displayActionVolcano() {
         showImage("Interface/TileAction_Volcano.png");
     }
 
+    /**
+     * Affiche la tile du tourbillon
+     */
     public void displayActionWhirl() {
         showImage("Interface/TileAction_Whirlpool.png");
     }

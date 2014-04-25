@@ -56,12 +56,23 @@ public class MountainTile extends GameTile {
     public MountainTile(GameBoard board, GameTile hg, GameTile hd, GameTile g, GameTile d, GameTile bd, GameTile bg, String name, int height) {
         super(board, hg, hd, g, d, bd, bg, name, 3);
     }
-    
+
+    /**
+     * Constructeur MountainTile
+     * 
+     * @param board Plateau de jeu auquel appartient la tile
+     * @param stream chargement du fichier
+     * @throws IOException 
+     */
     public MountainTile(GameBoard board, DataInputStream stream) throws IOException {
         super(board, stream);
         readSerialized(stream);
     }
-    
+
+    /**
+     * Récupère le type de la tile
+     * @return return le type de la tile
+     */
     @Override
     public int getType() {
         return TILE_MOUNTAIN;

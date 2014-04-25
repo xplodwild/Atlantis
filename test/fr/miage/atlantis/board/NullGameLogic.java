@@ -115,5 +115,13 @@ public class NullGameLogic extends GameLogic {
     public void onCancelAction() {
         
     }
+
+    @Override
+    public void onGameFinished() {
+    }
+
+    @Override
+    public void finishCurrentAction() {
+    }
     
 }

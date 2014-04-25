@@ -21,10 +21,15 @@ import com.jme3.asset.AssetManager;
 import com.jme3.math.ColorRGBA;
 
 /**
- *
+ * Modèle du dé extends de la classe de modèle statique
  */
 public class DiceModel extends StaticModel {
 
+    /**
+     * Constructeur du modèle du dé
+     * 
+     * @param am AssetManager qui permet d'accéder aux assets
+     */
     public DiceModel(AssetManager am) {
         super(am, "Models/cube.mesh.xml", "Textures/dice.png", null);
         getMaterial().setFloat("Shininess", 1.0f);

@@ -54,6 +54,7 @@ public class Player {
      *
      * @param name Pseudo
      * @param number Numéro
+     * @param createTokens Créer automatiquement 10 tokens
      */
     public Player(final String name, final int number, final boolean createTokens) {
         mName = name;

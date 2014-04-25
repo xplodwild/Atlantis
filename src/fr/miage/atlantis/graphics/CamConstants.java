@@ -27,10 +27,16 @@ import com.jme3.renderer.Camera;
 import com.jme3.scene.Spatial;
 
 /**
- *
+ * Constantes pour les angles de caméra
  */
 public class CamConstants {
 
+    /**
+     * Placement de la caméra pour la postition menu
+     *
+     * @param camNode Noeud ou placer la caméra
+     * @param cam Objet camera
+     */
     public static void moveMenu(Spatial camNode, Camera cam) {
         if (camNode.getNumControls() > 1) {
             camNode.removeControl(camNode.getControl(1));
@@ -57,6 +63,12 @@ public class CamConstants {
         cameraMotionControl.play();
     }
 
+    /**
+     * Déplace la caméra en positio de jeu
+     *
+     * @param camNode Noeud ou placer la cam
+     * @param cam objet camera
+     */
     public static void moveAboveBoard(Spatial camNode, Camera cam) {
         if (camNode.getNumControls() > 1) {
             camNode.removeControl(camNode.getControl(1));

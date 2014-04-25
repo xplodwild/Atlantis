@@ -20,7 +20,7 @@ package fr.miage.atlantis.graphics.models;
 import com.jme3.asset.AssetManager;
 
 /**
- *
+ * Modèle du Bateau extends de la class AnimatedModel
  */
 public class BoatModel extends AnimatedModel {
 
@@ -28,6 +28,10 @@ public class BoatModel extends AnimatedModel {
     public final static String ANIMATION_BOAT_SINK = "boat_sink";
     public final static String ANIMATION_BOAT_ROW = "boat_row";
 
+    /**
+     * Constructeur du modèle du bateau
+     * @param am AssetManager qui permet d'accéder aux assets
+     */
     public BoatModel(AssetManager am) {
         super(am, "Models/boat.mesh.xml",
                 "Textures/boat.png", "Textures/boat_normal.png");

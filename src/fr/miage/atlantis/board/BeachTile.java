@@ -56,12 +56,24 @@ public class BeachTile extends GameTile {
     public BeachTile(GameBoard board, GameTile hg, GameTile hd, GameTile g, GameTile d, GameTile bd, GameTile bg, String name, int height) {
         super(board, hg, hd, g, d, bd, bg, name, 1);
     }
-    
+
+    /**
+     * Constructeur de BeachTile
+     * 
+     * @param board Plateau auquel appartient la tile
+     * @param stream chargement fichier
+     * @throws IOException 
+     */
     public BeachTile(GameBoard board, DataInputStream stream) throws IOException {
         super(board, stream);
         readSerialized(stream);
     }
 
+    /**
+     * Getter qui recupère le type de la tile
+     * 
+     * @return le type de tile
+     */
     @Override
     public int getType() {
         return TILE_BEACH;

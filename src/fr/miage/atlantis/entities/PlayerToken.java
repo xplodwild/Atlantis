@@ -30,7 +30,7 @@ import fr.miage.atlantis.logic.GameLogic;
  * @date 02/03/2014
  */
 public class PlayerToken extends GameEntity {
-    
+
     public final static int STATE_UNDEFINED = -1;
     public final static int STATE_ON_LAND = 0;
     public final static int STATE_SWIMMING = 1;
@@ -63,11 +63,26 @@ public class PlayerToken extends GameEntity {
     public PlayerToken(Player p, int points) {
         this("PlayerToken", true, p, points);
     }
-    
+
+    /**
+     * Constructeur pes pions
+     *
+     * @param name Nom du pion
+     * @param p Joueur propriétaire du pion
+     * @param points Valeur en points
+     */
     public PlayerToken(String name, Player p, int points) {
         this(name, false, p, points);
     }
-    
+
+    /**
+     * Constructeur des pions
+     *
+     * @param name
+     * @param appendUniqueID
+     * @param p
+     * @param points
+     */
     public PlayerToken(String name, boolean appendUniqueID, Player p, int points) {
         super(name, appendUniqueID);
         mState = STATE_UNDEFINED;
@@ -75,6 +90,13 @@ public class PlayerToken extends GameEntity {
         mPlayer = p;
     }
 
+    /**
+     * Déplace le pion vers une autre tile
+     *
+     * @param logic GameLogic du jeu
+     * @param tile Destination
+     * @return true si le mouvement s'est bien déroulé
+     */
     @Override
     public boolean moveToTile(GameLogic logic, GameTile tile) {
         boolean result = super.moveToTile(logic, tile);
@@ -89,18 +111,38 @@ public class PlayerToken extends GameEntity {
     //--------------------------------------------------------------------------
     //GETTERS                                                                  |
     //--------------------------------------------------------------------------
+    /**
+     * Retourne la constante state du pion
+     *
+     * @return un int corrspondant à une constante
+     */
     public int getState() {
         return mState;
     }
 
+    /**
+     * Renvoie la valeur du pion
+     *
+     * @return La valeur du pion en points
+     */
     public int getPoints() {
         return this.mPoints;
     }
 
+    /**
+     * Le propriétaire de ce pion
+     *
+     * @return Le player propriétaire de ce pion
+     */
     public Player getPlayer() {
         return mPlayer;
     }
 
+    /**
+     * Renvoie le bateau sur lequel est le pion
+     *
+     * @return un bateau
+     */
     public Boat getBoat() {
         return mBoat;
     }
@@ -109,6 +151,11 @@ public class PlayerToken extends GameEntity {
     //--------------------------------------------------------------------------
     //SETTERS                                                                  |
     //--------------------------------------------------------------------------
+    /**
+     * Définit l'état du pion
+     *
+     * @param state Le nouvel état du pion
+     */
     public void setState(int state) {
         if (mState == STATE_ON_BOAT && state != STATE_ON_BOAT) {
             // On n'est plus sur un bateau, donc on l'enlève pour éviter toute confusion
@@ -117,6 +164,11 @@ public class PlayerToken extends GameEntity {
         mState = state;
     }
 
+    /**
+     * Définit le bateau sur lequel est le pion
+     *
+     * @param b un boat sur lequel mettre le pion
+     */
     public void setBoat(Boat b) {
         mBoat = b;
     }

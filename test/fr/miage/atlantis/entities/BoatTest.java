@@ -8,9 +8,7 @@ import fr.miage.atlantis.Player;
 import fr.miage.atlantis.board.GameBoard;
 import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.board.NullGameLogic;
-import fr.miage.atlantis.board.WaterTile;
 import fr.miage.atlantis.logic.GameLogic;
-import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -49,7 +47,7 @@ public class BoatTest {
     @Test
     public void testMoveToTile() {
         System.out.println("moveToTile");
-        GameBoard gb = new GameBoard();
+        GameBoard gb = new GameBoard(true);
         GameLogic gl = new NullGameLogic();
         
         // Quelques tiles de test
@@ -58,9 +56,9 @@ public class BoatTest {
         GameTile t3 = gb.getTileSet().get("Water #6");
         
         // On fait un bateau
-        PlayerToken pt1 = new PlayerToken(new Player("Leonardo Di Caprio",0), 5);
-        PlayerToken pt2 = new PlayerToken(new Player("Lara Fabian",0), 5);
-        PlayerToken pt3 = new PlayerToken(new Player("Le capitaine crochet",0), 10);
+        PlayerToken pt1 = new PlayerToken(new Player("Leonardo Di Caprio",0,false), 5);
+        PlayerToken pt2 = new PlayerToken(new Player("Lara Fabian",0,false), 5);
+        PlayerToken pt3 = new PlayerToken(new Player("Le capitaine crochet",0,false), 10);
         Boat titanic = new Boat();
         titanic.addPlayer(pt1);
         titanic.addPlayer(pt2);
@@ -98,15 +96,15 @@ public class BoatTest {
         //On crée les bateaux vides
         assertTrue(b.getOnboardTokens().isEmpty());
         
-        PlayerToken pt1 = new PlayerToken(new Player("P1",0),10);
+        PlayerToken pt1 = new PlayerToken(new Player("P1",0,false),10);
         b.addPlayer(pt1);
         
         //Un ajout fonctionne
         assertTrue(b.getOnboardTokens().contains(pt1));
         
-        PlayerToken pt2 = new PlayerToken(new Player("P2",1),10);
+        PlayerToken pt2 = new PlayerToken(new Player("P2",1,false),10);
         b.addPlayer(pt2);
-        PlayerToken pt3 = new PlayerToken(new Player("P3",2),10);
+        PlayerToken pt3 = new PlayerToken(new Player("P3",2,false),10);
         b.addPlayer(pt3);
         
         //Un total de 3 ajouts fonctionne
@@ -115,7 +113,7 @@ public class BoatTest {
         
         // On ne peut pas ajouter plus de 4 éléments.
         try{
-            PlayerToken pt4 = new PlayerToken(new Player("P3",2),10);
+            PlayerToken pt4 = new PlayerToken(new Player("P3",2,false),10);
             b.addPlayer(pt4);
             fail("On a pu mettre 4 items sur un bateau");
         }catch(Exception e){
@@ -131,7 +129,7 @@ public class BoatTest {
     public void testRemovePlayer() {
         System.out.println("removePlayer");
         Boat b = new Boat();
-        PlayerToken pt = new PlayerToken(new Player("P1",0), 10);
+        PlayerToken pt = new PlayerToken(new Player("P1",0,false), 10);
         b.addPlayer(pt);
         
         // On a bien ajouté l'objet
@@ -162,9 +160,9 @@ public class BoatTest {
     public void testGetPlayerSlot() {
         System.out.println("getPlayerSlot");
         Boat b = new Boat();
-        PlayerToken pt1 = new PlayerToken(new Player("Leonardo Di Caprio",0), 5);
-        PlayerToken pt2 = new PlayerToken(new Player("Lara Fabian",0), 5);
-        PlayerToken pt3 = new PlayerToken(new Player("Le capitaine crochet",0), 10);
+        PlayerToken pt1 = new PlayerToken(new Player("Leonardo Di Caprio",0,false), 5);
+        PlayerToken pt2 = new PlayerToken(new Player("Lara Fabian",0,false), 5);
+        PlayerToken pt3 = new PlayerToken(new Player("Le capitaine crochet",0,false), 10);
         b.addPlayer(pt1);
         b.addPlayer(pt2);
         b.addPlayer(pt3);
@@ -174,7 +172,7 @@ public class BoatTest {
         assertEquals(2,b.getPlayerSlot(pt3));
         
         try{
-            b.getPlayerSlot(new PlayerToken(new Player("P",0), 90));
+            b.getPlayerSlot(new PlayerToken(new Player("P",0,false), 90));
             fail("On get un player sur un bateau alors qu'il y est pas, étonnant");
         }catch(Exception e){
             assertTrue(true);
@@ -188,9 +186,9 @@ public class BoatTest {
     public void testHasRoom() {
         System.out.println("hasRoom");
         Boat b = new Boat();
-        PlayerToken pt1 = new PlayerToken(new Player("Leonardo Di Caprio",0), 5);
-        PlayerToken pt2 = new PlayerToken(new Player("Lara Fabian",0), 5);
-        PlayerToken pt3 = new PlayerToken(new Player("Le capitaine crochet",0), 10);
+        PlayerToken pt1 = new PlayerToken(new Player("Leonardo Di Caprio",0,false), 5);
+        PlayerToken pt2 = new PlayerToken(new Player("Lara Fabian",0,false), 5);
+        PlayerToken pt3 = new PlayerToken(new Player("Le capitaine crochet",0,false), 10);
         
         //Bateau vide
         assertTrue(b.hasRoom());
@@ -221,11 +219,11 @@ public class BoatTest {
         Boat b = new Boat();
         
         // Joueur 1 et son token
-        Player p1 = new Player("P1",0);
+        Player p1 = new Player("P1",0,false);
         PlayerToken pt1 = new PlayerToken(p1, 10);
         
         // Joueur 2 et ses token
-        Player p2 = new Player("P2",0);
+        Player p2 = new Player("P2",0,false);
         PlayerToken pt2 = new PlayerToken(p2, 8);
         PlayerToken pt3 = new PlayerToken(p2, 2);
         

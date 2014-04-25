@@ -35,21 +35,18 @@ import de.lessvoid.nifty.Nifty;
 import fr.miage.atlantis.Game3DLogic;
 import fr.miage.atlantis.GameDice;
 import fr.miage.atlantis.audio.AudioManager;
-import fr.miage.atlantis.board.GameTile;
-import fr.miage.atlantis.entities.GameEntity;
 import fr.miage.atlantis.graphics.hud.AbstractDisplay;
 import fr.miage.atlantis.graphics.hud.HudAnimator;
 import fr.miage.atlantis.graphics.hud.HudManager;
 import fr.miage.atlantis.graphics.hud.TileActionDisplay;
 import fr.miage.atlantis.graphics.models.DiceModel;
 import fr.miage.atlantis.gui.Gui;
-import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 /**
- *
+ * Renderer 3D pour le jeu
  */
 public class Game3DRenderer extends SimpleApplication {
 
@@ -68,12 +65,20 @@ public class Game3DRenderer extends SimpleApplication {
     private HudManager mHudManager;
     private Nifty mNifty;
 
+    /**
+     * Constructeur de Game3DRenderer
+     *
+     * @param parent Logique 3D qui va avec
+     */
     public Game3DRenderer(Game3DLogic parent) {
         mParent = parent;
         mHudAnimator = new HudAnimator();
         mFutureUpdater = new FutureUpdater();
     }
 
+    /**
+     * Initialisation des graphiques
+     */
     @Override
     public void simpleInitApp() {
         // Pré-configuration
@@ -130,9 +135,15 @@ public class Game3DRenderer extends SimpleApplication {
         mNifty.gotoScreen("start");
     }
 
+
     public void runOnMainThread(Callable r) {
         enqueue(r);
     }
+
+
+    /**
+     * Affiche ou non le framerate et d'autres infos dans un coin de l'écran
+     */
 
     public void toggleGraphicsStats() {
         if (!mDisplayGraphicalStats) {
@@ -146,48 +157,103 @@ public class Game3DRenderer extends SimpleApplication {
         }
     }
 
+    /**
+     * Renvoie le Node auquel est rattachée la caméra
+     *
+     * @return le Node auquel est rattachée la caméra
+     */
     public CameraNode getCameraNode() {
         return mCameraNode;
     }
 
+    /**
+     * Renvoie le BoardRenderer utilisé pour le rendu de la board
+     *
+     * @return le BoardRenderer utilisé pour le rendu de la board
+     */
     public BoardRenderer getBoardRenderer() {
         return mBoardRenderer;
     }
 
+    /**
+     * Renvoie le renderer des entités
+     *
+     * @return le renderer des entités
+     */
     public EntitiesRenderer getEntitiesRenderer() {
         return mEntitiesRenderer;
     }
 
+    /**
+     * Renvoie le Listener de rendu
+     *
+     * @return le Listener de rendu
+     */
     public InputActionListener getInputListener() {
         return mInputListener;
     }
 
+    /**
+     * Renvoie la logique 3D utilisée dans ce rendu
+     *
+     * @return la logique 3D utilisée dans ce rendu
+     */
     public Game3DLogic getLogic() {
         return mParent;
     }
 
+    /**
+     * Renvoie l'animateur des infos de l'interface
+     *
+     * @return l'animateur des infos de l'interface
+     */
     public HudAnimator getHudAnimator() {
         return mHudAnimator;
     }
 
+    /**
+     * Affiche le Hud
+     *
+     * @param disp AbstractDisplay
+     */
     public void displayHudCenter(AbstractDisplay disp) {
         disp.setPosition(cam.getWidth() / 2 - TileActionDisplay.IMAGE_WIDTH / 2,
                 cam.getHeight() / 2 - TileActionDisplay.IMAGE_HEIGHT / 2);
         guiNode.attachChild(disp);
     }
 
+    /**
+     * Renvoie le HudManager
+     *
+     * @return le HudManager
+     */
     public HudManager getHud() {
         return mHudManager;
     }
 
+    /**
+     * Renvoie le FuturAdapter
+     *
+     * @return le FuturAdapter
+     */
     public FutureUpdater getFuture() {
         return mFutureUpdater;
     }
 
+    /**
+     * Renvoie le noeaud d'attache prinpcipal du Rendrerer
+     *
+     * @return Renvoie le noeaud d'attache prinpcipal du Rendrerer
+     */
     public Node getSceneNode() {
         return mSceneNode;
     }
 
+    /**
+     * Animation pour le lancer de dé
+     *
+     * @param finalFace Face sur laquelle le dé doit terminer son mouvement
+     */
     public void rollDiceAnimation(final int finalFace) {
         mSceneNode.attachChild(mDiceModel);
         mDiceModel.setLocalTranslation(cam.getLocation().add(cam.getDirection().mult(150.0f)));
@@ -242,6 +308,11 @@ public class Game3DRenderer extends SimpleApplication {
         motionControl.play();
     }
 
+    /**
+     * Mise a jour de l'animation
+     *
+     * @param tpf temps
+     */
     @Override
     public void simpleUpdate(float tpf) {
 
@@ -254,10 +325,20 @@ public class Game3DRenderer extends SimpleApplication {
         mFutureUpdater.update(tpf);
     }
 
+    /**
+     * Retourne l'objet de framework d'interface: Nifty
+     *
+     * @return l'objet de framework d'interface: Nifty
+     */
     public Nifty getNifty() {
         return mNifty;
     }
 
+    /**
+     * Méthode non-implémentée
+     *
+     * @param rm Gestionnaire de rendu
+     */
     @Override
     public void simpleRender(RenderManager rm) {
     }

@@ -20,7 +20,7 @@ package fr.miage.atlantis.graphics.models;
 import com.jme3.math.Vector3f;
 
 /**
- *
+ * Modele de tiles abstraites
  */
 public interface AbstractTileModel {
 
