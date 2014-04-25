@@ -29,7 +29,7 @@ import fr.miage.atlantis.graphics.AnimationBrain;
 import fr.miage.atlantis.graphics.BoneAttachControl;
 
 /**
- *
+ * Animation des modèles 
  */
 public class AnimatedModel extends StaticModel {
 
@@ -38,6 +38,14 @@ public class AnimatedModel extends StaticModel {
     private AnimControl mControl;
     private AnimChannel mChannel;
 
+    /**
+     * Constructeur du modèle
+     * 
+     * @param am AssetManager qui permet d'accéder aux assets
+     * @param meshName Nom de la mesh
+     * @param diffusePath chemin de diffusion
+     * @param normalPath chemin normal
+     */
     public AnimatedModel(AssetManager am, String meshName,
             String diffusePath, String normalPath) {
         super(am, meshName, diffusePath, normalPath);
@@ -50,10 +58,21 @@ public class AnimatedModel extends StaticModel {
         skeletonControl.setHardwareSkinningPreferred(true);
     }
 
+    /**
+     * Animation joué
+     * @param animation animation à jouer
+     */
     public void playAnimation(String animation) {
         playAnimation(animation, true, true, null);
     }
 
+    /**
+     * Animation joué
+     * @param animation animation à jouer
+     * @param loop nombre de répétition
+     * @param animateTransition animation de transition
+     * @param listener liste des événements d'animation
+     */
     public void playAnimation(String animation, boolean loop, boolean animateTransition,
             AnimEventListener listener) {
         mChannel.setLoopMode(loop ? LoopMode.Loop : LoopMode.DontLoop);
@@ -71,6 +90,11 @@ public class AnimatedModel extends StaticModel {
         }
     }
 
+    /**
+     * Animation joué
+     * @param state statut de l'animation
+     * @param listener liste des événements d'animation
+     */
     public void playAnimation(AnimationBrain.State state, AnimEventListener listener) {
         if (state != null && state.animationName != null) {
             playAnimation(state.animationName, state.loop, state.animateTransition, listener);
@@ -80,10 +104,17 @@ public class AnimatedModel extends StaticModel {
         }
     }
 
+    /**
+     * Animation joué
+     * @param state statut de l'animation
+     */
     public void playAnimation(AnimationBrain.State state) {
         playAnimation(state, null);
     }
 
+    /**
+     * affichage des animations
+     */
     public void printAnimations() {
         for (String anim : mControl.getAnimationNames()) {
             System.out.println(anim);
