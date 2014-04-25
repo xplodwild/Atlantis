@@ -53,13 +53,11 @@ public class TileAction {
      */
     public final static int ACTION_MOVE_ANIMAL = 0;
     /**
-     * Action déclenchable permettant d'annuler l'action d'un animal sur le
-     * joueur
+     * Action déclenchable permettant d'annuler l'action d'un animal sur le joueur
      */
     public final static int ACTION_CANCEL_ANIMAL = 1;
     /**
-     * Action immédiate faisant apparaître une nouvelle entité (shark, whale,
-     * boat)
+     * Action immédiate faisant apparaître une nouvelle entité (shark, whale,boat)
      */
     public final static int ACTION_SPAWN_ENTITY = 2;
     /**
@@ -254,6 +252,15 @@ public class TileAction {
     private static ArrayList<TileAction> sRandomizerMountain;
     private static final Logger logger = Logger.getLogger(GameBoard.class.getName());
 
+    /**
+     * Constructeur de l'action de la tile
+     * 
+     * @param action action de la tile
+     * @param entity entité de la tile
+     * @param isImmediate boolean : action immédiate ou non
+     * @param isTriggerable boolean : action déclenchable ou non
+     * @param isVolcano boolean : tile volcan ou non
+     */
     private TileAction(int action, int entity, boolean isImmediate,
             boolean isTriggerable, boolean isVolcano) {
         mAction = action;
@@ -263,11 +270,22 @@ public class TileAction {
         mIsVolcano = isVolcano;
         mHasBeenUsed = false;
     }
-    
+
+    /**
+     * Chargement du fichier des tileAction
+     * 
+     * @param data flux de données
+     * @throws IOException 
+     */
     private TileAction(DataInputStream data) throws IOException {
         readSerialized(data);
     }
-    
+
+    /**
+     * Sauvegarde des données
+     * @param data flux de données
+     * @throws IOException 
+     */
     public void serializeTo(DataOutputStream data) throws IOException {
         data.writeBoolean(mIsImmediate);
         data.writeBoolean(mIsTriggerable);
@@ -276,9 +294,13 @@ public class TileAction {
         data.writeInt(mEntity);
         data.writeBoolean(mHasBeenUsed);
         data.writeInt(mMovesRemaining);
-        // TODO: mInitialEntity - pour le moment, on annule le picking complètement
     }
-    
+
+    /**
+     * Chargement des données
+     * @param data flux de données
+     * @throws IOException 
+     */
     public final void readSerialized(DataInputStream data) throws IOException {
         mIsImmediate = data.readBoolean();
         mIsTriggerable = data.readBoolean();
@@ -287,21 +309,35 @@ public class TileAction {
         mEntity = data.readInt();
         mHasBeenUsed = data.readBoolean();
         mMovesRemaining = data.readInt();
-        // TODO: mInitialEntity - pour le moment, on annule le picking complètement
     }
 
+    /**
+     * Enlève un mouvement à l'entité
+     */
     public void decreaseMovesRemaining() {
         mMovesRemaining--;
     }
 
+    /**
+     * Recupère le mouvement enlevé
+     * @return le mouvement enlevé
+     */
     public int getMovesRemaining() {
         return mMovesRemaining;
     }
 
+    /**
+     * Recupère l'entité initiale
+     * @return l'entité initial
+     */
     public GameEntity getInitialEntity() {
         return mInitialEntity;
     }
 
+    /**
+     * Définit l'entité initiale
+     * @param ent entité à définir
+     */
     public void setInitialEntity(GameEntity ent) {
         mInitialEntity = ent;
     }
@@ -323,7 +359,7 @@ public class TileAction {
     }
 
     public final static class Factory {
-        
+
         public static TileAction createFromSerialized(final DataInputStream data) throws IOException {
             return new TileAction(data);
         }
@@ -358,7 +394,7 @@ public class TileAction {
     }
 
     /**
-     * Genere une action au hasard à placer sous un tile beach
+     * Génère une action au hasard à placer sous un tile beach
      *
      * @return A random ActionTile
      */
@@ -646,6 +682,7 @@ public class TileAction {
 
     /**
      * Lance l'action d'une tile d'annulation de mouvement d'animal
+     *
      * @param logic La logique du jeu
      */
     private void performActionCancelAnimal(GameLogic logic) {
@@ -798,27 +835,51 @@ public class TileAction {
     //--------------------------------------------------------------------------
     //GETTERS                                                                  |
     //--------------------------------------------------------------------------
+    /**
+    * Retourne si l'action est immédiate ou non 
+    * @return boolean : true si l'action est immediate
+    */
     public boolean isImmediate() {
         return mIsImmediate;
     }
 
+    /**
+     * Retourne si l'action est déclenchable ou non
+     * @return boolean : true si l'action est déclenchable
+     */
     public boolean isTriggerable() {
         return mIsTriggerable;
     }
 
+    /**
+     * REtourne si c'est un volcan ou non
+     * @return boolean : true si la tile à un volcan en dessous
+     */
     public boolean isVolcano() {
         return mIsVolcano;
     }
 
+    /**
+     * Recupère une action
+     * @return l'action
+     */
     public int getAction() {
         return mAction;
     }
 
+    /**
+     * recupère une entité
+     * @return une entité
+     */
     public int getEntity() {
         return mEntity;
     }
-    //--------------------------------------------------------------------------
+   
 
+    /**
+     * Permet de résumé l'action est les différentes possibilités a executer
+     * @return une phrase sur l'action 
+     */
     @Override
     public String toString() {
         return "TileAction(action=" + mAction + ", entity=" + mEntity + ", isImmediate=" + mIsImmediate + ", isTriggerable=" + mIsTriggerable + ")";
