@@ -41,11 +41,22 @@ public class SeaSerpent extends Animal {
     public SeaSerpent() {
         this("Serpent de mer", true);
     }
-    
+
+    /**
+     * Constructeur de SeaSerpent
+     *
+     * @param name Nom du bestiau
+     */
     public SeaSerpent(String name) {
         this(name, false);
     }
-    
+
+    /**
+     * constructeur de SeaSerpent
+     *
+     * @param name nom du bestiau
+     * @param appendUniqueID true si on veut un ID unique pour cette classe
+     */
     public SeaSerpent(String name, boolean appendUniqueID) {
         super(name, MAX_MOVES, appendUniqueID);
     }
