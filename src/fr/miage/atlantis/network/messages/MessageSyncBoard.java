@@ -101,6 +101,14 @@ public class MessageSyncBoard extends AbstractMessage {
         if (logic instanceof Game3DLogic) {
             Game3DLogic logic3d = (Game3DLogic) logic;
             logic3d.getRenderer().getBoardRenderer().renderBoard(logic.getBoard());
+            logic3d.getRenderer().getEntitiesRenderer().clearEntities();
+            Map<String, GameTile> tiles = logic.getBoard().getTileSet();
+            for (GameTile tile : tiles.values()) {
+                for (GameEntity ent : tile.getEntities()) {
+                    Logger.getGlobal().info("Rendering entity " + ent.getName() + " on tile " + tile.getName());
+                    logic3d.getRenderer().getEntitiesRenderer().addEntity(ent);
+                }
+            }
         }
     }
 
@@ -110,12 +118,6 @@ public class MessageSyncBoard extends AbstractMessage {
         // comme si on déserialisait. Easy breezy, copy pasty.
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         DataOutputStream data = new DataOutputStream(baos);
-
-        // On créé les 5 seaserpent, puisque c'est les seules entités par défaut qu'on doit
-        // absolument avoir
-        for (int i = 0; i < 5; i++) {
-            board.putEntity(new SeaSerpent());
-        }
 
         // Nombre de tiles dans le board
         Map<String, GameTile> tiles = board.getTileSet();

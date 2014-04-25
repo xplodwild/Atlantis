@@ -67,7 +67,6 @@ public class GameCommonCommands {
                         String tileName = (String) m.getParameter(0);
                         int points = (Integer) m.getParameter(1);
                         PlayerToken pt = new PlayerToken(mLogic.getCurrentTurn().getPlayer(), points);
-                        log("FROM NETWORK: INITIAL PLAYER PUT FOR PLAYER " + mLogic.getCurrentTurn().getPlayer().getNumber());
                         mLogic.getCurrentTurn().getPlayer().getTokens().add(pt);
                         mLogic.getCurrentTurn().putInitialToken(pt, mLogic.getBoard().getTileSet().get(tileName));
                     }
@@ -76,6 +75,14 @@ public class GameCommonCommands {
                     case GameTurn.STEP_INITIAL_BOAT_PUT: {
                         String tileName = (String) m.getParameter(0);
                         mLogic.getCurrentTurn().putInitialBoat(mLogic.getBoard().getTileSet().get(tileName));
+                    }
+                    break;
+
+                    case GameTurn.STEP_MOVE_ENTITY: {
+                        String entName = (String) m.getParameter(0);
+                        String tileName = (String) m.getParameter(1);
+                        mLogic.getCurrentTurn().moveEntity(mLogic.getBoard().getEntity(entName),
+                                mLogic.getBoard().getTileSet().get(tileName));
                     }
                     break;
                 }

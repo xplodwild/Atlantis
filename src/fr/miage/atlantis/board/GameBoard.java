@@ -83,7 +83,7 @@ public final class GameBoard {
             this.beachTilesRemaining = NB_BEACHTILES;
             this.forestTilesRemaining = NB_FORESTTILES;
             this.mountainTilesRemaining = NB_MOUNTAINTILES;
-        
+
             this.fillInRandomizerWithTiles();
             this.generateDefaultBoard();
             this.setDefaultBoardTileAttributes();
@@ -863,7 +863,7 @@ public final class GameBoard {
         mTileSet.put(newTile.getName(), newTile);
         return newTile;
     }
-    
+
     public void forcePutTile(GameTile tile) {
         mTileSet.put(tile.getName(), tile);
     }
@@ -895,7 +895,7 @@ public final class GameBoard {
 
             newTile.setLeftUpperTile(baseUpperRightTile);
             this.placeTileAtTheBottomRightOf(baseUpperRightTile, newTile);
-            //baseUpperRightTile.setRightBottomTile(newTile);            
+            //baseUpperRightTile.setRightBottomTile(newTile);
             //this.mTileSet.put(baseUpperRightTile.getName(), baseUpperRightTile);
         }
         if (baseBottomRightTile != null) {
@@ -1059,11 +1059,11 @@ public final class GameBoard {
 
         return false;
     }
-    
+
     public Set<String> getAllEntities() {
         return mEntities.keySet();
     }
-    
+
     /**
      * Retourne l'entité ayant le nom indiqué, ou null
      * @param name Nom de l'entité
@@ -1072,7 +1072,7 @@ public final class GameBoard {
     public GameEntity getEntity(final String name) {
         return mEntities.get(name);
     }
-    
+
     /**
      * Met une entité dans le hashmap d'entités
      * @param ent L'entité à sauver
@@ -1137,5 +1137,5 @@ public final class GameBoard {
     }
     //--------------------------------------------------------------------------
 
-   
+
 }

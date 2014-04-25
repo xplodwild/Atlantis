@@ -216,6 +216,15 @@ public class GameTurn implements GameRenderListener {
             }
         }
 
+        NetworkObserverProxy nop = NetworkObserverProxy.getDefault();
+        if (nop.isNetworkGame() && nop.getPlayerNumber() == mPlayer.getNumber()) {
+            // C'est une partie en réseau, on transmet le mouvement
+            nop.onPlayerTurnEvent(GameTurn.STEP_MOVE_ENTITY, new Object[]{
+                ent.getName(),
+                dest.getName()
+            });
+        }
+
         // On le transmet au controlleur en attendant la suite
         mController.onUnitMove(ent, dest);
     }
@@ -330,7 +339,6 @@ public class GameTurn implements GameRenderListener {
         List<PlayerToken> tokens = mPlayer.getTokens();
         mTokenToPlace = null;
 
-        Logger.getGlobal().info("PLAYER HAS " + tokens.size() + " !");
         for (PlayerToken pt : tokens) {
             if (pt.getState() == PlayerToken.STATE_UNDEFINED && pt.getTile() == null) {
                 // On a un token non placé, on demande pour le placer
@@ -430,6 +438,12 @@ public class GameTurn implements GameRenderListener {
 
     public void onUnitMoveFinished() {
         logger.log(Level.FINE, "GameTurn: onUnitMoveFinished() ", new Object[]{});
+
+        NetworkObserverProxy nop = NetworkObserverProxy.getDefault();
+        if (nop.isNetworkGame() && mPlayer.getNumber() != nop.getPlayerNumber()) {
+            // On est en réseau et c'est pas notre tour, on ne fait pas les actions qui suvient.
+            return;
+        }
 
         if (mTileAction != null && !mTileAction.hasBeenUsed()) {
             // On a une tile action pas utilisée, et on a fait un mouvement.

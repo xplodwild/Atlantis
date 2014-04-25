@@ -54,6 +54,10 @@ public class EntitiesRenderer extends Node {
     }
 
     public AnimatedModel addEntity(GameEntity ent) {
+        if (mEntityToNode.containsKey(ent)) {
+            return null;
+        }
+
         AnimatedModel output = null;
         if (ent instanceof Boat) {
             output = addBoat((Boat) ent);
@@ -82,7 +86,7 @@ public class EntitiesRenderer extends Node {
         output.playAnimation(AnimationBrain.getIdleAnimation(ent));
         return output;
     }
-    
+
     /**
      * Supprime toutes les entitées présentes sur le plateau
      */
@@ -91,7 +95,7 @@ public class EntitiesRenderer extends Node {
         for (Node node : nodes) {
             detachChild(node);
         }
-        
+
         mEntityToNode.clear();
         mNodeToEntity.clear();
     }

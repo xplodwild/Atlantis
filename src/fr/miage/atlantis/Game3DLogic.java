@@ -59,6 +59,7 @@ import fr.miage.atlantis.graphics.models.SharkModel;
 import fr.miage.atlantis.graphics.models.StaticModel;
 import fr.miage.atlantis.logic.GameLogic;
 import fr.miage.atlantis.logic.GameTurn;
+import fr.miage.atlantis.network.NetworkObserverProxy;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
