@@ -85,6 +85,14 @@ public class GameCommonCommands {
                     }
                     break;
 
+                    case GameTurn.STEP_MOVE_DICE_ENTITY: {
+                        String entName = (String) m.getParameter(0);
+                        String tileName = (String) m.getParameter(1);
+                        mLogic.getCurrentTurn().moveEntity(mLogic.getBoard().getEntity(entName),
+                                    mLogic.getBoard().getTileSet().get(tileName));
+                    }
+                    break;
+
                     case GameTurn.STEP_SINK_TILE: {
                         String tileName = (String) m.getParameter(0);
                         mLogic.getCurrentTurn().sinkLandTile(mLogic.getBoard().getTileSet().get(tileName));

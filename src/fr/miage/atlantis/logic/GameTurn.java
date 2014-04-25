@@ -274,6 +274,17 @@ public class GameTurn implements GameRenderListener {
 
         // TODO: Faut-il logger ces mouvements aussi?
         mRemainingDiceMoves--;
+
+        NetworkObserverProxy nop = NetworkObserverProxy.getDefault();
+        if (isMyNetworkTurn()) {
+            // C'est une partie en réseau, on transmet le mouvement
+            nop.onPlayerTurnEvent(GameTurn.STEP_MOVE_DICE_ENTITY, new Object[]{
+                ent.getName(),
+                dest.getName()
+            });
+        }
+
+        // On transmet au contrôleur
         mController.onUnitMove(ent, dest);
     }
 
