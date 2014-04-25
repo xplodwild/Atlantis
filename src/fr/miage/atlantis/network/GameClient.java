@@ -32,6 +32,7 @@ import fr.miage.atlantis.network.messages.MessageKthxbye;
 import fr.miage.atlantis.network.messages.MessageNextTurn;
 import fr.miage.atlantis.network.messages.MessageOhai;
 import fr.miage.atlantis.network.messages.MessagePlayerJoined;
+import fr.miage.atlantis.network.messages.MessageRemoteTile;
 import fr.miage.atlantis.network.messages.MessageRollDice;
 import fr.miage.atlantis.network.messages.MessageSyncBoard;
 import fr.miage.atlantis.network.messages.MessageTurnEvent;
@@ -60,6 +61,7 @@ public class GameClient implements ClientStateListener, MessageListener {
         Serializer.registerClass(MessageGameStart.class);
         Serializer.registerClass(MessageSyncBoard.class);
         Serializer.registerClass(MessageTurnEvent.class);
+        Serializer.registerClass(MessageRemoteTile.class);
     }
 
 
@@ -113,6 +115,8 @@ public class GameClient implements ClientStateListener, MessageListener {
             handleMessageTurnEvent((MessageTurnEvent) m);
         } else if (m instanceof MessageRollDice) {
             handleMessageRollDice((MessageRollDice) m);
+        } else if (m instanceof MessageRemoteTile) {
+            handleMessageRemoteTile((MessageRemoteTile) m);
         }
     }
 
@@ -167,5 +171,10 @@ public class GameClient implements ClientStateListener, MessageListener {
     private void handleMessageRollDice(final MessageRollDice m) {
         log("Roll dice: " + m.getDiceAction());
         mCommon.handleMessageRollDice(m);
+    }
+
+    private void handleMessageRemoteTile(final MessageRemoteTile m) {
+        log("Remote tile used by " + m.getPlayerNumber());
+        mCommon.handleMessageRemoteTile(m);
     }
 }

@@ -18,10 +18,12 @@
 package fr.miage.atlantis.network;
 
 import fr.miage.atlantis.Game3DLogic;
+import fr.miage.atlantis.Player;
 import fr.miage.atlantis.entities.Boat;
 import fr.miage.atlantis.entities.PlayerToken;
 import fr.miage.atlantis.logic.GameTurn;
 import fr.miage.atlantis.network.messages.MessageNextTurn;
+import fr.miage.atlantis.network.messages.MessageRemoteTile;
 import fr.miage.atlantis.network.messages.MessageRollDice;
 import fr.miage.atlantis.network.messages.MessageTurnEvent;
 import java.util.concurrent.Callable;
@@ -89,7 +91,7 @@ public class GameCommonCommands {
                         String entName = (String) m.getParameter(0);
                         String tileName = (String) m.getParameter(1);
                         mLogic.getCurrentTurn().moveEntity(mLogic.getBoard().getEntity(entName),
-                                    mLogic.getBoard().getTileSet().get(tileName));
+                                mLogic.getBoard().getTileSet().get(tileName));
                     }
                     break;
 
@@ -117,6 +119,16 @@ public class GameCommonCommands {
         mLogic.getRenderer().runOnMainThread(new Callable<Void>() {
             public Void call() throws Exception {
                 mLogic.onDiceRoll(m.getDiceAction());
+                return null;
+            }
+        });
+    }
+
+    public void handleMessageRemoteTile(final MessageRemoteTile m) {
+        mLogic.getRenderer().runOnMainThread(new Callable<Void>() {
+            public Void call() throws Exception {
+                Player playuse = mLogic.getPlayers()[m.getPlayerNumber()];
+                mLogic.getCurrentTurn().useRemoteTile(playuse, m.getTileAction());
                 return null;
             }
         });

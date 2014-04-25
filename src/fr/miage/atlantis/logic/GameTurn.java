@@ -406,6 +406,13 @@ public class GameTurn implements GameRenderListener {
         // On enlève la taile du joueur
         playuse.removeActionTile(action);
 
+        // Si on est en réseau, on signale qu'on utilise cette tile si c'est nous
+        final NetworkObserverProxy nop = NetworkObserverProxy.getDefault();
+        if (nop.isNetworkGame() && playuse.getNumber() == nop.getPlayerNumber()) {
+            nop.onPlayerUseRemoteTile(playuse.getNumber(), action);
+        }
+
+
         // On lance l'annulation (les tiles remotes sont toutes des ta
         mController.onCancelAction();
     }

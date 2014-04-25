@@ -33,6 +33,7 @@ import fr.miage.atlantis.network.messages.MessageKthxbye;
 import fr.miage.atlantis.network.messages.MessageNextTurn;
 import fr.miage.atlantis.network.messages.MessageOhai;
 import fr.miage.atlantis.network.messages.MessagePlayerJoined;
+import fr.miage.atlantis.network.messages.MessageRemoteTile;
 import fr.miage.atlantis.network.messages.MessageRollDice;
 import fr.miage.atlantis.network.messages.MessageSyncBoard;
 import fr.miage.atlantis.network.messages.MessageTurnEvent;
@@ -69,6 +70,7 @@ public class GameHost implements ConnectionListener, MessageListener<HostedConne
         Serializer.registerClass(MessageGameStart.class);
         Serializer.registerClass(MessageSyncBoard.class);
         Serializer.registerClass(MessageTurnEvent.class);
+        Serializer.registerClass(MessageRemoteTile.class);
     }
 
     public GameHost(Game3DLogic logic, GuiController guiController, String name) {
@@ -156,6 +158,8 @@ public class GameHost implements ConnectionListener, MessageListener<HostedConne
             handleMessageNextTurn(source, (MessageNextTurn) m);
         } else if (m instanceof MessageRollDice) {
             handleMessageRollDice(source, (MessageRollDice) m);
+        } else if (m instanceof MessageRemoteTile) {
+            handleMessageRemoteTile(source, (MessageRemoteTile) m);
         } else {
             throw new UnsupportedOperationException("Unhandled message in host: " + m);
         }
@@ -229,6 +233,15 @@ public class GameHost implements ConnectionListener, MessageListener<HostedConne
         broadcast(m, source);
 
         mCommon.handleMessageRollDice(m);
+    }
+
+    private void handleMessageRemoteTile(HostedConnection source, MessageRemoteTile m) {
+        log("Remote tile used by " + m.getPlayerNumber());
+
+        // Retransmission du message
+        broadcast(m, source);
+
+        mCommon.handleMessageRemoteTile(m);
     }
 
 }
