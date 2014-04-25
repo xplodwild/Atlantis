@@ -16,8 +16,6 @@ import fr.miage.atlantis.entities.Boat;
 import fr.miage.atlantis.entities.GameEntity;
 import fr.miage.atlantis.entities.PlayerToken;
 import fr.miage.atlantis.entities.SeaSerpent;
-import fr.miage.atlantis.entities.Shark;
-import fr.miage.atlantis.entities.Whale;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -57,7 +55,7 @@ public class GameTurnTest {
     public void testMoveEntity_GameEntity_GameTile() {
         System.out.println("moveEntity");
         
-        Player joueur = new Player("lu",1);
+        Player joueur = new Player("lu",1,false);
         NullGameLogic gl = new NullGameLogic();
         GameTurn instance = new GameTurn(gl, joueur);
         GameBoard board = new GameBoard(true);       
@@ -84,7 +82,7 @@ public class GameTurnTest {
     @Test
     public void testMoveEntity_GameEntity_Boat() {
         System.out.println("moveEntity");
-        Player joueur = new Player("Lucie", 1);
+        Player joueur = new Player("Lucie", 1,false);
         NullGameLogic gl = new NullGameLogic();
         GameTurn instance = new GameTurn(gl, joueur);
         GameBoard board = new GameBoard(true);
@@ -111,7 +109,7 @@ boat.addPlayer(pion);
         GameTile dep = new WaterTile(null, "Depart");
         ent.moveToTile(new NullGameLogic(), dep);
         GameTile dest = new WaterTile(null, "Arrivee");
-        GameTurn instance = new GameTurn(new NullGameLogic(), new Player(null, 0));
+        GameTurn instance = new GameTurn(new NullGameLogic(), new Player(null, 0,false));
         instance.moveDiceEntity(ent, dest);
         
         // L'entité s'est elle bien déplacée ?
@@ -128,7 +126,7 @@ boat.addPlayer(pion);
     public void testRollDice() {
         System.out.println("rollDice");
         GameLogic gl = new NullGameLogic();
-        GameTurn instance = new GameTurn(gl, new Player("P1", 1));
+        GameTurn instance = new GameTurn(gl, new Player("P1", 1,false));
         for(int i=0;i<1000;i++){
             int res = instance.rollDice();
             assertFalse(res<0 || res>=GameDice.FACE_COUNT);
@@ -142,7 +140,7 @@ boat.addPlayer(pion);
     public void testHasSunkLandTile() {
         System.out.println("hasSunkLandTile");
         GameLogic gl = new NullGameLogic();
-        GameTurn instance = new GameTurn(gl, new Player("P1",0));
+        GameTurn instance = new GameTurn(gl, new Player("P1",0,false));
         GameTile tile = new BeachTile(new GameBoard(true), "Beach #yolo");
         
         // Aucune tuile n'a été coulée
@@ -162,7 +160,7 @@ boat.addPlayer(pion);
     public void testSinkLandTile() {
         System.out.println("sinkLandTile");
         GameLogic gl = new NullGameLogic();
-        GameTurn instance = new GameTurn(gl, new Player("P1",0));
+        GameTurn instance = new GameTurn(gl, new Player("P1",0,false));
         GameTile tile = new BeachTile(new GameBoard(true), "Beach #yolo");
         
         // Aucune tuile n'a été coulée
@@ -183,10 +181,10 @@ boat.addPlayer(pion);
         System.out.println("useRemoteTile");
         GameBoard gb = new GameBoard(true);
         TileAction action = TileAction.Factory.createCancelAnimal(TileAction.ENTITY_SHARK);
-        Player p = new Player("P1", 0);
+        Player p = new Player("P1", 0,false);
         GameLogic gl = new NullGameLogic();
         GameTurn instance = new GameTurn(gl, p);
-        Player p2 = new Player("P2", 1);
+        Player p2 = new Player("P2", 1,false);
         p2.addActionTile(action);
         
         // Le joueur use son action pas pdt son tour
@@ -203,7 +201,7 @@ boat.addPlayer(pion);
         System.out.println("useLocalTile");
         GameBoard gb = new GameBoard(true);
         TileAction action = TileAction.Factory.createMoveAnimal(TileAction.ENTITY_SEASERPENT);
-        Player p = new Player("P1", 0);
+        Player p = new Player("P1", 0,false);
         p.addActionTile(action);
         GameLogic gl = new NullGameLogic();
         GameTurn instance = new GameTurn(gl, p);

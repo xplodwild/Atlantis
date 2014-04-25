@@ -44,7 +44,7 @@ public class GameLogTest {
     @Test
     public void testLogTurn() {
         System.out.println("logTurn");
-        GameTurn gt = new GameTurn(new NullGameLogic(), new Player("P1",0));
+        GameTurn gt = new GameTurn(new NullGameLogic(), new Player("P1",0,false));
         GameLog instance = new GameLog();
         instance.logTurn(gt);
         
@@ -58,7 +58,7 @@ public class GameLogTest {
     @Test
     public void testGetTurn() {
         System.out.println("getTurn");
-        GameTurn gt = new GameTurn(new NullGameLogic(), new Player("P1",0));
+        GameTurn gt = new GameTurn(new NullGameLogic(), new Player("P1",0,false));
         GameLog instance = new GameLog();
         instance.logTurn(gt);
         
