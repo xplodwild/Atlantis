@@ -342,10 +342,18 @@ public class GameTurn implements GameRenderListener {
         return (mSunkenTile != null);
     }
 
+    /**
+     * Place un PlayerToken
+     * @return 
+     */
     public PlayerToken getTokenToPlace() {
         return mTokenToPlace;
     }
 
+    /**
+     * Coule une tile
+     * @param tile tile coulé
+     */
     public void sinkLandTile(GameTile tile) {
         mSunkenTile = tile;
         mController.onSinkTile(tile);
