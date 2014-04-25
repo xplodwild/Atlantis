@@ -75,16 +75,30 @@ public class GameCommonCommands {
 
                     case GameTurn.STEP_INITIAL_BOAT_PUT: {
                         String tileName = (String) m.getParameter(0);
-                        mLogic.getCurrentTurn().putInitialBoat(mLogic.getBoard().getTileSet().get(tileName));
+                        String boatName = (String) m.getParameter(1);
+                        mLogic.getCurrentTurn().putInitialBoat(boatName,
+                                mLogic.getBoard().getTileSet().get(tileName));
                     }
                     break;
 
                     case GameTurn.STEP_MOVE_ENTITY: {
                         String entName = (String) m.getParameter(0);
-                        String tileName = (String) m.getParameter(1);
-                        log("Moving entity " + entName + " to tile " + tileName);
-                        mLogic.getCurrentTurn().moveEntity(mLogic.getBoard().getEntity(entName),
-                                mLogic.getBoard().getTileSet().get(tileName));
+                        boolean isBoat = (Boolean) m.getParameter(1);
+                        String tileOrBoatName = (String) m.getParameter(2);
+                        log("Moving entity " + entName + " to tile or boat " + tileOrBoatName);
+
+                        if (isBoat) {
+                            // On ne peut que bouger un PlayerToken sur un bateau
+                            PlayerToken pt = (PlayerToken) mLogic.getBoard().getEntity(entName);
+                            Boat b = (Boat) mLogic.getBoard().getEntity(tileOrBoatName);
+                            pt.setState(PlayerToken.STATE_ON_BOAT);
+                            pt.setBoat(b);
+                            b.addPlayer(pt);
+                            mLogic.getCurrentTurn().moveEntity(pt, b);
+                        } else {
+                            mLogic.getCurrentTurn().moveEntity(mLogic.getBoard().getEntity(entName),
+                                    mLogic.getBoard().getTileSet().get(tileOrBoatName));
+                        }
                     }
                     break;
                 }

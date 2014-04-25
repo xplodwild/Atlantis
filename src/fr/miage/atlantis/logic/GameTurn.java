@@ -221,6 +221,7 @@ public class GameTurn implements GameRenderListener {
             // C'est une partie en réseau, on transmet le mouvement
             nop.onPlayerTurnEvent(GameTurn.STEP_MOVE_ENTITY, new Object[]{
                 ent.getName(),
+                false,
                 dest.getName()
             });
         }
@@ -243,6 +244,16 @@ public class GameTurn implements GameRenderListener {
         EntityMove move = new EntityMove(ent.getTile(), dest.getTile(), ent, -1);
         mMoves.add(move);
         mRemainingMoves--;
+
+        NetworkObserverProxy nop = NetworkObserverProxy.getDefault();
+        if (nop.isNetworkGame() && nop.getPlayerNumber() == mPlayer.getNumber()) {
+            // C'est une partie en réseau, on transmet le mouvement
+            nop.onPlayerTurnEvent(GameTurn.STEP_MOVE_ENTITY, new Object[]{
+                ent.getName(),
+                true,
+                dest.getName()
+            });
+        }
 
         // On le transmet au controlleur en attendant la suite
         mController.onUnitMove(ent, dest.getTile());
@@ -330,6 +341,13 @@ public class GameTurn implements GameRenderListener {
 
     public void putInitialBoat(GameTile tile) {
         Boat b = new Boat();
+        b.moveToTile(null, tile);
+        mController.getBoard().putEntity(b);
+        mController.onInitialBoatPut(b);
+    }
+
+    public void putInitialBoat(String name, GameTile tile) {
+        Boat b = new Boat(name);
         b.moveToTile(null, tile);
         mController.getBoard().putEntity(b);
         mController.onInitialBoatPut(b);
@@ -424,7 +442,7 @@ public class GameTurn implements GameRenderListener {
         NetworkObserverProxy nop = NetworkObserverProxy.getDefault();
         if (nop.isNetworkGame() && nop.getPlayerNumber() == mPlayer.getNumber()) {
             nop.onPlayerTurnEvent(GameTurn.STEP_INITIAL_BOAT_PUT,
-                    new Object[]{pt.getTile().getName()});
+                    new Object[]{pt.getTile().getName(), pt.getName()});
         }
 
         if (!nop.isNetworkGame() || nop.getPlayerNumber() == mPlayer.getNumber()) {
