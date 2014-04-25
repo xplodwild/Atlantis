@@ -31,6 +31,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Classe représentant toute la partie logique du jeu
@@ -363,7 +364,7 @@ public abstract class GameLogic implements GameTurnListener {
 
     /**
      * Retourne le nombre de bateaux initiaux RESTANT à placer
-     * @return 
+     * @return
      */
     public int getRemainingInitialBoats() {
         // Chaque joueur a deux bateaux à placer
@@ -428,7 +429,7 @@ public abstract class GameLogic implements GameTurnListener {
     public GameDice getDice() {
         return mDice;
     }
-    
+
 
     //--------------------------------------------------------------------------
     //METHODES ABSTRAITES                                                      |
@@ -495,5 +496,5 @@ public abstract class GameLogic implements GameTurnListener {
      * Termine l'action en cours du tour
      */
     public abstract void finishCurrentAction();
-   
+
 }

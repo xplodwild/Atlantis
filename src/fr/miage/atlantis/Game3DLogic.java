@@ -85,53 +85,53 @@ public class Game3DLogic extends GameLogic {
      * Renderer des objet 3d
      */
     private Game3DRenderer mRenderer;
-    
+
     /**
      * Entite courante
      */
     private GameEntity mPickedEntity;
-    
+
     /**
      * Compteur callback
      */
     private int mBypassCallbackCount;
-    
+
     /**
      * Liste des pick d'entite
      */
     private List<EntityPickRequest> mEntRequestHistory;
-    
+
     /**
      * Liste des pick de tiles
      */
     private List<TilePickRequest> mTileRequestHistory;
-    
+
     /**
      * Cancel ou non un pick
      */
     private boolean mCanCancelPickingAction;
-    
+
     /**
      * Cancel un callback d'une action
      */
     private FutureCallback mCancelActionCallback;
-    
+
     /**
      * Tile utilisé pour annuler une action
      */
     private TileAction mTileUsedToCancel;
-    
+
     /**
      * Entité source pouvant etre annulée
      */
     private GameEntity mCancellableSource;
-    
+
     /**
      * Entité cible qui subit l'annulation de sort
      */
     private GameEntity mCancellableTarget;
 
-    
+
     /**
      * Instance du logger Java
      */
@@ -161,8 +161,8 @@ public class Game3DLogic extends GameLogic {
 
     /**
      * Sert a serialiser les données pour la sauvegarde
-     * 
-     * @param data données a serialiser 
+     *
+     * @param data données a serialiser
      * @throws IOException Exception d'entree sortie
      */
     @Override
@@ -174,8 +174,8 @@ public class Game3DLogic extends GameLogic {
     }
 
     /**
-     * Sert a deserialiser les données en vue du chargement 
-     * 
+     * Sert a deserialiser les données en vue du chargement
+     *
      * @param data données a deserialiser
      * @throws IOException Exception d'entree sortie
      */
@@ -198,7 +198,7 @@ public class Game3DLogic extends GameLogic {
 
     /**
      * Prépare le jeu
-     * 
+     *
      * @param players joueurs du jeu
      * @param prepareBoard plateau du jeu
      */
@@ -293,17 +293,17 @@ public class Game3DLogic extends GameLogic {
 
     /**
      * Getter de la derniere entité selectionnée
-     * 
+     *
      * @return Derniere entity selectionnée
      */
     public GameEntity getLastPickedEntity() {
         return mPickedEntity;
     }
 
-    
+
     /**
-     * Methode executée a chaque debut de tours 
-     * 
+     * Methode executée a chaque debut de tours
+     *
      * @param p Joueur courant
      */
     public void onTurnStart(Player p) {
@@ -315,8 +315,8 @@ public class Game3DLogic extends GameLogic {
 
         getCurrentTurn().onTurnStarted();
     }
-    
-    
+
+
     /**
      * Methode executé au placement d'un pion
      * @param pt Token placé
@@ -327,7 +327,7 @@ public class Game3DLogic extends GameLogic {
         getCurrentTurn().onInitialTokenPutDone(pt);
     }
 
-    
+
     /**
      * Methode executé au placement dun bateau
      * @param b bateau placé
@@ -339,7 +339,7 @@ public class Game3DLogic extends GameLogic {
         getCurrentTurn().onInitialBoatPutDone(b);
     }
 
-    
+
     /**
      * Methode executée au moment ou on joue une tile
      * @param tile tile joué
@@ -350,11 +350,11 @@ public class Game3DLogic extends GameLogic {
         mCanCancelPickingAction = false;
     }
 
-    
+
     /**
      * Methode executé a chaque depalcement d'unité
      * @param ent entité bougé
-     * @param dest destination 
+     * @param dest destination
      */
     @Override
     public void onUnitMove(final GameEntity ent, final GameTile dest) {
@@ -496,7 +496,7 @@ public class Game3DLogic extends GameLogic {
         // On lis un son
     }
 
-    
+
     /**
      * Methode execute quand on lance le dé
      * @param face face du dé recue
@@ -508,9 +508,9 @@ public class Game3DLogic extends GameLogic {
         mRenderer.rollDiceAnimation(face);
     }
 
-    
+
     /**
-     * Methode executé quand on coule une tile 
+     * Methode executé quand on coule une tile
      * @param tile Tile coulée
      */
     public void onSinkTile(final GameTile tile) {
@@ -585,7 +585,7 @@ public class Game3DLogic extends GameLogic {
         });
     }
 
-    
+
     /**
      * Appelé lorsque l'utilisateur appuie sur Espace
      */
@@ -619,7 +619,7 @@ public class Game3DLogic extends GameLogic {
 
     /**
      * Cherche une tile action pouvant annuler une entité
-     * 
+     *
      * @param entity entité a annuler
      * @param playTilesList liste des tileaction ou chercher
      * @return la tileaction souhaité si trouvée dans la liste
@@ -635,13 +635,13 @@ public class Game3DLogic extends GameLogic {
         return null;
     }
 
-    
+
     /**
      * Methode executée quand on
-     * 
+     *
      * @param source
      * @param target
-     * @param action 
+     * @param action
      */
     public void onCancellableEntityAction(final GameEntity source, final GameEntity target,
             final int action) {

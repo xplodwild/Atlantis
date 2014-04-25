@@ -31,6 +31,7 @@ import com.jme3.scene.CameraNode;
 import com.jme3.scene.Node;
 import com.jme3.scene.control.CameraControl.ControlDirection;
 import com.jme3.scene.plugins.blender.BlenderModelLoader;
+import com.jme3.system.AppSettings;
 import de.lessvoid.nifty.Nifty;
 import fr.miage.atlantis.Game3DLogic;
 import fr.miage.atlantis.GameDice;
@@ -43,7 +44,6 @@ import fr.miage.atlantis.graphics.models.DiceModel;
 import fr.miage.atlantis.gui.Gui;
 import java.util.Random;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 /**
  * Renderer 3D pour le jeu
@@ -71,9 +71,14 @@ public class Game3DRenderer extends SimpleApplication {
      * @param parent Logique 3D qui va avec
      */
     public Game3DRenderer(Game3DLogic parent) {
+        super();
         mParent = parent;
         mHudAnimator = new HudAnimator();
         mFutureUpdater = new FutureUpdater();
+        setSettings(new AppSettings(true));
+        settings.setSettingsDialogImage("Interface/splash.jpg");
+        settings.setResolution(1280, 720);
+        settings.setTitle("Survive: Escape from Atlantis");
     }
 
     /**
@@ -81,6 +86,8 @@ public class Game3DRenderer extends SimpleApplication {
      */
     @Override
     public void simpleInitApp() {
+
+
         // Pré-configuration
         assetManager.registerLoader(BlenderModelLoader.class, "blend");
         AudioManager.getDefault().initialize(assetManager, rootNode);
