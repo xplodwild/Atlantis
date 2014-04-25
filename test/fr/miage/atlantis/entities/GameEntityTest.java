@@ -113,18 +113,4 @@ public class GameEntityTest {
         // requin de la tile.
     }
 
-    /**
-     * Test of spawn method, of class GameEntity.
-     * Méthode non-implémentée
-     *
-    @Test
-    public void testSpawn() {
-        System.out.println("spawn");
-        GameLogic logic = null;
-        GameEntity instance = null;
-        instance.spawn(logic);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-    */
 }
