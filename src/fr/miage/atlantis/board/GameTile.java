@@ -205,6 +205,9 @@ public abstract class GameTile {
         for (GameEntity ent : mEntities) {
             data.writeUTF(ent.getName());
         }
+
+        data.writeBoolean(mAction != null);
+        if (mAction != null) mAction.serializeTo(data);
     }
 
 
@@ -254,6 +257,10 @@ public abstract class GameTile {
             } else {
                 Logger.getGlobal().info("Can't restore entity named " + entUniqueName);
             }
+        }
+
+        if (data.readBoolean()) {
+            mAction = TileAction.Factory.createFromSerialized(data);
         }
     }
 

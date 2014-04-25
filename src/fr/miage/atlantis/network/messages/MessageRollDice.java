@@ -21,47 +21,22 @@ import com.jme3.network.AbstractMessage;
 import com.jme3.network.serializing.Serializable;
 
 /**
- * Message lors de la connexion d'un autre joueur
+ * Message donnant le départ du lancé de dé
  * (vide)
  */
 @Serializable
-public class MessagePlayerJoined extends AbstractMessage {
-    private String mNickname;
+public class MessageRollDice extends AbstractMessage {
+    int mDiceAction;
 
-    private int mNumber;
-
-
-    /**
-     *
-     */
-    public MessagePlayerJoined() {
-
+    public MessageRollDice() {
     }
 
-    /**
-     *
-     * @param name
-     * @param number
-     */
-    public MessagePlayerJoined(final String name, final int number) {
-        mNickname = name;
-        mNumber = number;
+    public MessageRollDice(int diceAction) {
+        mDiceAction = diceAction;
     }
 
-    /**
-     *
-     * @return
-     */
-    public String getName() {
-        return mNickname;
+    public int getDiceAction() {
+        return mDiceAction;
     }
 
-
-    /**
-     *
-     * @return
-     */
-    public int getNumber() {
-        return mNumber;
-    }
 }

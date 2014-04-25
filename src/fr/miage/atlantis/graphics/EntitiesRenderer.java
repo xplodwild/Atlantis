@@ -66,6 +66,10 @@ public class EntitiesRenderer extends Node {
      * @return le modèle animé de l'entité
      */
     public AnimatedModel addEntity(GameEntity ent) {
+        if (mEntityToNode.containsKey(ent)) {
+            return null;
+        }
+
         AnimatedModel output = null;
         if (ent instanceof Boat) {
             output = addBoat((Boat) ent);

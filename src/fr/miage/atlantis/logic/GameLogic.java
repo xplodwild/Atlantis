@@ -24,9 +24,7 @@ import fr.miage.atlantis.board.GameTile;
 import fr.miage.atlantis.entities.Boat;
 import fr.miage.atlantis.entities.GameEntity;
 import fr.miage.atlantis.entities.PlayerToken;
-
-import static fr.miage.atlantis.logic.GameTurn.STEP_FINISH;
-
+import fr.miage.atlantis.entities.SeaSerpent;
 import fr.miage.atlantis.network.NetworkObserverProxy;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -210,12 +208,19 @@ public abstract class GameLogic implements GameTurnListener {
         // Création du board
         mBoard = new GameBoard(prepareBoard);
 
+        if (nop.isClient()) {
+            // On créé les seaserpent si on est client d'une partie réseau
+            for (int i = 0; i < 5; i++) {
+                mBoard.putEntity(new SeaSerpent());
+            }
+        }
+
         // On créé les joueurs
         mPlayers = new Player[players.length];
         for (int i = 0; i < mPlayers.length; i++) {
             mPlayers[i] = new Player(players[i], i + 1, prepareBoard);
 
-            if (nop.getPlayerNumber() == i + 1) {
+            if (nop.isNetworkGame() && nop.getPlayerNumber() == i + 1 && !nop.isHost()) {
                 mPlayers[i].createTokens();
             }
         }

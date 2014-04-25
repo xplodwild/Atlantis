@@ -197,6 +197,11 @@ public class GameTurn implements GameRenderListener {
         return mTileAction;
     }
 
+    public boolean isMyNetworkTurn() {
+        final NetworkObserverProxy nop = NetworkObserverProxy.getDefault();
+        return (nop.isNetworkGame() && nop.getPlayerNumber() == mPlayer.getNumber());
+    }
+
     /**
      * Demarre le début du tour de jeu du joueur courant
      */
@@ -233,7 +238,7 @@ public class GameTurn implements GameRenderListener {
      * @param dest Tile destination
      */
     public void moveEntity(GameEntity ent, GameTile dest) {
-        logger.log(Level.FINE, "GameTurn: moveEntity (on tile)", new Object[]{});
+        logger.info("GameTurn: moveEntity (on tile)");
 
         // On log le mouvement
         // xplod: Pourquoi stocker le numero du tour ici? Surtout qu'on l'a pas
@@ -265,6 +270,16 @@ public class GameTurn implements GameRenderListener {
             }
         }
 
+        NetworkObserverProxy nop = NetworkObserverProxy.getDefault();
+        if (isMyNetworkTurn()) {
+            // C'est une partie en réseau, on transmet le mouvement
+            nop.onPlayerTurnEvent(GameTurn.STEP_MOVE_ENTITY, new Object[]{
+                ent.getName(),
+                false,
+                dest.getName()
+            });
+        }
+
         // On le transmet au controlleur en attendant la suite
         mController.onUnitMove(ent, dest);
     }
@@ -284,6 +299,16 @@ public class GameTurn implements GameRenderListener {
         mMoves.add(move);
         mRemainingMoves--;
 
+        NetworkObserverProxy nop = NetworkObserverProxy.getDefault();
+        if (isMyNetworkTurn()) {
+            // C'est une partie en réseau, on transmet le mouvement
+            nop.onPlayerTurnEvent(GameTurn.STEP_MOVE_ENTITY, new Object[]{
+                ent.getName(),
+                true,
+                dest.getName()
+            });
+        }
+
         // On le transmet au controlleur en attendant la suite
         mController.onUnitMove(ent, dest.getTile());
     }
@@ -299,6 +324,17 @@ public class GameTurn implements GameRenderListener {
 
         // TODO: Faut-il logger ces mouvements aussi?
         mRemainingDiceMoves--;
+
+        NetworkObserverProxy nop = NetworkObserverProxy.getDefault();
+        if (isMyNetworkTurn()) {
+            // C'est une partie en réseau, on transmet le mouvement
+            nop.onPlayerTurnEvent(GameTurn.STEP_MOVE_DICE_ENTITY, new Object[]{
+                ent.getName(),
+                dest.getName()
+            });
+        }
+
+        // On transmet au contrôleur
         mController.onUnitMove(ent, dest);
     }
 
@@ -354,6 +390,10 @@ public class GameTurn implements GameRenderListener {
                 break;
         }
 
+        if (isMyNetworkTurn()) {
+            NetworkObserverProxy.getDefault().onPlayerRollDice(mDiceAction);
+        }
+
         mController.onDiceRoll(mDiceAction);
 
         return mDiceAction;
@@ -389,6 +429,14 @@ public class GameTurn implements GameRenderListener {
      */
     public void sinkLandTile(GameTile tile) {
         mSunkenTile = tile;
+
+
+        NetworkObserverProxy nop = NetworkObserverProxy.getDefault();
+        if (isMyNetworkTurn()) {
+            nop.onPlayerTurnEvent(GameTurn.STEP_SINK_TILE,
+                        new Object[]{tile.getName()});
+        }
+
         mController.onSinkTile(tile);
     }
 
@@ -410,6 +458,13 @@ public class GameTurn implements GameRenderListener {
      */
     public void putInitialBoat(GameTile tile) {
         Boat b = new Boat();
+        b.moveToTile(null, tile);
+        mController.getBoard().putEntity(b);
+        mController.onInitialBoatPut(b);
+    }
+
+    public void putInitialBoat(String name, GameTile tile) {
+        Boat b = new Boat(name);
         b.moveToTile(null, tile);
         mController.getBoard().putEntity(b);
         mController.onInitialBoatPut(b);
@@ -444,6 +499,13 @@ public class GameTurn implements GameRenderListener {
 
         // On enlève la taile du joueur
         playuse.removeActionTile(action);
+
+        // Si on est en réseau, on signale qu'on utilise cette tile si c'est nous
+        final NetworkObserverProxy nop = NetworkObserverProxy.getDefault();
+        if (nop.isNetworkGame() && playuse.getNumber() == nop.getPlayerNumber()) {
+            nop.onPlayerUseRemoteTile(playuse.getNumber(), action);
+        }
+
 
         // On lance l'annulation (les tiles remotes sont toutes des ta
         mController.onCancelAction();
@@ -501,9 +563,9 @@ public class GameTurn implements GameRenderListener {
     public void onInitialTokenPutDone(PlayerToken pt) {
         // Un pion joueur a été placé. On finit le tour, c'est au suivant même si on a tout placé.
         NetworkObserverProxy nop = NetworkObserverProxy.getDefault();
-        if (nop.isNetworkGame() && nop.getPlayerNumber() == mPlayer.getNumber()) {
+        if (isMyNetworkTurn()) {
             nop.onPlayerTurnEvent(GameTurn.STEP_INITIAL_PLAYER_PUT,
-                    new Object[]{pt.getTile().getName(), pt.getPoints()});
+                    new Object[]{pt.getTile().getName(), pt.getPoints(), pt.getName()});
         }
 
         if (!nop.isNetworkGame() || nop.getPlayerNumber() == mPlayer.getNumber()) {
@@ -519,9 +581,9 @@ public class GameTurn implements GameRenderListener {
     public void onInitialBoatPutDone(Boat pt) {
         // Un pion bateau a été placé. On finit le tour, c'est au suivant même si on a tout placé.
         NetworkObserverProxy nop = NetworkObserverProxy.getDefault();
-        if (nop.isNetworkGame() && nop.getPlayerNumber() == mPlayer.getNumber()) {
+        if (isMyNetworkTurn()) {
             nop.onPlayerTurnEvent(GameTurn.STEP_INITIAL_BOAT_PUT,
-                    new Object[]{pt.getTile().getName()});
+                    new Object[]{pt.getTile().getName(), pt.getName()});
         }
 
         if (!nop.isNetworkGame() || nop.getPlayerNumber() == mPlayer.getNumber()) {
@@ -535,6 +597,12 @@ public class GameTurn implements GameRenderListener {
 
     public void onUnitMoveFinished() {
         logger.log(Level.FINE, "GameTurn: onUnitMoveFinished() ", new Object[]{});
+
+        NetworkObserverProxy nop = NetworkObserverProxy.getDefault();
+        if (nop.isNetworkGame() && mPlayer.getNumber() != nop.getPlayerNumber()) {
+            // On est en réseau et c'est pas notre tour, on ne fait pas les actions qui suvient.
+            return;
+        }
 
         if (mTileAction != null && !mTileAction.hasBeenUsed()) {
             // On a une tile action pas utilisée, et on a fait un mouvement.
@@ -625,14 +693,16 @@ public class GameTurn implements GameRenderListener {
                 break;
         }
 
-        if (mController.getBoard().hasEntityOfType(entityType)) {
-            mCurrentStep = STEP_MOVE_DICE_ENTITY;
-            requestDiceEntityPicking(null);
-        } else {
-            // Pas d'entité du type du dé a bouger. Le dé étant la dernière étape d'un tour,
-            // on a terminé.
-            logger.log(Level.FINE, "GameTurn: No entity of type " + entityType.toString() + " on the board. Finish turn.", new Object[]{});
-            finishTurn();
+        if (!NetworkObserverProxy.getDefault().isNetworkGame() || isMyNetworkTurn()) {
+            if (mController.getBoard().hasEntityOfType(entityType)) {
+                mCurrentStep = STEP_MOVE_DICE_ENTITY;
+                requestDiceEntityPicking(null);
+            } else {
+                // Pas d'entité du type du dé a bouger. Le dé étant la dernière étape d'un tour,
+                // on a terminé.
+                logger.log(Level.FINE, "GameTurn: No entity of type " + entityType.toString() + " on the board. Finish turn.", new Object[]{});
+                finishTurn();
+            }
         }
     }
 

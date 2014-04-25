@@ -25,17 +25,16 @@ import com.jme3.network.Network;
 import com.jme3.network.serializing.Serializer;
 
 import fr.miage.atlantis.Game3DLogic;
-import fr.miage.atlantis.entities.PlayerToken;
-
 import fr.miage.atlantis.gui.controllers.GuiController;
 import fr.miage.atlantis.logic.GameLogic;
-import fr.miage.atlantis.logic.GameTurn;
 import fr.miage.atlantis.network.messages.MessageChat;
 import fr.miage.atlantis.network.messages.MessageGameStart;
 import fr.miage.atlantis.network.messages.MessageKthxbye;
 import fr.miage.atlantis.network.messages.MessageNextTurn;
 import fr.miage.atlantis.network.messages.MessageOhai;
 import fr.miage.atlantis.network.messages.MessagePlayerJoined;
+import fr.miage.atlantis.network.messages.MessageRemoteTile;
+import fr.miage.atlantis.network.messages.MessageRollDice;
 import fr.miage.atlantis.network.messages.MessageSyncBoard;
 import fr.miage.atlantis.network.messages.MessageTurnEvent;
 import java.io.IOException;
@@ -53,16 +52,19 @@ public class GameClient implements ClientStateListener, MessageListener {
     private String mPlayerName;
     private Client mClient;
     private GuiController mGuiController;
+    private GameCommonCommands mCommon;
 
     static {
         Serializer.registerClass(MessageOhai.class);
         Serializer.registerClass(MessageKthxbye.class);
         Serializer.registerClass(MessageChat.class);
         Serializer.registerClass(MessagePlayerJoined.class);
+        Serializer.registerClass(MessageRollDice.class);
         Serializer.registerClass(MessageNextTurn.class);
         Serializer.registerClass(MessageGameStart.class);
         Serializer.registerClass(MessageSyncBoard.class);
         Serializer.registerClass(MessageTurnEvent.class);
+        Serializer.registerClass(MessageRemoteTile.class);
     }
 
     /**
@@ -75,6 +77,7 @@ public class GameClient implements ClientStateListener, MessageListener {
         mLogic = (Game3DLogic) logic;
 
         mGuiController = gui;
+        mCommon = new GameCommonCommands(mLogic);
     }
 
     /**
@@ -138,7 +141,10 @@ public class GameClient implements ClientStateListener, MessageListener {
             handleMessageNextTurn((MessageNextTurn) m);
         } else if (m instanceof MessageTurnEvent) {
             handleMessageTurnEvent((MessageTurnEvent) m);
-
+        } else if (m instanceof MessageRollDice) {
+            handleMessageRollDice((MessageRollDice) m);
+        } else if (m instanceof MessageRemoteTile) {
+            handleMessageRemoteTile((MessageRemoteTile) m);
         }
     }
 
@@ -169,48 +175,40 @@ public class GameClient implements ClientStateListener, MessageListener {
         mGuiController.onRemoteGameStart();
     }
 
-
-    private void handleMessageSyncBoard(MessageSyncBoard m) {
+    private void handleMessageSyncBoard(final MessageSyncBoard m) {
         log("Host is sending the board!");
-        // We (re)prepare the game
-        mLogic.prepareGame(mGuiController.getPlayers(), false);
-
-
-        try {
-            m.readBoard(mLogic);
-        } catch (IOException ex) {
-            log("Error!");
-        }
-    }
-
-    private void handleMessageNextTurn(MessageNextTurn m) {
-        log("Next turn: " + m.getPlayerNumber());
         mLogic.getRenderer().runOnMainThread(new Callable<Void>() {
             public Void call() throws Exception {
-                mLogic.nextTurn();
-                return null;
-            }
-        });
+                // We (re)prepare the game
+                mLogic.prepareGame(mGuiController.getPlayers(), false);
 
-    }
-
-    private void handleMessageTurnEvent(final MessageTurnEvent m) {
-        log("Turn event: " + m.getEvent());
-        mLogic.getRenderer().runOnMainThread(new Callable<Void>() {
-            public Void call() throws Exception {
-                switch (m.getEvent()) {
-                    case GameTurn.STEP_INITIAL_PLAYER_PUT: {
-                        String tileName = (String) m.getParameter(0);
-                        int points = (Integer) m.getParameter(1);
-                        PlayerToken pt = new PlayerToken(mLogic.getCurrentTurn().getPlayer(), points);
-                        pt.moveToTile(null, mLogic.getBoard().getTileSet().get(tileName));
-                        mLogic.getCurrentTurn().getPlayer().getTokens().add(pt);
-                        mLogic.onInitialTokenPut(pt);
-                    }
-                    break;
+                try {
+                    m.readBoard(mLogic);
+                } catch (IOException ex) {
+                    log("Error!");
                 }
                 return null;
             }
         });
+    }
+
+    private void handleMessageNextTurn(MessageNextTurn m) {
+        log("Next turn: " + m.getPlayerNumber());
+        mCommon.handleMessageNextTurn(m);
+    }
+
+    private void handleMessageTurnEvent(final MessageTurnEvent m) {
+        log("Turn event: " + m.getEvent());
+        mCommon.handleMessageTurnEvent(m);
+    }
+
+    private void handleMessageRollDice(final MessageRollDice m) {
+        log("Roll dice: " + m.getDiceAction());
+        mCommon.handleMessageRollDice(m);
+    }
+
+    private void handleMessageRemoteTile(final MessageRemoteTile m) {
+        log("Remote tile used by " + m.getPlayerNumber());
+        mCommon.handleMessageRemoteTile(m);
     }
 }

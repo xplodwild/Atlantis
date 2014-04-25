@@ -26,15 +26,15 @@ import com.jme3.network.Network;
 import com.jme3.network.Server;
 import com.jme3.network.serializing.Serializer;
 import fr.miage.atlantis.Game3DLogic;
-import fr.miage.atlantis.entities.PlayerToken;
 import fr.miage.atlantis.gui.controllers.GuiController;
-import fr.miage.atlantis.logic.GameTurn;
 import fr.miage.atlantis.network.messages.MessageChat;
 import fr.miage.atlantis.network.messages.MessageGameStart;
 import fr.miage.atlantis.network.messages.MessageKthxbye;
 import fr.miage.atlantis.network.messages.MessageNextTurn;
 import fr.miage.atlantis.network.messages.MessageOhai;
 import fr.miage.atlantis.network.messages.MessagePlayerJoined;
+import fr.miage.atlantis.network.messages.MessageRemoteTile;
+import fr.miage.atlantis.network.messages.MessageRollDice;
 import fr.miage.atlantis.network.messages.MessageSyncBoard;
 import fr.miage.atlantis.network.messages.MessageTurnEvent;
 import java.io.IOException;
@@ -43,7 +43,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
 import java.util.logging.Logger;
 
 /**
@@ -62,16 +61,19 @@ public class GameHost implements ConnectionListener, MessageListener<HostedConne
     private Game3DLogic mLogic;
     private GuiController mGuiController;
     private String mPlayerName;
+    private GameCommonCommands mCommon;
 
     static {
         Serializer.registerClass(MessageOhai.class);
         Serializer.registerClass(MessageKthxbye.class);
         Serializer.registerClass(MessageChat.class);
         Serializer.registerClass(MessagePlayerJoined.class);
+        Serializer.registerClass(MessageRollDice.class);
         Serializer.registerClass(MessageNextTurn.class);
         Serializer.registerClass(MessageGameStart.class);
         Serializer.registerClass(MessageSyncBoard.class);
         Serializer.registerClass(MessageTurnEvent.class);
+        Serializer.registerClass(MessageRemoteTile.class);
     }
 
 
@@ -88,6 +90,7 @@ public class GameHost implements ConnectionListener, MessageListener<HostedConne
         mLogic = logic;
         mGuiController = guiController;
         mPlayerName = name;
+        mCommon = new GameCommonCommands(mLogic);
     }
 
     /**
@@ -176,6 +179,10 @@ public class GameHost implements ConnectionListener, MessageListener<HostedConne
         } else if (m instanceof MessageNextTurn) {
             // Un nouveau tour
             handleMessageNextTurn(source, (MessageNextTurn) m);
+        } else if (m instanceof MessageRollDice) {
+            handleMessageRollDice(source, (MessageRollDice) m);
+        } else if (m instanceof MessageRemoteTile) {
+            handleMessageRemoteTile(source, (MessageRemoteTile) m);
         } else {
             throw new UnsupportedOperationException("Unhandled message in host: " + m);
         }
@@ -238,30 +245,34 @@ public class GameHost implements ConnectionListener, MessageListener<HostedConne
         // Retransmission du message
         broadcast(m, source);
 
-        switch (m.getEvent()) {
-            case GameTurn.STEP_INITIAL_PLAYER_PUT: {
-                String tileName = (String) m.getParameter(0);
-                int points = (Integer) m.getParameter(1);
-                PlayerToken pt = new PlayerToken(mLogic.getCurrentTurn().getPlayer(), points);
-                pt.moveToTile(null, mLogic.getBoard().getTileSet().get(tileName));
-                mLogic.onInitialTokenPut(pt);
-            }
-            break;
-        }
+        mCommon.handleMessageTurnEvent(m);
     }
 
     private void handleMessageNextTurn(HostedConnection source, MessageNextTurn m) {
         log("Next turn: " + m.getPlayerNumber());
 
+        // Retransmission du message
         broadcast(m, source);
 
-        mLogic.getRenderer().runOnMainThread(new Callable<Void>() {
-            public Void call() throws Exception {
-                mLogic.nextTurn();
-                return null;
-            }
-        });
+        mCommon.handleMessageNextTurn(m);
+    }
 
+    private void handleMessageRollDice(HostedConnection source, MessageRollDice m) {
+        log("Roll dice: " + m.getDiceAction());
+
+        // Retransmission du message
+        broadcast(m, source);
+
+        mCommon.handleMessageRollDice(m);
+    }
+
+    private void handleMessageRemoteTile(HostedConnection source, MessageRemoteTile m) {
+        log("Remote tile used by " + m.getPlayerNumber());
+
+        // Retransmission du message
+        broadcast(m, source);
+
+        mCommon.handleMessageRemoteTile(m);
     }
 
 }

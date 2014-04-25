@@ -90,6 +90,7 @@ public class Game3DRenderer extends SimpleApplication {
 
         setDisplayFps(false);
         setDisplayStatView(false);
+        setPauseOnLostFocus(false);
 
         // Configuration camera
         mCameraNode = new CameraNode("Main Camera", cam);

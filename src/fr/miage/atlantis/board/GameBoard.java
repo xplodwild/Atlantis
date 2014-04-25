@@ -766,11 +766,11 @@ public final class GameBoard {
         return retour;
     }
 
-    
+
     /**
      * Coule le tile donné et le supprime du plateau, passe tous les players presents sur le tile à Swimmer
      *
-     * @param logic 
+     * @param logic
      * @param tile tile a couler
      * @return La WaterTile qui a remplacé la tile
      */
@@ -835,7 +835,7 @@ public final class GameBoard {
         mTileSet.put(tile.getName(), tile);
     }
 
-   
+
     /**
      * Permet de placer un Tile à la droite d'un autre, tout en updatant les Tiles
      * adjacents.
@@ -857,7 +857,6 @@ public final class GameBoard {
 
             newTile.setLeftUpperTile(baseUpperRightTile);
             this.placeTileAtTheBottomRightOf(baseUpperRightTile, newTile);
-            
         }
         if (baseBottomRightTile != null) {
             this.placeTileAtTheBottomLeftOf(newTile, baseBottomRightTile);
@@ -1003,8 +1002,8 @@ public final class GameBoard {
     }
 
     /**
-     * Retourne si oui ou non il y a une tile au bord de l'eau au niveau spécifié. 
-     * Exemple, si on a une tile Beach entourée de Mountain, cela renverra 
+     * Retourne si oui ou non il y a une tile au bord de l'eau au niveau spécifié.
+     * Exemple, si on a une tile Beach entourée de Mountain, cela renverra
      * false même si une tile au niveau beach existe.
      *
      * @param level Le niveau
@@ -1054,7 +1053,7 @@ public final class GameBoard {
     //--------------------------------------------------------------------------
     //GETTERS                                                                  |
     //--------------------------------------------------------------------------
-    
+
     /**
      * Recupère la tile dans le coin en haut à droite de la tile courante
      * @param tile tile choisie
@@ -1094,7 +1093,7 @@ public final class GameBoard {
     /**
      * Recupère la tile à côté à droite
      * @param tile tile choisie
-     * @return la tile à droite 
+     * @return la tile à droite
      */
     private GameTile getRightSideTile(GameTile tile) {
         return tile.getRightTile();
@@ -1108,7 +1107,7 @@ public final class GameBoard {
     private GameTile getLeftSideTile(GameTile tile) {
         return tile.getLeftTile();
     }
-  
+
 
     //--------------------------------------------------------------------------
     //SETTERS                                                                  |
@@ -1134,7 +1133,7 @@ public final class GameBoard {
     /**
      * Définit la tile en bas à gauche
      * @param tile tile choisie
-     * @param toBePlaced tile à placer 
+     * @param toBePlaced tile à placer
      */
     private void setBottomLeftCornerTile(GameTile tile, GameTile toBePlaced) {
         tile.setLeftBottomTile(toBePlaced);
@@ -1166,5 +1165,5 @@ public final class GameBoard {
     private void setLeftSideTile(GameTile tile, GameTile toBePlaced) {
         tile.setLeftTile(toBePlaced);
     }
-    
+    //--------------------------------------------------------------------------
 }

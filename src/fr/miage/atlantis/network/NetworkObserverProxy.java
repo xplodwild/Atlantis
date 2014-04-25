@@ -19,8 +19,11 @@ package fr.miage.atlantis.network;
 
 import com.jme3.network.Message;
 import fr.miage.atlantis.board.GameBoard;
+import fr.miage.atlantis.board.TileAction;
 import fr.miage.atlantis.network.messages.MessageGameStart;
 import fr.miage.atlantis.network.messages.MessageNextTurn;
+import fr.miage.atlantis.network.messages.MessageRemoteTile;
+import fr.miage.atlantis.network.messages.MessageRollDice;
 import fr.miage.atlantis.network.messages.MessageSyncBoard;
 import fr.miage.atlantis.network.messages.MessageTurnEvent;
 import java.io.IOException;
@@ -189,6 +192,16 @@ public class NetworkObserverProxy {
         for (Object o : params) {
             msg.addParameter(o);
         }
+        sendCommon(msg);
+    }
+
+    public void onPlayerRollDice(int action) {
+        MessageRollDice msg = new MessageRollDice(action);
+        sendCommon(msg);
+    }
+
+    public void onPlayerUseRemoteTile(int playerNumber, TileAction tile) {
+        MessageRemoteTile msg = new MessageRemoteTile(playerNumber, tile);
         sendCommon(msg);
     }
 }

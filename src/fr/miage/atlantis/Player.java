@@ -72,16 +72,16 @@ public class Player {
      */
     public final void createTokens() {
         // On génère les 10 tokens par joueur
-        mTokens.add(new PlayerToken(this, 6));
-        mTokens.add(new PlayerToken(this, 5));
-        mTokens.add(new PlayerToken(this, 4));
-        mTokens.add(new PlayerToken(this, 3));
-        mTokens.add(new PlayerToken(this, 3));
-        mTokens.add(new PlayerToken(this, 2));
-        mTokens.add(new PlayerToken(this, 2));
-        mTokens.add(new PlayerToken(this, 1));
-        mTokens.add(new PlayerToken(this, 1));
-        mTokens.add(new PlayerToken(this, 1));
+        mTokens.add(new PlayerToken("PlayerToken_" + mNumber + "_" + 0, this, 6));
+        mTokens.add(new PlayerToken("PlayerToken_" + mNumber + "_" + 1, this, 5));
+        mTokens.add(new PlayerToken("PlayerToken_" + mNumber + "_" + 2, this, 4));
+        mTokens.add(new PlayerToken("PlayerToken_" + mNumber + "_" + 3, this, 3));
+        mTokens.add(new PlayerToken("PlayerToken_" + mNumber + "_" + 4, this, 3));
+        mTokens.add(new PlayerToken("PlayerToken_" + mNumber + "_" + 5, this, 2));
+        mTokens.add(new PlayerToken("PlayerToken_" + mNumber + "_" + 6, this, 2));
+        mTokens.add(new PlayerToken("PlayerToken_" + mNumber + "_" + 7, this, 1));
+        mTokens.add(new PlayerToken("PlayerToken_" + mNumber + "_" + 8, this, 1));
+        mTokens.add(new PlayerToken("PlayerToken_" + mNumber + "_" + 9, this, 1));
     }
 
     /**
