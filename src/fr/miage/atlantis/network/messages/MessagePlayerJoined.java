@@ -1,12 +1,12 @@
-/* 
+/*
  * Copyright (C) 2014 Loris Durand, Guillaume Lesniak, Cristian Sanna,
  *                    Lucie Wiemert
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -15,41 +15,40 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package fr.miage.atlantis;
+package fr.miage.atlantis.network.messages;
 
-import fr.miage.atlantis.logic.GameLogic;
+import com.jme3.network.AbstractMessage;
+import com.jme3.network.serializing.Serializable;
 
 /**
- * Classe main
- * @author Atlantis team
+ * Message lors de la connexion d'un autre joueur
+ * (vide)
  */
-public class Atlantis {
+@Serializable
+public class MessagePlayerJoined extends AbstractMessage {
+    private String mNickname;
 
-    /**
-     * Logique du jeu
-     */
-    private GameLogic mGameLogic;
+    private int mNumber;
 
-    /**
-     * Constructeur d'atlantis
-     */
-    public Atlantis() {
-        mGameLogic = new Game3DLogic();
+
+    public MessagePlayerJoined() {
+
     }
-    
-    /**
-     * Methode de demarrage du jeu
-     */
-    public void start() {
-        mGameLogic.boot();
+
+
+    public MessagePlayerJoined(final String name, final int number) {
+        mNickname = name;
+        mNumber = number;
+
     }
-    
-    /**
-     * Methode main executé
-     * @param args arguments de la ligne de commande
-     */
-    public static void main(String[] args) {
-        Atlantis app = new Atlantis();
-        app.start();
+
+    public String getName() {
+        return mNickname;
     }
+
+
+    public int getNumber() {
+        return mNumber;
+    }
+
 }

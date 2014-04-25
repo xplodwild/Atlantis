@@ -23,6 +23,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Classe abstraite représentant les tiles que l'on place sur le plateau de jeu
@@ -163,34 +164,23 @@ public abstract class GameTile {
 
         // Vraiment, on aurait dû faire un tableau
         data.writeBoolean(mLeftBottomTile != null);
-        if (mLeftBottomTile != null) {
-            data.writeUTF(mLeftBottomTile.getName());
-        }
+
+        if (mLeftBottomTile != null) data.writeUTF(mLeftBottomTile.getName());
 
         data.writeBoolean(mLeftTile != null);
-        if (mLeftTile != null) {
-            data.writeUTF(mLeftTile.getName());
-        }
+        if (mLeftTile != null) data.writeUTF(mLeftTile.getName());
 
         data.writeBoolean(mLeftUpperTile != null);
-        if (mLeftUpperTile != null) {
-            data.writeUTF(mLeftUpperTile.getName());
-        }
+        if (mLeftUpperTile != null) data.writeUTF(mLeftUpperTile.getName());
 
         data.writeBoolean(mRightBottomTile != null);
-        if (mRightBottomTile != null) {
-            data.writeUTF(mRightBottomTile.getName());
-        }
+        if (mRightBottomTile != null) data.writeUTF(mRightBottomTile.getName());
 
         data.writeBoolean(mRightTile != null);
-        if (mRightTile != null) {
-            data.writeUTF(mRightTile.getName());
-        }
+        if (mRightTile != null) data.writeUTF(mRightTile.getName());
 
         data.writeBoolean(mRightUpperTile != null);
-        if (mRightUpperTile != null) {
-            data.writeUTF(mRightUpperTile.getName());
-        }
+        if (mRightUpperTile != null) data.writeUTF(mRightUpperTile.getName());
 
         data.writeInt(mEntities.size());
         for (GameEntity ent : mEntities) {
@@ -198,12 +188,14 @@ public abstract class GameTile {
         }
     }
 
+
     /**
      * ressort une BorderTile d'une sauvegarde
      *
      * @param data cible de serialisation
      * @throws IOException
      */
+
     public void readSerialized(DataInputStream data) throws IOException {
         mName = data.readUTF();
         mHeight = data.readInt();
@@ -235,9 +227,14 @@ public abstract class GameTile {
 
         int entCount = data.readInt();
         for (int i = 0; i < entCount; i++) {
-            GameEntity ent = mBoard.getEntity(data.readUTF());
-            mEntities.add(ent);
-            ent.moveToTile(null, this);
+            String entUniqueName = data.readUTF();
+            GameEntity ent = mBoard.getEntity(entUniqueName);
+            if (ent != null) {
+                mEntities.add(ent);
+                ent.moveToTile(null, this);
+            } else {
+                Logger.getGlobal().info("Can't restore entity named " + entUniqueName);
+            }
         }
     }
 

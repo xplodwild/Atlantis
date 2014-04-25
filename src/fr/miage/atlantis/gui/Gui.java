@@ -59,6 +59,8 @@ public class Gui {
     private Nifty mNifty;
     private Console mConsole;
 
+    
+    
     public Gui(Game3DRenderer g3d, Nifty n) {
         this.mAm = g3d.getAssetManager();
         this.maudioRenderer = g3d.getAudioRenderer();
@@ -74,11 +76,7 @@ public class Gui {
         n.loadStyleFile(Gui.STYLE_FILE);
         n.loadControlFile(Gui.CONTROL_FILE);
 
-
         this.instanciateScreens();
-
-
-
     }
 
     private void instanciateScreens() {
@@ -91,7 +89,12 @@ public class Gui {
         ((GuiController) this.mNifty.getScreen("inGameHud").getScreenController()).set3DRenderer(this.mGame3DRenderer);
         ((GuiController) this.mNifty.getScreen("inGameHud2J").getScreenController()).set3DRenderer(this.mGame3DRenderer);
         ((GuiController) this.mNifty.getScreen("inGameHud3J").getScreenController()).set3DRenderer(this.mGame3DRenderer);
-
+        ((GuiController) this.mNifty.getScreen("lobbyMulti").getScreenController()).set3DRenderer(this.mGame3DRenderer);
+        ((GuiController) this.mNifty.getScreen("HostLan").getScreenController()).set3DRenderer(this.mGame3DRenderer);
+        ((GuiController) this.mNifty.getScreen("JoinLan").getScreenController()).set3DRenderer(this.mGame3DRenderer);
+        
+        
+        
         this.mNifty.gotoScreen("inGameHud");
 
 

@@ -2,12 +2,17 @@ package fr.miage.atlantis.gui.controllers;
 
 import com.jme3.renderer.Camera;
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.controls.Button;
+import de.lessvoid.nifty.controls.Chat;
+import de.lessvoid.nifty.controls.ChatTextSendEvent;
 import de.lessvoid.nifty.controls.Label;
 import de.lessvoid.nifty.controls.TextField;
+import de.lessvoid.nifty.controls.chatcontrol.ChatControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.PanelRenderer;
 import de.lessvoid.nifty.elements.render.TextRenderer;
+import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.Color;
@@ -24,9 +29,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Random;
+import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 
 /**
  * Controlleur implémentant les fonction appelées par les éléments du GUI
@@ -39,42 +44,34 @@ public class GuiController implements ScreenController {
      * Renderer du jeu
      */
     private Game3DRenderer g3rdr;
-
     /**
      * Objet NiftyGui
      */
     private Nifty nifty;
-
     /**
      * Ecran courant
      */
     private Screen screen;
-
     /**
      * Liste de Pseudo aléatoire
      */
     private ArrayList<String> nameRandomizer;
-
     /**
      * Liste des joueurs
      */
-    private String[] players;
-
+    private static String[] players;
     /**
      * Type de screen pour la partie en cours (2 / 3 / 4 joueurs)
      */
     private static int mScreenType;
-
     /**
      * Etat de la musique
      */
     private boolean musicState;
-
     /**
      * Etat des autres sons
      */
     private boolean soundState;
-
 
     /**
      * Constructeur du Controlleur
@@ -116,6 +113,10 @@ public class GuiController implements ScreenController {
         this.g3rdr = g3d;
     }
 
+    public String[] getPlayers() {
+        return players;
+    }
+
     /**
      * Arrete l'action en cours lors d'une partie
      */
@@ -124,40 +125,136 @@ public class GuiController implements ScreenController {
             Logger.getGlobal().severe("Game3DRenderer is null!");
             return;
         }
+
         if (this.g3rdr.getLogic() == null) {
             Logger.getGlobal().severe("Game3DRenderer's logic is null!");
             return;
         }
-
         this.g3rdr.getLogic().finishCurrentAction();
     }
 
-    
     /**
-     * Demmarre une nouvellle partie en reseau et accede au lobby
+     * Démarre effectivement la partie réseau
      */
-    public void startGameMulti(){
-        /*
-         TextField fieldJ1 = this.nifty.getScreen("HostLan").findElementByName("inputJ1").getNiftyControl(TextField.class);
-         String nick;
-         
-         if(fieldJ1.getRealText().isEmpty()){
-             nick=this.nameRandomizer.get(0);
-         }else{
-             nick=fieldJ1.getRealText();
-         }
-                  
-         players=new String[1];         
-         players[0] = nick;         
-         
-         fieldJ1 = this.nifty.getScreen("lobbyMulti").findElementByName("nomJ1").getNiftyControl(TextField.class);
-         fieldJ1.setText(nick);
-         
-         this.g3rdr.getLogic().prepareGame(players, true);
-         */
-         this.nifty.gotoScreen("lobbyMulti");
+    public void startGameMulti() {
+
+        if(players.length>2){
+            // On prépare le jeu sur l'hôte, puis on le propage aux clients (prepareGame le fait)
+        this.g3rdr.getLogic().prepareGame(players, true);
+
+        // Préparation de l'interface
+        switch (players.length) {
+            case 2:
+                GuiController.mScreenType = 2;
+                this.nifty.gotoScreen("inGameHud2J");
+                break;
+            case 3:
+                GuiController.mScreenType = 3;
+                this.nifty.gotoScreen("inGameHud3J");
+                break;
+            case 4:
+                GuiController.mScreenType = 4;
+                this.nifty.gotoScreen("inGameHud");
+                break;
+        }
+
+        // On met à jour les noms des joueurs dans l'UI
+        this.updatePlayerName();
+
+        // On lance la partie
+        this.g3rdr.getLogic().startGame();
+
+        Camera cam = g3rdr.getCamera();
+        CamConstants.moveAboveBoard(g3rdr.getCameraNode(), cam);
+        AudioManager.getDefault().setMainMusic(false);
+        }
     }
     
+    
+    
+    public void receiveChatMessage(String joueur,String message){
+        Chat ipx = this.nifty.getScreen("lobbyMulti").findElementByName("chatId").getNiftyControl(Chat.class);
+                                
+        final Element chatPanel = this.nifty.getScreen("lobbyMulti").findElementByName("chatId");
+        final Chat chatController = chatPanel.findNiftyControl("chatPanel", Chat.class);
+                               
+        chatController.receivedChatLine(joueur,null,message);
+    }
+    
+    @NiftyEventSubscriber(id="chatId")
+    public final void onSendText(final String id, final ChatTextSendEvent event) {
+            
+        this.receiveChatMessage(id,event.getText());
+        
+    }
+    
+    
+
+
+    public void onRemoteGameStart() {
+        this.g3rdr.runOnMainThread(new Callable<Void>() {
+            public Void call() {
+                switch (players.length) {
+                    case 2:
+                        GuiController.mScreenType = 2;
+                        nifty.gotoScreen("inGameHud2J");
+                        break;
+                    case 3:
+                        GuiController.mScreenType = 3;
+                        nifty.gotoScreen("inGameHud3J");
+                        break;
+                    case 4:
+                        GuiController.mScreenType = 4;
+                        nifty.gotoScreen("inGameHud");
+                        break;
+                }
+
+                updatePlayerName();
+
+                g3rdr.getLogic().startGame();
+                Camera cam = g3rdr.getCamera();
+                CamConstants.moveAboveBoard(g3rdr.getCameraNode(), cam);
+                AudioManager.getDefault().setMainMusic(false);
+                return null;
+            }
+        });
+    }
+
+    /**
+     * Démarre une nouvellle partie en reseau et accede au lobby
+     */
+    public void goToLobby() {
+        TextField fieldJ1 = this.nifty.getScreen("HostLan").findElementByName("inputJ1").getNiftyControl(TextField.class);
+        String nick;
+
+        
+        if (fieldJ1.getRealText().isEmpty()) {
+            nick = this.nameRandomizer.get(0);
+        } else {
+            nick = fieldJ1.getRealText();
+        }
+
+        players = new String[1];
+        players[0] = nick;
+
+        Chat ipx = this.nifty.getScreen("lobbyMulti").findElementByName("chatId").getNiftyControl(Chat.class);
+        ipx.addPlayer(nick, null);
+        
+        Element niftyElement;
+        niftyElement = nifty.getScreen("lobbyMulti").findElementByName("nom");
+        niftyElement.getRenderer(TextRenderer.class).setText(nick);
+
+        // Hébergement du serveur: On devient l'host et on se connecte à nous même
+        GameHost host = new GameHost(g3rdr.getLogic(), this, this.players[0]);
+        try {
+            host.startListening();
+        } catch (IOException ex) {
+            Logger.getGlobal().log(Level.SEVERE, "Cannot start listening on the game server", ex);
+        }
+
+        this.nifty.gotoScreen("lobbyMulti");
+    }
+
     
     /**
      * Demarre une nouvelle partie avec les pseudos données ou des pseudos
@@ -232,72 +329,70 @@ public class GuiController implements ScreenController {
 
     }
 
-
     /**
      * Fonction appelée lorsqu'on hoste une nouvelle partie sur le réseau local
      */
-    public void lanHost(){
-        // Hébergement du serveur: On devient l'host et on se connecte à nous même
-        GameHost host = new GameHost(g3rdr.getLogic());
-        try {
-            host.startListening();
-        } catch (IOException ex) {
-            Logger.getGlobal().log(Level.SEVERE, "Cannot start listening on the game server", ex);
-        }
-
-        //Se connecte sur le serveur crée en local
-        lanConnectImpl("127.0.0.1");
-
-        //Bouge sur l'ecran lobby multijoueur    @TODO : Réaliser l'ecran
+    public void lanHost() {
         this.nifty.gotoScreen("HostLan");
     }
 
-
-
+    
+    
     /**
      * Fonction appelée une fois que les champs de l'ecran pour rejoindre une
      * partie lan sont remplis.
      */
-    public void lanConnect(){
-
+    public void lanConnect() {
+        this.nifty.getScreen("lobbyMulti").findElementByName("btnNouvPartie").hide();
+        
         TextField ip = this.nifty.getScreen("JoinLan").findElementByName("inputIP").getNiftyControl(TextField.class);
         TextField nick = this.nifty.getScreen("JoinLan").findElementByName("inputNick").getNiftyControl(TextField.class);
 
         String ipServ = ip.getRealText();
         String nickname = nick.getRealText();
+        
+        if(nickname.equals("")){
+            int k=new Random().nextInt(20);
+            nickname = this.nameRandomizer.get(k);
+        }
 
-        boolean connected=this.lanConnectImpl(ipServ);
+        boolean connected = this.lanConnectImpl(ipServ, nickname);
 
-        if(connected){
-             this.nifty.gotoScreen("LobbyMultijoueur");
-        }else{
+        if (connected) {
+            Chat ipx = this.nifty.getScreen("lobbyMulti").findElementByName("chatId").getNiftyControl(Chat.class);
+            ipx.addPlayer(nickname, null);
+            
+            this.nifty.gotoScreen("lobbyMulti"); 
+        } else {
             this.nifty.gotoScreen("ErrorConnect");
         }
     }
 
-
+    
     /**
      * Connexion effective a un serveur de jeu en local
+     *
      * @param ipAddress IP au serveur a laquelle se connecter
+     * @param nickName Notre pseudo
      * @return True or false si la connexion est opérationnelle
      */
-    private boolean lanConnectImpl(final String ipAddress) {
+    private boolean lanConnectImpl(final String ipAddress, final String nickName) {
 
         boolean retour = false;
 
-        GameClient gameClient = new GameClient(g3rdr.getLogic());
+        GameClient gameClient = new GameClient(g3rdr.getLogic(), this);
         try {
-            gameClient.connect(ipAddress);
+            gameClient.connect(ipAddress, nickName);
             retour = true;
         } catch (IOException ex) {
-
             Logger.getLogger(GuiController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+        players = null;
+
         return retour;
     }
-
-
+    
 
     /**
      * Redemarre le jeu en cours (avec les memes joueurs
@@ -335,56 +430,11 @@ public class GuiController implements ScreenController {
                 this.nifty.gotoScreen("inGameHud");
                 break;
         }
-    }
-
-
-
-    /**
-     * Désactive tout les sons du jeu
-     *
-     */
-    public void soundToggle() {
-        /**
-         * TODO : toggle les sons FX ingame
-         */
-        if (this.soundState) {
-            /**
-             * Renseigner la source audio a pause à la place de null
-             */
-            // this.maudioRenderer.pauseSource(null);
-            this.nifty.getScreen("inGameMenu").findElementByName("btnOptions").getNiftyControl(Button.class).setText("Sons on");
-            this.soundState = false;
-        } else {
-            // this.maudioRenderer.playSource(null);
-
-
-            this.nifty.getScreen("inGameMenu").findElementByName("btnOptions").getNiftyControl(Button.class).setText("Sons off");
-            this.soundState = true;
-        }
-    }
-
-    /**
-     * Met en pause la musique du jeu
-     *
-     */
-    public void musicToggle() {
-        /**
-         * TODO : toggle la musique du jeu
-         */
-        if (this.musicState) {
-            /**
-             * Renseigner la source audio a pause à la place de null
-             */
-            // this.maudioRenderer.pauseSource(null);
-            this.nifty.getScreen("inGameMenu").findElementByName("btnOptions2").getNiftyControl(Button.class).setText("Musique on");
-            this.musicState = false;
-        } else {
-            // this.maudioRenderer.playSource(null);
-
-
-            this.nifty.getScreen("inGameMenu").findElementByName("btnOptions2").getNiftyControl(Button.class).setText("Musique off");
-            this.musicState = true;
-        }
+    }    
+    
+    
+    public void errorConnection(){
+        this.nifty.gotoScreen("ErrorConnect");
     }
 
     /**
@@ -392,13 +442,16 @@ public class GuiController implements ScreenController {
      */
     public void backToMenu() {
 
-        //Si le jeu n'est pas finis on sauvegarde par defaut.
+
         /*
+
          boolean gameOver = this.g3rdr.getLogic().isFinished();
          if (!gameOver) {
          this.save();
          }
+
          */
+
 
 
         TextField fieldJ1 = this.nifty.getScreen("start").findElementByName("inputJ1").getNiftyControl(TextField.class);
@@ -468,18 +521,18 @@ public class GuiController implements ScreenController {
                 i++;
             }
 
-            switch(logicPlayers.length){
+            switch (logicPlayers.length) {
                 case 2:
-                    GuiController.mScreenType=2;
+                    GuiController.mScreenType = 2;
                     this.nifty.gotoScreen("inGameHud2J");
 
                     break;
                 case 3:
-                    GuiController.mScreenType=3;
+                    GuiController.mScreenType = 3;
                     this.nifty.gotoScreen("inGameHud3J");
                     break;
                 case 4:
-                    GuiController.mScreenType=4;
+                    GuiController.mScreenType = 4;
                     this.nifty.gotoScreen("inGameHud");
                     break;
             }
@@ -517,10 +570,10 @@ public class GuiController implements ScreenController {
      *
      */
     public void exit() {
+
         /*
          boolean gameOver = this.g3rdr.getLogic().isFinished();
          if (!gameOver) {
-
          this.save();
          }
          */
@@ -579,6 +632,7 @@ public class GuiController implements ScreenController {
      *
      */
     public void updatePlayerName() {
+        Logger.getGlobal().severe("updatePlayerName: " + players.length + " " + players);
         Element niftyElement;
         if (players.length == 4) {
             //Ecran 4 Joueurs
@@ -589,6 +643,16 @@ public class GuiController implements ScreenController {
             niftyElement = nifty.getScreen("inGameHud").findElementByName("nomJ3");
             niftyElement.getRenderer(TextRenderer.class).setText(players[2]);
             niftyElement = nifty.getScreen("inGameHud").findElementByName("nomJ4");
+            niftyElement.getRenderer(TextRenderer.class).setText(players[3]);
+
+            //Lobby Multi
+            niftyElement = nifty.getScreen("lobbyMulti").findElementByName("nom");
+            niftyElement.getRenderer(TextRenderer.class).setText(players[0]);
+            niftyElement = nifty.getScreen("lobbyMulti").findElementByName("nomJ2");
+            niftyElement.getRenderer(TextRenderer.class).setText(players[1]);
+            niftyElement = nifty.getScreen("lobbyMulti").findElementByName("nomJ3");
+            niftyElement.getRenderer(TextRenderer.class).setText(players[2]);
+            niftyElement = nifty.getScreen("lobbyMulti").findElementByName("nomJ4");
             niftyElement.getRenderer(TextRenderer.class).setText(players[3]);
         }
 
@@ -601,6 +665,14 @@ public class GuiController implements ScreenController {
             niftyElement.getRenderer(TextRenderer.class).setText(players[1]);
             niftyElement = nifty.getScreen("inGameHud3J").findElementByName("nomJ3");
             niftyElement.getRenderer(TextRenderer.class).setText(players[2]);
+
+            //Lobby Multi
+            niftyElement = nifty.getScreen("lobbyMulti").findElementByName("nom");
+            niftyElement.getRenderer(TextRenderer.class).setText(players[0]);
+            niftyElement = nifty.getScreen("lobbyMulti").findElementByName("nomJ2");
+            niftyElement.getRenderer(TextRenderer.class).setText(players[1]);
+            niftyElement = nifty.getScreen("lobbyMulti").findElementByName("nomJ3");
+            niftyElement.getRenderer(TextRenderer.class).setText(players[2]);
         }
 
         if (players.length == 2) {
@@ -609,20 +681,26 @@ public class GuiController implements ScreenController {
             niftyElement.getRenderer(TextRenderer.class).setText(players[0]);
             niftyElement = nifty.getScreen("inGameHud2J").findElementByName("nomJ2");
             niftyElement.getRenderer(TextRenderer.class).setText(players[1]);
+
+            //Lobby Multi
+            niftyElement = nifty.getScreen("lobbyMulti").findElementByName("nom");
+            niftyElement.getRenderer(TextRenderer.class).setText(players[0]);
+            niftyElement = nifty.getScreen("lobbyMulti").findElementByName("nomJ2");
+            niftyElement.getRenderer(TextRenderer.class).setText(players[1]);
         }
 
         //Ecran Accueil
         niftyElement = nifty.getScreen("inGameMenu").findElementByName("nomJ1");
         niftyElement.getRenderer(TextRenderer.class).setText(players[0]);
-        niftyElement = nifty.getScreen("inGameMenu").findElementByName("nomJ2");
-        niftyElement.getRenderer(TextRenderer.class).setText(players[1]);
-        if (players.length == 3) {
+        if (players.length >= 2) {
+            niftyElement = nifty.getScreen("inGameMenu").findElementByName("nomJ2");
+            niftyElement.getRenderer(TextRenderer.class).setText(players[1]);
+        }
+        if (players.length >= 3) {
             niftyElement = nifty.getScreen("inGameMenu").findElementByName("nomJ3");
             niftyElement.getRenderer(TextRenderer.class).setText(players[2]);
         }
-        if (players.length == 4) {
-            niftyElement = nifty.getScreen("inGameMenu").findElementByName("nomJ3");
-            niftyElement.getRenderer(TextRenderer.class).setText(players[2]);
+        if (players.length >= 4) {
             niftyElement = nifty.getScreen("inGameMenu").findElementByName("nomJ4");
             niftyElement.getRenderer(TextRenderer.class).setText(players[3]);
         }
@@ -719,7 +797,7 @@ public class GuiController implements ScreenController {
         this.nameRandomizer.remove(tmp);
         fieldMulti.setText(tmp);
     }
-    
+
     /**
      * Remplis le champ pseudo pour le multijoueur LAN avec un pseudo aléatoire
      * *
@@ -1036,4 +1114,22 @@ public class GuiController implements ScreenController {
                 break;
         }
     }
+
+    public void onPlayerConnected(final String name) {
+        String[] newPlayers = new String[players == null ? 1 : players.length + 1];
+        if (players != null) {
+            int i = 0;
+            for (String s : players) {
+                newPlayers[i] = players[i];
+                i++;
+            }
+        }
+        newPlayers[newPlayers.length - 1] = name;
+
+        Logger.getGlobal().severe("Players: " + newPlayers.length);
+
+        players = newPlayers;
+        updatePlayerName();
+    }
+
 }

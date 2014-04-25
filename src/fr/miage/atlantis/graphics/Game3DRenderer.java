@@ -42,6 +42,8 @@ import fr.miage.atlantis.graphics.hud.TileActionDisplay;
 import fr.miage.atlantis.graphics.models.DiceModel;
 import fr.miage.atlantis.gui.Gui;
 import java.util.Random;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 /**
  * Renderer 3D pour le jeu
@@ -133,9 +135,16 @@ public class Game3DRenderer extends SimpleApplication {
         mNifty.gotoScreen("start");
     }
 
+
+    public void runOnMainThread(Callable r) {
+        enqueue(r);
+    }
+
+
     /**
      * Affiche ou non le framerate et d'autres infos dans un coin de l'écran
      */
+
     public void toggleGraphicsStats() {
         if (!mDisplayGraphicalStats) {
             mDisplayGraphicalStats = true;

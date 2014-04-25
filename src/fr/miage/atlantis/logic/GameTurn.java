@@ -29,6 +29,7 @@ import fr.miage.atlantis.entities.PlayerToken;
 import fr.miage.atlantis.entities.SeaSerpent;
 import fr.miage.atlantis.entities.Shark;
 import fr.miage.atlantis.entities.Whale;
+import fr.miage.atlantis.network.NetworkObserverProxy;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -433,15 +434,32 @@ public class GameTurn implements GameRenderListener {
         }
     }
 
-    public void onInitialTokenPutDone() {
+    @Override
+    public void onInitialTokenPutDone(PlayerToken pt) {
         // Un pion joueur a été placé. On finit le tour, c'est au suivant même si on a tout placé.
-        finishTurn();
+        NetworkObserverProxy nop = NetworkObserverProxy.getDefault();
+        if (nop.isNetworkGame() && nop.getPlayerNumber() == mPlayer.getNumber()) {
+            nop.onPlayerTurnEvent(GameTurn.STEP_INITIAL_PLAYER_PUT,
+                    new Object[]{pt.getTile().getName(), pt.getPoints()});
+        }
+
+        if (!nop.isNetworkGame() || nop.getPlayerNumber() == mPlayer.getNumber()) {
+            finishTurn();
+        }
     }
 
     @Override
-    public void onInitialBoatPutDone() {
+    public void onInitialBoatPutDone(Boat pt) {
         // Un pion bateau a été placé. On finit le tour, c'est au suivant même si on a tout placé.
-        finishTurn();
+        NetworkObserverProxy nop = NetworkObserverProxy.getDefault();
+        if (nop.isNetworkGame() && nop.getPlayerNumber() == mPlayer.getNumber()) {
+            nop.onPlayerTurnEvent(GameTurn.STEP_INITIAL_BOAT_PUT,
+                    new Object[]{pt.getTile().getName()});
+        }
+
+        if (!nop.isNetworkGame() || nop.getPlayerNumber() == mPlayer.getNumber()) {
+            finishTurn();
+        }
     }
 
     public void onPlayedTileAction() {

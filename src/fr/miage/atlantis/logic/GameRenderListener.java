@@ -17,6 +17,9 @@
  */
 package fr.miage.atlantis.logic;
 
+import fr.miage.atlantis.entities.Boat;
+import fr.miage.atlantis.entities.PlayerToken;
+
 /**
  * Interface qui écoute les diverses actions du jeu
  */
@@ -27,15 +30,11 @@ public interface GameRenderListener {
      */
     public void onTurnStarted();
 
-    /**
-     * Initialisation 
-     */
-    public void onInitialTokenPutDone();
 
-    /**
-     * Initialisation des bateaux
-     */
-    public void onInitialBoatPutDone();
+    public void onInitialTokenPutDone(PlayerToken pt);
+
+    public void onInitialBoatPutDone(Boat pt);
+
 
     /**
      * ACtion de la tile jouée

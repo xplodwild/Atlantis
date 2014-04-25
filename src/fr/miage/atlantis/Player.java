@@ -63,18 +63,25 @@ public class Player {
         mNumber = number;
 
         if (createTokens) {
-            // On génère les 10 tokens par joueur
-            mTokens.add(new PlayerToken(this, 6));
-            mTokens.add(new PlayerToken(this, 5));
-            mTokens.add(new PlayerToken(this, 4));
-            mTokens.add(new PlayerToken(this, 3));
-            mTokens.add(new PlayerToken(this, 3));
-            mTokens.add(new PlayerToken(this, 2));
-            mTokens.add(new PlayerToken(this, 2));
-            mTokens.add(new PlayerToken(this, 1));
-            mTokens.add(new PlayerToken(this, 1));
-            mTokens.add(new PlayerToken(this, 1));
+            createTokens();
         }
+    }
+
+    /**
+     * Créée les pions associés au joueur
+     */
+    public final void createTokens() {
+        // On génère les 10 tokens par joueur
+        mTokens.add(new PlayerToken(this, 6));
+        mTokens.add(new PlayerToken(this, 5));
+        mTokens.add(new PlayerToken(this, 4));
+        mTokens.add(new PlayerToken(this, 3));
+        mTokens.add(new PlayerToken(this, 3));
+        mTokens.add(new PlayerToken(this, 2));
+        mTokens.add(new PlayerToken(this, 2));
+        mTokens.add(new PlayerToken(this, 1));
+        mTokens.add(new PlayerToken(this, 1));
+        mTokens.add(new PlayerToken(this, 1));
     }
 
     /**
