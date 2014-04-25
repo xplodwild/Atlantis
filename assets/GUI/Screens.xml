@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nifty xmlns="http://nifty-gui.sourceforge.net/nifty-1.3.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://nifty-gui.sourceforge.net/nifty-1.3.xsd http://nifty-gui.sourceforge.net/nifty-1.3.xsd">
 
+       
     <!-- +++++++++++++++++++++++++++++++++++++++ -->
     <!-- start screen -->
     <!-- +++++++++++++++++++++++++++++++++++++++ -->
@@ -492,6 +493,9 @@
     </screen>
 
 
+    <useStyles filename="nifty-default-styles.xml" />
+    <useControls filename="nifty-default-controls.xml" />   
+
     <!-- +++++++++++++++++++++++++++++++++++++++ -->
     <!-- hud screen -->
     <!-- +++++++++++++++++++++++++++++++++++++++ -->
@@ -547,7 +551,7 @@
                 </panel>
 
 
-                <panel id="bas" height="50%" width="100%" align="left" valign="top" paddingTop="3.7%"  childLayout="horizontal" visibleToMouse="true">
+                <panel id="bas" height="70%" width="100%" align="left" valign="top" paddingTop="3.7%"  childLayout="horizontal" visibleToMouse="true">
 
                     <panel id="bas_1" height="100%" width="24%" backgroundColor="#0060ab4d" align="right" valign="top" childLayout="vertical" visibleToMouse="true">
                         <panel id="haut_1"  height="25%" width="80%" align="right" valign="top" childLayout="vertical" visibleToMouse="true">
@@ -593,13 +597,14 @@
                     <panel id="spacer_4" height="100%" width="2%"  backgroundColor="#00000080" align="right" valign="top" childLayout="vertical" visibleToMouse="true">
                     </panel>
                 </panel>
-
-                <panel id="barreDuBas" height="50%" width="100%" align="left" valign="bottom" backgroundColor="#00000080" childLayout="vertical" visibleToMouse="true">
-
-                    <!-- +++++++++++++++++++++++++++++++++++++++ -->
-                    <!-- INTEGRER LE CHAT -->
-                    <!-- +++++++++++++++++++++++++++++++++++++++ -->
-
+                
+                <panel id="spacer_4" height="3%" width="100%"  backgroundColor="#00000080" align="right" valign="top" childLayout="vertical" visibleToMouse="true">
+                </panel>
+                
+                <panel id="barreDuBas" height="27%" width="99%" align="left" valign="bottom" backgroundColor="#00000080" childLayout="vertical" visibleToMouse="true">
+                    <control id="chatId" name="nifty-chat" width="100%" height="90%" lines="6" sendLabel="Envoyer">
+                         <interact onClick="onSendText()" />
+                    </control>
                 </panel>
             </panel>
 
