@@ -49,7 +49,7 @@ public class PlayerTokenTest {
     public void testMoveToTile() {
         System.out.println("moveToTile");
         GameLogic logic = new NullGameLogic();
-        GameBoard board = new GameBoard();
+        GameBoard board = new GameBoard(true);
         
         GameTile tile = board.getTileSet().get("Beach #15");
         GameTile tile1 = board.getTileSet().get("Water #37");
