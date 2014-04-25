@@ -56,8 +56,8 @@ public class WhaleTest {
         Whale baleine = new Whale();
         Boat petitBateau = new Boat();
         Boat barque = new Boat();
-        PlayerToken pt1 = new PlayerToken(new Player("neo",1), 3);
-        PlayerToken pt2 = new PlayerToken(new Player("dolly", 2),2);
+        PlayerToken pt1 = new PlayerToken(new Player("neo",1,false), 3);
+        PlayerToken pt2 = new PlayerToken(new Player("dolly", 2,false),2);
         
         //Cas où la Baleine retourne un bateau avec des pions
         //1er test: on vérifie que toutes les entités sont sur la tile
