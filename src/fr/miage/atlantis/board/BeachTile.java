@@ -69,6 +69,11 @@ public class BeachTile extends GameTile {
         readSerialized(stream);
     }
 
+    /**
+     * Getter qui recupère le type de la tile
+     * 
+     * @return le type de tile
+     */
     @Override
     public int getType() {
         return TILE_BEACH;
