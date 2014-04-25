@@ -26,6 +26,7 @@ public abstract class FutureCallback {
 
     /**
      * Constructeur de FutureCallback
+     *
      * @param timeSec temps avant l'appel
      */
     public FutureCallback(float timeSec) {
