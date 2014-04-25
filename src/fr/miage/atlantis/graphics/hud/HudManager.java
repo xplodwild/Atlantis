@@ -21,7 +21,7 @@ import com.jme3.asset.AssetManager;
 import fr.miage.atlantis.graphics.Game3DRenderer;
 
 /**
- *
+ * Classe permettant la gestion des Hud
  */
 public class HudManager {
 
@@ -29,6 +29,10 @@ public class HudManager {
     private GameHud mGameHud;
     private Game3DRenderer mRenderer;
 
+    /**
+     * Constructeur permettant la gestion des Hud
+     * @param renderer rendu graphique
+     */
     public HudManager(Game3DRenderer renderer) {
         mHudAnimator = new HudAnimator();
         mRenderer = renderer;
@@ -36,6 +40,10 @@ public class HudManager {
 
     }
 
+    /**
+     * Recupère AssetManager qui permet d'accéder aux assets
+     * @return AssetManager
+     */
     public AssetManager getAssetManager() {
         return mRenderer.getAssetManager();
     }
@@ -47,10 +55,18 @@ public class HudManager {
         return mHudAnimator;
     }
 
+    /**
+     * Recupère le rendu graphique
+     * @return le rendu graphique
+     */
     public Game3DRenderer getRenderer() {
         return mRenderer;
     }
 
+    /**
+     * Recupère le jeu du Hud
+     * @return le jeu du hud
+     */
     public GameHud getGameHud() {
         return mGameHud;
     }
@@ -100,14 +116,19 @@ public class HudManager {
         displayAt(disp, mRenderer.getCamera().getWidth() - disp.getWidth() - 25, 25);
     }
 
-    
+    /**
+     * Recupère la largeur du l'écran
+     * @return la largeur
+     */
     public int getScreenWidth() {
         return mRenderer.getCamera().getWidth();
     }
     
+    /**
+     * Recupère la hauteur de l'écran
+     * @return la hauteur
+     */
     public int getScreenHeight() {
         return mRenderer.getCamera().getHeight();
     }
-
-
 }
