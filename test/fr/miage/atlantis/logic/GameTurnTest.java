@@ -60,7 +60,7 @@ public class GameTurnTest {
         Player joueur = new Player("lu",1);
         NullGameLogic gl = new NullGameLogic();
         GameTurn instance = new GameTurn(gl, joueur);
-        GameBoard board = new GameBoard();       
+        GameBoard board = new GameBoard(true);       
         
         //on ajoute un pion sur une tile et on test qu'elle est dessus.
         GameEntity pion = new PlayerToken(joueur,6);
@@ -87,7 +87,7 @@ public class GameTurnTest {
         Player joueur = new Player("Lucie", 1);
         NullGameLogic gl = new NullGameLogic();
         GameTurn instance = new GameTurn(gl, joueur);
-        GameBoard board = new GameBoard();
+        GameBoard board = new GameBoard(true);
         GameTile tile = board.getTileSet().get("Water #37");
         PlayerToken pion = new PlayerToken(joueur,6);
         Boat boat = new Boat();
@@ -143,7 +143,7 @@ boat.addPlayer(pion);
         System.out.println("hasSunkLandTile");
         GameLogic gl = new NullGameLogic();
         GameTurn instance = new GameTurn(gl, new Player("P1",0));
-        GameTile tile = new BeachTile(new GameBoard(), "Beach #yolo");
+        GameTile tile = new BeachTile(new GameBoard(true), "Beach #yolo");
         
         // Aucune tuile n'a été coulée
         assertFalse(instance.hasSunkLandTile());
@@ -163,7 +163,7 @@ boat.addPlayer(pion);
         System.out.println("sinkLandTile");
         GameLogic gl = new NullGameLogic();
         GameTurn instance = new GameTurn(gl, new Player("P1",0));
-        GameTile tile = new BeachTile(new GameBoard(), "Beach #yolo");
+        GameTile tile = new BeachTile(new GameBoard(true), "Beach #yolo");
         
         // Aucune tuile n'a été coulée
         assertFalse(instance.hasSunkLandTile());
@@ -181,7 +181,7 @@ boat.addPlayer(pion);
     @Test
     public void testUseRemoteTile() {
         System.out.println("useRemoteTile");
-        GameBoard gb = new GameBoard();
+        GameBoard gb = new GameBoard(true);
         TileAction action = TileAction.Factory.createCancelAnimal(TileAction.ENTITY_SHARK);
         Player p = new Player("P1", 0);
         GameLogic gl = new NullGameLogic();
@@ -201,7 +201,7 @@ boat.addPlayer(pion);
     @Test
     public void testUseLocalTile() {
         System.out.println("useLocalTile");
-        GameBoard gb = new GameBoard();
+        GameBoard gb = new GameBoard(true);
         TileAction action = TileAction.Factory.createMoveAnimal(TileAction.ENTITY_SEASERPENT);
         Player p = new Player("P1", 0);
         p.addActionTile(action);
