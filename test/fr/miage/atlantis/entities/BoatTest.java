@@ -49,7 +49,7 @@ public class BoatTest {
     @Test
     public void testMoveToTile() {
         System.out.println("moveToTile");
-        GameBoard gb = new GameBoard();
+        GameBoard gb = new GameBoard(true);
         GameLogic gl = new NullGameLogic();
         
         // Quelques tiles de test
