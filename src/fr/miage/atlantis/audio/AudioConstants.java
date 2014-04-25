@@ -21,13 +21,13 @@ package fr.miage.atlantis.audio;
  * Constantes pour le système audio (fichiers)
  */
 public class AudioConstants {
+
     public static class Path {
+
         private static final String D = "Audio/";
         private static final String E = ".wav";
-
         public static final String MAIN_MUSIC = D + "MainTheme.ogg";
         public static final String AMBIENCE = D + "Ambience.ogg";
-        
         public static final String ERROR = D + "Error" + E;
         public static final String DING = D + "Ding" + E;
         public static final String WHOOSH = D + "Whoosh" + E;
