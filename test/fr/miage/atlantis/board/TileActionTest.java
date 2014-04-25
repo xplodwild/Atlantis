@@ -4,7 +4,6 @@
  */
 package fr.miage.atlantis.board;
 
-import fr.miage.atlantis.logic.GameLogic;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

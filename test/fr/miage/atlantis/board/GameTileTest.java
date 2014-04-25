@@ -6,7 +6,6 @@ package fr.miage.atlantis.board;
 
 import fr.miage.atlantis.entities.GameEntity;
 import fr.miage.atlantis.entities.Shark;
-import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
