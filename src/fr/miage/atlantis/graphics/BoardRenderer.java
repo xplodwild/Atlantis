@@ -35,7 +35,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- *
+ * Class que gère le rendu 3D du board
  */
 public class BoardRenderer extends Node {
 
@@ -53,6 +53,10 @@ public class BoardRenderer extends Node {
     private Map<Node, GameTile> mNodeToGameTiles;
     private Map<GameTile, AbstractTileModel> mGameTileToModel;
 
+    /**
+     * Constructeur de BoardRenderer
+     * @param am AssertManager concerné
+     */
     public BoardRenderer(AssetManager am) {
         mAssetManager = am;
         mTiles = new ArrayList<Node>();
@@ -62,6 +66,9 @@ public class BoardRenderer extends Node {
         addIslands();
     }
 
+    /**
+     * Ajoute les îles aux 4 coins du BoardRenderer
+     */
     public void addIslands() {
         StaticModel islands = new StaticModel(mAssetManager,
                 "Models/polymsh.mesh.xml", "Textures/sand.jpg", name);
@@ -70,10 +77,18 @@ public class BoardRenderer extends Node {
         attachChild(islands);
     }
 
+    /*
+     * Retourne le noeud (élément graphique) auquel est rattachée une tile
+     */
     public Node getTile(int i) {
         return mTiles.get(i);
     }
 
+    /**
+     * Recupère le modele d'une tile
+     * @param tile La tuile concernée
+     * @return le modèle de la tile
+     */
     public AbstractTileModel findTileModel(GameTile tile) {
         return mGameTileToModel.get(tile);
     }
