@@ -184,7 +184,7 @@ public class GameTurn implements GameRenderListener {
      * @param dest Tile destination
      */
     public void moveEntity(GameEntity ent, GameTile dest) {
-        logger.log(Level.FINE, "GameTurn: moveEntity (on tile)", new Object[]{});
+        logger.info("GameTurn: moveEntity (on tile)");
 
         // On log le mouvement
         // xplod: Pourquoi stocker le numero du tour ici? Surtout qu'on l'a pas
@@ -410,7 +410,7 @@ public class GameTurn implements GameRenderListener {
         NetworkObserverProxy nop = NetworkObserverProxy.getDefault();
         if (nop.isNetworkGame() && nop.getPlayerNumber() == mPlayer.getNumber()) {
             nop.onPlayerTurnEvent(GameTurn.STEP_INITIAL_PLAYER_PUT,
-                    new Object[]{pt.getTile().getName(), pt.getPoints()});
+                    new Object[]{pt.getTile().getName(), pt.getPoints(), pt.getName()});
         }
 
         if (!nop.isNetworkGame() || nop.getPlayerNumber() == mPlayer.getNumber()) {

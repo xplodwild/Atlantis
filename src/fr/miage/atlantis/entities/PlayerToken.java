@@ -30,7 +30,7 @@ import fr.miage.atlantis.logic.GameLogic;
  * @date 02/03/2014
  */
 public class PlayerToken extends GameEntity {
-    
+
     public final static int STATE_UNDEFINED = -1;
     public final static int STATE_ON_LAND = 0;
     public final static int STATE_SWIMMING = 1;
@@ -63,11 +63,11 @@ public class PlayerToken extends GameEntity {
     public PlayerToken(Player p, int points) {
         this("PlayerToken", true, p, points);
     }
-    
+
     public PlayerToken(String name, Player p, int points) {
         this(name, false, p, points);
     }
-    
+
     public PlayerToken(String name, boolean appendUniqueID, Player p, int points) {
         super(name, appendUniqueID);
         mState = STATE_UNDEFINED;

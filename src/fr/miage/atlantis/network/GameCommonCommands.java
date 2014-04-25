@@ -66,7 +66,8 @@ public class GameCommonCommands {
                     case GameTurn.STEP_INITIAL_PLAYER_PUT: {
                         String tileName = (String) m.getParameter(0);
                         int points = (Integer) m.getParameter(1);
-                        PlayerToken pt = new PlayerToken(mLogic.getCurrentTurn().getPlayer(), points);
+                        String tokenName = (String) m.getParameter(2);
+                        PlayerToken pt = new PlayerToken(tokenName, mLogic.getCurrentTurn().getPlayer(), points);
                         mLogic.getCurrentTurn().getPlayer().getTokens().add(pt);
                         mLogic.getCurrentTurn().putInitialToken(pt, mLogic.getBoard().getTileSet().get(tileName));
                     }
@@ -81,6 +82,7 @@ public class GameCommonCommands {
                     case GameTurn.STEP_MOVE_ENTITY: {
                         String entName = (String) m.getParameter(0);
                         String tileName = (String) m.getParameter(1);
+                        log("Moving entity " + entName + " to tile " + tileName);
                         mLogic.getCurrentTurn().moveEntity(mLogic.getBoard().getEntity(entName),
                                 mLogic.getBoard().getTileSet().get(tileName));
                     }

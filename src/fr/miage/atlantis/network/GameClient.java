@@ -123,16 +123,21 @@ public class GameClient implements ClientStateListener, MessageListener {
         mGuiController.onRemoteGameStart();
     }
 
-    private void handleMessageSyncBoard(MessageSyncBoard m) {
+    private void handleMessageSyncBoard(final MessageSyncBoard m) {
         log("Host is sending the board!");
-        // We (re)prepare the game
-        mLogic.prepareGame(mGuiController.getPlayers(), false);
+        mLogic.getRenderer().runOnMainThread(new Callable<Void>() {
+            public Void call() throws Exception {
+                // We (re)prepare the game
+                mLogic.prepareGame(mGuiController.getPlayers(), false);
 
-        try {
-            m.readBoard(mLogic);
-        } catch (IOException ex) {
-            log("Error!");
-        }
+                try {
+                    m.readBoard(mLogic);
+                } catch (IOException ex) {
+                    log("Error!");
+                }
+                return null;
+            }
+        });
     }
 
     private void handleMessageNextTurn(MessageNextTurn m) {
