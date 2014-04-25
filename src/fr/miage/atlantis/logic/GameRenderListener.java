@@ -18,23 +18,47 @@
 package fr.miage.atlantis.logic;
 
 /**
- *
+ * Interface qui écoute les diverses actions du jeu
  */
 public interface GameRenderListener {
 
+    /**
+     * Le tour a commencé
+     */
     public void onTurnStarted();
 
+    /**
+     * Initialisation 
+     */
     public void onInitialTokenPutDone();
 
+    /**
+     * Initialisation des bateaux
+     */
     public void onInitialBoatPutDone();
 
+    /**
+     * ACtion de la tile jouée
+     */
     public void onPlayedTileAction();
 
+    /**
+     * Déplacement de l'entité terminé
+     */
     public void onUnitMoveFinished();
 
+    /**
+     * Lorsque le lancé dé est fini
+     */
     public void onDiceRollFinished();
 
+    /**
+     * Lorsque la tile est coulée
+     */
     public void onSinkTileFinished();
 
+    /**
+     * Action du entité est terminé
+     */
     public void onEntityActionFinished();
 }

@@ -320,22 +320,38 @@ public abstract class GameLogic implements GameTurnListener {
     //--------------------------------------------------------------------------
     //GETTERS                                                                  |
     //--------------------------------------------------------------------------
+    /**
+    * REcupère la board
+    * @return la board
+    */
     public GameBoard getBoard() {
         return mBoard;
     }
 
+    /**
+     * Recupère le tour de jeu en cours
+     * @return le tour de jeu en cours
+     */
     public GameTurn getCurrentTurn() {
         return mCurrentTurn;
     }
 
+    /**
+     * Reupère les players
+     * @return les players
+     */
     public Player[] getPlayers() {
         return mPlayers;
     }
 
+    /**
+     * recupère le dé
+     * @return le dé
+     */
     public GameDice getDice() {
         return mDice;
     }
-    //--------------------------------------------------------------------------
+    
 
     //--------------------------------------------------------------------------
     //METHODES ABSTRAITES                                                      |
@@ -398,5 +414,5 @@ public abstract class GameLogic implements GameTurnListener {
      * Termine l'action en cours du tour
      */
     public abstract void finishCurrentAction();
-    //--------------------------------------------------------------------------
+   
 }
