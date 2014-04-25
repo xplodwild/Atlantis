@@ -54,7 +54,7 @@ public class GuiController implements ScreenController {
     /**
      * Liste des joueurs
      */
-    private String[] players;
+    private static String[] players;
     /**
      * Type de screen pour la partie en cours (2 / 3 / 4 joueurs)
      */
@@ -134,7 +134,7 @@ public class GuiController implements ScreenController {
     public void startGameMulti() {
         // On prépare le jeu sur l'hôte, puis on le propage aux clients (prepareGame le fait)
         this.g3rdr.getLogic().prepareGame(players, true);
-        
+
         // Préparation de l'interface
         switch (players.length) {
             case 2:
@@ -343,6 +343,8 @@ public class GuiController implements ScreenController {
         } catch (IOException ex) {
             Logger.getLogger(GuiController.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+        players = null;
 
         return retour;
     }
@@ -580,6 +582,7 @@ public class GuiController implements ScreenController {
      *
      */
     public void updatePlayerName() {
+        Logger.getGlobal().severe("updatePlayerName: " + players.length + " " + players);
         Element niftyElement;
         if (players.length == 4) {
             //Ecran 4 Joueurs
@@ -639,15 +642,15 @@ public class GuiController implements ScreenController {
         //Ecran Accueil
         niftyElement = nifty.getScreen("inGameMenu").findElementByName("nomJ1");
         niftyElement.getRenderer(TextRenderer.class).setText(players[0]);
-        niftyElement = nifty.getScreen("inGameMenu").findElementByName("nomJ2");
-        niftyElement.getRenderer(TextRenderer.class).setText(players[1]);
-        if (players.length == 3) {
+        if (players.length >= 2) {
+            niftyElement = nifty.getScreen("inGameMenu").findElementByName("nomJ2");
+            niftyElement.getRenderer(TextRenderer.class).setText(players[1]);
+        }
+        if (players.length >= 3) {
             niftyElement = nifty.getScreen("inGameMenu").findElementByName("nomJ3");
             niftyElement.getRenderer(TextRenderer.class).setText(players[2]);
         }
-        if (players.length == 4) {
-            niftyElement = nifty.getScreen("inGameMenu").findElementByName("nomJ3");
-            niftyElement.getRenderer(TextRenderer.class).setText(players[2]);
+        if (players.length >= 4) {
             niftyElement = nifty.getScreen("inGameMenu").findElementByName("nomJ4");
             niftyElement.getRenderer(TextRenderer.class).setText(players[3]);
         }
@@ -1072,6 +1075,8 @@ public class GuiController implements ScreenController {
             }
         }
         newPlayers[newPlayers.length - 1] = name;
+
+        Logger.getGlobal().severe("Players: " + newPlayers.length);
 
         players = newPlayers;
         updatePlayerName();

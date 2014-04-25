@@ -25,8 +25,10 @@ import com.jme3.network.MessageListener;
 import com.jme3.network.Network;
 import com.jme3.network.Server;
 import com.jme3.network.serializing.Serializer;
+import fr.miage.atlantis.Game3DLogic;
+import fr.miage.atlantis.entities.PlayerToken;
 import fr.miage.atlantis.gui.controllers.GuiController;
-import fr.miage.atlantis.logic.GameLogic;
+import fr.miage.atlantis.logic.GameTurn;
 import fr.miage.atlantis.network.messages.MessageChat;
 import fr.miage.atlantis.network.messages.MessageGameStart;
 import fr.miage.atlantis.network.messages.MessageKthxbye;
@@ -41,6 +43,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
 import java.util.logging.Logger;
 
 /**
@@ -53,7 +56,7 @@ public class GameHost implements ConnectionListener, MessageListener<HostedConne
     private Server mServer;
     private List<HostedConnection> mConnections;
     private Map<Integer, String> mConnectionToName;
-    private GameLogic mLogic;
+    private Game3DLogic mLogic;
     private GuiController mGuiController;
     private String mPlayerName;
 
@@ -68,7 +71,7 @@ public class GameHost implements ConnectionListener, MessageListener<HostedConne
         Serializer.registerClass(MessageTurnEvent.class);
     }
 
-    public GameHost(GameLogic logic, GuiController guiController, String name) {
+    public GameHost(Game3DLogic logic, GuiController guiController, String name) {
         mConnections = new ArrayList<HostedConnection>();
         mConnectionToName = new HashMap<Integer, String>();
         mLogic = logic;
@@ -84,6 +87,7 @@ public class GameHost implements ConnectionListener, MessageListener<HostedConne
         mServer.start();
 
         NetworkObserverProxy.getDefault().setHost(this);
+        NetworkObserverProxy.getDefault().setPlayerNumber(1);
     }
 
     public void stop() {
@@ -145,8 +149,17 @@ public class GameHost implements ConnectionListener, MessageListener<HostedConne
             handleMessageChat(source.getId(), (MessageChat) m);
         } else if (m instanceof MessageTurnEvent) {
             // Un événement du tour vient d'arriver
-            handleMessageTurnEvent(source.getId(), (MessageTurnEvent) m);
+            handleMessageTurnEvent(source, (MessageTurnEvent) m);
+        } else if (m instanceof MessageNextTurn) {
+            // Un nouveau tour
+            handleMessageNextTurn(source, (MessageNextTurn) m);
+        } else {
+            throw new UnsupportedOperationException("Unhandled message in host: " + m);
         }
+    }
+
+    private void log(final String m) {
+        Logger.getGlobal().info(m);
     }
 
     private void handleMessageOhai(HostedConnection source, MessageOhai m) {
@@ -159,18 +172,19 @@ public class GameHost implements ConnectionListener, MessageListener<HostedConne
         mGuiController.onPlayerConnected(m.getName());
 
         // On retransmet aux autres ce joueur
-        MessagePlayerJoined msg = new MessagePlayerJoined(m.getName());
+        int playerNumber = mConnectionToName.size() + 1;
+        MessagePlayerJoined msg = new MessagePlayerJoined(m.getName(), playerNumber);
         broadcast(msg, source);
 
         // On transmet les joueurs existant à ce joueur, y compris lui-même afin qu'il connaisse
         // sa place dans le jeu.
-        msg = new MessagePlayerJoined(mPlayerName);
+        msg = new MessagePlayerJoined(mPlayerName, playerNumber);
         source.send(msg);
 
         Collection<String> players = mConnectionToName.values();
         for (String player : players) {
             if (player != null) {
-                msg = new MessagePlayerJoined(player);
+                msg = new MessagePlayerJoined(player, playerNumber);
                 source.send(msg);
             }
         }
@@ -187,9 +201,36 @@ public class GameHost implements ConnectionListener, MessageListener<HostedConne
         // TODO: Afficher dans le chat!
     }
 
-    private void handleMessageTurnEvent(int sourceId, MessageTurnEvent m) {
-        // TODO
+    private void handleMessageTurnEvent(HostedConnection source, MessageTurnEvent m) {
+        log("Turn event: " + m.getEvent());
+
+        // Retransmission du message
+        broadcast(m, source);
+
+        switch (m.getEvent()) {
+            case GameTurn.STEP_INITIAL_PLAYER_PUT: {
+                String tileName = (String) m.getParameter(0);
+                int points = (Integer) m.getParameter(1);
+                PlayerToken pt = new PlayerToken(mLogic.getCurrentTurn().getPlayer(), points);
+                pt.moveToTile(null, mLogic.getBoard().getTileSet().get(tileName));
+                mLogic.onInitialTokenPut(pt);
+            }
+            break;
+        }
     }
 
+    private void handleMessageNextTurn(HostedConnection source, MessageNextTurn m) {
+        log("Next turn: " + m.getPlayerNumber());
+
+        broadcast(m, source);
+
+        mLogic.getRenderer().runOnMainThread(new Callable<Void>() {
+            public Void call() throws Exception {
+                mLogic.nextTurn();
+                return null;
+            }
+        });
+
+    }
 
 }

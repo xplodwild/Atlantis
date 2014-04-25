@@ -27,16 +27,22 @@ import com.jme3.network.serializing.Serializable;
 @Serializable
 public class MessagePlayerJoined extends AbstractMessage {
     private String mNickname;
+    private int mNumber;
 
     public MessagePlayerJoined() {
 
     }
 
-    public MessagePlayerJoined(final String name) {
+    public MessagePlayerJoined(final String name, final int number) {
         mNickname = name;
+        mNumber = number;
     }
 
     public String getName() {
         return mNickname;
+    }
+
+    public int getNumber() {
+        return mNumber;
     }
 }
