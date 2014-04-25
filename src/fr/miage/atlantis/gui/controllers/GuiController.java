@@ -194,32 +194,6 @@ public class GuiController implements ScreenController {
 
 
 
-    /**
-     *
-     * @param joueur
-     * @param message
-     */
-    public void receiveChatMessage(String joueur,String message){
-        Chat ipx = this.nifty.getScreen("lobbyMulti").findElementByName("chatId").getNiftyControl(Chat.class);
-
-        final Element chatPanel = this.nifty.getScreen("lobbyMulti").findElementByName("chatId");
-        final Chat chatController = chatPanel.findNiftyControl("chatPanel", Chat.class);
-
-        chatController.receivedChatLine(joueur,null,message);
-    }
-
-    /**
-     *
-     * @param id
-     * @param event
-     */
-    @NiftyEventSubscriber(id="chatId")
-    public final void onSendText(final String id, final ChatTextSendEvent event) {
-
-        this.receiveChatMessage(id,event.getText());
-
-    }
-
 
 
 
@@ -272,8 +246,6 @@ public class GuiController implements ScreenController {
         players = new String[1];
         players[0] = nick;
 
-        Chat ipx = this.nifty.getScreen("lobbyMulti").findElementByName("chatId").getNiftyControl(Chat.class);
-        ipx.addPlayer(nick, null);
 
         Element niftyElement;
         niftyElement = nifty.getScreen("lobbyMulti").findElementByName("nom");
