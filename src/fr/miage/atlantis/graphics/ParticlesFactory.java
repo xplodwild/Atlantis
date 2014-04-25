@@ -24,10 +24,16 @@ import com.jme3.material.RenderState;
 import com.jme3.scene.Node;
 
 /**
- *
+ * classe génératice de particules
  */
 public class ParticlesFactory {
 
+    /**
+     * Fait faire des éclaboussures à l'eau (splash!)
+     *
+     * @param assetManager AssetManager
+     * @return noeud où est le splash
+     */
     public static Node makeWaterSplash(AssetManager assetManager) {
         // On charge l'effet "pré-fabriqué" en j3o
         Node loadedNode = (Node) assetManager.loadModel("Scenes/fx_WaterSplash.j3o");
@@ -49,6 +55,11 @@ public class ParticlesFactory {
         return loadedNode;
     }
 
+    /**
+     * Génere toutes les particules d'un effet
+     *
+     * @param effect noeud ou placer l'effet
+     */
     public static void emitAllParticles(Node effect) {
         ParticleEmitter emitter = (ParticleEmitter) effect.getChild(0);
         emitter.emitAllParticles();
