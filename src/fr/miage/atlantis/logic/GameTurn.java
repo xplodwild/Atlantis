@@ -47,18 +47,16 @@ import java.util.logging.Logger;
 public class GameTurn implements GameRenderListener {
 
     public static boolean DBG_QUICKTEST = false;
-
-    public static final int STEP_START                  = 0;
-    public static final int STEP_INITIAL_PLAYER_PUT     = 1;
-    public static final int STEP_INITIAL_BOAT_PUT       = 2;
-    public static final int STEP_MOVE_ENTITY            = 3;
-    public static final int STEP_MOVE_DICE_ENTITY       = 4;
-    public static final int STEP_MOVE_BONUS_BOAT        = 5;
-    public static final int STEP_MOVE_BONUS_SWIMMER     = 6;
-    public static final int STEP_SINK_TILE              = 7;
-    public static final int STEP_USE_TILE_ACTION        = 8;
-    public static final int STEP_FINISH                 = 9;
-
+    public static final int STEP_START = 0;
+    public static final int STEP_INITIAL_PLAYER_PUT = 1;
+    public static final int STEP_INITIAL_BOAT_PUT = 2;
+    public static final int STEP_MOVE_ENTITY = 3;
+    public static final int STEP_MOVE_DICE_ENTITY = 4;
+    public static final int STEP_MOVE_BONUS_BOAT = 5;
+    public static final int STEP_MOVE_BONUS_SWIMMER = 6;
+    public static final int STEP_SINK_TILE = 7;
+    public static final int STEP_USE_TILE_ACTION = 8;
+    public static final int STEP_FINISH = 9;
     private TileAction mTileAction;
     private List<TileAction> mRemoteTiles;
     private List<EntityMove> mMoves;
@@ -97,15 +95,24 @@ public class GameTurn implements GameRenderListener {
         mSwimmersMoved = new ArrayList<PlayerToken>();
     }
 
+    /**
+     * Serialize la tile dans le DataOutputStream indiqué
+     * @param data flux de données
+     * @throws IOException 
+     */
     public void serializeTo(DataOutputStream data) throws IOException {
         data.writeBoolean(DBG_QUICKTEST);
         data.writeBoolean(mTileAction != null);
-        if (mTileAction != null) mTileAction.serializeTo(data);
+        if (mTileAction != null) {
+            mTileAction.serializeTo(data);
+        }
 
         // mRemoteTiles: Non utilisé a part pour du logging, donc pas sauvegardé
         // mMoves:       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         data.writeBoolean(mSunkenTile != null);
-        if (mSunkenTile != null) data.writeUTF(mSunkenTile.getName());
+        if (mSunkenTile != null) {
+            data.writeUTF(mSunkenTile.getName());
+        }
 
         data.writeInt(mDiceAction);
         data.writeBoolean(mDiceRolled);
@@ -120,6 +127,11 @@ public class GameTurn implements GameRenderListener {
         }
     }
 
+    /**
+     * ressort une BorderTile d'une sauvegarde
+     * @param data flux de données
+     * @throws IOException 
+     */
     public void readSerialized(DataInputStream data) throws IOException {
         DBG_QUICKTEST = data.readBoolean();
         if (data.readBoolean()) {
@@ -143,6 +155,10 @@ public class GameTurn implements GameRenderListener {
         }
     }
 
+    /**
+     * Recupère l'action de la tile
+     * @return l'action
+     */
     public TileAction getTileAction() {
         return mTileAction;
     }
@@ -240,6 +256,7 @@ public class GameTurn implements GameRenderListener {
 
     /**
      * déplacement de l'entité sur lequel on est tombé au lancé de dés
+     *
      * @param ent
      * @param dest
      */
@@ -251,12 +268,22 @@ public class GameTurn implements GameRenderListener {
         mController.onUnitMove(ent, dest);
     }
 
+    /**
+     * Tile d'action de téléportation
+     * @param ent entité à téléporté
+     * @param dest tile de destination
+     */
     public void tileActionTeleport(GameEntity ent, GameTile dest) {
         logger.log(Level.FINE, "GameTile: tileActionTeleport");
         // mCurrentStep?
         mController.onUnitMove(ent, dest);
     }
 
+    /**
+     * Tile de l'action Bonus bateau ou swim
+     * @param ent entité
+     * @param dest tile de destination
+     */
     public void tileActionBonusBoatOrSwim(GameEntity ent, GameTile dest) {
         logger.log(Level.FINE, "GameTile: tileActionBonusBoatOrSwim");
         mTileAction.decreaseMovesRemaining();
@@ -266,6 +293,10 @@ public class GameTurn implements GameRenderListener {
         mController.onUnitMove(ent, dest);
     }
 
+    /**
+     * lancé de dé
+     * @return le résultat du lancé de dé 
+     */
     public int rollDice() {
         logger.log(Level.FINE, "GameTurn: rollDice ", new Object[]{});
 
@@ -294,10 +325,18 @@ public class GameTurn implements GameRenderListener {
         return mDiceAction;
     }
 
+    /**
+     * Nombre de mouvement de dé restant
+     * @return Nombre de mouvement de dé restant
+     */
     public int getRemainingDiceMoves() {
         return mRemainingDiceMoves;
     }
-
+    
+    /**
+     * Regarde si la Tile a coulé
+     * @return  boolean : true si la tile est coulé
+     */
     public boolean hasSunkLandTile() {
         return (mSunkenTile != null);
     }
@@ -595,7 +634,9 @@ public class GameTurn implements GameRenderListener {
     public boolean finishCurrentAction() {
         Logger.getGlobal().info("Current action: " + mCurrentStep);
 
-        if (!canFinishCurrentAction()) return false;
+        if (!canFinishCurrentAction()) {
+            return false;
+        }
 
         if (mCurrentStep == STEP_MOVE_ENTITY) {
             mRemainingMoves = 0;
