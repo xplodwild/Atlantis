@@ -17,18 +17,12 @@
  */
 package fr.miage.atlantis.network;
 
-import com.jme3.network.serializing.Serializer;
 import fr.miage.atlantis.Game3DLogic;
 import fr.miage.atlantis.entities.Boat;
 import fr.miage.atlantis.entities.PlayerToken;
 import fr.miage.atlantis.logic.GameTurn;
-import fr.miage.atlantis.network.messages.MessageChat;
-import fr.miage.atlantis.network.messages.MessageGameStart;
-import fr.miage.atlantis.network.messages.MessageKthxbye;
 import fr.miage.atlantis.network.messages.MessageNextTurn;
-import fr.miage.atlantis.network.messages.MessageOhai;
-import fr.miage.atlantis.network.messages.MessagePlayerJoined;
-import fr.miage.atlantis.network.messages.MessageSyncBoard;
+import fr.miage.atlantis.network.messages.MessageRollDice;
 import fr.miage.atlantis.network.messages.MessageTurnEvent;
 import java.util.concurrent.Callable;
 import java.util.logging.Logger;
@@ -39,17 +33,6 @@ import java.util.logging.Logger;
 public class GameCommonCommands {
 
     private Game3DLogic mLogic;
-
-    static {
-        Serializer.registerClass(MessageOhai.class);
-        Serializer.registerClass(MessageKthxbye.class);
-        Serializer.registerClass(MessageChat.class);
-        Serializer.registerClass(MessagePlayerJoined.class);
-        Serializer.registerClass(MessageNextTurn.class);
-        Serializer.registerClass(MessageGameStart.class);
-        Serializer.registerClass(MessageSyncBoard.class);
-        Serializer.registerClass(MessageTurnEvent.class);
-    }
 
     public GameCommonCommands(Game3DLogic logic) {
         mLogic = logic;
@@ -117,6 +100,15 @@ public class GameCommonCommands {
         mLogic.getRenderer().runOnMainThread(new Callable<Void>() {
             public Void call() throws Exception {
                 mLogic.nextTurn();
+                return null;
+            }
+        });
+    }
+
+    public void handleMessageRollDice(final MessageRollDice m) {
+        mLogic.getRenderer().runOnMainThread(new Callable<Void>() {
+            public Void call() throws Exception {
+                mLogic.onDiceRoll(m.getDiceAction());
                 return null;
             }
         });

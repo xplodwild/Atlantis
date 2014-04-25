@@ -24,16 +24,15 @@ import com.jme3.network.MessageListener;
 import com.jme3.network.Network;
 import com.jme3.network.serializing.Serializer;
 import fr.miage.atlantis.Game3DLogic;
-import fr.miage.atlantis.entities.PlayerToken;
 import fr.miage.atlantis.gui.controllers.GuiController;
 import fr.miage.atlantis.logic.GameLogic;
-import fr.miage.atlantis.logic.GameTurn;
 import fr.miage.atlantis.network.messages.MessageChat;
 import fr.miage.atlantis.network.messages.MessageGameStart;
 import fr.miage.atlantis.network.messages.MessageKthxbye;
 import fr.miage.atlantis.network.messages.MessageNextTurn;
 import fr.miage.atlantis.network.messages.MessageOhai;
 import fr.miage.atlantis.network.messages.MessagePlayerJoined;
+import fr.miage.atlantis.network.messages.MessageRollDice;
 import fr.miage.atlantis.network.messages.MessageSyncBoard;
 import fr.miage.atlantis.network.messages.MessageTurnEvent;
 import java.io.IOException;
@@ -50,6 +49,19 @@ public class GameClient implements ClientStateListener, MessageListener {
     private Client mClient;
     private GuiController mGuiController;
     private GameCommonCommands mCommon;
+
+    static {
+        Serializer.registerClass(MessageOhai.class);
+        Serializer.registerClass(MessageKthxbye.class);
+        Serializer.registerClass(MessageChat.class);
+        Serializer.registerClass(MessagePlayerJoined.class);
+        Serializer.registerClass(MessageRollDice.class);
+        Serializer.registerClass(MessageNextTurn.class);
+        Serializer.registerClass(MessageGameStart.class);
+        Serializer.registerClass(MessageSyncBoard.class);
+        Serializer.registerClass(MessageTurnEvent.class);
+    }
+
 
     public GameClient(GameLogic logic, GuiController gui) {
         mLogic = (Game3DLogic) logic;
@@ -99,6 +111,8 @@ public class GameClient implements ClientStateListener, MessageListener {
             handleMessageNextTurn((MessageNextTurn) m);
         } else if (m instanceof MessageTurnEvent) {
             handleMessageTurnEvent((MessageTurnEvent) m);
+        } else if (m instanceof MessageRollDice) {
+            handleMessageRollDice((MessageRollDice) m);
         }
     }
 
@@ -148,5 +162,10 @@ public class GameClient implements ClientStateListener, MessageListener {
     private void handleMessageTurnEvent(final MessageTurnEvent m) {
         log("Turn event: " + m.getEvent());
         mCommon.handleMessageTurnEvent(m);
+    }
+
+    private void handleMessageRollDice(final MessageRollDice m) {
+        log("Roll dice: " + m.getDiceAction());
+        mCommon.handleMessageRollDice(m);
     }
 }

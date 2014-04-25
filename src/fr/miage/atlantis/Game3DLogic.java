@@ -456,8 +456,12 @@ public class Game3DLogic extends GameLogic {
                                     player.addActionTile(action);
                                 }
 
-                                // Fin de l'action, étape suivante
-                                getCurrentTurn().onSinkTileFinished();
+                                // SinkTileFinished lance le dé - le joueur en cours est autoritaire
+                                // du dé, donc on le lance que si besoin
+                                if (!nop.isNetworkGame() || getCurrentTurn().isMyNetworkTurn()) {
+                                    // Fin de l'action, étape suivante
+                                    getCurrentTurn().onSinkTileFinished();
+                                }
                             }
                         });
                     } else {

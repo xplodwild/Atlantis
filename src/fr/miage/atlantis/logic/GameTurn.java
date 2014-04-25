@@ -148,6 +148,11 @@ public class GameTurn implements GameRenderListener {
         return mTileAction;
     }
 
+    public boolean isMyNetworkTurn() {
+        final NetworkObserverProxy nop = NetworkObserverProxy.getDefault();
+        return (nop.isNetworkGame() && nop.getPlayerNumber() == mPlayer.getNumber());
+    }
+
     /**
      * Demarre le début du tour de jeu du joueur courant
      */
@@ -217,7 +222,7 @@ public class GameTurn implements GameRenderListener {
         }
 
         NetworkObserverProxy nop = NetworkObserverProxy.getDefault();
-        if (nop.isNetworkGame() && nop.getPlayerNumber() == mPlayer.getNumber()) {
+        if (isMyNetworkTurn()) {
             // C'est une partie en réseau, on transmet le mouvement
             nop.onPlayerTurnEvent(GameTurn.STEP_MOVE_ENTITY, new Object[]{
                 ent.getName(),
@@ -246,7 +251,7 @@ public class GameTurn implements GameRenderListener {
         mRemainingMoves--;
 
         NetworkObserverProxy nop = NetworkObserverProxy.getDefault();
-        if (nop.isNetworkGame() && nop.getPlayerNumber() == mPlayer.getNumber()) {
+        if (isMyNetworkTurn()) {
             // C'est une partie en réseau, on transmet le mouvement
             nop.onPlayerTurnEvent(GameTurn.STEP_MOVE_ENTITY, new Object[]{
                 ent.getName(),
@@ -310,6 +315,10 @@ public class GameTurn implements GameRenderListener {
                 break;
         }
 
+        if (isMyNetworkTurn()) {
+            NetworkObserverProxy.getDefault().onPlayerRollDice(mDiceAction);
+        }
+
         mController.onDiceRoll(mDiceAction);
 
         return mDiceAction;
@@ -332,7 +341,7 @@ public class GameTurn implements GameRenderListener {
 
 
         NetworkObserverProxy nop = NetworkObserverProxy.getDefault();
-        if (nop.isNetworkGame() && nop.getPlayerNumber() == mPlayer.getNumber()) {
+        if (isMyNetworkTurn()) {
             nop.onPlayerTurnEvent(GameTurn.STEP_SINK_TILE,
                         new Object[]{tile.getName()});
         }
@@ -434,7 +443,7 @@ public class GameTurn implements GameRenderListener {
     public void onInitialTokenPutDone(PlayerToken pt) {
         // Un pion joueur a été placé. On finit le tour, c'est au suivant même si on a tout placé.
         NetworkObserverProxy nop = NetworkObserverProxy.getDefault();
-        if (nop.isNetworkGame() && nop.getPlayerNumber() == mPlayer.getNumber()) {
+        if (isMyNetworkTurn()) {
             nop.onPlayerTurnEvent(GameTurn.STEP_INITIAL_PLAYER_PUT,
                     new Object[]{pt.getTile().getName(), pt.getPoints(), pt.getName()});
         }
@@ -448,7 +457,7 @@ public class GameTurn implements GameRenderListener {
     public void onInitialBoatPutDone(Boat pt) {
         // Un pion bateau a été placé. On finit le tour, c'est au suivant même si on a tout placé.
         NetworkObserverProxy nop = NetworkObserverProxy.getDefault();
-        if (nop.isNetworkGame() && nop.getPlayerNumber() == mPlayer.getNumber()) {
+        if (isMyNetworkTurn()) {
             nop.onPlayerTurnEvent(GameTurn.STEP_INITIAL_BOAT_PUT,
                     new Object[]{pt.getTile().getName(), pt.getName()});
         }
@@ -560,14 +569,16 @@ public class GameTurn implements GameRenderListener {
                 break;
         }
 
-        if (mController.getBoard().hasEntityOfType(entityType)) {
-            mCurrentStep = STEP_MOVE_DICE_ENTITY;
-            requestDiceEntityPicking(null);
-        } else {
-            // Pas d'entité du type du dé a bouger. Le dé étant la dernière étape d'un tour,
-            // on a terminé.
-            logger.log(Level.FINE, "GameTurn: No entity of type " + entityType.toString() + " on the board. Finish turn.", new Object[]{});
-            finishTurn();
+        if (!NetworkObserverProxy.getDefault().isNetworkGame() || isMyNetworkTurn()) {
+            if (mController.getBoard().hasEntityOfType(entityType)) {
+                mCurrentStep = STEP_MOVE_DICE_ENTITY;
+                requestDiceEntityPicking(null);
+            } else {
+                // Pas d'entité du type du dé a bouger. Le dé étant la dernière étape d'un tour,
+                // on a terminé.
+                logger.log(Level.FINE, "GameTurn: No entity of type " + entityType.toString() + " on the board. Finish turn.", new Object[]{});
+                finishTurn();
+            }
         }
     }
 

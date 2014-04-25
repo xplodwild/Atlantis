@@ -26,15 +26,14 @@ import com.jme3.network.Network;
 import com.jme3.network.Server;
 import com.jme3.network.serializing.Serializer;
 import fr.miage.atlantis.Game3DLogic;
-import fr.miage.atlantis.entities.PlayerToken;
 import fr.miage.atlantis.gui.controllers.GuiController;
-import fr.miage.atlantis.logic.GameTurn;
 import fr.miage.atlantis.network.messages.MessageChat;
 import fr.miage.atlantis.network.messages.MessageGameStart;
 import fr.miage.atlantis.network.messages.MessageKthxbye;
 import fr.miage.atlantis.network.messages.MessageNextTurn;
 import fr.miage.atlantis.network.messages.MessageOhai;
 import fr.miage.atlantis.network.messages.MessagePlayerJoined;
+import fr.miage.atlantis.network.messages.MessageRollDice;
 import fr.miage.atlantis.network.messages.MessageSyncBoard;
 import fr.miage.atlantis.network.messages.MessageTurnEvent;
 import java.io.IOException;
@@ -43,7 +42,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
 import java.util.logging.Logger;
 
 /**
@@ -51,7 +49,7 @@ import java.util.logging.Logger;
  */
 public class GameHost implements ConnectionListener, MessageListener<HostedConnection> {
 
-    public static final int DEFAULT_PORT = 8199;
+    public static final int DEFAULT_PORT = 4243;
 
     private Server mServer;
     private List<HostedConnection> mConnections;
@@ -66,6 +64,7 @@ public class GameHost implements ConnectionListener, MessageListener<HostedConne
         Serializer.registerClass(MessageKthxbye.class);
         Serializer.registerClass(MessageChat.class);
         Serializer.registerClass(MessagePlayerJoined.class);
+        Serializer.registerClass(MessageRollDice.class);
         Serializer.registerClass(MessageNextTurn.class);
         Serializer.registerClass(MessageGameStart.class);
         Serializer.registerClass(MessageSyncBoard.class);
@@ -155,6 +154,8 @@ public class GameHost implements ConnectionListener, MessageListener<HostedConne
         } else if (m instanceof MessageNextTurn) {
             // Un nouveau tour
             handleMessageNextTurn(source, (MessageNextTurn) m);
+        } else if (m instanceof MessageRollDice) {
+            handleMessageRollDice(source, (MessageRollDice) m);
         } else {
             throw new UnsupportedOperationException("Unhandled message in host: " + m);
         }
@@ -219,6 +220,15 @@ public class GameHost implements ConnectionListener, MessageListener<HostedConne
         broadcast(m, source);
 
         mCommon.handleMessageNextTurn(m);
+    }
+
+    private void handleMessageRollDice(HostedConnection source, MessageRollDice m) {
+        log("Roll dice: " + m.getDiceAction());
+
+        // Retransmission du message
+        broadcast(m, source);
+
+        mCommon.handleMessageRollDice(m);
     }
 
 }
