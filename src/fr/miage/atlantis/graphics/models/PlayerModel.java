@@ -22,7 +22,7 @@ import com.jme3.scene.shape.Box;
 import fr.miage.atlantis.graphics.Utils;
 
 /**
- *
+ * Modèle des players extends de la classe de modèle animé
  */
 public class PlayerModel extends AnimatedModel {
 
@@ -45,6 +45,11 @@ public class PlayerModel extends AnimatedModel {
     public final static String COLOR_RED = "red";
     private final static String COLLISION_BONE_ATTACH = "UpperBody";
 
+    /**
+     * Constructeur du modèle du player
+     * @param am l'emplacement du centre de la tile random
+     * @param color couleur du player
+     */
     public PlayerModel(AssetManager am, final String color) {
         super(am, "Models/Avatar_A.mesh.xml",
                 "Textures/player_" + color + ".png", null);
@@ -56,6 +61,11 @@ public class PlayerModel extends AnimatedModel {
         setupCustomCollisionShape(Utils.generateInvisibleBox(am, box), COLLISION_BONE_ATTACH);
     }
 
+    /**
+     * Définit la couleur des joueurs
+     * @param i code la couleur
+     * @return la couleur à mettre au joueur
+     */
     public static String intToColor(int i) {
         switch (i) {
             case 1:

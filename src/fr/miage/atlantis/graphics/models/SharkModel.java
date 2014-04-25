@@ -20,7 +20,7 @@ package fr.miage.atlantis.graphics.models;
 import com.jme3.asset.AssetManager;
 
 /**
- *
+ * Modèle du Shark extend de la classe modèle animé
  */
 public class SharkModel extends AnimatedModel {
 
@@ -30,6 +30,10 @@ public class SharkModel extends AnimatedModel {
     public final static String ANIMATION_SWIM_CYCLE = "swim_cycle";
     public final static String ANIMATION_ATTACK_SWIMMER = "attack_swimmer";
 
+    /**
+     * Constructeur du modèle Shark
+     * @param am AssetManager qui permet d'accéder aux assets
+     */
     public SharkModel(AssetManager am) {
         super(am, "Models/sharkA.mesh.xml", "Textures/shark.png", null);
         getModel().scale(0.9f);

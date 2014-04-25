@@ -29,7 +29,7 @@ import fr.miage.atlantis.graphics.ModelCache;
 import java.util.Random;
 
 /**
- *
+ * Modèle des tile vides
  */
 public class EmptyTileModel extends StaticModel implements AbstractTileModel {
 
@@ -37,6 +37,12 @@ public class EmptyTileModel extends StaticModel implements AbstractTileModel {
     public final static String DATA_IS_TILE_SHELL = "is_tile_shell";
     private final static String COLLISION_MESH_FILE_NAME = "Models/collision_tile.mesh.xml";
 
+    /**
+     * Constructeur du modèle des tiles vides
+     * @param tileName nom de la tile
+     * @param assetManager AssetManager qui permet d'accéder aux assets
+     * @param color couleur de la tile
+     */
     public EmptyTileModel(final String tileName, AssetManager assetManager, ColorRGBA color) {
         super(assetManager, "Models/hexagon.blend", null, null);
 
@@ -76,11 +82,19 @@ public class EmptyTileModel extends StaticModel implements AbstractTileModel {
         meshNode.setUserData(TileModel.DATA_TILE_NAME, tileName);
     }
 
+    /**
+     * Recupère l'emplacement du centre de la tile
+     * @return l'emplacement du centre de la tile
+     */
     public Vector3f getTileTopCenter() {
         updateWorldBound();
         return getWorldBound().getCenter().add(0, 4.0f, 0);
     }
 
+    /**
+     * Recupère l'emplacement du centre de la tile random
+     * @return l'emplacement du centre de la tile random
+     */
     public Vector3f getRandomizedTileTopCenter() {
         Random r = new Random();
         return getTileTopCenter().add(-10.0f + r.nextFloat() * 20.0f, 0f, -10.0f + r.nextFloat() * 20.0f);
