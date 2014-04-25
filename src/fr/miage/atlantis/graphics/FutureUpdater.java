@@ -21,12 +21,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * Classe de gestion des FuturCallback
  */
 public class FutureUpdater {
 
     private List<FutureCallback> mFutureCallbacks;
 
+    /**
+     * Constructeur vide
+     */
     public FutureUpdater() {
         mFutureCallbacks = new ArrayList<FutureCallback>();
     }
@@ -44,6 +47,12 @@ public class FutureUpdater {
         }
     }
 
+    /**
+     * Traitement de la file de FutureCallbacks. On traite d'abord les
+     * callbacks, puis on supprime les callbacks qui sont terminés/survenus.
+     *
+     * @param tpf temps
+     */
     public void update(float tpf) {
         // Traitement de la file de FutureCallbacks. On traite d'abord les callbacks, puis on
         // supprime les callbacks qui sont terminés/survenus.
