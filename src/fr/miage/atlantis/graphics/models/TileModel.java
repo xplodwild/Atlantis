@@ -22,7 +22,7 @@ import com.jme3.math.Vector3f;
 import java.util.Random;
 
 /**
- *
+ * Modèle de la tile
  */
 public class TileModel extends StaticModel implements AbstractTileModel {
 
@@ -30,6 +30,12 @@ public class TileModel extends StaticModel implements AbstractTileModel {
     public final static String DATA_TILE_NAME = "tile_name";
     private int mHeight;
 
+    /**
+     * Constructeur du modèle de la tile
+     * @param tileName Nom de la tile
+     * @param height hauteur de la tile
+     * @param am AssetManager qui permet d'accéder aux assets
+     */
     public TileModel(final String tileName, int height, AssetManager am) {
         super(am, getModelPathFromHeight(height),
                 getTexturePathFromHeight(height),
@@ -46,16 +52,29 @@ public class TileModel extends StaticModel implements AbstractTileModel {
         getModel().setUserData(DATA_TILE_NAME, tileName);
     }
 
+    /**
+     * Recupère l'emplacement du centre de la tile
+     * @return l'emplacement du centre de la tile
+     */
     public Vector3f getTileTopCenter() {
         updateWorldBound();
         return getModelNode().getWorldBound().getCenter().add(0.0f, 6.0f * (mHeight + 1), 0.0f);
     }
 
+    /**
+     * Recupère l'emplacement du centre de la tile random
+     * @return l'emplacement du centre de la tile random
+     */
     public Vector3f getRandomizedTileTopCenter() {
         Random r = new Random();
         return getTileTopCenter().add(-10.0f + r.nextFloat() * 20.0f, 0f, -10.0f + r.nextFloat() * 20.0f);
     }
 
+    /**
+     * Recupère le modèle du chemin par rapport à la hauteur
+     * @param height hauteur de la tile
+     * @return 
+     */
     private static String getModelPathFromHeight(int height) {
         String path = null;
         switch (height) {
@@ -74,6 +93,11 @@ public class TileModel extends StaticModel implements AbstractTileModel {
         return path;
     }
 
+    /**
+     * Recupère la texture de la tile
+     * @param height hauteur de la tile
+     * @return 
+     */
     private static String getTexturePathFromHeight(int height) {
         String path = null;
         switch (height) {
@@ -92,6 +116,11 @@ public class TileModel extends StaticModel implements AbstractTileModel {
         return path;
     }
 
+    /**
+     * Recupère le chemin normal
+     * @param height hauteur de la tile
+     * @return 
+     */
     private static String getNormalPathFromHeight(int height) {
         String path = null;
         switch (height) {

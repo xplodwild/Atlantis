@@ -20,7 +20,7 @@ package fr.miage.atlantis.graphics.models;
 import com.jme3.asset.AssetManager;
 
 /**
- *
+ * Modèle de la baleine extends de la classe de modèle animé
  */
 public class WhaleModel extends AnimatedModel {
 
@@ -32,6 +32,10 @@ public class WhaleModel extends AnimatedModel {
     public final static String ANIMATION_ATTACK_BOAT = "Attack_Boat";
     public final static String ANIMATION_SUCKED_DOWN = "Sucked_Down";
 
+    /**
+     * Constructeur du modèle Baleine 
+     * @param am AssetManager qui permet d'accéder aux assets
+     */
     public WhaleModel(AssetManager am) {
         super(am, "Models/whaleA.mesh.xml", "Textures/whale.png", null);
         getModel().scale(0.6f);
