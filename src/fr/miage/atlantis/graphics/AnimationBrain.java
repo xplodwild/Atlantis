@@ -32,27 +32,54 @@ import fr.miage.atlantis.graphics.models.WhaleModel;
 import java.util.Random;
 
 /**
- *
+ * Décide quel animation jouer à quel moment
  */
 public class AnimationBrain {
 
+    /**
+     * Les différents anomations qui se rapportent aux états (marche, nage etc)
+     */
     public static class State {
 
+        /**
+         * Constructeur State
+         *
+         * @param a constante d'un animation
+         */
         public State(String a) {
             this(a, 0);
         }
 
+        /**
+         * Constructeur State
+         *
+         * @param y angle de caméra pour cette animation
+         * @param a constante d'un animation
+         */
         public State(String a, float y) {
             animationName = a;
             yOffset = y;
         }
 
+        /**
+         * Constructeur State
+         *
+         * @param aT constante de l'animation de transition vers cet état
+         * @param y angle de caméra pour cette animation
+         * @param a constante d'un animation
+         */
         public State(String a, float y, boolean aT) {
             animationName = a;
             yOffset = y;
             animateTransition = aT;
         }
 
+        /**
+         * Si on répète en boucle l'animation d'état
+         *
+         * @param loop
+         * @return
+         */
         public State setLoop(boolean loop) {
             this.loop = loop;
             return this;
@@ -75,6 +102,12 @@ public class AnimationBrain {
         public boolean animateTransition = true;
     }
 
+    /**
+     * Récupère l'animation d'une entité lorsqu'ele est fixe sur une case.
+     *
+     * @param ent entité concernée
+     * @return un etat State
+     */
     public static State getIdleAnimation(GameEntity ent) {
         if (ent instanceof PlayerToken) {
             PlayerToken pt = (PlayerToken) ent;
@@ -107,6 +140,13 @@ public class AnimationBrain {
         return null;
     }
 
+    /**
+     * Récupère l'animation de mouvement d'une entité
+     *
+     * @param ent entité concernée
+     * @param dest destination du mouvement
+     * @return renvoie un State d'animation
+     */
     public static State getMovementAnimation(GameEntity ent, GameTile dest) {
         if (ent instanceof PlayerToken) {
             PlayerToken pt = (PlayerToken) ent;
@@ -130,6 +170,12 @@ public class AnimationBrain {
         return null;
     }
 
+    /**
+     * Renvoie l'animation de noyade d'une entité
+     *
+     * @param ent entité concernée
+     * @return un état State d'animation
+     */
     public static State getDrownAnimation(GameEntity ent) {
         if (ent instanceof PlayerToken) {
             return new State(PlayerModel.ANIMATION_DROWN);
@@ -146,6 +192,12 @@ public class AnimationBrain {
         return null;
     }
 
+    /**
+     * Renvoie l'animation d'apparition sur le terrain d'une entité
+     *
+     * @param ent entité concernée
+     * @return un état State d'animation
+     */
     public static State getSpawnAnimation(GameEntity ent) {
         if (ent instanceof Shark) {
             return new State(SharkModel.ANIMATION_RISE).setLoop(false);
