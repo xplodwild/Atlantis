@@ -24,6 +24,10 @@ public abstract class FutureCallback {
 
     private float mTimeRemaining;
 
+    /**
+     * Constructeur de FutureCallback
+     * @param timeSec temps avant l'appel
+     */
     public FutureCallback(float timeSec) {
         mTimeRemaining = timeSec;
     }
@@ -33,7 +37,7 @@ public abstract class FutureCallback {
      * de l'événement
      *
      * @param timeSinceLastFrame
-     * @return
+     * @return true si l'élément est arrivé
      */
     boolean decreaseTime(float timeSinceLastFrame) {
         mTimeRemaining -= timeSinceLastFrame;
