@@ -53,7 +53,7 @@ public class PlayerTokenTest {
         
         GameTile tile = board.getTileSet().get("Beach #15");
         GameTile tile1 = board.getTileSet().get("Water #37");
-        Player luigi = new Player("Luigi", 1);
+        Player luigi = new Player("Luigi", 1,false);
         PlayerToken pt1 = new PlayerToken(luigi, 5);
         
         //1er test on met sur le pion sur une tile
