@@ -41,18 +41,37 @@ public class BoneAttachControl extends AbstractControl implements Savable, Clone
     private String mBoneName;
     private Geometry mChild;
 
+    /**
+     * Constructeur vide pour la sérialization
+     */
     public BoneAttachControl() {
-    } // empty serialization constructor
+    }
 
+    /**
+     * Construteur de BoneAttachControl
+     *
+     * @param boneName Bone à attacher
+     * @param child Truc qu'on attache au bone
+     */
     public BoneAttachControl(final String boneName, final Geometry child) {
         mBoneName = boneName;
         mChild = child;
     }
 
+    /**
+     * Construteur de BoneAttachControl
+     *
+     * @param boneName Bone à attacher
+     */
     public void setBoneName(final String boneName) {
         mBoneName = boneName;
     }
 
+    /**
+     * Définir en tant qu'élément attaché
+     *
+     * @param child élement graphique a attacher
+     */
     public void setChild(final Geometry child) {
         mChild = child;
     }
@@ -84,6 +103,12 @@ public class BoneAttachControl extends AbstractControl implements Savable, Clone
         }
     }
 
+    /**
+     * Clone l'élément pour la représentation spatiale
+     *
+     * @param spatial Element spatial
+     * @return le control
+     */
     @Override
     public Control cloneForSpatial(Spatial spatial) {
         final BoneAttachControl control = new BoneAttachControl();
@@ -93,11 +118,23 @@ public class BoneAttachControl extends AbstractControl implements Savable, Clone
         return control;
     }
 
+    /**
+     * Rendu graphique du contrôle (non implémenté)
+     *
+     * @param rm Rendumanager
+     * @param vp viewport
+     */
     @Override
     protected void controlRender(RenderManager rm, ViewPort vp) {
         /* Optional: rendering manipulation (for advanced users) */
     }
 
+    /**
+     * Lecture pour la sérialization de boneattachcontrol (non implémenté)
+     *
+     * @param im flux JmeImporter
+     * @throws IOException UnsupportedOperationException
+     */
     @Override
     public void read(JmeImporter im) throws IOException {
         super.read(im);
@@ -105,6 +142,12 @@ public class BoneAttachControl extends AbstractControl implements Savable, Clone
         // im.getCapsule(this).read(...);
     }
 
+    /**
+     * Ecriture pour la sérialization de boneattachcontrol (non implémenté)
+     *
+     * @param ex flux JmeExporter
+     * @throws IOException UnsupportedOperationException
+     */
     @Override
     public void write(JmeExporter ex) throws IOException {
         super.write(ex);
