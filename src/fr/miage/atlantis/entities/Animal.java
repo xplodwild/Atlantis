@@ -47,7 +47,13 @@ public abstract class Animal extends GameEntity {
     //--------------------------------------------------------------------------
     //GETTERS                                                                  |
     //--------------------------------------------------------------------------
+    /**
+     * Getter du nombre de mouvement max de l'entité Animal
+     *
+     * @return le maximum de mouvement de cette antité
+     */
     public int getMaxMoves() {
         return mMaxMoves;
     }
+    //--------------------------------------------------------------------------
 }

@@ -49,11 +49,22 @@ public class Boat extends GameEntity {
     public Boat() {
         this("Boat", true);
     }
-    
+
+    /**
+     * Constructeur du Bateau
+     *
+     * @param name le nom du bateau
+     */
     public Boat(String name) {
         this(name, false);
     }
-    
+
+    /**
+     * Constructeur du Bateau
+     *
+     * @param name
+     * @param appendUniqueID
+     */
     public Boat(String name, boolean appendUniqueID) {
         super(name, appendUniqueID);
         this.mOnboard = new ArrayList();
@@ -179,6 +190,14 @@ public class Boat extends GameEntity {
         return false;
     }
 
+    /**
+     * Action au croisement d'une entité avec celle-ci
+     *
+     * @param logic La GameLogic du jeu
+     * @param ent L'entité croisée
+     * @return true si quelque chose s'est passé (protip le bateau d'attaque
+     * personne)
+     */
     @Override
     public boolean onEntityCross(GameLogic logic, GameEntity ent) {
         // Pas besoin de traiter la baleine ici, puisque les événements sont traités dans les deux
@@ -189,6 +208,11 @@ public class Boat extends GameEntity {
     //--------------------------------------------------------------------------
     //GETTERS
     //--------------------------------------------------------------------------
+    /**
+     * Récupère les pions sur le bateau
+     *
+     * @return Une liste de PlayerTokens
+     */
     public List<PlayerToken> getOnboardTokens() {
         return this.mOnboard;
     }
