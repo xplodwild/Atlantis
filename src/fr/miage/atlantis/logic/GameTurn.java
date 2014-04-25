@@ -329,6 +329,14 @@ public class GameTurn implements GameRenderListener {
 
     public void sinkLandTile(GameTile tile) {
         mSunkenTile = tile;
+
+
+        NetworkObserverProxy nop = NetworkObserverProxy.getDefault();
+        if (nop.isNetworkGame() && nop.getPlayerNumber() == mPlayer.getNumber()) {
+            nop.onPlayerTurnEvent(GameTurn.STEP_SINK_TILE,
+                        new Object[]{tile.getName()});
+        }
+
         mController.onSinkTile(tile);
     }
 

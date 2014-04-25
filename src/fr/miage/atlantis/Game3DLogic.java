@@ -426,34 +426,49 @@ public class Game3DLogic extends GameLogic {
                         }
                     }
 
-                    // D'abord, on affiche la tile "piochée" à l'écran
+                    // D'abord, on affiche la tile "piochée" à l'écran, si on doit la voir (ie.
+                    // c'est une tile immédiate, ou c'est notre tour)
+                    final NetworkObserverProxy nop = NetworkObserverProxy.getDefault();
                     final TileAction action = tile.getAction();
-                    final TileActionDisplay tad = TileActionDisplay.getTileForAction(action,
-                            mRenderer.getAssetManager());
-                    mRenderer.getHud().displayCenter(tad);
-                    mRenderer.getHud().getAnimator().animateFade(tad, 1.0f);
 
-                    // Ensuite, après l'affichage, on traite l'action
-                    mRenderer.getFuture().addFutureTimeCallback(new FutureCallback(2.0f) {
-                        @Override
-                        public void onFutureHappened() {
-                            mRenderer.getHud().getAnimator().animateFade(tad, 0.0f);
+                    if (!nop.isNetworkGame()
+                            || nop.getPlayerNumber() == getCurrentTurn().getPlayer().getNumber()
+                            || action.isImmediate()) {
+                        final TileActionDisplay tad = TileActionDisplay.getTileForAction(action,
+                                mRenderer.getAssetManager());
+                        mRenderer.getHud().displayCenter(tad);
+                        mRenderer.getHud().getAnimator().animateFade(tad, 1.0f);
 
-                            // On lance l'action sous la tile, si c'est immédiat
-                            if (action.isImmediate()) {
-                                onPlayTileAction(newTile, action);
-                            } else {
-                                // L'action est pas immédiate, on stock la tile dans la pile du
-                                // joueur.
-                                Player player = getCurrentTurn().getPlayer();
-                                player.addActionTile(action);
+                        // Ensuite, après l'affichage, on traite l'action
+                        mRenderer.getFuture().addFutureTimeCallback(new FutureCallback(2.0f) {
+                            @Override
+                            public void onFutureHappened() {
+                                mRenderer.getHud().getAnimator().animateFade(tad, 0.0f);
 
+                                // On lance l'action sous la tile, si c'est immédiat
+                                if (action.isImmediate()) {
+                                    onPlayTileAction(newTile, action);
+                                } else {
+                                    // L'action est pas immédiate, on stock la tile dans la pile du
+                                    // joueur.
+                                    Player player = getCurrentTurn().getPlayer();
+                                    player.addActionTile(action);
+                                }
+
+                                // Fin de l'action, étape suivante
+                                getCurrentTurn().onSinkTileFinished();
                             }
-
-                            // Fin de l'action, étape suivante
-                            getCurrentTurn().onSinkTileFinished();
+                        });
+                    } else {
+                        // On est en réseau, et c'est pas notre tour ou la tile est pas immédiate.
+                        // Si elle est effectivement immédiate, on lance l'action (animations, etc)
+                        if (action.isImmediate()) {
+                            onPlayTileAction(newTile, action);
+                        } else {
+                            Player player = getCurrentTurn().getPlayer();
+                            player.addActionTile(action);
                         }
-                    });
+                    }
                 }
             }
         });

@@ -101,6 +101,12 @@ public class GameCommonCommands {
                         }
                     }
                     break;
+
+                    case GameTurn.STEP_SINK_TILE: {
+                        String tileName = (String) m.getParameter(0);
+                        mLogic.getCurrentTurn().sinkLandTile(mLogic.getBoard().getTileSet().get(tileName));
+                    }
+                    break;
                 }
                 return null;
             }
