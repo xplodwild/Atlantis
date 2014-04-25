@@ -24,7 +24,15 @@ import com.jme3.math.Vector3f;
  */
 public interface AbstractTileModel {
 
+    /**
+     *
+     * @return
+     */
     public Vector3f getTileTopCenter();
 
+    /**
+     *
+     * @return
+     */
     public Vector3f getRandomizedTileTopCenter();
 }

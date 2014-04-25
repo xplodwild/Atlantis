@@ -33,6 +33,9 @@ import fr.miage.atlantis.graphics.BoneAttachControl;
  */
 public class AnimatedModel extends StaticModel {
 
+    /**
+     *
+     */
     public final static String DATA_IS_CUSTOM_COLMODEL = "is_custom_colmodel";
     private final static float BLEND_TIME = 0.2f;
     private AnimControl mControl;

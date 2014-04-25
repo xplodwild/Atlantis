@@ -39,9 +39,21 @@ import java.util.Set;
  */
 public class BoardRenderer extends Node {
 
+    /**
+     *
+     */
     public final static String DATA_TILE = "tile";
+    /**
+     *
+     */
     public final static String DATA_TILE_X = "tile_x";
+    /**
+     *
+     */
     public final static String DATA_TILE_Y = "tile_y";
+    /**
+     *
+     */
     public final static String DATA_TILE_OFFSET = "tile_offset";
     private final static boolean DEBUG_ITERATION = false;
     private final static float TILE_WIDTH = 35.0f;
@@ -79,6 +91,11 @@ public class BoardRenderer extends Node {
 
     /*
      * Retourne le noeud (élément graphique) auquel est rattachée une tile
+     */
+    /**
+     *
+     * @param i
+     * @return
      */
     public Node getTile(int i) {
         return mTiles.get(i);

@@ -92,6 +92,11 @@ public class Utils {
         return output;
     }
 
+    /**
+     *
+     * @param rad
+     * @return
+     */
     public static float degreesToRad(float rad) {
         return rad * 3.14159f / 180.0f;
     }

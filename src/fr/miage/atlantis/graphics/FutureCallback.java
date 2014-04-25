@@ -51,5 +51,8 @@ public abstract class FutureCallback {
         }
     }
 
+    /**
+     *
+     */
     public abstract void onFutureHappened();
 }

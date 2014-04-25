@@ -36,6 +36,9 @@ public class HudAnimator {
     private List<State> mActiveStates;
     private List<State> mDeletionStates;
 
+    /**
+     *
+     */
     public HudAnimator() {
         mActiveStates = new ArrayList<State>();
         mDeletionStates = new ArrayList<State>();

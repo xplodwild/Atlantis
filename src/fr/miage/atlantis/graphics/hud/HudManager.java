@@ -81,6 +81,10 @@ public class HudManager {
         mHudAnimator.update(tpf);
     }
 
+    /**
+     *
+     * @param disp
+     */
     public void removeFromDisplay(AbstractDisplay disp) {
         mRenderer.getGuiNode().detachChild(disp);
     }

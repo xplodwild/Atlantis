@@ -26,22 +26,73 @@ import fr.miage.atlantis.graphics.Utils;
  */
 public class PlayerModel extends AnimatedModel {
 
+    /**
+     *
+     */
     public final static String ANIMATION_CLIMB_BOAT = "Climb_boat";
+    /**
+     *
+     */
     public final static String ANIMATION_EATEN_BY_SHARK = "Eaten_by_shark";
+    /**
+     *
+     */
     public final static String ANIMATION_SWIM_IDLE = "Swim_Idle";
+    /**
+     *
+     */
     public final static String ANIMATION_GET_ON_OFF_BOAT = "Get_on_off_boat";
+    /**
+     *
+     */
     public final static String ANIMATION_DROWN = "Drown";
+    /**
+     *
+     */
     public final static String ANIMATION_DIVE = "Dive";
+    /**
+     *
+     */
     public final static String ANIMATION_WALK_CYCLE = "walk_cycle";
+    /**
+     *
+     */
     public final static String ANIMATION_SWIM_CYCLE = "swim_cycle";
+    /**
+     *
+     */
     public final static String ANIMATION_JUMP_OFF_BOAT = "Jump_off_boat";
+    /**
+     *
+     */
     public final static String ANIMATION_CLIMB_ISLAND = "Climb_island";
+    /**
+     *
+     */
     public final static String ANIMATION_LAND_IDLE_1 = "Land_Idle1";
+    /**
+     *
+     */
     public final static String ANIMATION_LAND_IDLE_2 = "Land_Idle2";
+    /**
+     *
+     */
     public final static String ANIMATION_LAND_IDLE_3 = "Land_Idle3";
+    /**
+     *
+     */
     public final static String COLOR_BLUE = "blue";
+    /**
+     *
+     */
     public final static String COLOR_GREEN = "green";
+    /**
+     *
+     */
     public final static String COLOR_ORANGE = "orange";
+    /**
+     *
+     */
     public final static String COLOR_RED = "red";
     private final static String COLLISION_BONE_ATTACH = "UpperBody";
 

@@ -35,7 +35,7 @@ public class MessageChat extends AbstractMessage {
     }
     
     /**
-     * Constructeur de MassageChat #2
+     * Constructeur de MessageChat #2
      * @param message message envoyé
      */
     public MessageChat(final String message) {

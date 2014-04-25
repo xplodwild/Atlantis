@@ -26,7 +26,13 @@ import java.util.Random;
  */
 public class TileModel extends StaticModel implements AbstractTileModel {
 
+    /**
+     *
+     */
     public final static String DATA_IS_TILE = "is_tile";
+    /**
+     *
+     */
     public final static String DATA_TILE_NAME = "tile_name";
     private int mHeight;
 

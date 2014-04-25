@@ -24,8 +24,17 @@ import com.jme3.asset.AssetManager;
  */
 public class BoatModel extends AnimatedModel {
 
+    /**
+     *
+     */
     public final static String ANIMATION_BOAT_IDLE = "boat_idle";
+    /**
+     *
+     */
     public final static String ANIMATION_BOAT_SINK = "boat_sink";
+    /**
+     *
+     */
     public final static String ANIMATION_BOAT_ROW = "boat_row";
 
     /**

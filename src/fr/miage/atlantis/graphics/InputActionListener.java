@@ -58,7 +58,13 @@ import java.util.logging.Logger;
 public class InputActionListener {
 
     private final static int REQUEST_NONE = -1;
+    /**
+     *
+     */
     public final static int REQUEST_ENTITY_PICK = (1 << 0);
+    /**
+     *
+     */
     public final static int REQUEST_TILE_PICK = (1 << 1);
     private final static String INPUTMAP_MOUSE_HOVER = "mouse_hover";
     private final static String INPUTMAP_MOUSE_CLICK = "mouse_click";

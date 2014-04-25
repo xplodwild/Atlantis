@@ -136,6 +136,10 @@ public class Game3DRenderer extends SimpleApplication {
     }
 
 
+    /**
+     *
+     * @param r
+     */
     public void runOnMainThread(Callable r) {
         enqueue(r);
     }

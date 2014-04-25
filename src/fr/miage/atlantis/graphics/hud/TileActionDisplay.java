@@ -26,7 +26,13 @@ import fr.miage.atlantis.board.TileAction;
 public class TileActionDisplay extends AbstractDisplay {
 
     private TileAction mAction;
+    /**
+     *
+     */
     public final static int IMAGE_WIDTH = 256;
+    /**
+     *
+     */
     public final static int IMAGE_HEIGHT = 223;
 
     /**

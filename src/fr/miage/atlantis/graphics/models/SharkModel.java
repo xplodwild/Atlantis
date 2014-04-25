@@ -24,10 +24,25 @@ import com.jme3.asset.AssetManager;
  */
 public class SharkModel extends AnimatedModel {
 
+    /**
+     *
+     */
     public final static String ANIMATION_RISE = "Rise";
+    /**
+     *
+     */
     public final static String ANIMATION_DIVE = "Dive";
+    /**
+     *
+     */
     public final static String ANIMATION_SUCKED_DOWN_WHIRPOOL = "sucked_down_whirpool";
+    /**
+     *
+     */
     public final static String ANIMATION_SWIM_CYCLE = "swim_cycle";
+    /**
+     *
+     */
     public final static String ANIMATION_ATTACK_SWIMMER = "attack_swimmer";
 
     /**

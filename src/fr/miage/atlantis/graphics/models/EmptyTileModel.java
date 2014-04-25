@@ -34,6 +34,9 @@ import java.util.Random;
 public class EmptyTileModel extends StaticModel implements AbstractTileModel {
 
     // Détermine si la tile pickée est juste un cocon autour de la tile
+    /**
+     *
+     */
     public final static String DATA_IS_TILE_SHELL = "is_tile_shell";
     private final static String COLLISION_MESH_FILE_NAME = "Models/collision_tile.mesh.xml";
 

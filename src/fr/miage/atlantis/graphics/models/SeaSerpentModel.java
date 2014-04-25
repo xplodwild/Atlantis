@@ -26,11 +26,29 @@ import fr.miage.atlantis.graphics.Utils;
  */
 public class SeaSerpentModel extends AnimatedModel {
 
+    /**
+     *
+     */
     public final static String ANIMATION_IDLE = "Idle";
+    /**
+     *
+     */
     public final static String ANIMATION_ATTACK_CELL = "Attack cell";
+    /**
+     *
+     */
     public final static String ANIMATION_RISE = "rise";
+    /**
+     *
+     */
     public final static String ANIMATION_SUCKED_DOWN = "Sucked Down";
+    /**
+     *
+     */
     public final static String ANIMATION_SWIM_CYCLE = "swim cycle";
+    /**
+     *
+     */
     public final static String ANIMATION_DIVE = "Dive";
     private final static String COLLISION_BONE_ATTACH = "root";
 
