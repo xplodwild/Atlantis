@@ -48,7 +48,7 @@ public class GameEntityTest {
     public void testIsDead() {
         System.out.println("isDead");
         GameLogic lg = new NullGameLogic();
-        GameBoard board = new GameBoard();
+        GameBoard board = new GameBoard(true);
         GameTile tile = board.getTileSet().get("Water #37");
         Shark requin = new Shark();
         
@@ -70,7 +70,7 @@ public class GameEntityTest {
     public void testMoveToTile() {
         System.out.println("moveToTile");
         GameLogic logic = new NullGameLogic();
-        GameBoard board = new GameBoard();
+        GameBoard board = new GameBoard(true);
         GameTile tile = board.getTileSet().get("Water #37");
         GameTile tile1 = board.getTileSet().get("Water #36");
         SeaSerpent serpent = new SeaSerpent();

@@ -49,7 +49,7 @@ public class WhaleTest {
     public void testOnEntityCross() {
         System.out.println("onEntityCross");
         GameLogic logic = new NullGameLogic();
-        GameBoard board = new GameBoard();
+        GameBoard board = new GameBoard(true);
         GameTile tile = board.getTileSet().get("Water #37");
         GameTile tile1 = board.getTileSet().get("Water #35");
         
