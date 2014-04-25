@@ -20,22 +20,36 @@ package fr.miage.atlantis;
 import fr.miage.atlantis.logic.GameLogic;
 
 /**
- *
+ * Classe main
+ * @author Atlantis team
  */
 public class Atlantis {
 
+    /**
+     * Logique du jeu
+     */
     private GameLogic mGameLogic;
 
-    public static void main(String[] args) {
-        Atlantis app = new Atlantis();
-        app.start();
-    }
-
+    /**
+     * Constructeur d'atlantis
+     */
     public Atlantis() {
         mGameLogic = new Game3DLogic();
     }
-
+    
+    /**
+     * Methode de demarrage du jeu
+     */
     public void start() {
         mGameLogic.boot();
+    }
+    
+    /**
+     * Methode main executé
+     * @param args arguments de la ligne de commande
+     */
+    public static void main(String[] args) {
+        Atlantis app = new Atlantis();
+        app.start();
     }
 }
