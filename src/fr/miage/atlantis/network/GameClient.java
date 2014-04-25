@@ -22,53 +22,168 @@ import com.jme3.network.ClientStateListener;
 import com.jme3.network.Message;
 import com.jme3.network.MessageListener;
 import com.jme3.network.Network;
+import com.jme3.network.serializing.Serializer;
+
+import fr.miage.atlantis.Game3DLogic;
+import fr.miage.atlantis.entities.PlayerToken;
+
+import fr.miage.atlantis.gui.controllers.GuiController;
 import fr.miage.atlantis.logic.GameLogic;
+import fr.miage.atlantis.logic.GameTurn;
+import fr.miage.atlantis.network.messages.MessageChat;
 import fr.miage.atlantis.network.messages.MessageGameStart;
+import fr.miage.atlantis.network.messages.MessageKthxbye;
+import fr.miage.atlantis.network.messages.MessageNextTurn;
 import fr.miage.atlantis.network.messages.MessageOhai;
+import fr.miage.atlantis.network.messages.MessagePlayerJoined;
+import fr.miage.atlantis.network.messages.MessageSyncBoard;
+import fr.miage.atlantis.network.messages.MessageTurnEvent;
 import java.io.IOException;
+
+import java.util.concurrent.Callable;
+
+import java.util.logging.Logger;
 
 /**
  * Client pour le jeu en réseau
  */
 public class GameClient implements ClientStateListener, MessageListener {
-    
-    private GameLogic mLogic;
+
+    private Game3DLogic mLogic;
+    private String mPlayerName;
     private Client mClient;
-    
-    public GameClient(GameLogic logic) {
-        mLogic = logic;
+    private GuiController mGuiController;
+
+    static {
+        Serializer.registerClass(MessageOhai.class);
+        Serializer.registerClass(MessageKthxbye.class);
+        Serializer.registerClass(MessageChat.class);
+        Serializer.registerClass(MessagePlayerJoined.class);
+        Serializer.registerClass(MessageNextTurn.class);
+        Serializer.registerClass(MessageGameStart.class);
+        Serializer.registerClass(MessageSyncBoard.class);
+        Serializer.registerClass(MessageTurnEvent.class);
     }
-    
-    public void connect(final String ipAddress) throws IOException {
+
+    public GameClient(GameLogic logic, GuiController gui) {
+
+        mLogic = (Game3DLogic) logic;
+
+        mGuiController = gui;
+    }
+
+    public void connect(final String ipAddress, final String name) throws IOException {
+        mPlayerName = name;
         mClient = Network.connectToServer(ipAddress, GameHost.DEFAULT_PORT);
-        
+
         mClient.addClientStateListener(this);
         mClient.addMessageListener(this);
-        
+
         mClient.start();
+
+        NetworkObserverProxy.getDefault().setClient(this);
+    }
+
+    public void send(Message msg) {
+        mClient.send(msg);
+    }
+
+    public void close() {
+        mClient.close();
     }
 
     public void clientConnected(Client c) {
-        
+        // On envoie le nom
+        MessageOhai ohai = new MessageOhai(mPlayerName);
+        mClient.send(ohai);
     }
 
     public void clientDisconnected(Client c, DisconnectInfo info) {
-        
+
     }
 
     public void messageReceived(Object source, Message m) {
         if (m instanceof MessageOhai) {
-            // TODO: Connexion acceptée, afficher le lobby
+        } else if (m instanceof MessagePlayerJoined) {
+            handleMessagePlayerJoined((MessagePlayerJoined) m);
         } else if (m instanceof MessageGameStart) {
-            // TODO: Le jeu commence, il faut passer vers le board
+            handleMessageGameStart((MessageGameStart) m);
+        } else if (m instanceof MessageSyncBoard) {
+            handleMessageSyncBoard((MessageSyncBoard) m);
+
+        } else if (m instanceof MessageNextTurn) {
+            handleMessageNextTurn((MessageNextTurn) m);
+        } else if (m instanceof MessageTurnEvent) {
+            handleMessageTurnEvent((MessageTurnEvent) m);
+
         }
     }
 
     public Client getClient() {
         return this.mClient;
     }
-    
-    
-    
-    
+
+    private void log(final String msg) {
+        Logger.getGlobal().info(msg);
+    }
+
+    private void handleMessagePlayerJoined(MessagePlayerJoined m) {
+        log("Player joined game: " + m.getName());
+        mGuiController.onPlayerConnected(m.getName());
+
+        if (m.getName().equals(mPlayerName)) {
+            NetworkObserverProxy.getDefault().setPlayerNumber(m.getNumber());
+        }
+
+    }
+
+    private void handleMessageGameStart(MessageGameStart m) {
+        log("Game is starting!");
+        mGuiController.onRemoteGameStart();
+    }
+
+
+    private void handleMessageSyncBoard(MessageSyncBoard m) {
+        log("Host is sending the board!");
+        // We (re)prepare the game
+        mLogic.prepareGame(mGuiController.getPlayers(), false);
+
+
+        try {
+            m.readBoard(mLogic);
+        } catch (IOException ex) {
+            log("Error!");
+        }
+    }
+
+    private void handleMessageNextTurn(MessageNextTurn m) {
+        log("Next turn: " + m.getPlayerNumber());
+        mLogic.getRenderer().runOnMainThread(new Callable<Void>() {
+            public Void call() throws Exception {
+                mLogic.nextTurn();
+                return null;
+            }
+        });
+
+    }
+
+    private void handleMessageTurnEvent(final MessageTurnEvent m) {
+        log("Turn event: " + m.getEvent());
+        mLogic.getRenderer().runOnMainThread(new Callable<Void>() {
+            public Void call() throws Exception {
+                switch (m.getEvent()) {
+                    case GameTurn.STEP_INITIAL_PLAYER_PUT: {
+                        String tileName = (String) m.getParameter(0);
+                        int points = (Integer) m.getParameter(1);
+                        PlayerToken pt = new PlayerToken(mLogic.getCurrentTurn().getPlayer(), points);
+                        pt.moveToTile(null, mLogic.getBoard().getTileSet().get(tileName));
+                        mLogic.getCurrentTurn().getPlayer().getTokens().add(pt);
+                        mLogic.onInitialTokenPut(pt);
+                    }
+                    break;
+                }
+                return null;
+            }
+        });
+    }
 }

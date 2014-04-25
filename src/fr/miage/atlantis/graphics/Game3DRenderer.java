@@ -45,6 +45,8 @@ import fr.miage.atlantis.graphics.models.DiceModel;
 import fr.miage.atlantis.gui.Gui;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 /**
  *
@@ -126,6 +128,10 @@ public class Game3DRenderer extends SimpleApplication {
 
         mGui = new Gui(this, mNifty);
         mNifty.gotoScreen("start");
+    }
+
+    public void runOnMainThread(Callable r) {
+        enqueue(r);
     }
 
     public void toggleGraphicsStats() {
