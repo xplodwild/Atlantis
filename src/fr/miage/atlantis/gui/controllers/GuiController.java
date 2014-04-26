@@ -366,9 +366,7 @@ public class GuiController implements ScreenController {
         boolean connected = this.lanConnectImpl(ipServ, nickname);
 
         if (connected) {
-            Chat ipx = this.nifty.getScreen("lobbyMulti").findElementByName("chatId").getNiftyControl(Chat.class);
-            ipx.addPlayer(nickname, null);
-
+            
             this.nifty.gotoScreen("lobbyMulti");
         } else {
             this.nifty.gotoScreen("ErrorConnect");
